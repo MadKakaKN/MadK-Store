@@ -94,13 +94,13 @@ Ghi chú: ma trận này là điểm xuất phát, điều chỉnh khi làm đ�
 
 **Phân tích và thiết kế**
 - [ ] Chốt phạm vi MVP: catalog, giỏ hàng, đặt hàng COD, trang quản trị
-- [ ] Chốt danh sách actor và ma trận quyền (xem mục "Actor và phân quyền")
-- [ ] Viết user story ngắn cho từng actor chính (Customer, Sales, Warehouse, Admin)
-- [ ] Vẽ sơ đồ trạng thái đơn hàng
+- [x] Chốt danh sách actor và ma trận quyền (xem mục "Actor và phân quyền")
+- [x] Viết user story ngắn cho từng actor chính (Customer, Sales, Warehouse, Admin)
+- [x] Vẽ sơ đồ trạng thái đơn hàng
 - [ ] Vẽ wireframe (giấy hoặc Figma) cho các trang chính, gồm cả bản mobile
 - [ ] Chốt phạm vi 3D (3 chỗ: chi tiết sản phẩm, hero trang chủ, đặt hàng thành công/404) và chọn React Three Fiber
 - [ ] Chọn 5-10 sản phẩm nổi bật sẽ có model 3D; tìm nguồn model (Sketchfab, Poly Pizza hoặc tự làm bằng Blender) và kiểm tra giấy phép
-- [ ] Vẽ ERD sơ bộ và danh sách API
+- [x] Vẽ ERD sơ bộ và danh sách API
 
 **Hạ tầng**
 - [x] Dựng repo, cấu trúc Clean Architecture

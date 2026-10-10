@@ -1,0 +1,611 @@
+openapi: 3.0.3
+info:
+  title: MadK Store API Specification
+  description: Đặc tả RESTful API chính thức cho dự án thương mại điện tử MadK Store (Giai đoạn 1 - 4).
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+    description: Môi trường Development cục bộ
+  - url: https://api.madkstore.vn
+    description: Môi trường Production
+
+paths:
+  # ========================================================
+  # AUTHENTICATION & USER MANAGEMENT
+  # ========================================================
+  /api/v1/auth/register:
+    post:
+      tags: [Auth]
+      summary: Đăng ký tài khoản người dùng mới
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password, fullName]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string, minLength: 6 }
+                fullName: { type: string }
+                phoneNumber: { type: string }
+      responses:
+        '200':
+          description: Đăng ký thành công
+        '400':
+          description: Dữ liệu không hợp lệ hoặc email đã tồn tại
+
+  /api/v1/auth/login:
+    post:
+      tags: [Auth]
+      summary: Đăng nhập hệ thống bằng email và mật khẩu
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+      responses:
+        '200':
+          description: Đăng nhập thành công, trả về JWT token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Sai email hoặc mật khẩu
+
+  /api/v1/auth/refresh-token:
+    post:
+      tags: [Auth]
+      summary: Làm mới Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken: { type: string }
+      responses:
+        '200':
+          description: Cấp mới token thành công
+
+  /api/v1/users/me:
+    get:
+      tags: [Users]
+      summary: Lấy thông tin tài khoản đang đăng nhập
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Thông tin người dùng kèm vai trò và quyền hạn
+
+  /api/v1/users/me/addresses:
+    get:
+      tags: [Addresses]
+      summary: Lấy danh sách sổ địa chỉ của tôi
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Danh sách địa chỉ nhận hàng
+    post:
+      tags: [Addresses]
+      summary: Thêm địa chỉ nhận hàng mới
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAddressDto'
+      responses:
+        '200':
+          description: Thêm địa chỉ thành công
+
+  # ========================================================
+  # CATALOG: CATEGORIES & BRANDS
+  # ========================================================
+  /api/v1/categories:
+    get:
+      tags: [Catalog - Categories]
+      summary: Lấy cây danh mục sản phẩm (phân cấp cha - con)
+      responses:
+        '200':
+          description: Cây danh mục phân cấp
+
+  /api/v1/categories/{slug}:
+    get:
+      tags: [Catalog - Categories]
+      summary: Xem chi tiết danh mục kèm schema lọc thông số
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Chi tiết danh mục
+        '404':
+          description: Không tìm thấy danh mục
+
+  /api/v1/brands:
+    get:
+      tags: [Catalog - Brands]
+      summary: Danh sách thương hiệu
+      responses:
+        '200':
+          description: Danh sách thương hiệu
+
+  # ========================================================
+  # CATALOG: PRODUCTS & VARIANTS
+  # ========================================================
+  /api/v1/products:
+    get:
+      tags: [Catalog - Products]
+      summary: Tìm kiếm và lọc sản phẩm (Full-Text Search, JSONB Specs, Phân trang)
+      parameters:
+        - name: search
+          in: query
+          description: Từ khóa tìm kiếm Full-Text
+          schema: { type: string }
+        - name: categoryId
+          in: query
+          schema: { type: string, format: uuid }
+        - name: brandId
+          in: query
+          schema: { type: string, format: uuid }
+        - name: minPrice
+          in: query
+          schema: { type: number }
+        - name: maxPrice
+          in: query
+          schema: { type: number }
+        - name: sort
+          in: query
+          description: 'Sắp xếp: price_asc, price_desc, newest'
+          schema: { type: string }
+        - name: page
+          in: query
+          schema: { type: integer, default: 1 }
+        - name: pageSize
+          in: query
+          schema: { type: integer, default: 20 }
+      responses:
+        '200':
+          description: Danh sách sản phẩm phân trang
+
+  /api/v1/products/{slug}:
+    get:
+      tags: [Catalog - Products]
+      summary: Chi tiết sản phẩm, đường dẫn 3D GLB, biến thể SKU và tồn kho khả dụng
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Chi tiết sản phẩm
+        '404':
+          description: Không tìm thấy sản phẩm
+
+  # ========================================================
+  # SHOPPING CART
+  # ========================================================
+  /api/v1/cart:
+    get:
+      tags: [Cart]
+      summary: Lấy chi tiết giỏ hàng hiện tại (hỗ trợ cả khách vãng lai qua Header)
+      parameters:
+        - name: X-Anonymous-Id
+          in: header
+          required: false
+          schema: { type: string }
+      responses:
+        '200':
+          description: Chi tiết giỏ hàng
+
+  /api/v1/cart/items:
+    post:
+      tags: [Cart]
+      summary: Thêm sản phẩm vào giỏ hàng
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [variantId, quantity]
+              properties:
+                variantId: { type: string, format: uuid }
+                quantity: { type: integer, minimum: 1 }
+      responses:
+        '200':
+          description: Đã thêm vào giỏ hàng
+        '400':
+          description: Số lượng yêu cầu vượt quá tồn kho khả dụng
+
+  /api/v1/cart/items/{itemId}:
+    put:
+      tags: [Cart]
+      summary: Cập nhật số lượng món hàng trong giỏ
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [quantity]
+              properties:
+                quantity: { type: integer, minimum: 1 }
+      responses:
+        '200':
+          description: Cập nhật thành công
+    delete:
+      tags: [Cart]
+      summary: Xóa món hàng khỏi giỏ
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Đã xóa món hàng
+
+  # ========================================================
+  # COUPONS
+  # ========================================================
+  /api/v1/coupons/apply:
+    post:
+      tags: [Coupons]
+      summary: Kiểm tra và tính giá trị giảm giá của coupon
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [couponCode, cartTotalAmount]
+              properties:
+                couponCode: { type: string }
+                cartTotalAmount: { type: number }
+      responses:
+        '200':
+          description: Kết quả áp dụng mã giảm giá
+
+  # ========================================================
+  # ORDERS & CHECKOUT
+  # ========================================================
+  /api/v1/orders/checkout:
+    post:
+      tags: [Orders]
+      summary: Tạo đơn hàng mới (Server tính lại giá, giữ kho an toàn, lưu snapshot)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutRequestDto'
+      responses:
+        '200':
+          description: Đặt hàng thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutResponseDto'
+        '400':
+          description: Hết hàng, mã giảm giá không hợp lệ hoặc sai lệch giá
+
+  /api/v1/orders/my-orders:
+    get:
+      tags: [Orders]
+      summary: Xem danh sách đơn hàng của tôi (Chống IDOR)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema: { type: integer, default: 1 }
+        - name: pageSize
+          in: query
+          schema: { type: integer, default: 20 }
+      responses:
+        '200':
+          description: Danh sách đơn hàng cá nhân
+
+  /api/v1/orders/my-orders/{id}:
+    get:
+      tags: [Orders]
+      summary: Xem chi tiết đơn hàng của tôi (Chống IDOR)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Chi tiết đơn hàng cùng các trường snapshot
+        '403':
+          description: Không có quyền xem đơn hàng này (IDOR protection)
+        '404':
+          description: Không tìm thấy đơn hàng
+
+  /api/v1/orders/my-orders/{id}/cancel:
+    post:
+      tags: [Orders]
+      summary: Khách tự hủy đơn hàng (khi đơn còn ở trạng thái Pending)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason: { type: string }
+      responses:
+        '200':
+          description: Hủy đơn thành công và tự động giải phóng tồn kho
+
+  # ========================================================
+  # PAYMENTS
+  # ========================================================
+  /api/v1/payments/{orderId}/vnpay-url:
+    get:
+      tags: [Payments]
+      summary: Lấy URL chuyển hướng thanh toán VNPay
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Trả về URL thanh toán VNPay
+
+  /api/v1/payments/vnpay-ipn:
+    post:
+      tags: [Payments]
+      summary: Webhook IPN xử lý kết quả thanh toán từ VNPay (Idempotent)
+      responses:
+        '200':
+          description: Xác nhận kết quả IPN thành công
+
+  # ========================================================
+  # RETURNS & REFUNDS
+  # ========================================================
+  /api/v1/orders/{id}/return-requests:
+    post:
+      tags: [Returns]
+      summary: Khách gửi yêu cầu đổi trả / hoàn tiền
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReturnRequestDto'
+      responses:
+        '200':
+          description: Gửi yêu cầu đổi trả thành công
+
+  # ========================================================
+  # ADMIN & INVENTORY
+  # ========================================================
+  /api/v1/admin/orders:
+    get:
+      tags: [Admin - Orders]
+      summary: Quản lý danh sách đơn hàng toàn shop (Sales / Admin)
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Danh sách đơn hàng toàn shop
+
+  /api/v1/admin/orders/{id}/status:
+    patch:
+      tags: [Admin - Orders]
+      summary: Cập nhật trạng thái đơn hàng (Xác nhận, Đang giao, Hoàn tất, Hủy)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [newStatus]
+              properties:
+                newStatus: { type: string }
+                note: { type: string }
+      responses:
+        '200':
+          description: Cập nhật trạng thái và điều chỉnh tồn kho thành công
+
+  /api/v1/admin/inventory:
+    get:
+      tags: [Admin - Inventory]
+      summary: Xem bảng tồn kho thực tế và tồn đang giữ của từng SKU
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Danh sách tồn kho theo biến thể
+
+  /api/v1/admin/inventory/adjust:
+    post:
+      tags: [Admin - Inventory]
+      summary: Điều chỉnh tồn kho sau kiểm kê thủ công
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [variantId, actualQuantity, reason]
+              properties:
+                variantId: { type: string, format: uuid }
+                actualQuantity: { type: integer, minimum: 0 }
+                reason: { type: string }
+      responses:
+        '200':
+          description: Điều chỉnh tồn kho và ghi sổ cái thành công
+
+  /api/v1/admin/reports/dashboard:
+    get:
+      tags: [Admin - Reports]
+      summary: Xem số liệu báo cáo Dashboard tổng quan
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Doanh thu, lợi nhuận gộp, top sản phẩm, cảnh báo kho
+
+  /api/v1/admin/audit-logs:
+    get:
+      tags: [Admin - System]
+      summary: Xem nhật ký kiểm toán thao tác quản trị
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Danh sách audit logs kèm old_values và new_values
+
+  /health:
+    get:
+      tags: [Health]
+      summary: Health check endpoint kiểm tra kết nối hệ thống và cơ sở dữ liệu
+      responses:
+        '200':
+          description: Hệ thống hoạt động bình thường (Healthy)
+        '503':
+          description: Cơ sở dữ liệu hoặc dịch vụ không phản hồi
+
+# ========================================================
+# COMPONENTS & SCHEMAS
+# ========================================================
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    LoginResponse:
+      type: object
+      properties:
+        accessToken: { type: string }
+        refreshToken: { type: string }
+        expiresIn: { type: integer }
+        user:
+          type: object
+          properties:
+            id: { type: string, format: uuid }
+            email: { type: string }
+            fullName: { type: string }
+            roles:
+              type: array
+              items: { type: string }
+
+    CreateAddressDto:
+      type: object
+      required: [recipientName, phoneNumber, provinceCode, provinceName, districtCode, districtName, wardCode, wardName, detailedAddress]
+      properties:
+        recipientName: { type: string }
+        phoneNumber: { type: string }
+        provinceCode: { type: string }
+        provinceName: { type: string }
+        districtCode: { type: string }
+        districtName: { type: string }
+        wardCode: { type: string }
+        wardName: { type: string }
+        detailedAddress: { type: string }
+        isDefault: { type: boolean }
+
+    CheckoutRequestDto:
+      type: object
+      required: [paymentMethod, addressId]
+      properties:
+        paymentMethod:
+          type: string
+          enum: [COD, VNPay]
+        addressId:
+          type: string
+          format: uuid
+        couponCode:
+          type: string
+        customerNote:
+          type: string
+
+    CheckoutResponseDto:
+      type: object
+      properties:
+        orderId: { type: string, format: uuid }
+        orderNumber: { type: string }
+        totalAmount: { type: number }
+        paymentMethod: { type: string }
+        paymentUrl: { type: string, nullable: true }
+        status: { type: string }
+
+    CreateReturnRequestDto:
+      type: object
+      required: [reason, items]
+      properties:
+        reason: { type: string }
+        bankInfo:
+          type: object
+          properties:
+            bankName: { type: string }
+            accountNumber: { type: string }
+            accountHolder: { type: string }
+        items:
+          type: array
+          items:
+            type: object
+            required: [orderItemId, quantity]
+            properties:
+              orderItemId: { type: string, format: uuid }
+              quantity: { type: integer, minimum: 1 }
+              reason: { type: string }
+              conditionNote: { type: string }
