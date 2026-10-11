@@ -121,6 +121,7 @@ export interface ProductVariantDto {
   salePrice: number;
   costPrice: number;
   isActive: boolean;
+  stockQuantity?: number;
   images: ProductImageDto[];
 }
 

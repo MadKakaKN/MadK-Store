@@ -175,7 +175,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     name: 'iPhone 15 Pro Max',
     slug: 'dien-thoai-iphone-15-pro-max',
     shortDescription: 'Khung titan siêu bền, chip Apple A17 Pro mạnh mẽ, camera tiềm vọng 5x.',
-    description: 'iPhone 15 Pro Max là đỉnh cao công nghệ với khung vỏ titan hàng không vũ trụ siêu nhẹ và bền bỉ. Màn hình Super Retina XDR 6.7 inch với ProMotion 120Hz mượt mà.',
+    description: '<p>iPhone 15 Pro Max là đỉnh cao công nghệ với khung vỏ titan hàng không vũ trụ siêu nhẹ và bền bỉ. Màn hình Super Retina XDR 6.7 inch với ProMotion 120Hz mượt mà.</p><p>Hệ thống camera chuyên nghiệp với khả năng zoom quang học 5x, nút Action Button mới và cổng sạc USB-C hỗ trợ tốc độ truyền dữ liệu USB 3 siêu tốc.</p>',
     specifications: JSON.stringify({ os: 'iOS', screen_size: '6.7 inch', refresh_rate: '120Hz', ram: '8GB', storage: '256GB', network: '5G' }),
     model3DUrl: 'https://models.madkstore.vn/iphone-15-pro-max.glb',
     thumbnailUrl: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&q=80',
@@ -184,8 +184,9 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     category: { id: 'c-dien-thoai-thong-minh', name: 'Điện thoại thông minh', slug: 'dien-thoai-thong-minh' },
     brand: { id: 'b-apple', name: 'Apple', slug: 'apple' },
     variants: [
-      { id: 'v-1', sku: 'IP15PM-256-NAT', name: 'iPhone 15 Pro Max 256GB Titan Tự Nhiên', attributes: JSON.stringify({ color: 'Titan Tự Nhiên', storage: '256GB' }), originalPrice: 36990000, salePrice: 34990000, costPrice: 28000000, isActive: true, images: [] },
-      { id: 'v-2', sku: 'IP15PM-512-BLU', name: 'iPhone 15 Pro Max 512GB Titan Xanh', attributes: JSON.stringify({ color: 'Titan Xanh', storage: '512GB' }), originalPrice: 41990000, salePrice: 39990000, costPrice: 32000000, isActive: true, images: [] },
+      { id: 'v-1', sku: 'IP15PM-256-NAT', name: 'Titan Tự Nhiên - 256GB', attributes: JSON.stringify({ color: 'Titan Tự Nhiên', storage: '256GB' }), originalPrice: 36990000, salePrice: 34990000, costPrice: 28000000, isActive: true, stockQuantity: 18, images: [] },
+      { id: 'v-2', sku: 'IP15PM-512-BLU', name: 'Titan Xanh - 512GB', attributes: JSON.stringify({ color: 'Titan Xanh', storage: '512GB' }), originalPrice: 41990000, salePrice: 39990000, costPrice: 32000000, isActive: true, stockQuantity: 5, images: [] },
+      { id: 'v-1b', sku: 'IP15PM-1TB-BLK', name: 'Titan Đen - 1TB', attributes: JSON.stringify({ color: 'Titan Đen', storage: '1TB' }), originalPrice: 47990000, salePrice: 45990000, costPrice: 37000000, isActive: true, stockQuantity: 0, images: [] },
     ],
     images: [
       { id: 'img-1', imageUrl: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&q=80', altText: 'iPhone 15 Pro Max Chính', displayOrder: 1, isPrimary: true },
@@ -197,7 +198,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     name: 'Samsung Galaxy S24 Ultra',
     slug: 'dien-thoai-samsung-galaxy-s24-ultra',
     shortDescription: 'Galaxy AI quyền năng, bút S-Pen tích hợp, khung titan và camera 200MP zoom 100x.',
-    description: 'Galaxy S24 Ultra mở ra kỷ nguyên mới với trí tuệ nhân tạo Galaxy AI, màn hình phẳng Dynamic AMOLED 2X 120Hz rực rỡ và kính chống chói Corning Gorilla Armor.',
+    description: '<p>Galaxy S24 Ultra mở ra kỷ nguyên mới với trí tuệ nhân tạo Galaxy AI, màn hình phẳng Dynamic AMOLED 2X 120Hz rực rỡ và kính chống chói Corning Gorilla Armor.</p><p>Khung viền titan siêu bền, camera 200MP đột phá và bút S-Pen gắn trong thân máy cho trải nghiệm viết vẽ chân thực như trên giấy.</p>',
     specifications: JSON.stringify({ os: 'Android', screen_size: '6.8 inch', refresh_rate: '120Hz', ram: '12GB', storage: '256GB', network: '5G' }),
     model3DUrl: 'https://models.madkstore.vn/galaxy-s24-ultra.glb',
     thumbnailUrl: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&q=80',
@@ -206,10 +207,32 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     category: { id: 'c-dien-thoai-thong-minh', name: 'Điện thoại thông minh', slug: 'dien-thoai-thong-minh' },
     brand: { id: 'b-samsung', name: 'Samsung', slug: 'samsung' },
     variants: [
-      { id: 'v-3', sku: 'S24U-256-GRY', name: 'Galaxy S24 Ultra 256GB Xám Titan', attributes: JSON.stringify({ color: 'Xám Titan', storage: '256GB' }), originalPrice: 33990000, salePrice: 31990000, costPrice: 25000000, isActive: true, images: [] },
+      { id: 'v-3', sku: 'S24U-256-GRY', name: 'Xám Titan - 256GB', attributes: JSON.stringify({ color: 'Xám Titan', storage: '256GB' }), originalPrice: 33990000, salePrice: 31990000, costPrice: 25000000, isActive: true, stockQuantity: 12, images: [] },
+      { id: 'v-3b', sku: 'S24U-512-VIO', name: 'Tím Titan - 512GB', attributes: JSON.stringify({ color: 'Tím Titan', storage: '512GB' }), originalPrice: 37490000, salePrice: 35490000, costPrice: 28000000, isActive: true, stockQuantity: 0, images: [] },
     ],
     images: [
       { id: 'img-3', imageUrl: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&q=80', altText: 'Galaxy S24 Ultra Chính', displayOrder: 1, isPrimary: true },
+    ],
+  },
+  {
+    id: 'p-2b',
+    name: 'iPad Pro 11 M4 (2024)',
+    slug: 'may-tinh-bang-ipad-pro-11-m4',
+    shortDescription: 'Mỏng nhất lịch sử Apple 5.3mm, chip Apple M4 AI đột phá, màn hình Ultra Retina XDR OLED kép.',
+    description: '<p>iPad Pro 11 M4 định nghĩa lại máy tính bảng cao cấp với độ mỏng kỷ lục chỉ 5.3mm, màn hình OLED Tandem hai lớp siêu sáng và chip Apple M4 với sức mạnh xử lý AI 38 nghìn tỷ phép tính mỗi giây.</p>',
+    specifications: JSON.stringify({ os: 'iPadOS', screen_size: '11 inch', chip: 'Apple M4', storage: '256GB', ram: '8GB' }),
+    model3DUrl: 'https://models.madkstore.vn/ipad-pro-11-m4.glb',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80',
+    basePrice: 28990000,
+    isFeatured: true,
+    category: { id: 'c-may-tinh-bang', name: 'Máy tính bảng', slug: 'may-tinh-bang' },
+    brand: { id: 'b-apple', name: 'Apple', slug: 'apple' },
+    variants: [
+      { id: 'v-pad-1', sku: 'IPAD-M4-256-SLV', name: 'Bạc - 256GB Wi-Fi', attributes: JSON.stringify({ color: 'Bạc', storage: '256GB' }), originalPrice: 29990000, salePrice: 28990000, costPrice: 23000000, isActive: true, stockQuantity: 9, images: [] },
+      { id: 'v-pad-2', sku: 'IPAD-M4-512-BLK', name: 'Đen Không Gian - 512GB Wi-Fi', attributes: JSON.stringify({ color: 'Đen Không Gian', storage: '512GB' }), originalPrice: 34990000, salePrice: 33990000, costPrice: 27000000, isActive: true, stockQuantity: 4, images: [] },
+    ],
+    images: [
+      { id: 'img-pad-1', imageUrl: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80', altText: 'iPad Pro M4', displayOrder: 1, isPrimary: true },
     ],
   },
   {
@@ -217,7 +240,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     name: 'MacBook Pro 16 M3 Max',
     slug: 'laptop-apple-macbook-pro-16-m3-max',
     shortDescription: 'Sức mạnh dựng phim 8K và AI đỉnh cao, màn hình Liquid Retina XDR 120Hz, pin 22 giờ.',
-    description: 'Cỗ máy làm việc di động hoàn hảo nhất lịch sử Apple, xử lý các tác vụ render 3D và lập trình máy học nhẹ nhàng với chip M3 Max.',
+    description: '<p>Cỗ máy làm việc di động hoàn hảo nhất lịch sử Apple, xử lý các tác vụ render 3D và lập trình máy học nhẹ nhàng với chip M3 Max và bộ nhớ hợp nhất cực nhanh.</p>',
     specifications: JSON.stringify({ cpu: 'Apple M3 Pro', ram: '32GB', storage: '1TB SSD', weight: 'Trên 1.5kg' }),
     model3DUrl: 'https://models.madkstore.vn/macbook-pro-16.glb',
     thumbnailUrl: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&q=80',
@@ -226,10 +249,29 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     category: { id: 'c-laptop-van-phong', name: 'Laptop Văn phòng & Doanh nhân', slug: 'laptop-van-phong' },
     brand: { id: 'b-apple', name: 'Apple', slug: 'apple' },
     variants: [
-      { id: 'v-4', sku: 'MBP16-M3MAX-BLK', name: 'MacBook Pro 16 M3 Max 36GB/1TB Đen Không Gian', attributes: JSON.stringify({ color: 'Đen Không Gian', storage: '1TB SSD' }), originalPrice: 92990000, salePrice: 89990000, costPrice: 75000000, isActive: true, images: [] },
+      { id: 'v-4', sku: 'MBP16-M3MAX-BLK', name: 'Đen Không Gian - 36GB / 1TB SSD', attributes: JSON.stringify({ color: 'Đen Không Gian', storage: '1TB SSD' }), originalPrice: 92990000, salePrice: 89990000, costPrice: 75000000, isActive: true, stockQuantity: 6, images: [] },
     ],
     images: [
       { id: 'img-4', imageUrl: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&q=80', altText: 'MacBook Pro 16 Chính', displayOrder: 1, isPrimary: true },
+    ],
+  },
+  {
+    id: 'p-3b',
+    name: 'Dell XPS 15 9530 OLED',
+    slug: 'laptop-dell-xps-15-9530-oled',
+    shortDescription: 'Màn hình 3.5K OLED cảm ứng, Intel Core i9-13900H, đồ họa RTX 4070, vỏ nhôm nguyên khối.',
+    description: '<p>Dell XPS 15 9530 là biểu tượng của laptop văn phòng cao cấp và sáng tạo nội dung. Màn hình InfinityEdge viền siêu mỏng, bàn rê chuột kính cực êm ái và hệ thống âm thanh vòm Waves Nx 3D.</p>',
+    specifications: JSON.stringify({ cpu: 'Intel Core i9', ram: '32GB', storage: '1TB SSD', weight: 'Dưới 1.5kg' }),
+    thumbnailUrl: 'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=600&q=80',
+    basePrice: 62990000,
+    isFeatured: false,
+    category: { id: 'c-laptop-van-phong', name: 'Laptop Văn phòng & Doanh nhân', slug: 'laptop-van-phong' },
+    brand: { id: 'b-dell', name: 'Dell', slug: 'dell' },
+    variants: [
+      { id: 'v-xps-1', sku: 'XPS15-I9-32-1TB', name: 'Bạc Platinum - i9/32GB/1TB/RTX4070', attributes: JSON.stringify({ color: 'Bạc Platinum', ram: '32GB' }), originalPrice: 65990000, salePrice: 62990000, costPrice: 52000000, isActive: true, stockQuantity: 3, images: [] },
+    ],
+    images: [
+      { id: 'img-xps-1', imageUrl: 'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=600&q=80', altText: 'Dell XPS 15', displayOrder: 1, isPrimary: true },
     ],
   },
   {
@@ -237,7 +279,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     name: 'ASUS ROG Strix SCAR 16 (2024)',
     slug: 'laptop-asus-rog-strix-scar-16',
     shortDescription: 'Quái thú gaming Intel Core i9-14900HX, RTX 4090, màn hình Mini LED 240Hz Nebula HDR.',
-    description: 'Cỗ máy chiến game tối thượng dành cho game thủ Esports với hệ thống tản nhiệt ba quạt và keo tản nhiệt kim loại lỏng Conductonaut Extreme.',
+    description: '<p>Cỗ máy chiến game tối thượng dành cho game thủ Esports với hệ thống tản nhiệt ba quạt và keo tản nhiệt kim loại lỏng Conductonaut Extreme.</p>',
     specifications: JSON.stringify({ cpu: 'Intel Core i9', gpu: 'RTX 4090', ram: '32GB', storage: '1TB SSD', screen: '16 inch 240Hz' }),
     thumbnailUrl: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80',
     basePrice: 69990000,
@@ -245,7 +287,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     category: { id: 'c-laptop-gaming', name: 'Laptop Gaming', slug: 'laptop-gaming' },
     brand: { id: 'b-asus', name: 'ASUS', slug: 'asus' },
     variants: [
-      { id: 'v-5', sku: 'SCAR16-4090', name: 'ROG Strix SCAR 16 i9/32GB/1TB/RTX4090', attributes: JSON.stringify({ color: 'Off Black', gpu: 'RTX 4090' }), originalPrice: 73990000, salePrice: 69990000, costPrice: 58000000, isActive: true, images: [] },
+      { id: 'v-5', sku: 'SCAR16-4090', name: 'Off Black - i9/32GB/1TB/RTX4090', attributes: JSON.stringify({ color: 'Off Black', gpu: 'RTX 4090' }), originalPrice: 73990000, salePrice: 69990000, costPrice: 58000000, isActive: true, stockQuantity: 7, images: [] },
     ],
     images: [
       { id: 'img-5', imageUrl: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80', altText: 'ROG Strix SCAR 16', displayOrder: 1, isPrimary: true },
@@ -256,7 +298,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     name: 'Bàn phím cơ Keychron Q1 Pro Wireless',
     slug: 'ban-phim-co-keychron-q1-pro-wireless',
     shortDescription: 'Vỏ nhôm CNC 75%, gasket mount, kết nối Bluetooth 5.1 và keycap PBT doubleshot.',
-    description: 'Bàn phím cơ custom không dây cao cấp nhất của Keychron hỗ trợ phần mềm QMK/VIA tùy biến từng phím bấm.',
+    description: '<p>Bàn phím cơ custom không dây cao cấp nhất của Keychron hỗ trợ phần mềm QMK/VIA tùy biến từng phím bấm.</p>',
     specifications: JSON.stringify({ switch: 'Tactile', layout: '75%', connectivity: 'Không dây (Bluetooth/2.4G)', hotswap: 'Có' }),
     model3DUrl: 'https://models.madkstore.vn/keychron-q1-pro.glb',
     thumbnailUrl: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80',
@@ -265,8 +307,9 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     category: { id: 'c-ban-phim-co', name: 'Bàn phím cơ', slug: 'ban-phim-co' },
     brand: { id: 'b-keychron', name: 'Keychron', slug: 'keychron' },
     variants: [
-      { id: 'v-6', sku: 'KQ1P-RED', name: 'Keychron Q1 Pro Red Switch', attributes: JSON.stringify({ switch: 'Linear Red', color: 'Carbon Black' }), originalPrice: 4800000, salePrice: 4500000, costPrice: 3500000, isActive: true, images: [] },
-      { id: 'v-7', sku: 'KQ1P-BRN', name: 'Keychron Q1 Pro Brown Switch', attributes: JSON.stringify({ switch: 'Tactile Brown', color: 'Carbon Black' }), originalPrice: 4800000, salePrice: 4500000, costPrice: 3500000, isActive: true, images: [] },
+      { id: 'v-6', sku: 'KQ1P-RED', name: 'Carbon Black - Red Switch (Linear)', attributes: JSON.stringify({ switch: 'Linear Red', color: 'Carbon Black' }), originalPrice: 4800000, salePrice: 4500000, costPrice: 3500000, isActive: true, stockQuantity: 15, images: [] },
+      { id: 'v-7', sku: 'KQ1P-BRN', name: 'Carbon Black - Brown Switch (Tactile)', attributes: JSON.stringify({ switch: 'Tactile Brown', color: 'Carbon Black' }), originalPrice: 4800000, salePrice: 4500000, costPrice: 3500000, isActive: true, stockQuantity: 8, images: [] },
+      { id: 'v-7b', sku: 'KQ1P-BLU', name: 'Silver White - Banana Switch', attributes: JSON.stringify({ switch: 'Tactile Banana', color: 'Silver White' }), originalPrice: 4800000, salePrice: 4600000, costPrice: 3500000, isActive: true, stockQuantity: 0, images: [] },
     ],
     images: [
       { id: 'img-6', imageUrl: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80', altText: 'Keychron Q1 Pro', displayOrder: 1, isPrimary: true },
@@ -277,7 +320,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     name: 'Chuột gaming Logitech G Pro X Superlight 2',
     slug: 'chuot-gaming-logitech-g-pro-x-superlight-2',
     shortDescription: 'Siêu nhẹ 60g, cảm biến HERO 2 32000 DPI, switch lai quang học LIGHTFORCE.',
-    description: 'Chuột thi đấu Esports được các tuyển thủ chuyên nghiệp toàn cầu tin dùng nhất.',
+    description: '<p>Chuột thi đấu Esports được các tuyển thủ chuyên nghiệp toàn cầu tin dùng nhất.</p>',
     specifications: JSON.stringify({ sensor: 'Optical HERO', weight: 'Siêu nhẹ (<63g)', connectivity: 'Không dây 2.4GHz' }),
     thumbnailUrl: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80',
     basePrice: 3890000,
@@ -285,8 +328,8 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     category: { id: 'c-chuot-gaming', name: 'Chuột Gaming', slug: 'chuot-gaming' },
     brand: { id: 'b-logitech', name: 'Logitech', slug: 'logitech' },
     variants: [
-      { id: 'v-8', sku: 'GPX2-WHT', name: 'Logitech G Pro X Superlight 2 Trắng', attributes: JSON.stringify({ color: 'Trắng' }), originalPrice: 4290000, salePrice: 3890000, costPrice: 2800000, isActive: true, images: [] },
-      { id: 'v-9', sku: 'GPX2-BLK', name: 'Logitech G Pro X Superlight 2 Đen', attributes: JSON.stringify({ color: 'Đen' }), originalPrice: 4290000, salePrice: 3890000, costPrice: 2800000, isActive: true, images: [] },
+      { id: 'v-8', sku: 'GPX2-WHT', name: 'Trắng Ngọc Trai', attributes: JSON.stringify({ color: 'Trắng' }), originalPrice: 4290000, salePrice: 3890000, costPrice: 2800000, isActive: true, stockQuantity: 21, images: [] },
+      { id: 'v-9', sku: 'GPX2-BLK', name: 'Đen Mờ Nhám', attributes: JSON.stringify({ color: 'Đen' }), originalPrice: 4290000, salePrice: 3890000, costPrice: 2800000, isActive: true, stockQuantity: 14, images: [] },
     ],
     images: [
       { id: 'img-7', imageUrl: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80', altText: 'Logitech GPX2', displayOrder: 1, isPrimary: true },
@@ -297,7 +340,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     name: 'Tai nghe chống ồn Sony WH-1000XM5',
     slug: 'tai-nghe-sony-wh-1000xm5-wireless',
     shortDescription: 'Chống ồn đỉnh cao Auto NC Optimizer, 8 microphone, driver carbon fiber 30mm.',
-    description: 'Chuẩn mực tai nghe chống ồn chủ động toàn cầu mang đến không gian tĩnh lặng tuyệt đối cho âm nhạc hi-res.',
+    description: '<p>Chuẩn mực tai nghe chống ồn chủ động toàn cầu mang đến không gian tĩnh lặng tuyệt đối cho âm nhạc hi-res.</p>',
     specifications: JSON.stringify({ type: 'Over-ear', anc: 'Có', battery: '20 - 30 giờ', connectivity: 'Bluetooth 5.3' }),
     model3DUrl: 'https://models.madkstore.vn/sony-wh-1000xm5.glb',
     thumbnailUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=80',
@@ -306,7 +349,8 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     category: { id: 'c-tai-nghe', name: 'Tai nghe & Audio', slug: 'tai-nghe' },
     brand: { id: 'b-sony', name: 'Sony', slug: 'sony' },
     variants: [
-      { id: 'v-10', sku: 'WH1000M5-BLK', name: 'Sony WH-1000XM5 Đen', attributes: JSON.stringify({ color: 'Đen' }), originalPrice: 8990000, salePrice: 8490000, costPrice: 6500000, isActive: true, images: [] },
+      { id: 'v-10', sku: 'WH1000M5-BLK', name: 'Đen Cổ Điển', attributes: JSON.stringify({ color: 'Đen' }), originalPrice: 8990000, salePrice: 8490000, costPrice: 6500000, isActive: true, stockQuantity: 10, images: [] },
+      { id: 'v-10b', sku: 'WH1000M5-SLV', name: 'Bạc Bạch Kim', attributes: JSON.stringify({ color: 'Bạc' }), originalPrice: 8990000, salePrice: 8490000, costPrice: 6500000, isActive: true, stockQuantity: 0, images: [] },
     ],
     images: [
       { id: 'img-8', imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=80', altText: 'Sony WH-1000XM5', displayOrder: 1, isPrimary: true },
@@ -317,7 +361,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     name: 'VGA ASUS ROG Strix GeForce RTX 4090 OC 24GB',
     slug: 'vga-asus-rog-strix-geforce-rtx-4090',
     shortDescription: 'Kiến trúc Ada Lovelace, 24GB GDDR6X, khung kim loại đúc khuôn cứng cáp, buồng hơi tản nhiệt.',
-    description: 'Chiếc card đồ họa mạnh mẽ và hầm hố nhất thế giới, sẵn sàng cân mọi tựa game 4K Ray Tracing và huấn luyện mô hình AI.',
+    description: '<p>Chiếc card đồ họa mạnh mẽ và hầm hố nhất thế giới, sẵn sàng cân mọi tựa game 4K Ray Tracing và huấn luyện mô hình AI.</p>',
     specifications: JSON.stringify({ vram: '24GB GDDR6X', bus_width: '384-bit', power_consumption: '1000W' }),
     model3DUrl: 'https://models.madkstore.vn/rtx-4090.glb',
     thumbnailUrl: 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80',
@@ -326,10 +370,88 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     category: { id: 'c-vga-card-man-hinh', name: 'VGA - Card màn hình', slug: 'vga-card-man-hinh' },
     brand: { id: 'b-asus', name: 'ASUS', slug: 'asus' },
     variants: [
-      { id: 'v-11', sku: 'ROG-4090-24G', name: 'ASUS ROG Strix RTX 4090 OC Edition 24GB', attributes: JSON.stringify({ color: 'Đen RGB' }), originalPrice: 62990000, salePrice: 58990000, costPrice: 49000000, isActive: true, images: [] },
+      { id: 'v-11', sku: 'ROG-4090-24G', name: 'Đen RGB - 24GB OC Edition', attributes: JSON.stringify({ color: 'Đen RGB' }), originalPrice: 62990000, salePrice: 58990000, costPrice: 49000000, isActive: true, stockQuantity: 4, images: [] },
     ],
     images: [
       { id: 'img-9', imageUrl: 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80', altText: 'ROG Strix RTX 4090', displayOrder: 1, isPrimary: true },
+    ],
+  },
+  {
+    id: 'p-9',
+    name: 'CPU Intel Core i9-14900K',
+    slug: 'cpu-intel-core-i9-14900k',
+    shortDescription: '24 nhân 32 luồng, xung nhịp Turbo lên đến 6.0 GHz, socket LGA1700, hỗ trợ PCIe 5.0 và DDR5.',
+    description: '<p>Bộ vi xử lý desktop đầu bảng của Intel thế hệ Raptor Lake Refresh, cung cấp hiệu năng đơn nhân và đa nhân vô song cho gaming đỉnh cao và tác vụ dựng đồ họa chuyên nghiệp.</p>',
+    specifications: JSON.stringify({ socket: 'LGA1700', cores_threads: '24 nhân 32 luồng', boost_clock: 'Lên đến 6.0 GHz' }),
+    thumbnailUrl: 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80',
+    basePrice: 15490000,
+    isFeatured: false,
+    category: { id: 'c-cpu-vi-xu-ly', name: 'CPU - Vi xử lý', slug: 'cpu-vi-xu-ly' },
+    brand: { id: 'b-intel', name: 'Intel', slug: 'intel' },
+    variants: [
+      { id: 'v-cpu-1', sku: 'I9-14900K-BOX', name: 'Chính Hãng Box', attributes: JSON.stringify({ package: 'Box Chính Hãng' }), originalPrice: 16490000, salePrice: 15490000, costPrice: 13000000, isActive: true, stockQuantity: 11, images: [] },
+    ],
+    images: [
+      { id: 'img-cpu-1', imageUrl: 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80', altText: 'Intel Core i9-14900K', displayOrder: 1, isPrimary: true },
+    ],
+  },
+  {
+    id: 'p-10',
+    name: 'CPU AMD Ryzen 7 7800X3D',
+    slug: 'cpu-amd-ryzen-7-7800x3d',
+    shortDescription: 'Vua gaming thế giới với công nghệ 3D V-Cache 96MB L3, 8 nhân 16 luồng, socket AM5.',
+    description: '<p>Bộ vi xử lý chơi game số 1 toàn cầu hiện nay nhờ bộ nhớ đệm 3D V-Cache khổng lồ, tối ưu hóa tối đa tốc độ khung hình (FPS) trong mọi tựa game AAA và Esports.</p>',
+    specifications: JSON.stringify({ socket: 'AM5', cores_threads: '8 nhân 16 luồng', boost_clock: 'Lên đến 5.0 GHz' }),
+    thumbnailUrl: 'https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=600&q=80',
+    basePrice: 10990000,
+    isFeatured: true,
+    category: { id: 'c-cpu-vi-xu-ly', name: 'CPU - Vi xử lý', slug: 'cpu-vi-xu-ly' },
+    brand: { id: 'b-amd', name: 'AMD', slug: 'amd' },
+    variants: [
+      { id: 'v-cpu-2', sku: 'R7-7800X3D-BOX', name: 'Chính Hãng Box', attributes: JSON.stringify({ package: 'Box Chính Hãng' }), originalPrice: 11990000, salePrice: 10990000, costPrice: 9000000, isActive: true, stockQuantity: 7, images: [] },
+    ],
+    images: [
+      { id: 'img-cpu-2', imageUrl: 'https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=600&q=80', altText: 'AMD Ryzen 7 7800X3D', displayOrder: 1, isPrimary: true },
+    ],
+  },
+  {
+    id: 'p-11',
+    name: 'RAM Corsair Dominator Titanium RGB DDR5 32GB (2x16GB) 6000MHz',
+    slug: 'ram-corsair-dominator-titanium-rgb-ddr5-32gb',
+    shortDescription: 'DDR5 6000MHz CL30, LED RGB Capellix rực rỡ, thanh top bar tháo rời tùy biến, IC tuyển chọn.',
+    description: '<p>Dòng RAM cao cấp biểu tượng của Corsair với lá tản nhiệt nhôm rèn nguyên khối, thiết kế thanh ánh sáng tùy biến độc quyền và hỗ trợ Intel XMP 3.0 / AMD EXPO.</p>',
+    specifications: JSON.stringify({ type: 'DDR5', capacity: '32GB (2x16GB)', speed: '6000MHz', rgb: 'Có' }),
+    thumbnailUrl: 'https://images.unsplash.com/photo-1541029074-12826c71c4c9?w=600&q=80',
+    basePrice: 4890000,
+    isFeatured: false,
+    category: { id: 'c-ram-bo-nho-trong', name: 'RAM - Bộ nhớ trong', slug: 'ram-bo-nho-trong' },
+    brand: { id: 'b-corsair', name: 'Corsair', slug: 'corsair' },
+    variants: [
+      { id: 'v-ram-1', sku: 'DOM-TIT-32-BLK', name: 'Đen Mờ (2x16GB)', attributes: JSON.stringify({ color: 'Đen', capacity: '32GB' }), originalPrice: 5290000, salePrice: 4890000, costPrice: 3800000, isActive: true, stockQuantity: 16, images: [] },
+      { id: 'v-ram-2', sku: 'DOM-TIT-32-WHT', name: 'Trắng Sữa (2x16GB)', attributes: JSON.stringify({ color: 'Trắng', capacity: '32GB' }), originalPrice: 5390000, salePrice: 4990000, costPrice: 3900000, isActive: true, stockQuantity: 8, images: [] },
+    ],
+    images: [
+      { id: 'img-ram-1', imageUrl: 'https://images.unsplash.com/photo-1541029074-12826c71c4c9?w=600&q=80', altText: 'Corsair Dominator Titanium DDR5', displayOrder: 1, isPrimary: true },
+    ],
+  },
+  {
+    id: 'p-12',
+    name: 'Ổ cứng SSD Samsung 990 Pro 2TB PCIe 4.0 NVMe',
+    slug: 'o-cung-ssd-samsung-990-pro-2tb-pcie-4',
+    shortDescription: 'Tốc độ đọc 7450 MB/s, ghi 6900 MB/s, tản nhiệt Niken kiểm soát nhiệt độ thông minh.',
+    description: '<p>Ổ cứng SSD NVMe PCIe 4.0 nhanh nhất thị trường, tối ưu hóa tối đa cho các cấu hình PC gaming đỉnh cao, dựng phim 4K/8K và máy chơi game PlayStation 5.</p>',
+    specifications: JSON.stringify({ interface: 'PCIe 4.0 x4, NVMe 2.0', form_factor: 'M.2 2280', read_speed: '7450 MB/s', write_speed: '6900 MB/s' }),
+    thumbnailUrl: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&q=80',
+    basePrice: 4990000,
+    isFeatured: false,
+    category: { id: 'c-o-cung-ssd', name: 'Ổ cứng SSD', slug: 'o-cung-ssd' },
+    brand: { id: 'b-samsung', name: 'Samsung', slug: 'samsung' },
+    variants: [
+      { id: 'v-ssd-1', sku: 'SAM-990PRO-2TB', name: 'Bản Tiêu Chuẩn (Non-Heatsink) 2TB', attributes: JSON.stringify({ capacity: '2TB', heatsink: 'Không' }), originalPrice: 5390000, salePrice: 4990000, costPrice: 3900000, isActive: true, stockQuantity: 20, images: [] },
+      { id: 'v-ssd-2', sku: 'SAM-990PRO-2TB-HS', name: 'Bản Có Tản Nhiệt (Heatsink) 2TB', attributes: JSON.stringify({ capacity: '2TB', heatsink: 'Có' }), originalPrice: 5890000, salePrice: 5490000, costPrice: 4300000, isActive: true, stockQuantity: 6, images: [] },
+    ],
+    images: [
+      { id: 'img-ssd-1', imageUrl: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&q=80', altText: 'Samsung 990 Pro 2TB', displayOrder: 1, isPrimary: true },
     ],
   },
 ];
@@ -386,6 +508,24 @@ export function getMockProducts(params: ProductQueryParams = {}): PagedResult<Pr
   if (params.search) {
     const q = params.search.toLowerCase().trim();
     filtered = filtered.filter((p) => p.name.toLowerCase().includes(q));
+  }
+
+  if (params.specs && Object.keys(params.specs).length > 0) {
+    filtered = filtered.filter((p) => {
+      const fullProd = MOCK_PRODUCTS.find((mp) => mp.id === p.id);
+      if (!fullProd || !fullProd.specifications) return false;
+      try {
+        const specObj = JSON.parse(fullProd.specifications);
+        for (const [key, val] of Object.entries(params.specs!)) {
+          if (val && String(specObj[key]).toLowerCase() !== String(val).toLowerCase()) {
+            return false;
+          }
+        }
+        return true;
+      } catch {
+        return false;
+      }
+    });
   }
 
   if (params.sort === 'price_asc') {

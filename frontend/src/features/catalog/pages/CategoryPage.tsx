@@ -11,6 +11,7 @@ import {
 } from '../../../types/catalog';
 import ProductCard from '../components/ProductCard';
 import LoadingSpinner from '../../../components/common/LoadingSpinner';
+import { formatVND } from '../../../utils/format';
 
 const PRICE_PRESETS = [
   { label: 'Tất cả mức giá', min: undefined, max: undefined },
@@ -39,13 +40,23 @@ export const CategoryPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
-  // Parse search params
+  // Custom price input state
+  const [customMinInput, setCustomMinInput] = useState('');
+  const [customMaxInput, setCustomMaxInput] = useState('');
+
+  // Parse search params from URL
   const searchQuery = searchParams.get('search') || '';
   const selectedBrand = searchParams.get('brand') || '';
   const selectedSort = (searchParams.get('sort') || 'newest') as 'newest' | 'price_asc' | 'price_desc';
   const minPriceParam = searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined;
   const maxPriceParam = searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined;
   const currentPage = searchParams.get('page') ? Number(searchParams.get('page')) : 1;
+
+  // Sync inputs when params change
+  useEffect(() => {
+    setCustomMinInput(minPriceParam !== undefined ? minPriceParam.toString() : '');
+    setCustomMaxInput(maxPriceParam !== undefined ? maxPriceParam.toString() : '');
+  }, [minPriceParam, maxPriceParam]);
 
   // Collect specs from URL: specs[ram]=16GB -> specs: { ram: '16GB' }
   const selectedSpecs = useMemo(() => {
@@ -59,13 +70,13 @@ export const CategoryPage: React.FC = () => {
     return specs;
   }, [searchParams]);
 
-  // Load tree and all brands once
+  // Load category tree and brands once
   useEffect(() => {
     catalogApi.getCategoryTree().then(setCategoryTree);
     catalogApi.getBrands().then(setAllBrands);
   }, []);
 
-  // Load category details and filters when slug changes
+  // Load category details and dynamic filters when slug changes
   useEffect(() => {
     if (slug) {
       catalogApi.getCategoryBySlug(slug).then(setCategoryDetail);
@@ -140,6 +151,13 @@ export const CategoryPage: React.FC = () => {
     });
   };
 
+  const handleCustomPriceSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const min = customMinInput ? Number(customMinInput) : undefined;
+    const max = customMaxInput ? Number(customMaxInput) : undefined;
+    handlePricePreset(min, max);
+  };
+
   const handleSpecChange = (specKey: string, specVal: string) => {
     const current = selectedSpecs[specKey];
     const key = `specs[${specKey}]`;
@@ -159,6 +177,12 @@ export const CategoryPage: React.FC = () => {
   const hasActiveFilters = Boolean(
     selectedBrand || minPriceParam !== undefined || maxPriceParam !== undefined || Object.keys(selectedSpecs).length > 0
   );
+
+  const activeBrandName = useMemo(() => {
+    if (!selectedBrand) return '';
+    const b = allBrands.find((brand) => brand.slug === selectedBrand);
+    return b ? b.name : selectedBrand;
+  }, [selectedBrand, allBrands]);
 
   return (
     <div className="py-6 sm:py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -203,14 +227,14 @@ export const CategoryPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setMobileFilterOpen(true)}
-              className="lg:hidden px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold flex items-center gap-1.5"
+              className="lg:hidden px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
               </svg>
               <span>Bộ lọc</span>
               {hasActiveFilters && (
-                <span className="w-2 h-2 rounded-full bg-brand-400"></span>
+                <span className="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
               )}
             </button>
           </div>
@@ -218,10 +242,10 @@ export const CategoryPage: React.FC = () => {
       </div>
 
       {/* Main Layout: Sidebar Filters + Products Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
         {/* Desktop Sidebar Filters */}
         <aside className="hidden lg:block lg:col-span-1 space-y-6">
-          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm space-y-6 sticky top-24">
+          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm space-y-6 sticky top-24 max-h-[85vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <h2 className="text-sm font-bold uppercase tracking-wider text-slate-900 flex items-center gap-2">
                 <span>⚡</span> Bộ lọc tìm kiếm
@@ -312,7 +336,7 @@ export const CategoryPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Price Presets */}
+            {/* Price Presets & Custom inputs */}
             <div>
               <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
                 Khoảng giá
@@ -337,9 +361,36 @@ export const CategoryPage: React.FC = () => {
                   );
                 })}
               </div>
+
+              {/* Custom price min-max */}
+              <form onSubmit={handleCustomPriceSubmit} className="mt-3 pt-3 border-t border-slate-100 space-y-2">
+                <span className="text-[11px] font-semibold text-slate-400 block">Hoặc tự nhập khoảng giá:</span>
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    type="number"
+                    placeholder="Tối thiểu"
+                    value={customMinInput}
+                    onChange={(e) => setCustomMinInput(e.target.value)}
+                    className="w-full text-xs p-2 rounded-xl border border-slate-200 focus:outline-none focus:border-brand-500"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Tối đa"
+                    value={customMaxInput}
+                    onChange={(e) => setCustomMaxInput(e.target.value)}
+                    className="w-full text-xs p-2 rounded-xl border border-slate-200 focus:outline-none focus:border-brand-500"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition-colors"
+                >
+                  Áp dụng giá
+                </button>
+              </form>
             </div>
 
-            {/* Dynamic Spec Filters if available */}
+            {/* Dynamic Spec Filters from API */}
             {categoryFilters?.specFilters && categoryFilters.specFilters.length > 0 && (
               <div className="space-y-4 pt-3 border-t border-slate-100">
                 {categoryFilters.specFilters.map((spec) => (
@@ -357,7 +408,7 @@ export const CategoryPage: React.FC = () => {
                             onClick={() => handleSpecChange(spec.key, opt)}
                             className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-all ${
                               isSelected
-                                ? 'bg-brand-600 border-brand-600 text-white'
+                                ? 'bg-brand-600 border-brand-600 text-white shadow-sm'
                                 : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-brand-300'
                             }`}
                           >
@@ -375,17 +426,17 @@ export const CategoryPage: React.FC = () => {
 
         {/* Products List Area */}
         <section className="lg:col-span-3 space-y-6">
-          {/* Toolbar: Sort + Active filters pills */}
+          {/* Toolbar: Sort & Status */}
           <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-semibold text-slate-500">Sắp xếp theo:</span>
+              <span className="text-xs font-semibold text-slate-500">Sắp xếp:</span>
               <div className="inline-flex rounded-xl p-1 bg-slate-100 text-xs font-semibold">
                 <button
                   type="button"
                   onClick={() => updateQuery({ sort: 'newest' })}
                   className={`px-3 py-1.5 rounded-lg transition-all ${
                     selectedSort === 'newest'
-                      ? 'bg-white text-brand-700 shadow-sm'
+                      ? 'bg-white text-brand-700 shadow-sm font-bold'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -396,39 +447,94 @@ export const CategoryPage: React.FC = () => {
                   onClick={() => updateQuery({ sort: 'price_asc' })}
                   className={`px-3 py-1.5 rounded-lg transition-all ${
                     selectedSort === 'price_asc'
-                      ? 'bg-white text-brand-700 shadow-sm'
+                      ? 'bg-white text-brand-700 shadow-sm font-bold'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
-                  Giá tăng dần
+                  Giá thấp &rarr; cao
                 </button>
                 <button
                   type="button"
                   onClick={() => updateQuery({ sort: 'price_desc' })}
                   className={`px-3 py-1.5 rounded-lg transition-all ${
                     selectedSort === 'price_desc'
-                      ? 'bg-white text-brand-700 shadow-sm'
+                      ? 'bg-white text-brand-700 shadow-sm font-bold'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
-                  Giá giảm dần
+                  Giá cao &rarr; thấp
                 </button>
               </div>
             </div>
 
-            {hasActiveFilters && (
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-400">Đang lọc theo tiêu chí</span>
-                <button
-                  type="button"
-                  onClick={clearAllFilters}
-                  className="text-xs text-brand-600 hover:underline font-bold"
-                >
-                  Xóa lọc
-                </button>
-              </div>
-            )}
+            <div className="text-xs text-slate-400 font-medium">
+              Trang {pagedData.page} / {Math.max(1, pagedData.totalPages)} &bull; {pagedData.totalItems} kết quả
+            </div>
           </div>
+
+          {/* Active Filter Pills Bar */}
+          {hasActiveFilters && (
+            <div className="flex flex-wrap items-center gap-2 p-3 bg-brand-50/50 rounded-2xl border border-brand-100">
+              <span className="text-xs font-bold text-slate-600">Đang lọc:</span>
+
+              {selectedBrand && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-white border border-brand-200 text-xs font-semibold text-brand-700 shadow-sm">
+                  <span>Hãng: {activeBrandName}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleBrandChange(selectedBrand)}
+                    className="ml-1 text-slate-400 hover:text-rose-500 font-bold"
+                  >
+                    &times;
+                  </button>
+                </span>
+              )}
+
+              {(minPriceParam !== undefined || maxPriceParam !== undefined) && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-white border border-brand-200 text-xs font-semibold text-brand-700 shadow-sm">
+                  <span>
+                    Giá:{' '}
+                    {minPriceParam !== undefined && maxPriceParam !== undefined
+                      ? `${formatVND(minPriceParam)} - ${formatVND(maxPriceParam)}`
+                      : minPriceParam !== undefined
+                      ? `Từ ${formatVND(minPriceParam)}`
+                      : `Đến ${formatVND(maxPriceParam!)}`}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => handlePricePreset(undefined, undefined)}
+                    className="ml-1 text-slate-400 hover:text-rose-500 font-bold"
+                  >
+                    &times;
+                  </button>
+                </span>
+              )}
+
+              {Object.entries(selectedSpecs).map(([specKey, specVal]) => (
+                <span
+                  key={specKey}
+                  className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-white border border-brand-200 text-xs font-semibold text-brand-700 shadow-sm"
+                >
+                  <span className="capitalize">{specKey}: {specVal}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleSpecChange(specKey, specVal)}
+                    className="ml-1 text-slate-400 hover:text-rose-500 font-bold"
+                  >
+                    &times;
+                  </button>
+                </span>
+              ))}
+
+              <button
+                type="button"
+                onClick={clearAllFilters}
+                className="text-xs text-rose-600 hover:underline font-bold ml-auto px-2"
+              >
+                Xóa tất cả
+              </button>
+            </div>
+          )}
 
           {/* Product Grid */}
           {loading ? (
@@ -565,6 +671,33 @@ export const CategoryPage: React.FC = () => {
                   ))}
                 </div>
               </div>
+
+              {/* Dynamic Specs in Mobile */}
+              {categoryFilters?.specFilters && categoryFilters.specFilters.length > 0 && (
+                <div className="mt-6 space-y-4">
+                  {categoryFilters.specFilters.map((spec) => (
+                    <div key={spec.key}>
+                      <h4 className="text-xs font-bold uppercase text-slate-400 mb-2">{spec.label}</h4>
+                      <div className="flex flex-wrap gap-1.5">
+                        {spec.options.map((opt) => (
+                          <button
+                            key={opt}
+                            type="button"
+                            onClick={() => handleSpecChange(spec.key, opt)}
+                            className={`px-2.5 py-1 rounded-lg text-xs font-medium border ${
+                              selectedSpecs[spec.key] === opt
+                                ? 'bg-brand-600 text-white border-brand-600'
+                                : 'bg-slate-50 text-slate-700 border-slate-200'
+                            }`}
+                          >
+                            {opt}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="pt-6 border-t border-slate-100 space-y-2">
