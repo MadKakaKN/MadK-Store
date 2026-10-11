@@ -4,6 +4,11 @@
 *.md
 frontend/node_modules
 frontend/dist
+**/.vs
+**/.vscode
+**/.idea
 **/bin
+**/bin/
 **/obj
+**/obj/
 logs
