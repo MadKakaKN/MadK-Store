@@ -114,20 +114,20 @@ Ghi chú: ma trận này là điểm xuất phát, điều chỉnh khi làm đ�
 ## Giai đoạn 1: Catalog (1-2 tuần)
 
 **Database**
-- [ ] Category (dạng cây), Brand
-- [ ] Product, ProductVariant (SKU, giá, tồn kho), ProductImage
-- [ ] Bảng schema thông số theo category (JSONB)
-- [ ] Slug thân thiện cho category và product
-- [ ] Trường đường dẫn model 3D (GLB, có thể rỗng) cho Product; ảnh thường vẫn là mặc định
-- [ ] Index cho cột lọc/sắp xếp, GIN index cho JSONB và full-text
+- [x] Category (dạng cây), Brand
+- [x] Product, ProductVariant (SKU, giá, tồn kho), ProductImage
+- [x] Bảng schema thông số theo category (JSONB)
+- [x] Slug thân thiện cho category và product
+- [x] Trường đường dẫn model 3D (GLB, có thể rỗng) cho Product; ảnh thường vẫn là mặc định
+- [x] Index cho cột lọc/sắp xếp, GIN index cho JSONB và full-text
 
 **Backend**
-- [ ] API danh sách có phân trang
-- [ ] Lọc theo category / brand / giá / thông số kỹ thuật
-- [ ] Sắp xếp
-- [ ] Tìm kiếm full-text của PostgreSQL
-- [ ] API chi tiết sản phẩm
-- [ ] Tránh N+1 query (kiểm tra bằng log SQL)
+- [x] API danh sách có phân trang
+- [x] Lọc theo category / brand / giá / thông số kỹ thuật
+- [x] Sắp xếp
+- [x] Tìm kiếm full-text của PostgreSQL
+- [x] API chi tiết sản phẩm
+- [x] Tránh N+1 query (kiểm tra bằng log SQL)
 
 **Frontend**
 - [ ] Trang chủ
