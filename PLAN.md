@@ -136,7 +136,7 @@ Ghi chú: ma trận này là điểm xuất phát, điều chỉnh khi làm đ�
 - [ ] Giao diện responsive trên mobile
 
 **Dữ liệu mẫu**
-- [ ] Seed 50-100 sản phẩm đa dạng (điện thoại, laptop, phụ kiện) để test bộ lọc
+- [x] Seed 50-100 sản phẩm đa dạng (điện thoại, laptop, phụ kiện, linh kiện) để test bộ lọc
 
 **Kết quả:** duyệt và tìm được sản phẩm.
 

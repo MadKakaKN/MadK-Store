@@ -82,20 +82,22 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "MadK Store API v1");
     });
 
-    // Automatically apply pending migrations in development
+    // Automatically apply pending migrations and seed data in development
     using var scope = app.Services.CreateScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<MadK.Infrastructure.Data.AppDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
     try
     {
         if (dbContext.Database.IsRelational())
         {
             dbContext.Database.Migrate();
         }
+
+        await MadK.Infrastructure.Data.DatabaseSeeder.SeedAsync(dbContext, logger);
     }
     catch (Exception ex)
     {
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogWarning(ex, "Could not apply database migrations on startup. Please ensure database is running.");
+        logger.LogWarning(ex, "Could not initialize database on startup. Please ensure database is running.");
     }
 }
 
