@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import catalogApi from '../../../api/catalogApi';
 import { CategoryTreeDto, ProductListDto } from '../../../types/catalog';
 import ProductCard from '../components/ProductCard';
+import Hero3DShowcase from '../components/Hero3DShowcase';
 import LoadingSpinner from '../../../components/common/LoadingSpinner';
 
 export const HomePage: React.FC = () => {
@@ -42,45 +43,53 @@ export const HomePage: React.FC = () => {
   return (
     <div className="py-6 sm:py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12 sm:space-y-16">
       {/* Hero Section Banner */}
-      <section className="relative rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-brand-950 text-white p-6 sm:p-12 lg:p-16 overflow-hidden shadow-2xl border border-slate-800">
+      <section className="relative rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-brand-950 text-white p-6 sm:p-10 lg:p-14 overflow-hidden shadow-2xl border border-slate-800">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(14,165,233,0.25),rgba(255,255,255,0))] pointer-events-none" />
         
-        <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-2 py-1 px-3.5 rounded-full text-xs font-bold tracking-wider uppercase bg-brand-500/20 text-brand-300 border border-brand-500/30 mb-6 backdrop-blur-sm">
-            <span className="w-2 h-2 rounded-full bg-brand-400 animate-ping"></span>
-            MadK Store Next-Gen Commerce
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          {/* Left Column (7 cols): Hero Text & Primary CTAs */}
+          <div className="lg:col-span-7 space-y-6">
+            <div className="inline-flex items-center gap-2 py-1 px-3.5 rounded-full text-xs font-bold tracking-wider uppercase bg-brand-500/20 text-brand-300 border border-brand-500/30 backdrop-blur-sm">
+              <span className="w-2 h-2 rounded-full bg-brand-400 animate-ping"></span>
+              MadK Store Next-Gen Commerce
+            </div>
+
+            <h1 className="text-3xl sm:text-5xl lg:text-5xl xl:text-6xl font-black tracking-tight leading-tight">
+              Khám phá thiết bị công nghệ đỉnh cao cùng{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-indigo-300 to-purple-300">
+                MadK Store
+              </span>
+            </h1>
+
+            <p className="text-sm sm:text-base lg:text-lg text-slate-300 leading-relaxed max-w-xl">
+              Hệ thống phân phối điện thoại thông minh, laptop gaming, linh kiện PC và gaming gear chính hãng.
+              Trải nghiệm video 3D chân thực và sẵn sàng tương tác mô hình 3D đa chiều trên từng sản phẩm.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              <Link
+                to="/categories"
+                className="inline-flex items-center justify-center px-6 py-3.5 rounded-2xl font-bold text-sm sm:text-base text-white bg-brand-600 hover:bg-brand-500 transition-all shadow-lg shadow-brand-600/30 hover:scale-[1.02] active:scale-[0.98]"
+              >
+                Mua sắm ngay &rarr;
+              </Link>
+              <Link
+                to="/categories/laptop"
+                className="inline-flex items-center justify-center px-6 py-3.5 rounded-2xl font-bold text-sm sm:text-base text-slate-200 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 hover:text-white transition-all backdrop-blur-sm"
+              >
+                Xem Laptop Gaming
+              </Link>
+            </div>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight sm:leading-none">
-            Khám phá thiết bị công nghệ đỉnh cao cùng{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-indigo-300 to-purple-300">
-              MadK Store
-            </span>
-          </h1>
-
-          <p className="mt-5 text-sm sm:text-lg text-slate-300 max-w-2xl leading-relaxed">
-            Hệ thống phân phối điện thoại thông minh, laptop, gaming gear và linh kiện PC chính hãng.
-            Chuẩn bị trải nghiệm mô hình 3D tương tác đa góc nhìn ngay trên trình duyệt của bạn.
-          </p>
-
-          <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
-            <Link
-              to="/categories"
-              className="inline-flex items-center justify-center px-6 py-3.5 rounded-2xl font-bold text-sm sm:text-base text-white bg-brand-600 hover:bg-brand-500 transition-all shadow-lg shadow-brand-600/30 hover:scale-[1.02] active:scale-[0.98]"
-            >
-              Mua sắm ngay &rarr;
-            </Link>
-            <Link
-              to="/categories/laptop"
-              className="inline-flex items-center justify-center px-6 py-3.5 rounded-2xl font-bold text-sm sm:text-base text-slate-200 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 hover:text-white transition-all backdrop-blur-sm"
-            >
-              Xem Laptop Gaming
-            </Link>
+          {/* Right Column (5 cols): 3D Video Showcase & Spotlight Devices */}
+          <div className="lg:col-span-5">
+            <Hero3DShowcase />
           </div>
         </div>
 
         {/* Feature badges row */}
-        <div className="relative z-10 mt-12 pt-8 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm text-slate-300 font-medium">
+        <div className="relative z-10 mt-10 pt-8 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm text-slate-300 font-medium">
           <div className="flex items-center gap-2">
             <span className="text-xl">🛡️</span>
             <span>100% Chính hãng</span>
