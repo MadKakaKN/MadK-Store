@@ -150,6 +150,12 @@ Ghi chú: ma trận này là điểm xuất phát, điều chỉnh khi làm đ�
 - [x] Role Customer mặc định, thiết kế schema RBAC mở rộng (User, Role, Permission, UserRole, RolePermission, RefreshToken)
 - [ ] Sổ địa chỉ với địa chỉ Việt Nam dạng chọn: tỉnh, quận/huyện, phường/xã (Task tiếp theo)
 
+**Giao diện Tài khoản & Xác thực (Frontend Auth & Account - Phase 2.2)**
+- [x] Trang đăng ký (`/auth/register`), đăng nhập (`/auth/login`), quên mật khẩu (`/auth/forgot-password`), đặt lại mật khẩu (`/auth/reset-password`), xác thực email (`/auth/verify-email`), hồ sơ cá nhân (`/account`)
+- [x] Lưu token an toàn (`localStorage`), tự động làm mới token ngầm (silent refresh qua interceptor khi 401) không làm gián đoạn người dùng
+- [x] Route guard: `ProtectedRoute` (bảo vệ `/account`, lưu redirect URL), `GuestRoute` (chặn người đã đăng nhập vào trang auth)
+- [x] Form validation phía client (email, độ dài mật khẩu, xác nhận mật khẩu, tên), hiển thị lỗi trường & lỗi server rõ ràng
+
 **Giỏ hàng và đơn hàng**
 - [ ] Giỏ hàng (lưu DB cho người đã đăng nhập; localStorage hoặc Redis cho khách)
 - [ ] Checkout COD

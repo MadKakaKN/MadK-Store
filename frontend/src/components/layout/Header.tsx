@@ -2,15 +2,19 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import catalogApi from '../../api/catalogApi';
 import { CategoryTreeDto } from '../../types/catalog';
+import { useAuth } from '../../features/auth/context/AuthContext';
 
 export const Header: React.FC = () => {
+  const { user, isAuthenticated, logout } = useAuth();
   const [categories, setCategories] = useState<CategoryTreeDto[]>([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedMobileCats, setExpandedMobileCats] = useState<Record<string, boolean>>({});
 
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -28,13 +32,17 @@ export const Header: React.FC = () => {
   useEffect(() => {
     setMobileMenuOpen(false);
     setCategoryDropdownOpen(false);
+    setUserMenuOpen(false);
   }, [location.pathname, location.search]);
 
-  // Click outside listener for desktop dropdown
+  // Click outside listener for desktop dropdowns
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setCategoryDropdownOpen(false);
+      }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setUserMenuOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -245,12 +253,82 @@ export const Header: React.FC = () => {
               <span className="hidden xl:inline text-xs font-semibold">Giỏ hàng</span>
             </Link>
 
-            <Link
-              to="/auth/login"
-              className="hidden sm:inline-flex items-center justify-center px-4 py-2 text-xs sm:text-sm font-bold text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100/80 rounded-xl transition-colors"
-            >
-              Đăng nhập
-            </Link>
+            {/* Auth button / User Dropdown */}
+            {isAuthenticated && user ? (
+              <div className="hidden sm:block relative" ref={userMenuRef}>
+                <button
+                  type="button"
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className="flex items-center gap-2.5 px-3 py-1.5 rounded-2xl hover:bg-slate-100 transition-colors border border-slate-200/60"
+                >
+                  <span className="w-8 h-8 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">
+                    {user.fullName ? user.fullName.charAt(0).toUpperCase() : 'U'}
+                  </span>
+                  <div className="hidden md:flex flex-col text-left">
+                    <span className="text-xs font-bold text-slate-800 leading-tight truncate max-w-[120px]">
+                      {user.fullName}
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-medium leading-tight">
+                      {user.roles?.[0] || 'Customer'}
+                    </span>
+                  </div>
+                  <svg
+                    className={`w-3.5 h-3.5 text-slate-400 transition-transform ${userMenuOpen ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {userMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-60 rounded-2xl bg-white shadow-xl shadow-slate-200/60 border border-slate-100 p-2 z-50 animate-fade-in">
+                    <div className="px-3 py-2.5 border-b border-slate-100">
+                      <p className="text-xs font-bold text-slate-900 truncate">{user.fullName}</p>
+                      <p className="text-[11px] text-slate-500 truncate">{user.email}</p>
+                    </div>
+                    <div className="py-1">
+                      <Link
+                        to="/account"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:text-brand-600 hover:bg-brand-50 rounded-xl transition-colors"
+                      >
+                        <span>👤 Hồ sơ & Bảo mật</span>
+                      </Link>
+                      {user.roles?.includes('Admin') && (
+                        <Link
+                          to="/admin"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-purple-700 hover:bg-purple-50 rounded-xl transition-colors"
+                        >
+                          <span>🛡️ Quản trị hệ thống</span>
+                        </Link>
+                      )}
+                    </div>
+                    <div className="pt-1 border-t border-slate-100">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setUserMenuOpen(false);
+                          logout();
+                        }}
+                        className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-xl transition-colors text-left"
+                      >
+                        <span>🚪 Đăng xuất</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                to="/auth/login"
+                className="hidden sm:inline-flex items-center justify-center px-4 py-2 text-xs sm:text-sm font-bold text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100/80 rounded-xl transition-colors"
+              >
+                Đăng nhập
+              </Link>
+            )}
 
             {/* Mobile hamburger button */}
             <button
@@ -389,13 +467,35 @@ export const Header: React.FC = () => {
             >
               <span>🛒 Giỏ hàng</span>
             </Link>
-            <Link
-              to="/auth/login"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-brand-600 font-bold"
-            >
-              Đăng nhập / Đăng ký &rarr;
-            </Link>
+            {isAuthenticated && user ? (
+              <div className="flex items-center gap-3">
+                <Link
+                  to="/account"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-brand-600 font-bold"
+                >
+                  👤 {user.fullName}
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    logout();
+                  }}
+                  className="text-xs text-rose-600 font-semibold hover:underline"
+                >
+                  Đăng xuất
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/auth/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-brand-600 font-bold"
+              >
+                Đăng nhập / Đăng ký &rarr;
+              </Link>
+            )}
           </div>
         </div>
       )}
