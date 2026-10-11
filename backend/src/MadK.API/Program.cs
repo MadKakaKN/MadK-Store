@@ -1,4 +1,7 @@
+using System.Text.Json;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
+using MadK.API.Middleware;
 using MadK.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,7 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 // ──── Serilog ────
 builder.Host.UseSerilog((context, loggerConfig) =>
 {
-    loggerConfig.ReadFrom.Configuration(context.Configuration);
+    loggerConfig
+        .ReadFrom.Configuration(context.Configuration)
+        .Enrich.FromLogContext()
+        .Enrich.WithProperty("Application", "MadK.API");
 });
 
 // ──── Infrastructure (EF Core, Repositories, etc.) ────
@@ -27,12 +33,21 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-// ──── Health Checks ────
+// ──── Health Checks (PostgreSQL + Redis) ────
+var dbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? "Host=localhost;Port=5432;Database=madkstore_dev;Username=madkstore;Password=madkstore_dev_pwd";
+var redisConnectionString = builder.Configuration.GetConnectionString("Redis")
+    ?? "localhost:6379";
+
 builder.Services.AddHealthChecks()
     .AddNpgSql(
-        builder.Configuration.GetConnectionString("DefaultConnection")!,
+        dbConnectionString,
         name: "postgresql",
-        tags: new[] { "db", "ready" });
+        tags: new[] { "db", "ready" })
+    .AddRedis(
+        redisConnectionString,
+        name: "redis",
+        tags: new[] { "cache", "ready" });
 
 // ──── CORS ────
 builder.Services.AddCors(options =>
@@ -49,6 +64,10 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+// ──── Custom Middleware ────
+app.UseMiddleware<CorrelationIdMiddleware>();
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 // ──── Middleware Pipeline ────
 if (app.Environment.IsDevelopment())
@@ -70,7 +89,36 @@ app.UseCors("AllowFrontend");
 
 app.MapControllers();
 
-app.MapHealthChecks("/health");
+// ──── Health Check Endpoint ────
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = async (context, report) =>
+    {
+        context.Response.ContentType = "application/json";
+        var payload = new
+        {
+            status = report.Status.ToString(),
+            totalDuration = report.TotalDuration.ToString(),
+            entries = report.Entries.ToDictionary(
+                e => e.Key,
+                e => new
+                {
+                    status = e.Value.Status.ToString(),
+                    duration = e.Value.Duration.ToString(),
+                    description = e.Value.Description,
+                    error = e.Value.Exception?.Message
+                })
+        };
+
+        var json = JsonSerializer.Serialize(payload, new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true
+        });
+
+        await context.Response.WriteAsync(json);
+    }
+});
 
 app.Run();
 

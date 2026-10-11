@@ -8,8 +8,11 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=madkstore_dev;Username=madkstore;Password=${POSTGRES_PASSWORD}
+      - ConnectionStrings__Redis=redis:6379
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     restart: unless-stopped
 
