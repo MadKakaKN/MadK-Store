@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using MadK.API.Middleware;
 using MadK.Infrastructure;
@@ -77,6 +78,22 @@ if (app.Environment.IsDevelopment())
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "MadK Store API v1");
     });
+
+    // Automatically apply pending migrations in development
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<MadK.Infrastructure.Data.AppDbContext>();
+    try
+    {
+        if (dbContext.Database.IsRelational())
+        {
+            dbContext.Database.Migrate();
+        }
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogWarning(ex, "Could not apply database migrations on startup. Please ensure database is running.");
+    }
 }
 
 app.UseSerilogRequestLogging();
