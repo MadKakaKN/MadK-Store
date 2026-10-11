@@ -1,3 +1,4 @@
+using MadK.Application.Interfaces;
 using MadK.Domain.Interfaces;
 using MadK.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +31,8 @@ public static class DependencyInjection
                         errorCodesToAdd: null);
                 }));
 
-        // Register UnitOfWork
+        // Register UnitOfWork & IAppDbContext
+        services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
         services.AddScoped<IUnitOfWork>(provider =>
         {
             var context = provider.GetRequiredService<AppDbContext>();

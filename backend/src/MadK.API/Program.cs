@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using MadK.API.Middleware;
+using MadK.Application;
 using MadK.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,10 +17,12 @@ builder.Host.UseSerilog((context, loggerConfig) =>
         .Enrich.WithProperty("Application", "MadK.API");
 });
 
-// ──── Infrastructure (EF Core, Repositories, etc.) ────
+// ──── Application & Infrastructure ────
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// ──── Controllers ────
+// ──── Controllers & Routing ────
+builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 builder.Services.AddControllers();
 
 // ──── Swagger ────

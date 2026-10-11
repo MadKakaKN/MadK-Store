@@ -1,3 +1,4 @@
+using MadK.Application.Interfaces;
 using MadK.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,7 +7,7 @@ namespace MadK.Infrastructure.Data;
 /// <summary>
 /// Main EF Core DbContext for the application.
 /// </summary>
-public class AppDbContext : DbContext
+public class AppDbContext : DbContext, IAppDbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
