@@ -39,6 +39,12 @@ public static class DependencyInjection
             return new UnitOfWork(context);
         });
 
+        // Identity Services
+        services.AddSingleton<IPasswordHasher, MadK.Infrastructure.Services.PasswordHasher>();
+        services.AddSingleton<IJwtTokenGenerator, MadK.Infrastructure.Services.JwtTokenGenerator>();
+        services.AddScoped<IEmailSender, MadK.Infrastructure.Services.ConsoleEmailSender>();
+        services.AddScoped<IIdentityService, MadK.Infrastructure.Services.IdentityService>();
+
         return services;
     }
 }

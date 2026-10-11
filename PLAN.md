@@ -142,12 +142,13 @@ Ghi chú: ma trận này là điểm xuất phát, điều chỉnh khi làm đ�
 
 ## Giai đoạn 2: Tài khoản và mua hàng (2-3 tuần)
 
-**Tài khoản**
-- [ ] Đăng ký, đăng nhập (JWT + refresh token)
-- [ ] Xác thực email
-- [ ] Quên mật khẩu / đặt lại mật khẩu
-- [ ] Rate limiting cho đăng nhập và các API nhạy cảm
-- [ ] Sổ địa chỉ với địa chỉ Việt Nam dạng chọn: tỉnh, quận/huyện, phường/xã
+**Tài khoản & Xác thực (Identity Backend - Phase 2.1)**
+- [x] Đăng ký, đăng nhập (JWT + refresh token xoay vòng)
+- [x] Xác thực email (token có hạn, gửi qua IEmailSender giả lập)
+- [x] Quên mật khẩu / đặt lại mật khẩu (token có hạn, dùng một lần)
+- [x] Rate limiting cho đăng nhập và đặt lại mật khẩu, khóa tạm tài khoản khi thử sai 5 lần (brute-force defense)
+- [x] Role Customer mặc định, thiết kế schema RBAC mở rộng (User, Role, Permission, UserRole, RolePermission, RefreshToken)
+- [ ] Sổ địa chỉ với địa chỉ Việt Nam dạng chọn: tỉnh, quận/huyện, phường/xã (Task tiếp theo)
 
 **Giỏ hàng và đơn hàng**
 - [ ] Giỏ hàng (lưu DB cho người đã đăng nhập; localStorage hoặc Redis cho khách)

@@ -29,6 +29,12 @@ public static class DatabaseSeeder
         // 3. Seed Products, Variants & Images
         await SeedProductsAsync(context, categoryMap, brandMap, logger);
 
+        // 4. Seed Roles & Permissions
+        var roleMap = await SeedRolesAndPermissionsAsync(context, logger);
+
+        // 5. Seed Default Users
+        await SeedUsersAsync(context, roleMap, logger);
+
         logger?.LogInformation("Database seeding completed successfully.");
     }
 
@@ -1903,4 +1909,173 @@ public static class DatabaseSeeder
 
         return list;
     }
+
+    private static async Task<Dictionary<string, Role>> SeedRolesAndPermissionsAsync(AppDbContext context, ILogger? logger)
+    {
+        var existingRoles = await context.Roles.ToDictionaryAsync(r => r.Name);
+        var existingPermissions = await context.Permissions.ToDictionaryAsync(p => p.Code);
+
+        // Define system permissions
+        var permissionDefs = new[]
+        {
+            new { Code = "catalog.view", Module = "Catalog", Desc = "Xem danh mục và sản phẩm" },
+            new { Code = "catalog.manage", Module = "Catalog", Desc = "Tạo, sửa, xóa danh mục và sản phẩm" },
+            new { Code = "order.view", Module = "Order", Desc = "Xem danh sách và chi tiết đơn hàng" },
+            new { Code = "order.manage", Module = "Order", Desc = "Cập nhật trạng thái và xử lý đơn hàng" },
+            new { Code = "inventory.view", Module = "Inventory", Desc = "Xem tồn kho sản phẩm" },
+            new { Code = "inventory.manage", Module = "Inventory", Desc = "Nhập xuất và điều chỉnh kho" },
+            new { Code = "user.view", Module = "User", Desc = "Xem thông tin người dùng" },
+            new { Code = "user.manage", Module = "User", Desc = "Quản lý tài khoản và phân quyền" },
+            new { Code = "report.view", Module = "Report", Desc = "Xem báo cáo doanh thu và kinh doanh" }
+        };
+
+        var addedPermissions = false;
+        foreach (var def in permissionDefs)
+        {
+            if (!existingPermissions.ContainsKey(def.Code))
+            {
+                var p = new Permission
+                {
+                    Id = Guid.NewGuid(),
+                    Code = def.Code,
+                    Module = def.Module,
+                    Description = def.Desc,
+                    CreatedAt = DateTime.UtcNow
+                };
+                context.Permissions.Add(p);
+                existingPermissions[p.Code] = p;
+                addedPermissions = true;
+            }
+        }
+
+        if (addedPermissions)
+        {
+            await context.SaveChangesAsync();
+        }
+
+        // Define system roles
+        var roleDefs = new[]
+        {
+            new { Name = "Customer", Desc = "Khách hàng mua sắm mặc định", Permissions = Array.Empty<string>() },
+            new { Name = "Sales", Desc = "Nhân viên bán hàng & chăm sóc khách hàng", Permissions = new[] { "catalog.view", "order.view", "order.manage", "report.view" } },
+            new { Name = "Warehouse", Desc = "Nhân viên kho vận & quản lý tồn kho", Permissions = new[] { "catalog.view", "order.view", "inventory.view", "inventory.manage" } },
+            new { Name = "Admin", Desc = "Quản trị viên toàn quyền hệ thống", Permissions = permissionDefs.Select(p => p.Code).ToArray() }
+        };
+
+        foreach (var rDef in roleDefs)
+        {
+            if (!existingRoles.TryGetValue(rDef.Name, out var role))
+            {
+                role = new Role
+                {
+                    Id = Guid.NewGuid(),
+                    Name = rDef.Name,
+                    Description = rDef.Desc,
+                    CreatedAt = DateTime.UtcNow
+                };
+                context.Roles.Add(role);
+                existingRoles[role.Name] = role;
+                await context.SaveChangesAsync();
+            }
+
+            // Ensure role permissions are mapped
+            var currentPermIds = await context.RolePermissions
+                .Where(rp => rp.RoleId == role.Id)
+                .Select(rp => rp.PermissionId)
+                .ToListAsync();
+
+            var targetPermIds = rDef.Permissions
+                .Where(code => existingPermissions.ContainsKey(code))
+                .Select(code => existingPermissions[code].Id)
+                .ToList();
+
+            foreach (var permId in targetPermIds)
+            {
+                if (!currentPermIds.Contains(permId))
+                {
+                    context.RolePermissions.Add(new RolePermission
+                    {
+                        RoleId = role.Id,
+                        PermissionId = permId
+                    });
+                }
+            }
+        }
+
+        await context.SaveChangesAsync();
+        logger?.LogInformation("Seeded {RoleCount} roles and permissions successfully.", existingRoles.Count);
+        return existingRoles;
+    }
+
+    private static async Task SeedUsersAsync(AppDbContext context, Dictionary<string, Role> roleMap, ILogger? logger)
+    {
+        var existingUsers = await context.Users
+            .Include(u => u.UserRoles)
+            .ToDictionaryAsync(u => u.Email.ToLower());
+
+        // Default admin
+        var adminEmail = "admin@madkstore.vn";
+        if (!existingUsers.ContainsKey(adminEmail))
+        {
+            var adminUser = new User
+            {
+                Id = Guid.NewGuid(),
+                Email = adminEmail,
+                FullName = "Quản Trị Viên Hệ Thống",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("AdminPassword123!", 11),
+                PhoneNumber = "0901234567",
+                IsActive = true,
+                EmailConfirmed = true,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            if (roleMap.TryGetValue("Admin", out var adminRole))
+            {
+                adminUser.UserRoles.Add(new UserRole
+                {
+                    UserId = adminUser.Id,
+                    RoleId = adminRole.Id,
+                    User = adminUser,
+                    Role = adminRole
+                });
+            }
+
+            context.Users.Add(adminUser);
+            logger?.LogInformation("Seeded default admin user: {Email}", adminEmail);
+        }
+
+        // Default customer
+        var customerEmail = "customer@madkstore.vn";
+        if (!existingUsers.ContainsKey(customerEmail))
+        {
+            var customerUser = new User
+            {
+                Id = Guid.NewGuid(),
+                Email = customerEmail,
+                FullName = "Nguyễn Văn Khách",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("CustomerPassword123!", 11),
+                PhoneNumber = "0987654321",
+                IsActive = true,
+                EmailConfirmed = true,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            if (roleMap.TryGetValue("Customer", out var customerRole))
+            {
+                customerUser.UserRoles.Add(new UserRole
+                {
+                    UserId = customerUser.Id,
+                    RoleId = customerRole.Id,
+                    User = customerUser,
+                    Role = customerRole
+                });
+            }
+
+            context.Users.Add(customerUser);
+            logger?.LogInformation("Seeded default customer user: {Email}", customerEmail);
+        }
+
+        await context.SaveChangesAsync();
+    }
 }
+

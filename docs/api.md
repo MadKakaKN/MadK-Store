@@ -26,10 +26,14 @@ Tài liệu này đặc tả toàn bộ các RESTful API endpoints của hệ th
 |---|---|---|---|---|---|---|
 | `POST` | `/api/v1/auth/register` | Guest | Đăng ký tài khoản mới | `email`, `password`, `fullName`, `phoneNumber` | `userId`, `email`, `message` | 400 (Email đã tồn tại / Mật khẩu yếu) |
 | `POST` | `/api/v1/auth/login` | Guest | Đăng nhập lấy token | `email`, `password` | `accessToken`, `refreshToken`, `expiresIn`, `user` (id, fullName, roles) | 400, 401 (Sai tài khoản/mật khẩu), 429 (Rate limit) |
-| `POST` | `/api/v1/auth/refresh-token`| All Users | Đổi token hết hạn | `refreshToken` | `accessToken`, `refreshToken` | 400, 401 (Token không hợp lệ/hết hạn) |
+| `POST` | `/api/v1/auth/refresh-token`| All Users | Đổi token hết hạn (xoay vòng, phát hiện tái sử dụng) | `refreshToken` | `accessToken`, `refreshToken`, `expiresIn`, `user` | 400, 401 (Token không hợp lệ/hết hạn/tái sử dụng trái phép) |
+| `POST` | `/api/v1/auth/logout` | Authenticated / All | Đăng xuất và thu hồi refresh token | `refreshToken` (optional) | `message` | Không |
 | `POST` | `/api/v1/auth/forgot-password`| Guest | Yêu cầu gửi mail đặt lại mật khẩu | `email` | `message` (luôn trả 200 để tránh enumeration) | 429 (Rate limit) |
-| `POST` | `/api/v1/auth/reset-password` | Guest | Đặt lại mật khẩu với token | `email`, `token`, `newPassword` | `message` | 400 (Token hết hạn / không hợp lệ) |
-| `GET` | `/api/v1/auth/verify-email` | Guest | Xác thực email đăng ký | Query: `token`, `email` | `message` | 400 (Token sai) |
+| `POST` | `/api/v1/auth/reset-password` | Guest | Đặt lại mật khẩu với token một lần | `email`, `token`, `newPassword` | `message` | 400 (Token hết hạn / không hợp lệ), 429 |
+| `POST` | `/api/v1/auth/verify-email` | Guest | Xác thực email đăng ký (POST) | `email`, `token` | `message` | 400 (Token sai/hết hạn) |
+| `GET` | `/api/v1/auth/verify-email` | Guest | Xác thực email đăng ký qua link trực tiếp (GET) | Query: `token`, `email` | `message` | 400 (Token sai/hết hạn) |
+| `POST` | `/api/v1/auth/change-password` | Authenticated | Đổi mật khẩu tài khoản | `currentPassword`, `newPassword` | `message` | 400, 401 |
+| `GET` | `/api/v1/auth/me` | Authenticated | Lấy hồ sơ tài khoản hiện tại | None | `id`, `email`, `fullName`, `phoneNumber`, `roles`, `permissions` | 401 (Chưa đăng nhập) |
 | `GET` | `/api/v1/users/me` | Authenticated | Lấy hồ sơ tài khoản hiện tại | None | `id`, `email`, `fullName`, `phoneNumber`, `roles`, `permissions` | 401 (Chưa đăng nhập) |
 | `PUT` | `/api/v1/users/me` | Authenticated | Cập nhật thông tin cá nhân | `fullName`, `phoneNumber`, `avatarUrl` | `user` thông tin mới | 400, 401 |
 | `GET` | `/api/v1/users/me/addresses`| Customer | Lấy danh sách sổ địa chỉ | None | `items: [AddressDto]` | 401 |

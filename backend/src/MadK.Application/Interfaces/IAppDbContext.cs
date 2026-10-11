@@ -12,5 +12,12 @@ public interface IAppDbContext
     DbSet<ProductVariant> ProductVariants { get; }
     DbSet<ProductImage> ProductImages { get; }
 
+    DbSet<User> Users { get; }
+    DbSet<Role> Roles { get; }
+    DbSet<Permission> Permissions { get; }
+    DbSet<UserRole> UserRoles { get; }
+    DbSet<RolePermission> RolePermissions { get; }
+    DbSet<RefreshToken> RefreshTokens { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
