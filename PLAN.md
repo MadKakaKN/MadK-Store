@@ -130,10 +130,10 @@ Ghi chú: ma trận này là điểm xuất phát, điều chỉnh khi làm đ�
 - [x] Tránh N+1 query (kiểm tra bằng log SQL)
 
 **Frontend**
-- [ ] Trang chủ
-- [ ] Trang danh mục có bộ lọc
-- [ ] Trang chi tiết với chọn biến thể
-- [ ] Giao diện responsive trên mobile
+- [x] Trang chủ
+- [x] Trang danh mục có bộ lọc
+- [x] Trang chi tiết với chọn biến thể
+- [x] Giao diện responsive trên mobile
 
 **Dữ liệu mẫu**
 - [x] Seed 50-100 sản phẩm đa dạng (điện thoại, laptop, phụ kiện, linh kiện) để test bộ lọc
