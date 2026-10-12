@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/context/AuthContext';
 import authApi from '../../../api/authApi';
+import { AddressList } from '../components/AddressList';
 
 export const AccountPage: React.FC = () => {
   const { user, logout, refreshUser } = useAuth();
@@ -194,8 +195,8 @@ export const AccountPage: React.FC = () => {
             >
               <span className="text-lg">📍</span>
               <span>Sổ địa chỉ</span>
-              <span className="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-2 py-0.5 rounded-full">
-                Phase 2.2
+              <span className="ml-auto text-[10px] bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded-full">
+                VN 63 tỉnh
               </span>
             </button>
 
@@ -373,16 +374,10 @@ export const AccountPage: React.FC = () => {
             </div>
           )}
 
-          {/* TAB 3: Addresses Preview */}
+          {/* TAB 3: Addresses */}
           {activeTab === 'addresses' && (
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm text-center py-12">
-              <div className="w-16 h-16 mx-auto rounded-3xl bg-slate-100 text-slate-400 flex items-center justify-center text-3xl mb-4">
-                📍
-              </div>
-              <h3 className="text-lg font-bold text-slate-900">Sổ địa chỉ nhận hàng (Việt Nam)</h3>
-              <p className="mt-2 text-sm text-slate-500 max-w-md mx-auto">
-                Hỗ trợ chọn địa chỉ 3 cấp (Tỉnh/Thành, Quận/Huyện, Phường/Xã) sẽ được hoàn thiện trong task kế tiếp của Giai đoạn 2.
-              </p>
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm">
+              <AddressList userId={user?.id} />
             </div>
           )}
 
