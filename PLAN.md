@@ -148,7 +148,7 @@ Ghi chú: ma trận này là điểm xuất phát, điều chỉnh khi làm đ�
 - [x] Quên mật khẩu / đặt lại mật khẩu (token có hạn, dùng một lần)
 - [x] Rate limiting cho đăng nhập và đặt lại mật khẩu, khóa tạm tài khoản khi thử sai 5 lần (brute-force defense)
 - [x] Role Customer mặc định, thiết kế schema RBAC mở rộng (User, Role, Permission, UserRole, RolePermission, RefreshToken)
-- [ ] Sổ địa chỉ với địa chỉ Việt Nam dạng chọn: tỉnh, quận/huyện, phường/xã (Task tiếp theo)
+- [x] Sổ địa chỉ với địa chỉ Việt Nam dạng chọn: tỉnh, quận/huyện, phường/xã (Backend & Frontend, chống IDOR, seed 63 tỉnh/thành)
 
 **Giao diện Tài khoản & Xác thực (Frontend Auth & Account - Phase 2.2)**
 - [x] Trang đăng ký (`/auth/register`), đăng nhập (`/auth/login`), quên mật khẩu (`/auth/forgot-password`), đặt lại mật khẩu (`/auth/reset-password`), xác thực email (`/auth/verify-email`), hồ sơ cá nhân (`/account`)

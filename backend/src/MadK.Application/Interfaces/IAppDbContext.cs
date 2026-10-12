@@ -18,6 +18,10 @@ public interface IAppDbContext
     DbSet<UserRole> UserRoles { get; }
     DbSet<RolePermission> RolePermissions { get; }
     DbSet<RefreshToken> RefreshTokens { get; }
+    DbSet<Province> Provinces { get; }
+    DbSet<District> Districts { get; }
+    DbSet<Ward> Wards { get; }
+    DbSet<Address> Addresses { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

@@ -35,6 +35,9 @@ public static class DatabaseSeeder
         // 5. Seed Default Users
         await SeedUsersAsync(context, roleMap, logger);
 
+        // 6. Seed Vietnam Administrative Divisions & Sample Addresses
+        await AddressSeeder.SeedAsync(context, logger);
+
         logger?.LogInformation("Database seeding completed successfully.");
     }
 
