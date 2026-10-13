@@ -3,9 +3,11 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import catalogApi from '../../api/catalogApi';
 import { CategoryTreeDto } from '../../types/catalog';
 import { useAuth } from '../../features/auth/context/AuthContext';
+import { useCart } from '../../features/cart/context/CartContext';
 
 export const Header: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
+  const { itemCount } = useCart();
   const [categories, setCategories] = useState<CategoryTreeDto[]>([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
@@ -246,8 +248,8 @@ export const Header: React.FC = () => {
                     d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
                   />
                 </svg>
-                <span className="absolute -top-1.5 -right-2 bg-rose-500 text-white font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
-                  0
+                <span className="absolute -top-1.5 -right-2 bg-rose-500 text-white font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center animate-fade-in">
+                  {itemCount > 99 ? '99+' : itemCount}
                 </span>
               </div>
               <span className="hidden xl:inline text-xs font-semibold">Giỏ hàng</span>
@@ -466,6 +468,11 @@ export const Header: React.FC = () => {
               className="text-slate-700 font-semibold flex items-center gap-2"
             >
               <span>🛒 Giỏ hàng</span>
+              {itemCount > 0 && (
+                <span className="px-1.5 py-0.5 rounded-full bg-rose-500 text-white font-bold text-[10px]">
+                  {itemCount}
+                </span>
+              )}
             </Link>
             {isAuthenticated && user ? (
               <div className="flex items-center gap-3">

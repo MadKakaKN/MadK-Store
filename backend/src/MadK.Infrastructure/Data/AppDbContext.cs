@@ -31,6 +31,8 @@ public class AppDbContext : DbContext, IAppDbContext
     public DbSet<District> Districts => Set<District>();
     public DbSet<Ward> Wards => Set<Ward>();
     public DbSet<Address> Addresses => Set<Address>();
+    public DbSet<Cart> Carts => Set<Cart>();
+    public DbSet<CartItem> CartItems => Set<CartItem>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

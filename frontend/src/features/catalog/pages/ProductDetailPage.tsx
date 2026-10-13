@@ -5,16 +5,19 @@ import { ProductDetailDto, ProductVariantDto } from '../../../types/catalog';
 import { formatVND } from '../../../utils/format';
 import LoadingSpinner from '../../../components/common/LoadingSpinner';
 import Product3DViewerPlaceholder from '../components/Product3DViewerPlaceholder';
+import { useCart } from '../../cart/context/CartContext';
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   const [product, setProduct] = useState<ProductDetailDto | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariantDto | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [viewMode, setViewMode] = useState<'2d' | '3d'>('2d');
   const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'policy'>('desc');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -121,15 +124,29 @@ export const ProductDetailPage: React.FC = () => {
     setTimeout(() => setToastMessage(null), 3500);
   };
 
-  const handleAddToCart = () => {
-    if (isOutOfStock) return;
-    const variantLabel = selectedVariant?.name || 'Mặc định';
-    showToast(`Đã thêm ${quantity}x "${product.name} (${variantLabel})" vào giỏ hàng!`);
+  const handleAddToCart = async () => {
+    if (isOutOfStock || !selectedVariant) return;
+    setIsAddingToCart(true);
+    const res = await addToCart(selectedVariant.id, quantity);
+    setIsAddingToCart(false);
+    if (res.success) {
+      const variantLabel = selectedVariant?.name || 'Mặc định';
+      showToast(res.message || `Đã thêm ${quantity}x "${product?.name} (${variantLabel})" vào giỏ hàng!`);
+    } else {
+      showToast(res.error || 'Không thể thêm vào giỏ hàng.');
+    }
   };
 
-  const handleBuyNow = () => {
-    if (isOutOfStock) return;
-    navigate('/cart');
+  const handleBuyNow = async () => {
+    if (isOutOfStock || !selectedVariant) return;
+    setIsAddingToCart(true);
+    const res = await addToCart(selectedVariant.id, quantity);
+    setIsAddingToCart(false);
+    if (res.success) {
+      navigate('/cart');
+    } else {
+      showToast(res.error || 'Không thể thêm vào giỏ hàng.');
+    }
   };
 
   return (
@@ -411,14 +428,14 @@ export const ProductDetailPage: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">
             <button
               type="button"
-              disabled={isOutOfStock}
+              disabled={isOutOfStock || isAddingToCart}
               onClick={handleAddToCart}
               className="w-full py-4 rounded-2xl bg-slate-900 hover:bg-slate-800 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className={`w-5 h-5 ${isAddingToCart ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
-              <span>{isOutOfStock ? 'Tạm hết hàng' : 'Thêm vào giỏ hàng'}</span>
+              <span>{isOutOfStock ? 'Tạm hết hàng' : isAddingToCart ? 'Đang thêm...' : 'Thêm vào giỏ hàng'}</span>
             </button>
 
             <button

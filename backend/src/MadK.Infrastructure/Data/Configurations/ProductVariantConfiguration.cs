@@ -28,6 +28,7 @@ public class ProductVariantConfiguration : IEntityTypeConfiguration<ProductVaria
         builder.Property(v => v.SalePrice).HasColumnName("sale_price").HasColumnType("numeric(15,2)").IsRequired();
         builder.Property(v => v.CostPrice).HasColumnName("cost_price").HasColumnType("numeric(15,2)").HasDefaultValue(0m);
         builder.Property(v => v.IsActive).HasColumnName("is_active").HasDefaultValue(true);
+        builder.Property(v => v.StockQuantity).HasColumnName("stock_quantity").HasDefaultValue(50);
         builder.Property(v => v.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
         builder.Property(v => v.UpdatedAt).HasColumnName("updated_at");
 

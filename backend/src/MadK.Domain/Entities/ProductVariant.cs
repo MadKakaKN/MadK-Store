@@ -17,6 +17,7 @@ public class ProductVariant : BaseEntity
     public decimal SalePrice { get; set; }
     public decimal CostPrice { get; set; } = 0;
     public bool IsActive { get; set; } = true;
+    public int StockQuantity { get; set; } = 50;
 
     public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
 }

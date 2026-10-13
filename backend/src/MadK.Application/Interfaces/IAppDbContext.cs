@@ -22,6 +22,8 @@ public interface IAppDbContext
     DbSet<District> Districts { get; }
     DbSet<Ward> Wards { get; }
     DbSet<Address> Addresses { get; }
+    DbSet<Cart> Carts { get; }
+    DbSet<CartItem> CartItems { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

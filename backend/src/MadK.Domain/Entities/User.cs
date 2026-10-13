@@ -26,6 +26,7 @@ public class User : BaseEntity
     public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
     public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     public ICollection<Address> Addresses { get; set; } = new List<Address>();
+    public ICollection<Cart> Carts { get; set; } = new List<Cart>();
 
     public bool IsLockedOut => LockoutEnd.HasValue && LockoutEnd.Value > DateTime.UtcNow;
 }
