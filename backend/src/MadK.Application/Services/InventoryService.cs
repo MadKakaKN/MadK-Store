@@ -25,7 +25,12 @@ public class InventoryService : IInventoryService
 
     public async Task<Result<InventoryDto>> GetStockAsync(Guid variantId, CancellationToken ct = default)
     {
-        var inventory = await GetOrCreateInventoryAsync(variantId, ct);
+        var inventory = await _context.Inventories.AsNoTracking().FirstOrDefaultAsync(i => i.VariantId == variantId, ct);
+        if (inventory == null)
+        {
+            inventory = await GetOrCreateInventoryAsync(variantId, ct);
+        }
+
         if (inventory == null)
         {
             return Result<InventoryDto>.Failure("Không tìm thấy biến thể sản phẩm.");
@@ -52,7 +57,9 @@ public class InventoryService : IInventoryService
 
         if (isRelational)
         {
-            await using var tx = await _efContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
+            var existingTx = _efContext.Database.CurrentTransaction;
+            bool ownsTx = existingTx == null;
+            await using var tx = ownsTx ? await _efContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct) : null;
             try
             {
                 // Đọc trạng thái trước
@@ -69,7 +76,7 @@ public class InventoryService : IInventoryService
 
                 if (affected == 0)
                 {
-                    await tx.RollbackAsync(ct);
+                    if (tx != null) await tx.RollbackAsync(ct);
                     return Result<InventoryDto>.Failure("Không thể cập nhật số lượng nhập kho.");
                 }
 
@@ -98,11 +105,11 @@ public class InventoryService : IInventoryService
                 await _efContext.Database.ExecuteSqlInterpolatedAsync(
                     $@"UPDATE product_variants 
                        SET stock_quantity = {onHandAfter - reservedAfter}, 
-                           updated_at = {now} 
+                            updated_at = {now} 
                        WHERE id = {variantId};", ct);
 
                 await _context.SaveChangesAsync(ct);
-                await tx.CommitAsync(ct);
+                if (tx != null) await tx.CommitAsync(ct);
 
                 inventory.OnHandQuantity = onHandAfter;
                 inventory.ReservedQuantity = reservedAfter;
@@ -115,7 +122,7 @@ public class InventoryService : IInventoryService
             }
             catch (Exception ex)
             {
-                await tx.RollbackAsync(ct);
+                if (tx != null) await tx.RollbackAsync(ct);
                 _logger.LogError(ex, "Restock error for variant {VariantId}", variantId);
                 return Result<InventoryDto>.Failure("Lỗi hệ thống khi nhập kho.");
             }
@@ -179,7 +186,9 @@ public class InventoryService : IInventoryService
 
         if (isRelational)
         {
-            await using var tx = await _efContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
+            var existingTx = _efContext.Database.CurrentTransaction;
+            bool ownsTx = existingTx == null;
+            await using var tx = ownsTx ? await _efContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct) : null;
             try
             {
                 // Kiểm tra Idempotency: Nếu reference đã từng Reserve rồi thì không reserve trùng lặp
@@ -210,7 +219,7 @@ public class InventoryService : IInventoryService
 
                 if (affected == 0)
                 {
-                    await tx.RollbackAsync(ct);
+                    if (tx != null) await tx.RollbackAsync(ct);
                     _logger.LogWarning("Reserve failed: Insufficient available stock for variant {VariantId} (requested {Qty})", variantId, quantity);
                     return Result<InventoryDto>.Failure("Không đủ tồn kho khả dụng để đặt trước/giữ hàng.");
                 }
@@ -248,7 +257,7 @@ public class InventoryService : IInventoryService
                        WHERE id = {variantId};", ct);
 
                 await _context.SaveChangesAsync(ct);
-                await tx.CommitAsync(ct);
+                if (tx != null) await tx.CommitAsync(ct);
 
                 _logger.LogInformation("Reserved variant {VariantId}: +{Qty} reserved (Available left: {Avail})",
                     variantId, quantity, onHandAfter - reservedAfter);
@@ -257,7 +266,7 @@ public class InventoryService : IInventoryService
             }
             catch (Exception ex)
             {
-                await tx.RollbackAsync(ct);
+                if (tx != null) await tx.RollbackAsync(ct);
                 _logger.LogError(ex, "Reserve transaction error for variant {VariantId}", variantId);
                 return Result<InventoryDto>.Failure("Lỗi hệ thống trong quá trình giữ hàng.");
             }
@@ -325,7 +334,9 @@ public class InventoryService : IInventoryService
 
         if (isRelational)
         {
-            await using var tx = await _efContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
+            var existingTx = _efContext.Database.CurrentTransaction;
+            bool ownsTx = existingTx == null;
+            await using var tx = ownsTx ? await _efContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct) : null;
             try
             {
                 // Kiểm tra Idempotency: Giải phóng lặp lại không làm sai số liệu!
@@ -354,7 +365,7 @@ public class InventoryService : IInventoryService
 
                 if (affected == 0)
                 {
-                    await tx.RollbackAsync(ct);
+                    if (tx != null) await tx.RollbackAsync(ct);
                     return Result<InventoryDto>.Failure("Số lượng yêu cầu giải phóng vượt quá số lượng đang giữ.");
                 }
 
@@ -388,7 +399,7 @@ public class InventoryService : IInventoryService
                        WHERE id = {variantId};", ct);
 
                 await _context.SaveChangesAsync(ct);
-                await tx.CommitAsync(ct);
+                if (tx != null) await tx.CommitAsync(ct);
 
                 _logger.LogInformation("Released variant {VariantId}: -{Qty} reserved (Available now: {Avail})",
                     variantId, quantity, onHand - reservedAfter);
@@ -397,7 +408,7 @@ public class InventoryService : IInventoryService
             }
             catch (Exception ex)
             {
-                await tx.RollbackAsync(ct);
+                if (tx != null) await tx.RollbackAsync(ct);
                 _logger.LogError(ex, "Release transaction error for variant {VariantId}", variantId);
                 return Result<InventoryDto>.Failure("Lỗi hệ thống khi giải phóng hàng.");
             }
@@ -465,7 +476,9 @@ public class InventoryService : IInventoryService
 
         if (isRelational)
         {
-            await using var tx = await _efContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
+            var existingTx = _efContext.Database.CurrentTransaction;
+            bool ownsTx = existingTx == null;
+            await using var tx = ownsTx ? await _efContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct) : null;
             try
             {
                 // Kiểm tra Idempotency: Commit lặp lại không làm trừ thật đúp!
@@ -497,7 +510,7 @@ public class InventoryService : IInventoryService
 
                 if (affected == 0)
                 {
-                    await tx.RollbackAsync(ct);
+                    if (tx != null) await tx.RollbackAsync(ct);
                     return Result<InventoryDto>.Failure("Không thể trừ kho vì số lượng đang giữ hoặc tồn thực tế không đủ.");
                 }
 
@@ -532,7 +545,7 @@ public class InventoryService : IInventoryService
                        WHERE id = {variantId};", ct);
 
                 await _context.SaveChangesAsync(ct);
-                await tx.CommitAsync(ct);
+                if (tx != null) await tx.CommitAsync(ct);
 
                 _logger.LogInformation("Committed variant {VariantId}: -{Qty} on-hand & reserved (OnHand left: {OnHand}, Avail: {Avail})",
                     variantId, quantity, onHandAfter, onHandAfter - reservedAfter);
@@ -541,7 +554,7 @@ public class InventoryService : IInventoryService
             }
             catch (Exception ex)
             {
-                await tx.RollbackAsync(ct);
+                if (tx != null) await tx.RollbackAsync(ct);
                 _logger.LogError(ex, "Commit transaction error for variant {VariantId}", variantId);
                 return Result<InventoryDto>.Failure("Lỗi hệ thống khi trừ kho thực tế.");
             }
@@ -615,7 +628,7 @@ public class InventoryService : IInventoryService
 
     private async Task<Inventory?> GetOrCreateInventoryAsync(Guid variantId, CancellationToken ct)
     {
-        var inventory = await _context.Inventories.FirstOrDefaultAsync(i => i.VariantId == variantId, ct);
+        var inventory = await _context.Inventories.AsNoTracking().FirstOrDefaultAsync(i => i.VariantId == variantId, ct);
         if (inventory != null)
         {
             return inventory;

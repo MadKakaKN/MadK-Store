@@ -26,6 +26,8 @@ public interface IAppDbContext
     DbSet<CartItem> CartItems { get; }
     DbSet<Inventory> Inventories { get; }
     DbSet<StockMovement> StockMovements { get; }
+    DbSet<Order> Orders { get; }
+    DbSet<OrderItem> OrderItems { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

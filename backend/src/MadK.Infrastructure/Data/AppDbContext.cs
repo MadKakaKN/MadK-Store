@@ -35,6 +35,8 @@ public class AppDbContext : DbContext, IAppDbContext
     public DbSet<CartItem> CartItems => Set<CartItem>();
     public DbSet<Inventory> Inventories => Set<Inventory>();
     public DbSet<StockMovement> StockMovements => Set<StockMovement>();
+    public DbSet<Order> Orders => Set<Order>();
+    public DbSet<OrderItem> OrderItems => Set<OrderItem>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
