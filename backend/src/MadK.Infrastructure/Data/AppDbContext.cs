@@ -33,6 +33,8 @@ public class AppDbContext : DbContext, IAppDbContext
     public DbSet<Address> Addresses => Set<Address>();
     public DbSet<Cart> Carts => Set<Cart>();
     public DbSet<CartItem> CartItems => Set<CartItem>();
+    public DbSet<Inventory> Inventories => Set<Inventory>();
+    public DbSet<StockMovement> StockMovements => Set<StockMovement>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
