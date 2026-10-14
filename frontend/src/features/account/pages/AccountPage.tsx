@@ -1,14 +1,31 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../auth/context/AuthContext';
 import authApi from '../../../api/authApi';
 import { AddressList } from '../components/AddressList';
+import { OrderList } from '../components/orders/OrderList';
 
 export const AccountPage: React.FC = () => {
   const { user, logout, refreshUser } = useAuth();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'addresses' | 'orders'>('profile');
+  const tabParam = searchParams.get('tab') as 'profile' | 'security' | 'addresses' | 'orders' | null;
+  const validTabs = ['profile', 'security', 'addresses', 'orders'];
+  const [activeTab, setActiveTabState] = useState<'profile' | 'security' | 'addresses' | 'orders'>(
+    tabParam && validTabs.includes(tabParam) ? tabParam : 'profile'
+  );
+
+  useEffect(() => {
+    if (tabParam && validTabs.includes(tabParam) && tabParam !== activeTab) {
+      setActiveTabState(tabParam);
+    }
+  }, [tabParam]);
+
+  const setActiveTab = (tab: 'profile' | 'security' | 'addresses' | 'orders') => {
+    setActiveTabState(tab);
+    setSearchParams({ tab });
+  };
 
   // Change Password form state
   const [currentPassword, setCurrentPassword] = useState('');
@@ -211,8 +228,8 @@ export const AccountPage: React.FC = () => {
             >
               <span className="text-lg">📦</span>
               <span>Đơn hàng của tôi</span>
-              <span className="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-2 py-0.5 rounded-full">
-                Phase 2.3
+              <span className="ml-auto text-[10px] bg-brand-100 text-brand-700 font-bold px-2 py-0.5 rounded-full">
+                Trực tiếp
               </span>
             </button>
           </div>
@@ -381,16 +398,18 @@ export const AccountPage: React.FC = () => {
             </div>
           )}
 
-          {/* TAB 4: Orders Preview */}
+          {/* TAB 4: Orders Management */}
           {activeTab === 'orders' && (
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm text-center py-12">
-              <div className="w-16 h-16 mx-auto rounded-3xl bg-slate-100 text-slate-400 flex items-center justify-center text-3xl mb-4">
-                📦
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm">
+              <div className="mb-6 pb-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-lg font-extrabold text-slate-900">Quản lý Đơn hàng</h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Theo dõi vòng đời đơn hàng, lịch sử chuyển trạng thái và hủy đơn COD khi còn hợp lệ.
+                  </p>
+                </div>
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Đơn hàng của tôi</h3>
-              <p className="mt-2 text-sm text-slate-500 max-w-md mx-auto">
-                Theo dõi tiến trình đặt hàng, giao hàng COD và kiểm tra chống IDOR theo đúng lộ trình Giai đoạn 2.
-              </p>
+              <OrderList />
             </div>
           )}
         </div>

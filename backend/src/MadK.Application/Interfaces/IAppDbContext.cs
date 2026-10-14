@@ -28,6 +28,7 @@ public interface IAppDbContext
     DbSet<StockMovement> StockMovements { get; }
     DbSet<Order> Orders { get; }
     DbSet<OrderItem> OrderItems { get; }
+    DbSet<OrderStatusHistory> OrderStatusHistories { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

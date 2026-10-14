@@ -40,6 +40,7 @@ public class OrderService : IOrderService
             var cleanKey = request.IdempotencyKey.Trim();
             var existingOrder = await _context.Orders
                 .Include(o => o.Items)
+                .Include(o => o.StatusHistories)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(o => o.IdempotencyKey == cleanKey, ct);
 
@@ -164,7 +165,7 @@ public class OrderService : IOrderService
         // 4. Sinh mã đơn hàng dễ đọc, duy nhất (e.g. MK-20261013-ABC123)
         string orderNumber = GenerateOrderNumber();
 
-        // 5. Mở TRANSACTION: Đảm bảo tạo Order, OrderItems và Giữ kho (Reserve) nguyên tử
+        // 5. Mở TRANSACTION: Đảm bảo tạo Order, OrderItems, OrderStatusHistory và Giữ kho (Reserve) nguyên tử
         bool isRelational = _efContext.Database.IsRelational();
         await using var tx = isRelational ? await _efContext.Database.BeginTransactionAsync(ct) : null;
 
@@ -175,6 +176,7 @@ public class OrderService : IOrderService
             var orderId = Guid.NewGuid();
             var orderItems = new List<OrderItem>();
             decimal subtotalAmount = 0m;
+            DateTime now = DateTime.UtcNow;
 
             foreach (var (variantId, quantity) in itemsToOrder)
             {
@@ -239,7 +241,7 @@ public class OrderService : IOrderService
                     AttributesSnapshot = variant.Attributes ?? "{}",
                     SpecificationsSnapshot = variant.Product?.Specifications,
                     ThumbnailUrlSnapshot = thumb,
-                    CreatedAt = DateTime.UtcNow
+                    CreatedAt = now
                 };
 
                 orderItems.Add(orderItem);
@@ -249,6 +251,18 @@ public class OrderService : IOrderService
             decimal shippingFee = 0m; // Miễn phí giao hàng toàn quốc
             decimal discountAmount = 0m;
             decimal totalAmount = subtotalAmount - discountAmount + shippingFee;
+
+            var initialHistory = new OrderStatusHistory
+            {
+                Id = Guid.NewGuid(),
+                OrderId = orderId,
+                FromStatus = null,
+                ToStatus = OrderStatus.Pending,
+                ChangedByUserId = userId,
+                ChangedByName = userId.HasValue ? "Khách hàng" : "Khách vãng lai",
+                Reason = "Khởi tạo đơn hàng COD",
+                CreatedAt = now
+            };
 
             var order = new Order
             {
@@ -267,8 +281,9 @@ public class OrderService : IOrderService
                 ShippingAddressSnapshot = addressSnapshot,
                 CustomerNote = request.CustomerNote,
                 IdempotencyKey = string.IsNullOrWhiteSpace(request.IdempotencyKey) ? null : request.IdempotencyKey.Trim(),
-                CreatedAt = DateTime.UtcNow,
-                Items = orderItems
+                CreatedAt = now,
+                Items = orderItems,
+                StatusHistories = new List<OrderStatusHistory> { initialHistory }
             };
 
             _context.Orders.Add(order);
@@ -318,6 +333,7 @@ public class OrderService : IOrderService
     public async Task<Result<OrderDto>> GetOrderByNumberAsync(
         string orderNumber,
         Guid? userId,
+        bool isStaffOrAdmin = false,
         CancellationToken ct = default)
     {
         if (string.IsNullOrWhiteSpace(orderNumber))
@@ -327,6 +343,7 @@ public class OrderService : IOrderService
 
         var order = await _context.Orders
             .Include(o => o.Items)
+            .Include(o => o.StatusHistories)
             .AsNoTracking()
             .FirstOrDefaultAsync(o => o.OrderNumber == orderNumber.Trim().ToUpper(), ct);
 
@@ -335,10 +352,13 @@ public class OrderService : IOrderService
             return Result<OrderDto>.Failure("Không tìm thấy đơn hàng.");
         }
 
-        // Chống IDOR: Nếu đơn thuộc user cụ thể, chỉ user đó hoặc admin mới xem được
-        if (userId.HasValue && order.UserId.HasValue && order.UserId != userId.Value)
+        // Chống IDOR: Nếu đơn thuộc user cụ thể, chỉ user đó hoặc admin/staff mới xem được
+        if (order.UserId.HasValue && !isStaffOrAdmin)
         {
-            return Result<OrderDto>.Failure("Bạn không có quyền xem đơn hàng này.");
+            if (!userId.HasValue || order.UserId.Value != userId.Value)
+            {
+                return Result<OrderDto>.Failure("Bạn không có quyền xem đơn hàng này.");
+            }
         }
 
         return Result<OrderDto>.Success(MapToDto(order));
@@ -347,10 +367,12 @@ public class OrderService : IOrderService
     public async Task<Result<OrderDto>> GetOrderByIdAsync(
         Guid orderId,
         Guid? userId,
+        bool isStaffOrAdmin = false,
         CancellationToken ct = default)
     {
         var order = await _context.Orders
             .Include(o => o.Items)
+            .Include(o => o.StatusHistories)
             .AsNoTracking()
             .FirstOrDefaultAsync(o => o.Id == orderId, ct);
 
@@ -359,9 +381,13 @@ public class OrderService : IOrderService
             return Result<OrderDto>.Failure("Không tìm thấy đơn hàng.");
         }
 
-        if (userId.HasValue && order.UserId.HasValue && order.UserId != userId.Value)
+        // Chống IDOR
+        if (order.UserId.HasValue && !isStaffOrAdmin)
         {
-            return Result<OrderDto>.Failure("Bạn không có quyền xem đơn hàng này.");
+            if (!userId.HasValue || order.UserId.Value != userId.Value)
+            {
+                return Result<OrderDto>.Failure("Bạn không có quyền xem đơn hàng này.");
+            }
         }
 
         return Result<OrderDto>.Success(MapToDto(order));
@@ -369,17 +395,328 @@ public class OrderService : IOrderService
 
     public async Task<Result<IReadOnlyList<OrderDto>>> GetMyOrdersAsync(
         Guid userId,
+        OrderStatus? filterStatus = null,
         CancellationToken ct = default)
     {
-        var orders = await _context.Orders
+        var query = _context.Orders
             .Include(o => o.Items)
+            .Include(o => o.StatusHistories)
             .AsNoTracking()
-            .Where(o => o.UserId == userId)
+            .Where(o => o.UserId == userId);
+
+        if (filterStatus.HasValue)
+        {
+            query = query.Where(o => o.Status == filterStatus.Value);
+        }
+
+        var orders = await query
             .OrderByDescending(o => o.CreatedAt)
             .ToListAsync(ct);
 
         var dtos = orders.Select(MapToDto).ToList();
         return Result<IReadOnlyList<OrderDto>>.Success(dtos);
+    }
+
+    public async Task<Result<OrderDto>> CancelOrderAsync(
+        string orderNumber,
+        Guid? userId,
+        CancelOrderRequestDto request,
+        bool isStaffOrAdmin = false,
+        CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(orderNumber))
+            return Result<OrderDto>.Failure("Mã đơn hàng không hợp lệ.");
+
+        if (string.IsNullOrWhiteSpace(request?.Reason))
+            return Result<OrderDto>.Failure("Vui lòng cung cấp lý do hủy đơn hàng.");
+
+        var order = await _context.Orders
+            .Include(o => o.Items)
+            .Include(o => o.StatusHistories)
+            .FirstOrDefaultAsync(o => o.OrderNumber == orderNumber.Trim().ToUpper(), ct);
+
+        if (order == null)
+            return Result<OrderDto>.Failure("Không tìm thấy đơn hàng.");
+
+        // Chống IDOR: Khách hàng chỉ được hủy đơn của chính mình
+        if (!isStaffOrAdmin)
+        {
+            if (!userId.HasValue || !order.UserId.HasValue || order.UserId.Value != userId.Value)
+            {
+                return Result<OrderDto>.Failure("Bạn không có quyền hủy đơn hàng này.");
+            }
+
+            // Theo docs/order-states.md: Khách chỉ được hủy khi Pending / Confirmed / PendingPayment
+            if (order.Status != OrderStatus.Pending && order.Status != OrderStatus.Confirmed && order.Status != OrderStatus.PendingPayment)
+            {
+                return Result<OrderDto>.Failure($"Không thể hủy đơn hàng ở trạng thái '{order.Status}'. Đơn hàng đã bắt đầu đóng gói hoặc vận chuyển.");
+            }
+        }
+        else
+        {
+            if (order.Status == OrderStatus.Cancelled || order.Status == OrderStatus.Completed || order.Status == OrderStatus.Returned)
+            {
+                return Result<OrderDto>.Failure($"Không thể hủy đơn hàng đã ở trạng thái kết thúc '{order.Status}'.");
+            }
+        }
+
+        bool isRelational = _efContext.Database.IsRelational();
+        await using var tx = isRelational ? await _efContext.Database.BeginTransactionAsync(ct) : null;
+
+        try
+        {
+            var oldStatus = order.Status;
+            var now = DateTime.UtcNow;
+
+            // Tác động kho khi hủy đơn theo docs/order-states.md:
+            if (oldStatus == OrderStatus.Pending || oldStatus == OrderStatus.Confirmed || oldStatus == OrderStatus.Processing || oldStatus == OrderStatus.PendingPayment)
+            {
+                // Giải phóng tồn kho đang giữ
+                foreach (var item in order.Items)
+                {
+                    if (item.VariantId.HasValue && item.Quantity > 0)
+                    {
+                        var releaseRes = await _inventoryService.ReleaseAsync(
+                            item.VariantId.Value,
+                            item.Quantity,
+                            "Order",
+                            order.OrderNumber,
+                            $"Giải phóng kho do hủy đơn ({request.Reason.Trim()})",
+                            ct);
+
+                        if (!releaseRes.IsSuccess)
+                        {
+                            _logger.LogWarning("Release stock returned warning for variant {VariantId}: {Err}", item.VariantId, releaseRes.Error);
+                        }
+                    }
+                }
+            }
+            else if (oldStatus == OrderStatus.Shipping)
+            {
+                // Giao hàng thất bại / khách từ chối nhận: Chuyển hoàn và nhập lại kho (OnHand)
+                foreach (var item in order.Items)
+                {
+                    if (item.VariantId.HasValue && item.Quantity > 0)
+                    {
+                        await _inventoryService.RestockAsync(
+                            item.VariantId.Value,
+                            item.Quantity,
+                            $"Nhập kho do chuyển hoàn/hủy đơn {order.OrderNumber}",
+                            ct);
+                    }
+                }
+            }
+
+            order.Status = OrderStatus.Cancelled;
+            order.CancelReason = request.Reason.Trim();
+            order.CancelledAt = now;
+            order.UpdatedAt = now;
+
+            var history = new OrderStatusHistory
+            {
+                Id = Guid.NewGuid(),
+                OrderId = order.Id,
+                FromStatus = oldStatus,
+                ToStatus = OrderStatus.Cancelled,
+                ChangedByUserId = userId,
+                ChangedByName = isStaffOrAdmin ? "Nhân viên / Quản trị viên" : "Khách hàng",
+                Reason = request.Reason.Trim(),
+                CreatedAt = now
+            };
+
+            _context.OrderStatusHistories.Add(history);
+            order.StatusHistories.Add(history);
+
+            await _context.SaveChangesAsync(ct);
+
+            if (tx != null)
+            {
+                await tx.CommitAsync(ct);
+            }
+
+            _logger.LogInformation("Order {OrderNumber} cancelled successfully by {Actor}. Reason: {Reason}",
+                order.OrderNumber, history.ChangedByName, request.Reason);
+
+            return Result<OrderDto>.Success(MapToDto(order), "Hủy đơn hàng thành công và đã hoàn kho.");
+        }
+        catch (Exception ex)
+        {
+            if (tx != null) await tx.RollbackAsync(ct);
+            _logger.LogError(ex, "Error cancelling order {OrderNumber}", order.OrderNumber);
+            return Result<OrderDto>.Failure("Lỗi khi hủy đơn hàng: " + ex.Message);
+        }
+    }
+
+    public async Task<Result<OrderDto>> UpdateOrderStatusAsync(
+        string orderNumber,
+        Guid? staffUserId,
+        string staffName,
+        UpdateOrderStatusRequestDto request,
+        CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(orderNumber))
+            return Result<OrderDto>.Failure("Mã đơn hàng không hợp lệ.");
+
+        var order = await _context.Orders
+            .Include(o => o.Items)
+            .Include(o => o.StatusHistories)
+            .FirstOrDefaultAsync(o => o.OrderNumber == orderNumber.Trim().ToUpper(), ct);
+
+        if (order == null)
+            return Result<OrderDto>.Failure("Không tìm thấy đơn hàng.");
+
+        var currentStatus = order.Status;
+        var targetStatus = request.NewStatus;
+
+        // KIỂM TRA STATE MACHINE: Chuyển trạng thái sai bị từ chối!
+        if (!IsValidTransition(currentStatus, targetStatus))
+        {
+            return Result<OrderDto>.Failure(
+                $"Chuyển trạng thái từ '{currentStatus}' sang '{targetStatus}' không hợp lệ theo quy tắc vòng đời đơn hàng.");
+        }
+
+        // Nếu chuyển sang Cancelled thì gọi logic hủy
+        if (targetStatus == OrderStatus.Cancelled)
+        {
+            return await CancelOrderAsync(
+                orderNumber,
+                staffUserId,
+                new CancelOrderRequestDto(request.Reason ?? "Nhân viên hủy đơn hàng"),
+                isStaffOrAdmin: true,
+                ct);
+        }
+
+        bool isRelational = _efContext.Database.IsRelational();
+        await using var tx = isRelational ? await _efContext.Database.BeginTransactionAsync(ct) : null;
+
+        try
+        {
+            var now = DateTime.UtcNow;
+
+            // TÁC ĐỘNG TỒN KHO THEO QUY TẮC STATE MACHINE:
+            if (currentStatus == OrderStatus.Processing && targetStatus == OrderStatus.Shipping)
+            {
+                // Bàn giao ĐVVC: Trừ tồn thực tế (OnHand), trừ tồn đang giữ (Reserved), ghi StockMovement OutboundOrder
+                foreach (var item in order.Items)
+                {
+                    if (item.VariantId.HasValue && item.Quantity > 0)
+                    {
+                        var commitRes = await _inventoryService.CommitAsync(
+                            item.VariantId.Value,
+                            item.Quantity,
+                            "Order",
+                            order.OrderNumber,
+                            $"Xuất kho bàn giao vận chuyển cho đơn {order.OrderNumber}",
+                            ct);
+
+                        if (!commitRes.IsSuccess)
+                        {
+                            throw new InvalidOperationException($"Không thể xuất kho cho sản phẩm '{item.ProductNameSnapshot}': {commitRes.Error}");
+                        }
+                    }
+                }
+            }
+            else if (currentStatus == OrderStatus.Shipping && targetStatus == OrderStatus.Completed)
+            {
+                // Giao hàng thành công: Nếu là COD thì đánh dấu đã thanh toán
+                if (order.PaymentMethod == PaymentMethod.COD)
+                {
+                    order.PaymentStatus = PaymentStatus.Paid;
+                }
+            }
+            else if (currentStatus == OrderStatus.ReturnRequested && targetStatus == OrderStatus.Returned)
+            {
+                // Đổi trả duyệt & kho nhận lại hàng: Nhập lại kho thực tế (+OnHand)
+                foreach (var item in order.Items)
+                {
+                    if (item.VariantId.HasValue && item.Quantity > 0)
+                    {
+                        await _inventoryService.RestockAsync(
+                            item.VariantId.Value,
+                            item.Quantity,
+                            $"Nhập lại kho do đổi trả đơn {order.OrderNumber}",
+                            ct);
+                    }
+                }
+
+                order.PaymentStatus = PaymentStatus.Refunded;
+            }
+
+            order.Status = targetStatus;
+            order.UpdatedAt = now;
+
+            var history = new OrderStatusHistory
+            {
+                Id = Guid.NewGuid(),
+                OrderId = order.Id,
+                FromStatus = currentStatus,
+                ToStatus = targetStatus,
+                ChangedByUserId = staffUserId,
+                ChangedByName = string.IsNullOrWhiteSpace(staffName) ? "Nhân viên" : staffName,
+                Reason = request.Reason,
+                Note = request.Note,
+                CreatedAt = now
+            };
+
+            _context.OrderStatusHistories.Add(history);
+            order.StatusHistories.Add(history);
+
+            await _context.SaveChangesAsync(ct);
+
+            if (tx != null)
+            {
+                await tx.CommitAsync(ct);
+            }
+
+            _logger.LogInformation("Order {OrderNumber} transitioned from {From} to {To} by {Actor}",
+                order.OrderNumber, currentStatus, targetStatus, history.ChangedByName);
+
+            return Result<OrderDto>.Success(MapToDto(order), $"Chuyển trạng thái đơn hàng sang '{targetStatus}' thành công.");
+        }
+        catch (Exception ex)
+        {
+            if (tx != null) await tx.RollbackAsync(ct);
+            _logger.LogError(ex, "Error updating status for order {OrderNumber}", order.OrderNumber);
+            return Result<OrderDto>.Failure("Lỗi khi cập nhật trạng thái đơn: " + ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Ma trận kiểm tra tính hợp lệ của việc chuyển trạng thái theo docs/order-states.md.
+    /// </summary>
+    public static bool IsValidTransition(OrderStatus current, OrderStatus target)
+    {
+        return (current, target) switch
+        {
+            // PendingPayment (Online VNPay)
+            (OrderStatus.PendingPayment, OrderStatus.Pending) => true,
+            (OrderStatus.PendingPayment, OrderStatus.Cancelled) => true,
+
+            // Pending (COD khởi tạo / Online đã thanh toán)
+            (OrderStatus.Pending, OrderStatus.Confirmed) => true,
+            (OrderStatus.Pending, OrderStatus.Cancelled) => true,
+
+            // Confirmed
+            (OrderStatus.Confirmed, OrderStatus.Processing) => true,
+            (OrderStatus.Confirmed, OrderStatus.Cancelled) => true,
+
+            // Processing
+            (OrderStatus.Processing, OrderStatus.Shipping) => true,
+            (OrderStatus.Processing, OrderStatus.Cancelled) => true,
+
+            // Shipping
+            (OrderStatus.Shipping, OrderStatus.Completed) => true,
+            (OrderStatus.Shipping, OrderStatus.Cancelled) => true,
+
+            // Completed
+            (OrderStatus.Completed, OrderStatus.ReturnRequested) => true,
+
+            // ReturnRequested
+            (OrderStatus.ReturnRequested, OrderStatus.Returned) => true,
+            (OrderStatus.ReturnRequested, OrderStatus.Completed) => true, // Từ chối đổi trả
+
+            _ => false
+        };
     }
 
     private static string GenerateOrderNumber()
@@ -444,8 +781,10 @@ public class OrderService : IOrderService
             order.TotalAmount,
             order.ShippingAddressSnapshot,
             order.CustomerNote,
+            order.CancelReason,
+            order.CancelledAt,
             order.IdempotencyKey,
-            order.Items.Select(i => new OrderItemDto(
+            (order.Items ?? Array.Empty<OrderItem>()).Select(i => new OrderItemDto(
                 i.Id,
                 i.VariantId,
                 i.ProductId,
@@ -460,6 +799,20 @@ public class OrderService : IOrderService
                 i.SpecificationsSnapshot,
                 i.ThumbnailUrlSnapshot
             )).ToList(),
+            (order.StatusHistories ?? Array.Empty<OrderStatusHistory>())
+                .DistinctBy(h => h.Id)
+                .OrderBy(h => h.CreatedAt)
+                .Select(h => new OrderStatusHistoryDto(
+                    h.Id,
+                    h.OrderId,
+                    h.FromStatus,
+                    h.ToStatus,
+                    h.ChangedByUserId,
+                    h.ChangedByName,
+                    h.Reason,
+                    h.Note,
+                    h.CreatedAt
+                )).ToList(),
             order.CreatedAt
         );
 }

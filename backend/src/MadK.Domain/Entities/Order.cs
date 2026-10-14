@@ -63,4 +63,5 @@ public class Order : BaseEntity
     public string? IdempotencyKey { get; set; }
 
     public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
+    public ICollection<OrderStatusHistory> StatusHistories { get; set; } = new List<OrderStatusHistory>();
 }

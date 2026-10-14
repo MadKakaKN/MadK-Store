@@ -2,6 +2,7 @@ using System.Security.Claims;
 using MadK.Application.Common;
 using MadK.Application.DTOs.Order;
 using MadK.Application.Interfaces;
+using MadK.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,6 +55,7 @@ public class OrdersController : ControllerBase
 
     /// <summary>
     /// Tra cứu chi tiết đơn hàng theo mã đơn (e.g. MK-20261013-XXXXXX).
+    /// Chống IDOR: Khách hàng chỉ xem được đơn của mình; Admin/Staff có quyền xem mọi đơn.
     /// </summary>
     [HttpGet("{orderNumber}")]
     [ProducesResponseType(typeof(Result<OrderDto>), StatusCodes.Status200OK)]
@@ -63,7 +65,9 @@ public class OrdersController : ControllerBase
         CancellationToken ct)
     {
         var (userId, _) = ResolveUserOrAnonymous(null);
-        var result = await _orderService.GetOrderByNumberAsync(orderNumber, userId, ct);
+        bool isStaffOrAdmin = User.IsInRole("Admin") || User.IsInRole("Staff");
+
+        var result = await _orderService.GetOrderByNumberAsync(orderNumber, userId, isStaffOrAdmin, ct);
         if (!result.IsSuccess)
         {
             return NotFound(result);
@@ -74,6 +78,7 @@ public class OrdersController : ControllerBase
 
     /// <summary>
     /// Tra cứu chi tiết đơn hàng theo ID.
+    /// Chống IDOR: Khách hàng chỉ xem được đơn của mình; Admin/Staff có quyền xem mọi đơn.
     /// </summary>
     [HttpGet("id/{orderId:guid}")]
     [ProducesResponseType(typeof(Result<OrderDto>), StatusCodes.Status200OK)]
@@ -83,7 +88,9 @@ public class OrdersController : ControllerBase
         CancellationToken ct)
     {
         var (userId, _) = ResolveUserOrAnonymous(null);
-        var result = await _orderService.GetOrderByIdAsync(orderId, userId, ct);
+        bool isStaffOrAdmin = User.IsInRole("Admin") || User.IsInRole("Staff");
+
+        var result = await _orderService.GetOrderByIdAsync(orderId, userId, isStaffOrAdmin, ct);
         if (!result.IsSuccess)
         {
             return NotFound(result);
@@ -93,12 +100,14 @@ public class OrdersController : ControllerBase
     }
 
     /// <summary>
-    /// Lấy danh sách lịch sử đơn hàng của người dùng hiện tại.
+    /// Lấy danh sách lịch sử đơn hàng của người dùng hiện tại (hỗ trợ lọc theo trạng thái).
     /// </summary>
     [Authorize]
     [HttpGet("my-orders")]
     [ProducesResponseType(typeof(Result<IReadOnlyList<OrderDto>>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetMyOrders(CancellationToken ct)
+    public async Task<IActionResult> GetMyOrders(
+        [FromQuery] OrderStatus? status,
+        CancellationToken ct)
     {
         var (userId, _) = ResolveUserOrAnonymous(null);
         if (!userId.HasValue)
@@ -106,7 +115,61 @@ public class OrdersController : ControllerBase
             return Unauthorized(Result<IReadOnlyList<OrderDto>>.Failure("Vui lòng đăng nhập."));
         }
 
-        var result = await _orderService.GetMyOrdersAsync(userId.Value, ct);
+        var result = await _orderService.GetMyOrdersAsync(userId.Value, status, ct);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Khách hàng tự hủy đơn hàng của mình khi đơn còn ở trạng thái cho phép (Pending, Confirmed).
+    /// Tự động giải phóng tồn kho đang giữ và ghi nhận lịch sử thay đổi.
+    /// </summary>
+    [Authorize]
+    [HttpPost("{orderNumber}/cancel")]
+    [ProducesResponseType(typeof(Result<OrderDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<OrderDto>), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CancelOrder(
+        [FromRoute] string orderNumber,
+        [FromBody] CancelOrderRequestDto request,
+        CancellationToken ct)
+    {
+        var (userId, _) = ResolveUserOrAnonymous(null);
+        if (!userId.HasValue)
+        {
+            return Unauthorized(Result<OrderDto>.Failure("Vui lòng đăng nhập để thực hiện thao tác này."));
+        }
+
+        bool isStaffOrAdmin = User.IsInRole("Admin") || User.IsInRole("Staff");
+        var result = await _orderService.CancelOrderAsync(orderNumber, userId, request, isStaffOrAdmin, ct);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Nhân viên / Quản trị viên cập nhật trạng thái đơn hàng tuân thủ State Machine theo docs/order-states.md.
+    /// Chuyển trạng thái sai sẽ bị từ chối; hệ thống tự động cập nhật tồn kho (Commit/Restock) tương ứng.
+    /// </summary>
+    [Authorize(Roles = "Admin,Staff")]
+    [HttpPut("{orderNumber}/status")]
+    [ProducesResponseType(typeof(Result<OrderDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<OrderDto>), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateOrderStatus(
+        [FromRoute] string orderNumber,
+        [FromBody] UpdateOrderStatusRequestDto request,
+        CancellationToken ct)
+    {
+        var (userId, _) = ResolveUserOrAnonymous(null);
+        var staffName = User.FindFirstValue(ClaimTypes.Name) ?? User.FindFirstValue(ClaimTypes.Email) ?? "Nhân viên";
+
+        var result = await _orderService.UpdateOrderStatusAsync(orderNumber, userId, staffName, request, ct);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result);
+        }
+
         return Ok(result);
     }
 

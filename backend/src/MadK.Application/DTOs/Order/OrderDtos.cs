@@ -44,6 +44,18 @@ public record OrderItemDto(
     string? ThumbnailUrl
 );
 
+public record OrderStatusHistoryDto(
+    Guid Id,
+    Guid OrderId,
+    OrderStatus? FromStatus,
+    OrderStatus ToStatus,
+    Guid? ChangedByUserId,
+    string ChangedByName,
+    string? Reason,
+    string? Note,
+    DateTime CreatedAt
+);
+
 public record OrderDto(
     Guid Id,
     string OrderNumber,
@@ -59,7 +71,20 @@ public record OrderDto(
     decimal TotalAmount,
     string ShippingAddressSnapshot,
     string? CustomerNote,
+    string? CancelReason,
+    DateTime? CancelledAt,
     string? IdempotencyKey,
     List<OrderItemDto> Items,
+    List<OrderStatusHistoryDto> StatusHistory,
     DateTime CreatedAt
+);
+
+public record CancelOrderRequestDto(
+    string Reason
+);
+
+public record UpdateOrderStatusRequestDto(
+    OrderStatus NewStatus,
+    string? Reason = null,
+    string? Note = null
 );
