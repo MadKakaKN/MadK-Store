@@ -77,6 +77,32 @@ export interface OrderDto {
   statusHistory: OrderStatusHistoryDto[];
 }
 
+export interface ShippingAddressInputDto {
+  recipientName: string;
+  phoneNumber: string;
+  recipientEmail?: string | null;
+  provinceCode?: string | null;
+  provinceName: string;
+  districtCode?: string | null;
+  districtName: string;
+  wardCode?: string | null;
+  wardName: string;
+  detailedAddress: string;
+}
+
+export interface CheckoutItemInputDto {
+  variantId: string;
+  quantity: number;
+}
+
+export interface CheckoutCodRequestDto {
+  addressId?: string | null;
+  shippingAddress?: ShippingAddressInputDto | null;
+  items?: CheckoutItemInputDto[] | null;
+  customerNote?: string | null;
+  idempotencyKey?: string | null;
+}
+
 export interface CancelOrderRequestDto {
   reason: string;
 }

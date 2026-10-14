@@ -11,6 +11,7 @@ import ResetPasswordPage from '../features/auth/pages/ResetPasswordPage';
 import VerifyEmailPage from '../features/auth/pages/VerifyEmailPage';
 import CartPage from '../features/cart/pages/CartPage';
 import CheckoutPage from '../features/checkout/pages/CheckoutPage';
+import OrderSuccessPage from '../features/checkout/pages/OrderSuccessPage';
 import AccountPage from '../features/account/pages/AccountPage';
 import AdminDashboardPage from '../features/admin/pages/AdminDashboardPage';
 import ProtectedRoute from '../features/auth/components/ProtectedRoute';
@@ -30,6 +31,8 @@ export const AppRoutes: React.FC = () => {
         {/* Cart & Checkout */}
         <Route path="cart" element={<CartPage />} />
         <Route path="checkout" element={<CheckoutPage />} />
+        <Route path="checkout/success" element={<OrderSuccessPage />} />
+        <Route path="order-success/:orderNumber" element={<OrderSuccessPage />} />
 
         {/* Auth Routes (Guest Only) */}
         <Route
