@@ -11,7 +11,8 @@ public record ShippingAddressInputDto(
     string DistrictName,
     string WardCode,
     string WardName,
-    string DetailedAddress
+    string DetailedAddress,
+    string? Email = null
 );
 
 public record CheckoutItemInputDto(
@@ -25,7 +26,9 @@ public record CheckoutCodRequestDto(
     ShippingAddressInputDto? ShippingAddress = null,
     List<CheckoutItemInputDto>? Items = null,
     string? CustomerNote = null,
-    string? IdempotencyKey = null
+    string? IdempotencyKey = null,
+    string? CouponCode = null,
+    string? CustomerEmail = null
 );
 
 public record OrderItemDto(
@@ -71,12 +74,15 @@ public record OrderDto(
     decimal TotalAmount,
     string ShippingAddressSnapshot,
     string? CustomerNote,
+    string? AdminNote,
     string? CancelReason,
     DateTime? CancelledAt,
     string? IdempotencyKey,
     List<OrderItemDto> Items,
     List<OrderStatusHistoryDto> StatusHistory,
-    DateTime CreatedAt
+    DateTime CreatedAt,
+    DateTime? ExpiresAt = null,
+    string? CouponSnapshot = null
 );
 
 public record CancelOrderRequestDto(
@@ -88,3 +94,8 @@ public record UpdateOrderStatusRequestDto(
     string? Reason = null,
     string? Note = null
 );
+
+public record UpdateOrderNoteRequestDto(
+    string AdminNote
+);
+

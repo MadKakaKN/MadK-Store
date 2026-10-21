@@ -73,6 +73,7 @@ export interface OrderDto {
   cancelledAt?: string | null;
   createdAt: string;
   updatedAt?: string | null;
+  couponSnapshot?: string | null;
   items: OrderItemDto[];
   statusHistory: OrderStatusHistoryDto[];
 }
@@ -101,6 +102,7 @@ export interface CheckoutCodRequestDto {
   items?: CheckoutItemInputDto[] | null;
   customerNote?: string | null;
   idempotencyKey?: string | null;
+  couponCode?: string | null;
 }
 
 export interface CancelOrderRequestDto {
@@ -213,3 +215,50 @@ export const PAYMENT_STATUS_CONFIG: Record<PaymentStatus, { label: string; color
   Failed: { label: 'Thanh toán thất bại', color: 'text-rose-600 bg-rose-50' },
   Refunded: { label: 'Đã hoàn tiền', color: 'text-slate-600 bg-slate-100' },
 };
+
+export interface CheckoutVnpayResponseDto {
+  order: OrderDto;
+  paymentUrl: string;
+  txnRef: string;
+  expiresAt: string;
+}
+
+export interface PaymentUrlResponseDto {
+  paymentUrl: string;
+  orderNumber: string;
+  txnRef: string;
+  expiresAt: string;
+}
+
+export interface VnpayCallbackResultDto {
+  isSuccess: boolean;
+  orderNumber: string;
+  amount: number;
+  transactionNo?: string | null;
+  bankCode?: string | null;
+  responseCode: string;
+  transactionStatus?: string | null;
+  message: string;
+  status: PaymentStatus;
+  orderStatus: OrderStatus;
+}
+
+export interface PaymentDto {
+  id: string;
+  orderId: string;
+  orderNumber: string;
+  txnRef: string;
+  transactionNo?: string | null;
+  amount: number;
+  currency: string;
+  paymentMethod: PaymentMethod;
+  status: PaymentStatus;
+  bankCode?: string | null;
+  cardType?: string | null;
+  responseCode?: string | null;
+  transactionStatus?: string | null;
+  orderInfo?: string | null;
+  createdAt: string;
+  paymentTime?: string | null;
+}
+

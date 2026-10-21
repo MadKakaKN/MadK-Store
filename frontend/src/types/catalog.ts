@@ -123,6 +123,10 @@ export interface ProductVariantDto {
   isActive: boolean;
   stockQuantity?: number;
   images: ProductImageDto[];
+  isOnSale?: boolean;
+  promotionName?: string | null;
+  promotionEndDate?: string | null;
+  discountPercent?: number;
 }
 
 export interface ProductDetailDto {

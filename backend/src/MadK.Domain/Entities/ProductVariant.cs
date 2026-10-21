@@ -21,4 +21,8 @@ public class ProductVariant : BaseEntity
     public Inventory? Inventory { get; set; }
 
     public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
+    public ICollection<PriceSchedule> PriceSchedules { get; set; } = new List<PriceSchedule>();
+    public ICollection<PurchaseOrderItem> PurchaseOrderItems { get; set; } = new List<PurchaseOrderItem>();
+    public ICollection<InventoryAuditItem> InventoryAuditItems { get; set; } = new List<InventoryAuditItem>();
 }
+

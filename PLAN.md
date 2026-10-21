@@ -157,12 +157,12 @@ Ghi chú: ma trận này là điểm xuất phát, điều chỉnh khi làm đ�
 - [x] Form validation phía client (email, độ dài mật khẩu, xác nhận mật khẩu, tên), hiển thị lỗi trường & lỗi server rõ ràng
 
 **Giỏ hàng và đơn hàng**
-- [ ] Giỏ hàng (lưu DB cho người đã đăng nhập; localStorage hoặc Redis cho khách)
-- [ ] Checkout COD
-- [ ] Tạo đơn với snapshot tên, giá, thông số
-- [ ] Trừ tồn kho an toàn khi đặt hàng
-- [ ] Trạng thái đơn: Mới, Xác nhận, Đang giao, Hoàn tất, Hủy (hủy thì hoàn kho)
-- [ ] Trang "Đơn hàng của tôi", kiểm tra quyền sở hữu đơn (chống IDOR)
+- [x] Giỏ hàng (lưu DB cho người đã đăng nhập; localStorage hoặc Redis cho khách)
+- [x] Checkout COD
+- [x] Tạo đơn với snapshot tên, giá, thông số
+- [x] Trừ tồn kho an toàn khi đặt hàng
+- [x] Trạng thái đơn: Mới, Xác nhận, Đang giao, Hoàn tất, Hủy (hủy thì hoàn kho)
+- [x] Trang "Đơn hàng của tôi", kiểm tra quyền sở hữu đơn (chống IDOR)
 
 **Kết quả:** mua hàng trọn vòng đời đơn.
 
@@ -179,8 +179,8 @@ Ghi chú: ma trận này là điểm xuất phát, điều chỉnh khi làm đ�
 - [ ] Nhà cung cấp, phiếu nhập hàng, giá vốn
 
 **Phân quyền và an toàn**
-- [ ] Phân quyền theo role/permission cho Admin, Sales, Warehouse (theo ma trận quyền), kiểm tra ở server
-- [ ] Audit log cho thao tác của admin (ai sửa gì, khi nào)
+- [x] Phân quyền theo role/permission cho Admin, Sales, Warehouse (theo ma trận quyền), kiểm tra ở server
+- [x] Audit log cho thao tác của admin (ai sửa gì, khi nào)
 
 **Dashboard**
 - [ ] Doanh thu, lợi nhuận gộp, đơn theo ngày, sản phẩm bán chạy, cảnh báo sắp hết hàng
@@ -190,17 +190,17 @@ Ghi chú: ma trận này là điểm xuất phát, điều chỉnh khi làm đ�
 ## Giai đoạn 4: Thanh toán và tăng trải nghiệm (2-3 tuần)
 
 **Thanh toán**
-- [ ] VNPay sandbox, xử lý bằng IPN/webhook, idempotent
-- [ ] Giữ tồn kho tạm khi chờ thanh toán; quá hạn thì job nền tự hủy đơn và hoàn kho
-- [ ] Hủy đơn đã thanh toán và hoàn tiền (có thể mô phỏng)
-- [ ] Quy trình đổi trả / trả hàng cơ bản
+- [x] VNPay sandbox, xử lý bằng IPN/webhook, idempotent
+- [x] Giữ tồn kho tạm khi chờ thanh toán; quá hạn thì job nền tự hủy đơn và hoàn kho
+- [x] Hủy đơn đã thanh toán và hoàn tiền (có thể mô phỏng)
+- [x] Quy trình đổi trả / trả hàng cơ bản
 
 **Khuyến mãi và vận chuyển**
-- [ ] Mã giảm giá
-- [ ] Phí vận chuyển (mock hoặc GHN sandbox)
+- [x] Mã giảm giá
+- [x] Phí vận chuyển (mock hoặc GHN sandbox)
 
 **Thông báo**
-- [ ] Email xác nhận đơn gửi qua hàng đợi (RabbitMQ + worker hoặc Hangfire)
+- [x] Email xác nhận đơn gửi qua hàng đợi (RabbitMQ + worker hoặc Hangfire)
 
 **Kết quả:** luồng thanh toán online hoàn chỉnh và an toàn khi có sự cố.
 

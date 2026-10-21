@@ -6,12 +6,14 @@ interface OrderCardProps {
   order: OrderDto;
   onViewDetails: (order: OrderDto) => void;
   onRequestCancel: (order: OrderDto) => void;
+  onRequestReturn?: (order: OrderDto) => void;
 }
 
 export const OrderCard: React.FC<OrderCardProps> = ({
   order,
   onViewDetails,
   onRequestCancel,
+  onRequestReturn,
 }) => {
   const formatVnd = (amount: number) => {
     return new Intl.NumberFormat('vi-VN', {
@@ -113,6 +115,17 @@ export const OrderCard: React.FC<OrderCardProps> = ({
               className="px-3.5 py-2 rounded-xl text-xs font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 transition-colors border border-rose-200"
             >
               Hủy đơn
+            </button>
+          )}
+
+          {onRequestReturn && order.status === 'Completed' && (
+            <button
+              type="button"
+              id={`order-card-return-${order.orderNumber}`}
+              onClick={() => onRequestReturn(order)}
+              className="px-3.5 py-2 rounded-xl text-xs font-semibold text-orange-700 bg-orange-50 hover:bg-orange-100 transition-colors border border-orange-200 flex items-center gap-1"
+            >
+              <span>↩️</span> Đổi trả
             </button>
           )}
 

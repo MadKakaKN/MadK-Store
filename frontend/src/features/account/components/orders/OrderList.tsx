@@ -4,6 +4,8 @@ import orderApi from '../../../../api/orderApi';
 import { OrderCard } from './OrderCard';
 import { OrderDetailModal } from './OrderDetailModal';
 import { CancelOrderModal } from './CancelOrderModal';
+import { ReturnRequestModal } from './ReturnRequestModal';
+import { ReturnRequestDto } from '../../../../types/return';
 
 interface TabFilter {
   id: 'ALL' | OrderStatus;
@@ -19,6 +21,8 @@ const TABS: TabFilter[] = [
   { id: 'Shipping', label: 'Đang giao', icon: '🚚' },
   { id: 'Completed', label: 'Hoàn tất', icon: '🎉' },
   { id: 'Cancelled', label: 'Đã hủy', icon: '✕' },
+  { id: 'ReturnRequested', label: 'Đang đổi trả', icon: '↩️' },
+  { id: 'Returned', label: 'Đã hoàn trả', icon: '💸' },
 ];
 
 export const OrderList: React.FC = () => {
@@ -31,6 +35,8 @@ export const OrderList: React.FC = () => {
   // Modals state
   const [selectedOrderForDetail, setSelectedOrderForDetail] = useState<OrderDto | null>(null);
   const [selectedOrderForCancel, setSelectedOrderForCancel] = useState<OrderDto | null>(null);
+  const [selectedOrderForReturn, setSelectedOrderForReturn] = useState<OrderDto | null>(null);
+  const [returnsRefreshKey, setReturnsRefreshKey] = useState<number>(0);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const fetchOrders = useCallback(async () => {
@@ -64,6 +70,22 @@ export const OrderList: React.FC = () => {
     }
 
     setToastMessage(`Đơn hàng #${updatedOrder.orderNumber} đã được hủy thành công và hoàn trả tồn kho.`);
+    setTimeout(() => setToastMessage(null), 6000);
+  };
+
+  const handleReturnCreated = (request: ReturnRequestDto) => {
+    // Backend chuyển đơn Completed -> ReturnRequested khi tạo yêu cầu thành công
+    const patch = (o: OrderDto): OrderDto =>
+      o.orderNumber === request.orderNumber ? { ...o, status: 'ReturnRequested' } : o;
+
+    setOrders((prev) => prev.map(patch));
+    setSelectedOrderForDetail((prev) => (prev ? patch(prev) : prev));
+    setSelectedOrderForReturn(null);
+    setReturnsRefreshKey((k) => k + 1);
+
+    setToastMessage(
+      `Đã gửi yêu cầu đổi trả cho đơn #${request.orderNumber}. Nhân viên sẽ liên hệ bạn trong vòng 24 giờ.`
+    );
     setTimeout(() => setToastMessage(null), 6000);
   };
 
@@ -245,6 +267,7 @@ export const OrderList: React.FC = () => {
               order={order}
               onViewDetails={(o) => setSelectedOrderForDetail(o)}
               onRequestCancel={(o) => setSelectedOrderForCancel(o)}
+              onRequestReturn={(o) => setSelectedOrderForReturn(o)}
             />
           ))}
         </div>
@@ -259,6 +282,8 @@ export const OrderList: React.FC = () => {
           onRequestCancel={(o) => {
             setSelectedOrderForCancel(o);
           }}
+          onRequestReturn={(o) => setSelectedOrderForReturn(o)}
+          returnsRefreshKey={returnsRefreshKey}
         />
       )}
 
@@ -269,6 +294,17 @@ export const OrderList: React.FC = () => {
           isOpen={!!selectedOrderForCancel}
           onClose={() => setSelectedOrderForCancel(null)}
           onCancelled={handleOrderCancelled}
+        />
+      )}
+
+      {/* Return Request Modal */}
+      {selectedOrderForReturn && (
+        <ReturnRequestModal
+          key={selectedOrderForReturn.orderNumber}
+          order={selectedOrderForReturn}
+          isOpen={!!selectedOrderForReturn}
+          onClose={() => setSelectedOrderForReturn(null)}
+          onCreated={handleReturnCreated}
         />
       )}
     </div>

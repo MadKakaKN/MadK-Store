@@ -20,6 +20,10 @@ public class BrandConfiguration : IEntityTypeConfiguration<Brand>
         builder.Property(b => b.IsActive).HasColumnName("is_active").HasDefaultValue(true);
         builder.Property(b => b.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
         builder.Property(b => b.UpdatedAt).HasColumnName("updated_at");
+        builder.Property(b => b.IsDeleted).HasColumnName("is_deleted").HasDefaultValue(false);
+        builder.Property(b => b.DeletedAt).HasColumnName("deleted_at");
+
+        builder.HasQueryFilter(b => !b.IsDeleted);
 
         // Indexes
         builder.HasIndex(b => b.Slug)

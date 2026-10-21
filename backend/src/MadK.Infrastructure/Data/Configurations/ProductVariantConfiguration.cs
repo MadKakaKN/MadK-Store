@@ -31,6 +31,10 @@ public class ProductVariantConfiguration : IEntityTypeConfiguration<ProductVaria
         builder.Property(v => v.StockQuantity).HasColumnName("stock_quantity").HasDefaultValue(50);
         builder.Property(v => v.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
         builder.Property(v => v.UpdatedAt).HasColumnName("updated_at");
+        builder.Property(v => v.IsDeleted).HasColumnName("is_deleted").HasDefaultValue(false);
+        builder.Property(v => v.DeletedAt).HasColumnName("deleted_at");
+
+        builder.HasQueryFilter(v => !v.IsDeleted);
 
         // Relationships
         builder.HasOne(v => v.Product)

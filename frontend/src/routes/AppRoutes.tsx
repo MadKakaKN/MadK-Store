@@ -12,14 +12,29 @@ import VerifyEmailPage from '../features/auth/pages/VerifyEmailPage';
 import CartPage from '../features/cart/pages/CartPage';
 import CheckoutPage from '../features/checkout/pages/CheckoutPage';
 import OrderSuccessPage from '../features/checkout/pages/OrderSuccessPage';
+import VnpayReturnPage from '../features/checkout/pages/VnpayReturnPage';
 import AccountPage from '../features/account/pages/AccountPage';
-import AdminDashboardPage from '../features/admin/pages/AdminDashboardPage';
 import ProtectedRoute from '../features/auth/components/ProtectedRoute';
 import GuestRoute from '../features/auth/components/GuestRoute';
+
+// Admin feature components
+import AdminLayout from '../features/admin/components/layout/AdminLayout';
+import AdminRouteGuard from '../features/admin/components/guards/AdminRouteGuard';
+import AdminDashboardPage from '../features/admin/pages/AdminDashboardPage';
+import AdminOrdersPage from '../features/admin/pages/AdminOrdersPage';
+import AdminReturnsPage from '../features/admin/pages/AdminReturnsPage';
+import AdminInventoryPage from '../features/admin/pages/AdminInventoryPage';
+import AdminCatalogPage from '../features/admin/pages/AdminCatalogPage';
+import { AdminPricingPage } from '../features/admin/pricing/AdminPricingPage';
+import AdminDiscountsPage from '../features/admin/pages/AdminDiscountsPage';
+import AdminUsersPage from '../features/admin/pages/AdminUsersPage';
+import AdminAuditLogsPage from '../features/admin/pages/AdminAuditLogsPage';
+import AdminReportsPage from '../features/admin/pages/AdminReportsPage';
 
 export const AppRoutes: React.FC = () => {
   return (
     <Routes>
+      {/* ──── Storefront Customer Routes (MainLayout) ──── */}
       <Route path="/" element={<MainLayout />}>
         <Route index element={<HomePage />} />
 
@@ -32,7 +47,9 @@ export const AppRoutes: React.FC = () => {
         <Route path="cart" element={<CartPage />} />
         <Route path="checkout" element={<CheckoutPage />} />
         <Route path="checkout/success" element={<OrderSuccessPage />} />
+        <Route path="checkout/vnpay-return" element={<VnpayReturnPage />} />
         <Route path="order-success/:orderNumber" element={<OrderSuccessPage />} />
+
 
         {/* Auth Routes (Guest Only) */}
         <Route
@@ -79,17 +96,7 @@ export const AppRoutes: React.FC = () => {
           }
         />
 
-        {/* Protected Admin Route */}
-        <Route
-          path="admin"
-          element={
-            <ProtectedRoute requiredRole="Admin">
-              <AdminDashboardPage />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Fallback 404 */}
+        {/* Fallback 404 for Storefront */}
         <Route
           path="*"
           element={
@@ -102,6 +109,90 @@ export const AppRoutes: React.FC = () => {
                 Đường dẫn bạn yêu cầu không tồn tại hoặc đã được di chuyển sang địa chỉ mới.
               </p>
             </div>
+          }
+        />
+      </Route>
+
+      {/* ──── Dedicated Admin Feature Area with Layout & Route Guards ──── */}
+      <Route
+        path="/admin"
+        element={
+          <AdminRouteGuard>
+            <AdminLayout />
+          </AdminRouteGuard>
+        }
+      >
+        <Route index element={<AdminDashboardPage />} />
+        <Route
+          path="orders"
+          element={
+            <AdminRouteGuard requiredPermission="order.view">
+              <AdminOrdersPage />
+            </AdminRouteGuard>
+          }
+        />
+        <Route
+          path="returns"
+          element={
+            <AdminRouteGuard requiredPermission="order.view">
+              <AdminReturnsPage />
+            </AdminRouteGuard>
+          }
+        />
+        <Route
+          path="inventory"
+          element={
+            <AdminRouteGuard requiredPermission="inventory.view">
+              <AdminInventoryPage />
+            </AdminRouteGuard>
+          }
+        />
+        <Route
+          path="catalog"
+          element={
+            <AdminRouteGuard requiredPermission="catalog.manage">
+              <AdminCatalogPage />
+            </AdminRouteGuard>
+          }
+        />
+        <Route
+          path="pricing"
+          element={
+            <AdminRouteGuard requiredPermission="catalog.manage">
+              <AdminPricingPage />
+            </AdminRouteGuard>
+          }
+        />
+        <Route
+          path="discounts"
+          element={
+            <AdminRouteGuard requiredPermission="discount.manage">
+              <AdminDiscountsPage />
+            </AdminRouteGuard>
+          }
+        />
+        <Route
+          path="users"
+          element={
+            <AdminRouteGuard requiredPermission="user.view">
+              <AdminUsersPage />
+            </AdminRouteGuard>
+          }
+        />
+        <Route
+          path="audit-logs"
+          element={
+            <AdminRouteGuard requiredPermission="audit.view">
+              <AdminAuditLogsPage />
+            </AdminRouteGuard>
+          }
+        />
+        <Route
+          path="reports"
+          element={
+            <AdminRouteGuard>
+              <AdminReportsPage />
+            </AdminRouteGuard>
           }
         />
       </Route>

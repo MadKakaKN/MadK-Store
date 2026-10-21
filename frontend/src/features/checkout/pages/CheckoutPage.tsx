@@ -4,6 +4,8 @@ import { useCart } from '../../cart/context/CartContext';
 import { useAuth } from '../../auth/context/AuthContext';
 import { addressApi } from '../../../api/addressApi';
 import orderApi from '../../../api/orderApi';
+import paymentApi from '../../../api/paymentApi';
+import { couponApi } from '../../../api/couponApi';
 import { formatVND } from '../../../utils/format';
 import type { ProvinceDto, DistrictDto, WardDto, AddressDto } from '../../../types/address';
 import type { CheckoutCodRequestDto, ShippingAddressInputDto } from '../../../types/order';
@@ -45,6 +47,22 @@ export const CheckoutPage: React.FC = () => {
   // Ghi chú & Phương thức thanh toán
   const [customerNote, setCustomerNote] = useState<string>('');
   const [paymentMethod, setPaymentMethod] = useState<'COD' | 'VNPay'>('COD');
+
+  // Trạng thái Coupon & Phí Vận Chuyển
+  const [couponInput, setCouponInput] = useState<string>('');
+  const [appliedCoupon, setAppliedCoupon] = useState<{
+    code: string;
+    discountAmount: number;
+    description?: string | null;
+  } | null>(null);
+  const [couponError, setCouponError] = useState<string | null>(null);
+  const [isValidatingCoupon, setIsValidatingCoupon] = useState<boolean>(false);
+
+  // Phí vận chuyển và thông tin giao hàng ước tính
+  const [shippingFee, setShippingFee] = useState<number>(0);
+  const [carrierName, setCarrierName] = useState<string>('MadK Express');
+  const [estimatedDelivery, setEstimatedDelivery] = useState<string>('1 - 3 ngày làm việc');
+  const [isFreeShipping, setIsFreeShipping] = useState<boolean>(false);
 
   // Trạng thái Submit & Error Handling
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -140,6 +158,97 @@ export const CheckoutPage: React.FC = () => {
     if (w) setWardName(w.name);
   };
 
+  // Ước tính phí vận chuyển & áp dụng mã giảm giá realtime
+  const fetchEstimate = async (couponToApply?: string | null) => {
+    if (items.length === 0) return;
+
+    let shippingAddressPayload: ShippingAddressInputDto | null = null;
+    let addressIdPayload: string | null = null;
+
+    if (isAuthenticated && !isUsingNewAddress && selectedAddressId) {
+      addressIdPayload = selectedAddressId;
+    } else if (provinceName) {
+      shippingAddressPayload = {
+        recipientName: recipientName.trim() || 'Người nhận',
+        phoneNumber: phoneNumber.trim() || '0900000000',
+        provinceCode,
+        provinceName,
+        districtCode,
+        districtName,
+        wardCode,
+        wardName,
+        detailedAddress: detailedAddress.trim() || 'Địa chỉ',
+      };
+    }
+
+    const codeToTest = couponToApply !== undefined ? couponToApply : appliedCoupon?.code;
+
+    try {
+      const res = await couponApi.estimateCheckout({
+        addressId: addressIdPayload,
+        shippingAddress: shippingAddressPayload,
+        items: items.map((i) => ({ variantId: i.variantId, quantity: i.quantity })),
+        couponCode: codeToTest || undefined,
+      });
+
+      if (res.isSuccess && res.data) {
+        setShippingFee(res.data.shippingFee);
+        setCarrierName(res.data.carrierName || 'MadK Express');
+        setEstimatedDelivery(res.data.estimatedDelivery || '1 - 3 ngày');
+        setIsFreeShipping(res.data.isFreeShipping);
+
+        if (codeToTest) {
+          if (res.data.isCouponValid) {
+            setAppliedCoupon({
+              code: res.data.couponCode || codeToTest,
+              discountAmount: res.data.discountAmount,
+              description: res.data.couponDescription,
+            });
+            setCouponError(null);
+          } else {
+            setAppliedCoupon(null);
+            setCouponError(res.data.couponErrorMessage || 'Mã giảm giá không hợp lệ hoặc chưa đủ điều kiện.');
+          }
+        } else {
+          setAppliedCoupon(null);
+          setCouponError(null);
+        }
+      }
+    } catch {
+      // ignore transient estimate error
+    }
+  };
+
+  // Tự động tính toán lại khi địa chỉ hoặc giỏ hàng thay đổi
+  useEffect(() => {
+    fetchEstimate();
+  }, [selectedAddressId, isUsingNewAddress, provinceName, totalAmount]);
+
+  const handleApplyCoupon = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!couponInput.trim()) {
+      setCouponError('Vui lòng nhập mã giảm giá.');
+      return;
+    }
+    setIsValidatingCoupon(true);
+    setCouponError(null);
+    try {
+      await fetchEstimate(couponInput.trim().toUpperCase());
+    } finally {
+      setIsValidatingCoupon(false);
+    }
+  };
+
+  const handleRemoveCoupon = async () => {
+    setCouponInput('');
+    setAppliedCoupon(null);
+    setCouponError(null);
+    await fetchEstimate(null);
+  };
+
+  const discountAmount = appliedCoupon?.discountAmount || 0;
+  const finalTotal = Math.max(0, totalAmount - discountAmount + shippingFee);
+
   // Validate form địa chỉ trước khi submit
   const validateForm = (): boolean => {
     const errs: { [key: string]: string } = {};
@@ -222,8 +331,32 @@ export const CheckoutPage: React.FC = () => {
         })),
         customerNote: customerNote.trim() || null,
         idempotencyKey: idempotencyKeyRef.current,
+        couponCode: appliedCoupon?.code || null,
       };
 
+      if (paymentMethod === 'VNPay') {
+        const vnpayRes = await paymentApi.checkoutVnpay(checkoutPayload);
+        if (vnpayRes.isSuccess && vnpayRes.data?.paymentUrl) {
+          await clearCart();
+          await refreshCart();
+          // Chuyển hướng người dùng sang cổng thanh toán VNPay Sandbox
+          window.location.href = vnpayRes.data.paymentUrl;
+          return;
+        } else {
+          const errorText = vnpayRes.error || 'Khởi tạo thanh toán VNPay không thành công. Vui lòng kiểm tra lại.';
+          setErrorMessage(errorText);
+          if (
+            errorText.toLowerCase().includes('tồn kho') ||
+            errorText.toLowerCase().includes('hết hàng') ||
+            errorText.toLowerCase().includes('không đủ')
+          ) {
+            setIsStockError(true);
+          }
+          return;
+        }
+      }
+
+      // Thanh toán COD
       const res = await orderApi.checkoutCod(checkoutPayload);
 
       if (res.isSuccess && res.data) {
@@ -247,6 +380,7 @@ export const CheckoutPage: React.FC = () => {
           setIsStockError(true);
         }
       }
+
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Lỗi kết nối máy chủ khi tạo đơn.';
       setErrorMessage(`Mất kết nối tới hệ thống: ${msg}. Vui lòng thử lại.`);
@@ -573,8 +707,14 @@ export const CheckoutPage: React.FC = () => {
               </div>
 
               <div className="space-y-3">
-                {/* COD Option (Active) */}
-                <label className="p-4 sm:p-5 rounded-2xl border-2 border-brand-500 bg-brand-50/40 cursor-pointer flex items-start gap-4 transition-all">
+                {/* COD Option */}
+                <label
+                  className={`p-4 sm:p-5 rounded-2xl border-2 cursor-pointer flex items-start gap-4 transition-all ${
+                    paymentMethod === 'COD'
+                      ? 'border-brand-500 bg-brand-50/40 ring-2 ring-brand-500/10'
+                      : 'border-slate-200 bg-white hover:border-slate-300'
+                  }`}
+                >
                   <input
                     type="radio"
                     name="paymentMethod"
@@ -589,8 +729,8 @@ export const CheckoutPage: React.FC = () => {
                       <span className="font-extrabold text-sm text-slate-900">
                         Thanh toán tiền mặt khi nhận hàng (COD)
                       </span>
-                      <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full ml-auto">
-                        Khuyên dùng
+                      <span className="text-[10px] bg-slate-100 text-slate-700 font-bold px-2 py-0.5 rounded-full ml-auto">
+                        Tiền mặt
                       </span>
                     </div>
                     <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
@@ -599,26 +739,40 @@ export const CheckoutPage: React.FC = () => {
                   </div>
                 </label>
 
-                {/* VNPay Option (Coming Soon) */}
-                <div className="p-4 sm:p-5 rounded-2xl border border-slate-200 bg-slate-50/60 opacity-60 flex items-start gap-4 cursor-not-allowed">
-                  <input type="radio" disabled className="mt-1" />
+                {/* VNPay Option (Active Sandbox) */}
+                <label
+                  className={`p-4 sm:p-5 rounded-2xl border-2 cursor-pointer flex items-start gap-4 transition-all ${
+                    paymentMethod === 'VNPay'
+                      ? 'border-brand-500 bg-brand-50/40 ring-2 ring-brand-500/10'
+                      : 'border-slate-200 bg-white hover:border-slate-300'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="VNPay"
+                    checked={paymentMethod === 'VNPay'}
+                    onChange={() => setPaymentMethod('VNPay')}
+                    className="mt-1 text-brand-600 focus:ring-brand-500"
+                  />
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <span className="text-lg">💳</span>
-                      <span className="font-bold text-sm text-slate-700">
+                      <span className="font-extrabold text-sm text-slate-900">
                         Thanh toán trực tuyến VNPay / QR Code
                       </span>
-                      <span className="text-[10px] bg-slate-200 text-slate-600 font-bold px-2 py-0.5 rounded-full ml-auto">
-                        Giai đoạn 4
+                      <span className="text-[10px] bg-brand-100 text-brand-800 font-bold px-2 py-0.5 rounded-full ml-auto">
+                        Sandbox
                       </span>
                     </div>
-                    <p className="mt-1 text-xs text-slate-500">
-                      Hỗ trợ thẻ ATM nội địa, thẻ quốc tế Visa/Mastercard và quét mã VNPAY-QR.
+                    <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
+                      Quét mã VNPAY-QR, thẻ ATM nội địa hoặc thẻ quốc tế Visa/Mastercard. Giữ hàng tạm 15 phút an toàn tuyệt đối.
                     </p>
                   </div>
-                </div>
+                </label>
               </div>
             </div>
+
 
             {/* Step 3: Customer Note */}
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-3">
@@ -685,6 +839,77 @@ export const CheckoutPage: React.FC = () => {
                 ))}
               </div>
 
+              {/* Mã giảm giá / Voucher */}
+              <div className="pt-4 border-t border-slate-100">
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center justify-between">
+                  <span>Mã ưu đãi / Voucher</span>
+                  {appliedCoupon && (
+                    <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                      Đã áp dụng
+                    </span>
+                  )}
+                </label>
+
+                {appliedCoupon ? (
+                  <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 flex items-center justify-between gap-3 text-xs">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono font-black text-emerald-800 bg-emerald-100/80 px-2 py-0.5 rounded-lg text-xs">
+                          {appliedCoupon.code}
+                        </span>
+                        <span className="font-bold text-emerald-700">
+                          - {formatVND(appliedCoupon.discountAmount)}
+                        </span>
+                      </div>
+                      {appliedCoupon.description && (
+                        <p className="mt-1 text-[11px] text-emerald-700/80 truncate">
+                          {appliedCoupon.description}
+                        </p>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleRemoveCoupon}
+                      className="px-2.5 py-1.5 rounded-xl bg-white hover:bg-rose-50 text-slate-500 hover:text-rose-600 border border-slate-200 hover:border-rose-200 font-bold text-[11px] transition-colors flex-shrink-0"
+                    >
+                      Bỏ chọn
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-1.5">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={couponInput}
+                        onChange={(e) => {
+                          setCouponInput(e.target.value.toUpperCase());
+                          if (couponError) setCouponError(null);
+                        }}
+                        placeholder="Nhập mã (VD: MADK2026, WELCOME50K)"
+                        className="flex-1 px-3.5 py-2.5 rounded-2xl text-xs uppercase font-mono tracking-wider border border-slate-200 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleApplyCoupon()}
+                        disabled={isValidatingCoupon || !couponInput.trim()}
+                        className="px-4 py-2.5 rounded-2xl bg-slate-900 hover:bg-brand-600 disabled:opacity-40 text-white font-bold text-xs transition-colors flex items-center gap-1.5 flex-shrink-0"
+                      >
+                        {isValidatingCoupon ? (
+                          <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        ) : (
+                          'Áp dụng'
+                        )}
+                      </button>
+                    </div>
+                    {couponError && (
+                      <p className="text-[11px] text-rose-500 flex items-center gap-1 font-medium">
+                        <span>⚠️</span> {couponError}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+
               {/* Financial Calculation Breakdown */}
               <div className="pt-4 border-t border-slate-100 space-y-2.5 text-xs text-slate-600">
                 <div className="flex items-center justify-between">
@@ -692,21 +917,38 @@ export const CheckoutPage: React.FC = () => {
                   <span className="font-mono font-semibold text-slate-900">{formatVND(totalAmount)}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span>Phí vận chuyển:</span>
-                  <span className="font-mono font-semibold text-emerald-600">0 ₫ (Miễn phí)</span>
+                  <div className="flex flex-col">
+                    <span>Phí vận chuyển:</span>
+                    <span className="text-[10px] text-slate-400">
+                      {carrierName} • {estimatedDelivery}
+                    </span>
+                  </div>
+                  <span
+                    className={`font-mono font-semibold ${
+                      isFreeShipping || shippingFee === 0 ? 'text-emerald-600' : 'text-slate-900'
+                    }`}
+                  >
+                    {isFreeShipping || shippingFee === 0 ? '0 ₫ (Miễn phí)' : formatVND(shippingFee)}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Giảm giá voucher:</span>
-                  <span className="font-mono font-semibold text-slate-400">0 ₫</span>
+                  <span
+                    className={`font-mono font-semibold ${
+                      discountAmount > 0 ? 'text-emerald-600 font-bold' : 'text-slate-400'
+                    }`}
+                  >
+                    {discountAmount > 0 ? `- ${formatVND(discountAmount)}` : '0 ₫'}
+                  </span>
                 </div>
 
                 <div className="pt-3 border-t border-slate-200 flex items-center justify-between text-slate-900">
                   <div>
                     <span className="text-sm font-black block">Tổng thanh toán:</span>
-                    <span className="text-[11px] text-slate-400 font-normal">Đã gồm VAT & Phí COD</span>
+                    <span className="text-[11px] text-slate-400 font-normal">Đã gồm VAT & Phí vận chuyển</span>
                   </div>
                   <span className="text-xl sm:text-2xl font-black text-brand-600 font-mono">
-                    {formatVND(totalAmount)}
+                    {formatVND(finalTotal)}
                   </span>
                 </div>
               </div>
@@ -720,15 +962,24 @@ export const CheckoutPage: React.FC = () => {
                 {isSubmitting ? (
                   <>
                     <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-                    <span>Đang kiểm tra tồn kho & tạo đơn...</span>
+                    <span>
+                      {paymentMethod === 'VNPay'
+                        ? 'Đang khởi tạo cổng VNPay...'
+                        : 'Đang kiểm tra tồn kho & tạo đơn...'}
+                    </span>
                   </>
                 ) : (
                   <>
-                    <span>Xác nhận Đặt hàng (COD)</span>
+                    <span>
+                      {paymentMethod === 'VNPay'
+                        ? 'Chuyển sang Cổng Thanh toán VNPay'
+                        : 'Xác nhận Đặt hàng (COD)'}
+                    </span>
                     <span>&rarr;</span>
                   </>
                 )}
               </button>
+
 
               {/* Reassurance notes */}
               <div className="text-[11px] text-slate-400 space-y-1.5 text-center">

@@ -11,11 +11,18 @@ public class CartService : ICartService
 {
     private readonly IAppDbContext _context;
     private readonly ILogger<CartService> _logger;
+    private readonly IPricingService? _pricingService;
 
     public CartService(IAppDbContext context, ILogger<CartService> logger)
+        : this(context, logger, null)
+    {
+    }
+
+    public CartService(IAppDbContext context, ILogger<CartService> logger, IPricingService? pricingService)
     {
         _context = context;
         _logger = logger;
+        _pricingService = pricingService;
     }
 
     public async Task<Result<CartDto>> GetCartAsync(Guid? userId, string? anonymousId, CancellationToken ct = default)
@@ -304,7 +311,10 @@ public class CartService : ICartService
                     .ThenInclude(v => v.Product)
             .Include(c => c.Items)
                 .ThenInclude(i => i.Variant)
-                    .ThenInclude(v => v.Images);
+                    .ThenInclude(v => v.Images)
+            .Include(c => c.Items)
+                .ThenInclude(i => i.Variant)
+                    .ThenInclude(v => v.PriceSchedules);
 
         Cart? cart = null;
 
@@ -343,7 +353,7 @@ public class CartService : ICartService
         return cart;
     }
 
-    private static CartDto MapToCartDto(Cart cart)
+    private CartDto MapToCartDto(Cart cart)
     {
         var items = new List<CartItemDto>();
         decimal totalAmount = 0m;
@@ -354,9 +364,10 @@ public class CartService : ICartService
             var variant = item.Variant;
             if (variant == null) continue;
 
-            // SERVER LUÔN TÍNH GIÁ TỪ DB:
-            decimal unitPrice = variant.SalePrice;
-            decimal origPrice = variant.OriginalPrice;
+            // SERVER LUÔN TÍNH GIÁ HIỆN HÀNH DÙNG CHUNG TỪ PRICING SERVICE:
+            var priceResult = _pricingService?.CalculateCurrentPrice(variant);
+            decimal unitPrice = priceResult != null ? priceResult.CurrentPrice : variant.SalePrice;
+            decimal origPrice = priceResult != null ? priceResult.OriginalPrice : variant.OriginalPrice;
             decimal lineTotal = unitPrice * item.Quantity;
 
             string? thumb = variant.Images?.OrderBy(img => img.DisplayOrder).FirstOrDefault()?.ImageUrl

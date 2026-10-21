@@ -58,10 +58,19 @@ public class Order : BaseEntity
     public DateTime? CancelledAt { get; set; }
 
     /// <summary>
+    /// Thời hạn thanh toán (đơn thanh toán online giữ hàng trong thời hạn này).
+    /// Quá thời gian này, job nền sẽ tự động hủy đơn và giải phóng tồn kho.
+    /// </summary>
+    public DateTime? ExpiresAt { get; set; }
+
+    /// <summary>
     /// Khóa Idempotency chống khách click đúp hoặc retry request tạo nhiều đơn trùng lặp.
     /// </summary>
     public string? IdempotencyKey { get; set; }
 
     public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
     public ICollection<OrderStatusHistory> StatusHistories { get; set; } = new List<OrderStatusHistory>();
+    public ICollection<Payment> Payments { get; set; } = new List<Payment>();
+    public ICollection<ReturnRequest> ReturnRequests { get; set; } = new List<ReturnRequest>();
 }
+

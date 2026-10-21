@@ -1,25 +1,65 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   OrderDto,
   ShippingAddressSnapshotDto,
   PAYMENT_STATUS_CONFIG,
 } from '../../../../types/order';
+import { ReturnRequestDto, isActiveReturn } from '../../../../types/return';
+import returnApi from '../../../../api/returnApi';
 import { OrderStatusBadge } from './OrderStatusBadge';
 import { OrderHistoryTimeline } from './OrderHistoryTimeline';
+import { ReturnRequestsPanel } from './ReturnRequestsPanel';
 
 interface OrderDetailModalProps {
   order: OrderDto | null;
   isOpen: boolean;
   onClose: () => void;
   onRequestCancel: (order: OrderDto) => void;
+  onRequestReturn?: (order: OrderDto) => void;
+  /** Tăng giá trị này để buộc tải lại danh sách yêu cầu đổi trả (sau khi tạo mới) */
+  returnsRefreshKey?: number;
 }
+
+/** Các trạng thái đơn có thể đã phát sinh yêu cầu đổi trả */
+const RETURN_RELEVANT_STATUSES = ['Completed', 'ReturnRequested', 'Returned'];
 
 export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
   order,
   isOpen,
   onClose,
   onRequestCancel,
+  onRequestReturn,
+  returnsRefreshKey = 0,
 }) => {
+  const [returns, setReturns] = useState<ReturnRequestDto[]>([]);
+  const [returnsLoading, setReturnsLoading] = useState(false);
+  const [returnsError, setReturnsError] = useState<string | null>(null);
+
+  const orderNumber = order?.orderNumber;
+  const shouldLoadReturns = !!order && isOpen && RETURN_RELEVANT_STATUSES.includes(order.status);
+
+  const loadReturns = useCallback(async () => {
+    if (!orderNumber) return;
+    setReturnsLoading(true);
+    setReturnsError(null);
+    try {
+      setReturns(await returnApi.getReturnRequestsByOrder(orderNumber));
+    } catch (err) {
+      setReturnsError(err instanceof Error ? err.message : 'Không thể tải yêu cầu đổi trả.');
+    } finally {
+      setReturnsLoading(false);
+    }
+  }, [orderNumber]);
+
+  useEffect(() => {
+    if (shouldLoadReturns) {
+      loadReturns();
+    } else {
+      setReturns([]);
+      setReturnsError(null);
+    }
+  }, [shouldLoadReturns, loadReturns, returnsRefreshKey]);
+
   if (!isOpen || !order) return null;
 
   // Phân tích Shipping Address Snapshot
@@ -59,6 +99,10 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
     order.status === 'Confirmed' ||
     order.status === 'PendingPayment';
 
+  const hasActiveReturn = returns.some(isActiveReturn);
+  const canRequestReturn =
+    !!onRequestReturn && order.status === 'Completed' && !returnsLoading && !hasActiveReturn;
+
   const paymentMeta = PAYMENT_STATUS_CONFIG[order.paymentStatus] || {
     label: order.paymentStatus,
     color: 'text-slate-600 bg-slate-100',
@@ -87,6 +131,16 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
           </div>
 
           <div className="flex items-center gap-3">
+            {canRequestReturn && (
+              <button
+                type="button"
+                id="order-detail-request-return"
+                onClick={() => onRequestReturn?.(order)}
+                className="px-4 py-2 rounded-2xl text-xs font-bold text-white bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 shadow-md shadow-orange-500/25 transition-all flex items-center gap-1.5"
+              >
+                <span>↩️</span> Yêu cầu đổi trả
+              </button>
+            )}
             {isCancellable && (
               <button
                 type="button"
@@ -108,6 +162,22 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
 
         {/* Scrollable Body */}
         <div className="overflow-y-auto flex-1 pr-1 space-y-6 py-6">
+          {/* Return / Refund Requests */}
+          {shouldLoadReturns && (returnsLoading || returnsError || returns.length > 0) && (
+            <section>
+              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <span>↩️</span>
+                <span>Yêu cầu đổi trả & hoàn tiền</span>
+              </h3>
+              <ReturnRequestsPanel
+                requests={returns}
+                isLoading={returnsLoading}
+                error={returnsError}
+                onRetry={loadReturns}
+              />
+            </section>
+          )}
+
           {/* Cancellation Notice if Cancelled */}
           {order.status === 'Cancelled' && (
             <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-900 text-xs">
@@ -244,7 +314,20 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
             </div>
             {order.discountAmount > 0 && (
               <div className="flex items-center justify-between text-emerald-600">
-                <span>Giảm giá (Voucher):</span>
+                <span className="flex items-center gap-1.5">
+                  <span>Giảm giá:</span>
+                  {(() => {
+                    try {
+                      if (order.couponSnapshot) {
+                        const snap = JSON.parse(order.couponSnapshot);
+                        if (snap.code) {
+                          return <span className="font-mono text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold">{snap.code}</span>;
+                        }
+                      }
+                    } catch {}
+                    return <span>(Voucher)</span>;
+                  })()}
+                </span>
                 <span className="font-mono font-medium">-{formatVnd(order.discountAmount)}</span>
               </div>
             )}

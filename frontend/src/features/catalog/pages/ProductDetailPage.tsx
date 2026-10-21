@@ -308,19 +308,26 @@ export const ProductDetailPage: React.FC = () => {
           </div>
 
           {/* Dynamic Price Display */}
-          <div className="p-5 rounded-2xl bg-gradient-to-r from-brand-50/70 to-slate-50 border border-brand-100 flex items-baseline gap-4">
-            <span className="text-3xl sm:text-4xl font-black text-brand-700">
-              {formatVND(currentPrice)}
-            </span>
-            {originalPrice && originalPrice > currentPrice && (
-              <div className="flex items-center gap-2">
-                <span className="text-sm sm:text-base text-slate-400 line-through">
-                  {formatVND(originalPrice)}
-                </span>
-                <span className="px-2 py-0.5 rounded-lg bg-rose-100 text-rose-600 text-xs font-bold">
-                  -{discountPercent}%
-                </span>
-              </div>
+          <div className="p-5 rounded-2xl bg-gradient-to-r from-brand-50/70 to-slate-50 border border-brand-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-baseline gap-4">
+              <span className="text-3xl sm:text-4xl font-black text-brand-700">
+                {formatVND(currentPrice)}
+              </span>
+              {originalPrice && originalPrice > currentPrice && (
+                <div className="flex items-center gap-2">
+                  <span className="text-sm sm:text-base text-slate-400 line-through">
+                    {formatVND(originalPrice)}
+                  </span>
+                  <span className="px-2 py-0.5 rounded-lg bg-rose-100 text-rose-600 text-xs font-bold">
+                    -{discountPercent}%
+                  </span>
+                </div>
+              )}
+            </div>
+            {selectedVariant?.isOnSale && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-bold bg-amber-500 text-white shadow-sm">
+                🔥 {selectedVariant.promotionName || 'Đang Khuyến Mãi'}
+              </span>
             )}
           </div>
 

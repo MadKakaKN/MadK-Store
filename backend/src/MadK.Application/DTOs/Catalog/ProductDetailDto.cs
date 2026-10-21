@@ -45,6 +45,10 @@ public class ProductVariantDto
     public decimal SalePrice { get; set; }
     public decimal CostPrice { get; set; }
     public bool IsActive { get; set; }
+    public bool IsOnSale { get; set; }
+    public string? PromotionName { get; set; }
+    public DateTimeOffset? PromotionEndDate { get; set; }
+    public decimal? DiscountPercent { get; set; }
     public List<ProductImageDto> Images { get; set; } = new();
 }
 

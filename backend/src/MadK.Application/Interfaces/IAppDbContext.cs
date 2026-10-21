@@ -11,6 +11,7 @@ public interface IAppDbContext
     DbSet<Product> Products { get; }
     DbSet<ProductVariant> ProductVariants { get; }
     DbSet<ProductImage> ProductImages { get; }
+    DbSet<PriceSchedule> PriceSchedules { get; }
 
     DbSet<User> Users { get; }
     DbSet<Role> Roles { get; }
@@ -29,6 +30,16 @@ public interface IAppDbContext
     DbSet<Order> Orders { get; }
     DbSet<OrderItem> OrderItems { get; }
     DbSet<OrderStatusHistory> OrderStatusHistories { get; }
+    DbSet<AuditLog> AuditLogs { get; }
+    DbSet<Supplier> Suppliers { get; }
+    DbSet<PurchaseOrder> PurchaseOrders { get; }
+    DbSet<PurchaseOrderItem> PurchaseOrderItems { get; }
+    DbSet<InventoryAudit> InventoryAudits { get; }
+    DbSet<InventoryAuditItem> InventoryAuditItems { get; }
+    DbSet<Payment> Payments { get; }
+    DbSet<ReturnRequest> ReturnRequests { get; }
+    DbSet<ReturnRequestItem> ReturnRequestItems { get; }
+    DbSet<Coupon> Coupons { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

@@ -1918,18 +1918,23 @@ public static class DatabaseSeeder
         var existingRoles = await context.Roles.ToDictionaryAsync(r => r.Name);
         var existingPermissions = await context.Permissions.ToDictionaryAsync(p => p.Code);
 
-        // Define system permissions
+        // Define system permissions matching PLAN.md matrix
         var permissionDefs = new[]
         {
             new { Code = "catalog.view", Module = "Catalog", Desc = "Xem danh mục và sản phẩm" },
-            new { Code = "catalog.manage", Module = "Catalog", Desc = "Tạo, sửa, xóa danh mục và sản phẩm" },
+            new { Code = "catalog.manage", Module = "Catalog", Desc = "Tạo, sửa, xóa danh mục và sản phẩm, quản lý giá" },
             new { Code = "order.view", Module = "Order", Desc = "Xem danh sách và chi tiết đơn hàng" },
             new { Code = "order.manage", Module = "Order", Desc = "Cập nhật trạng thái và xử lý đơn hàng" },
+            new { Code = "order.refund", Module = "Order", Desc = "Xử lý đổi trả và hoàn tiền" },
+            new { Code = "discount.manage", Module = "Discount", Desc = "Quản lý mã giảm giá" },
             new { Code = "inventory.view", Module = "Inventory", Desc = "Xem tồn kho sản phẩm" },
-            new { Code = "inventory.manage", Module = "Inventory", Desc = "Nhập xuất và điều chỉnh kho" },
+            new { Code = "inventory.manage", Module = "Inventory", Desc = "Nhập xuất, kiểm kho và điều chỉnh tồn kho" },
             new { Code = "user.view", Module = "User", Desc = "Xem thông tin người dùng" },
-            new { Code = "user.manage", Module = "User", Desc = "Quản lý tài khoản và phân quyền" },
-            new { Code = "report.view", Module = "Report", Desc = "Xem báo cáo doanh thu và kinh doanh" }
+            new { Code = "user.manage", Module = "User", Desc = "Quản lý tài khoản và phân quyền người dùng" },
+            new { Code = "audit.view", Module = "Audit", Desc = "Xem nhật ký kiểm toán hệ thống" },
+            new { Code = "report.revenue", Module = "Report", Desc = "Xem báo cáo doanh thu" },
+            new { Code = "report.inventory", Module = "Report", Desc = "Xem báo cáo tồn kho" },
+            new { Code = "report.all", Module = "Report", Desc = "Xem toàn bộ báo cáo phân tích" }
         };
 
         var addedPermissions = false;
@@ -1956,13 +1961,37 @@ public static class DatabaseSeeder
             await context.SaveChangesAsync();
         }
 
-        // Define system roles
+        // Define system roles according to PLAN.md matrix:
+        // Customer: Xem catalog, tìm kiếm
+        // Sales: Catalog.View, Order.View, Order.Manage, Order.Refund, Discount.Manage, Report.Revenue
+        // Warehouse: Catalog.View, Order.View, Inventory.View, Inventory.Manage, Report.Inventory
+        // Admin: Toàn quyền
         var roleDefs = new[]
         {
-            new { Name = "Customer", Desc = "Khách hàng mua sắm mặc định", Permissions = Array.Empty<string>() },
-            new { Name = "Sales", Desc = "Nhân viên bán hàng & chăm sóc khách hàng", Permissions = new[] { "catalog.view", "order.view", "order.manage", "report.view" } },
-            new { Name = "Warehouse", Desc = "Nhân viên kho vận & quản lý tồn kho", Permissions = new[] { "catalog.view", "order.view", "inventory.view", "inventory.manage" } },
-            new { Name = "Admin", Desc = "Quản trị viên toàn quyền hệ thống", Permissions = permissionDefs.Select(p => p.Code).ToArray() }
+            new
+            {
+                Name = "Customer",
+                Desc = "Khách hàng mua sắm mặc định",
+                Permissions = new[] { "catalog.view" }
+            },
+            new
+            {
+                Name = "Sales",
+                Desc = "Nhân viên bán hàng & chăm sóc khách hàng",
+                Permissions = new[] { "catalog.view", "order.view", "order.manage", "order.refund", "discount.manage", "report.revenue" }
+            },
+            new
+            {
+                Name = "Warehouse",
+                Desc = "Nhân viên kho vận & quản lý tồn kho",
+                Permissions = new[] { "catalog.view", "order.view", "inventory.view", "inventory.manage", "report.inventory" }
+            },
+            new
+            {
+                Name = "Admin",
+                Desc = "Quản trị viên toàn quyền hệ thống",
+                Permissions = permissionDefs.Select(p => p.Code).ToArray()
+            }
         };
 
         foreach (var rDef in roleDefs)
@@ -2016,7 +2045,7 @@ public static class DatabaseSeeder
             .Include(u => u.UserRoles)
             .ToDictionaryAsync(u => u.Email.ToLower());
 
-        // Default admin
+        // 1. Default admin
         var adminEmail = "admin@madkstore.vn";
         if (!existingUsers.ContainsKey(adminEmail))
         {
@@ -2047,7 +2076,7 @@ public static class DatabaseSeeder
             logger?.LogInformation("Seeded default admin user: {Email}", adminEmail);
         }
 
-        // Default customer
+        // 2. Default customer
         var customerEmail = "customer@madkstore.vn";
         if (!existingUsers.ContainsKey(customerEmail))
         {
@@ -2076,6 +2105,68 @@ public static class DatabaseSeeder
 
             context.Users.Add(customerUser);
             logger?.LogInformation("Seeded default customer user: {Email}", customerEmail);
+        }
+
+        // 3. Default Sales
+        var salesEmail = "sales@madkstore.vn";
+        if (!existingUsers.ContainsKey(salesEmail))
+        {
+            var salesUser = new User
+            {
+                Id = Guid.NewGuid(),
+                Email = salesEmail,
+                FullName = "Nguyễn Thị Sales",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("SalesPassword123!", 11),
+                PhoneNumber = "0912345678",
+                IsActive = true,
+                EmailConfirmed = true,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            if (roleMap.TryGetValue("Sales", out var salesRole))
+            {
+                salesUser.UserRoles.Add(new UserRole
+                {
+                    UserId = salesUser.Id,
+                    RoleId = salesRole.Id,
+                    User = salesUser,
+                    Role = salesRole
+                });
+            }
+
+            context.Users.Add(salesUser);
+            logger?.LogInformation("Seeded default sales user: {Email}", salesEmail);
+        }
+
+        // 4. Default Warehouse
+        var warehouseEmail = "warehouse@madkstore.vn";
+        if (!existingUsers.ContainsKey(warehouseEmail))
+        {
+            var warehouseUser = new User
+            {
+                Id = Guid.NewGuid(),
+                Email = warehouseEmail,
+                FullName = "Trần Văn Kho",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("WarehousePassword123!", 11),
+                PhoneNumber = "0923456789",
+                IsActive = true,
+                EmailConfirmed = true,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            if (roleMap.TryGetValue("Warehouse", out var warehouseRole))
+            {
+                warehouseUser.UserRoles.Add(new UserRole
+                {
+                    UserId = warehouseUser.Id,
+                    RoleId = warehouseRole.Id,
+                    User = warehouseUser,
+                    Role = warehouseRole
+                });
+            }
+
+            context.Users.Add(warehouseUser);
+            logger?.LogInformation("Seeded default warehouse user: {Email}", warehouseEmail);
         }
 
         await context.SaveChangesAsync();

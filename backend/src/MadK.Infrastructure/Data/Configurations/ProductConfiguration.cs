@@ -47,6 +47,10 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.Property(p => p.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
         builder.Property(p => p.UpdatedAt).HasColumnName("updated_at");
+        builder.Property(p => p.IsDeleted).HasColumnName("is_deleted").HasDefaultValue(false);
+        builder.Property(p => p.DeletedAt).HasColumnName("deleted_at");
+
+        builder.HasQueryFilter(p => !p.IsDeleted);
 
         // Relationships
         builder.HasOne(p => p.Category)

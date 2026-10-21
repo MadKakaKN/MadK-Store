@@ -39,7 +39,16 @@ public class InventoryService : IInventoryService
         return Result<InventoryDto>.Success(MapToDto(inventory));
     }
 
-    public async Task<Result<InventoryDto>> RestockAsync(Guid variantId, int quantity, string? reason = null, CancellationToken ct = default)
+    public Task<Result<InventoryDto>> RestockAsync(Guid variantId, int quantity, string? reason = null, CancellationToken ct = default) =>
+        RestockAsync(variantId, quantity, reason, null, null, ct);
+
+    public async Task<Result<InventoryDto>> RestockAsync(
+        Guid variantId,
+        int quantity,
+        string? reason,
+        string? referenceType,
+        string? referenceId,
+        CancellationToken ct = default)
     {
         if (quantity <= 0)
         {
@@ -94,8 +103,8 @@ public class InventoryService : IInventoryService
                     OnHandAfter = onHandAfter,
                     ReservedBefore = reservedBefore,
                     ReservedAfter = reservedAfter,
-                    ReferenceType = "Manual",
-                    ReferenceId = null,
+                    ReferenceType = referenceType ?? "Manual",
+                    ReferenceId = referenceId,
                     Reason = reason ?? "Nhập hàng vào kho",
                     CreatedAt = now
                 };
@@ -149,16 +158,191 @@ public class InventoryService : IInventoryService
                     OnHandAfter = inventory.OnHandQuantity,
                     ReservedBefore = reservedBefore,
                     ReservedAfter = reservedBefore,
-                    ReferenceType = "Manual",
-                    ReferenceId = null,
+                    ReferenceType = referenceType ?? "Manual",
+                    ReferenceId = referenceId,
                     Reason = reason ?? "Nhập hàng vào kho",
                     CreatedAt = now
                 };
                 _context.StockMovements.Add(movement);
+
+                var variant = _context.ProductVariants.FirstOrDefault(v => v.Id == variantId);
+                if (variant != null)
+                {
+                    variant.StockQuantity = inventory.OnHandQuantity - inventory.ReservedQuantity;
+                    variant.UpdatedAt = now;
+                }
+
                 _context.SaveChangesAsync(ct).GetAwaiter().GetResult();
             }
 
             return Result<InventoryDto>.Success(MapToDto(inventory), "Nhập kho thành công.");
+        }
+    }
+
+    public async Task<Result<InventoryDto>> AdjustStockAsync(
+        Guid variantId,
+        int quantityChange,
+        string reason,
+        string? referenceType = null,
+        string? referenceId = null,
+        CancellationToken ct = default)
+    {
+        if (quantityChange == 0)
+        {
+            return Result<InventoryDto>.Failure("Số lượng điều chỉnh phải khác 0.");
+        }
+
+        if (string.IsNullOrWhiteSpace(reason))
+        {
+            return Result<InventoryDto>.Failure("Cần cung cấp lý do điều chỉnh tồn kho.");
+        }
+
+        var inventory = await GetOrCreateInventoryAsync(variantId, ct);
+        if (inventory == null)
+        {
+            return Result<InventoryDto>.Failure("Không tìm thấy biến thể sản phẩm.");
+        }
+
+        bool isRelational = _efContext.Database.IsRelational();
+        DateTime now = DateTime.UtcNow;
+
+        if (isRelational)
+        {
+            var existingTx = _efContext.Database.CurrentTransaction;
+            bool ownsTx = existingTx == null;
+            await using var tx = ownsTx ? await _efContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct) : null;
+            try
+            {
+                var current = await _context.Inventories.AsNoTracking().FirstOrDefaultAsync(i => i.VariantId == variantId, ct);
+                int onHandBefore = current?.OnHandQuantity ?? 0;
+                int reservedBefore = current?.ReservedQuantity ?? 0;
+                int availableBefore = onHandBefore - reservedBefore;
+
+                // Quy tắc: Nếu điều chỉnh giảm (quantityChange < 0), không được vượt quá tồn khả dụng
+                if (quantityChange < 0 && (onHandBefore + quantityChange < reservedBefore))
+                {
+                    if (tx != null) await tx.RollbackAsync(ct);
+                    return Result<InventoryDto>.Failure($"Số lượng điều chỉnh giảm ({Math.Abs(quantityChange)}) vượt quá tồn kho khả dụng ({Math.Max(0, availableBefore)}).");
+                }
+
+                int affected;
+                if (quantityChange < 0)
+                {
+                    // Đảm bảo nguyên tử trên DB: on_hand_quantity + change >= reserved_quantity
+                    affected = await _efContext.Database.ExecuteSqlInterpolatedAsync(
+                        $@"UPDATE inventories 
+                           SET on_hand_quantity = on_hand_quantity + {quantityChange}, 
+                               updated_at = {now} 
+                           WHERE variant_id = {variantId} AND (on_hand_quantity + {quantityChange} >= reserved_quantity);", ct);
+                }
+                else
+                {
+                    affected = await _efContext.Database.ExecuteSqlInterpolatedAsync(
+                        $@"UPDATE inventories 
+                           SET on_hand_quantity = on_hand_quantity + {quantityChange}, 
+                               updated_at = {now} 
+                           WHERE variant_id = {variantId};", ct);
+                }
+
+                if (affected == 0)
+                {
+                    if (tx != null) await tx.RollbackAsync(ct);
+                    return Result<InventoryDto>.Failure($"Số lượng điều chỉnh giảm ({Math.Abs(quantityChange)}) vượt quá tồn kho khả dụng ({Math.Max(0, availableBefore)}).");
+                }
+
+                int onHandAfter = onHandBefore + quantityChange;
+                int reservedAfter = reservedBefore;
+
+                var movement = new StockMovement
+                {
+                    Id = Guid.NewGuid(),
+                    InventoryId = inventory.Id,
+                    VariantId = variantId,
+                    Type = StockMovementType.Adjustment,
+                    Quantity = Math.Abs(quantityChange),
+                    OnHandBefore = onHandBefore,
+                    OnHandAfter = onHandAfter,
+                    ReservedBefore = reservedBefore,
+                    ReservedAfter = reservedAfter,
+                    ReferenceType = referenceType ?? "StockAdjustment",
+                    ReferenceId = referenceId,
+                    Reason = reason,
+                    CreatedAt = now
+                };
+                _context.StockMovements.Add(movement);
+
+                // Đồng bộ tồn kho khả dụng lên biến thể
+                await _efContext.Database.ExecuteSqlInterpolatedAsync(
+                    $@"UPDATE product_variants 
+                       SET stock_quantity = {onHandAfter - reservedAfter}, 
+                            updated_at = {now} 
+                       WHERE id = {variantId};", ct);
+
+                await _context.SaveChangesAsync(ct);
+                if (tx != null) await tx.CommitAsync(ct);
+
+                inventory.OnHandQuantity = onHandAfter;
+                inventory.ReservedQuantity = reservedAfter;
+                inventory.UpdatedAt = now;
+
+                _logger.LogInformation("Adjusted variant {VariantId}: {Change:+0;-0} (OnHand: {Before} -> {After}) Reason: {Reason}",
+                    variantId, quantityChange, onHandBefore, onHandAfter, reason);
+
+                return Result<InventoryDto>.Success(MapToDto(inventory), "Điều chỉnh tồn kho thành công.");
+            }
+            catch (Exception ex)
+            {
+                if (tx != null) await tx.RollbackAsync(ct);
+                _logger.LogError(ex, "Adjustment error for variant {VariantId}", variantId);
+                return Result<InventoryDto>.Failure("Lỗi hệ thống khi điều chỉnh tồn kho.");
+            }
+        }
+        else
+        {
+            // Fallback InMemory cho unit test
+            lock (_inMemoryLock)
+            {
+                int onHandBefore = inventory.OnHandQuantity;
+                int reservedBefore = inventory.ReservedQuantity;
+                int availableBefore = onHandBefore - reservedBefore;
+
+                if (quantityChange < 0 && (onHandBefore + quantityChange < reservedBefore))
+                {
+                    return Result<InventoryDto>.Failure($"Số lượng điều chỉnh giảm ({Math.Abs(quantityChange)}) vượt quá tồn kho khả dụng ({Math.Max(0, availableBefore)}).");
+                }
+
+                inventory.OnHandQuantity += quantityChange;
+                inventory.UpdatedAt = now;
+
+                var movement = new StockMovement
+                {
+                    Id = Guid.NewGuid(),
+                    InventoryId = inventory.Id,
+                    VariantId = variantId,
+                    Type = StockMovementType.Adjustment,
+                    Quantity = Math.Abs(quantityChange),
+                    OnHandBefore = onHandBefore,
+                    OnHandAfter = inventory.OnHandQuantity,
+                    ReservedBefore = reservedBefore,
+                    ReservedAfter = reservedBefore,
+                    ReferenceType = referenceType ?? "StockAdjustment",
+                    ReferenceId = referenceId,
+                    Reason = reason,
+                    CreatedAt = now
+                };
+                _context.StockMovements.Add(movement);
+
+                var variant = _context.ProductVariants.FirstOrDefault(v => v.Id == variantId);
+                if (variant != null)
+                {
+                    variant.StockQuantity = inventory.OnHandQuantity - inventory.ReservedQuantity;
+                    variant.UpdatedAt = now;
+                }
+
+                _context.SaveChangesAsync(ct).GetAwaiter().GetResult();
+            }
+
+            return Result<InventoryDto>.Success(MapToDto(inventory), "Điều chỉnh tồn kho thành công.");
         }
     }
 
@@ -304,6 +488,7 @@ public class InventoryService : IInventoryService
                 };
                 _context.StockMovements.Add(movement);
                 _context.SaveChangesAsync(ct).GetAwaiter().GetResult();
+
             }
 
             return Result<InventoryDto>.Success(MapToDto(inventory), "Giữ hàng thành công.");
@@ -418,6 +603,19 @@ public class InventoryService : IInventoryService
             // InMemory Provider
             lock (_inMemoryLock)
             {
+                if (!string.IsNullOrWhiteSpace(referenceType) && !string.IsNullOrWhiteSpace(referenceId))
+                {
+                    var existingRelease = _context.StockMovements
+                        .FirstOrDefault(m => m.VariantId == variantId
+                                          && m.ReferenceType == referenceType
+                                          && m.ReferenceId == referenceId
+                                          && m.Type == StockMovementType.Release);
+                    if (existingRelease != null)
+                    {
+                        return Result<InventoryDto>.Success(MapToDto(inventory), "Hàng đã được giải phóng trước đó (Idempotent).");
+                    }
+                }
+
                 if (inventory.ReservedQuantity < quantity)
                 {
                     return Result<InventoryDto>.Failure("Số lượng yêu cầu giải phóng vượt quá số lượng đang giữ.");
@@ -446,9 +644,11 @@ public class InventoryService : IInventoryService
                 };
                 _context.StockMovements.Add(movement);
                 _context.SaveChangesAsync(ct).GetAwaiter().GetResult();
+
             }
 
             return Result<InventoryDto>.Success(MapToDto(inventory), "Giải phóng hàng thành công.");
+
         }
     }
 
@@ -564,6 +764,19 @@ public class InventoryService : IInventoryService
             // InMemory Provider
             lock (_inMemoryLock)
             {
+                if (!string.IsNullOrWhiteSpace(referenceType) && !string.IsNullOrWhiteSpace(referenceId))
+                {
+                    var existingCommit = _context.StockMovements
+                        .FirstOrDefault(m => m.VariantId == variantId
+                                          && m.ReferenceType == referenceType
+                                          && m.ReferenceId == referenceId
+                                          && m.Type == StockMovementType.Commit);
+                    if (existingCommit != null)
+                    {
+                        return Result<InventoryDto>.Success(MapToDto(inventory), "Giao dịch trừ kho đã được thực hiện trước đó (Idempotent).");
+                    }
+                }
+
                 if (inventory.ReservedQuantity < quantity || inventory.OnHandQuantity < quantity)
                 {
                     return Result<InventoryDto>.Failure("Không thể trừ kho vì số lượng đang giữ hoặc tồn thực tế không đủ.");
@@ -594,6 +807,7 @@ public class InventoryService : IInventoryService
                 };
                 _context.StockMovements.Add(movement);
                 _context.SaveChangesAsync(ct).GetAwaiter().GetResult();
+
             }
 
             return Result<InventoryDto>.Success(MapToDto(inventory), "Trừ kho thực tế thành công.");
@@ -626,13 +840,156 @@ public class InventoryService : IInventoryService
         return Result<IReadOnlyList<StockMovementDto>>.Success(movements);
     }
 
+    public async Task<Result<IReadOnlyList<StockMovementDto>>> GetMovementsFilteredAsync(StockMovementQueryFilter filter, CancellationToken ct = default)
+    {
+        var query = _context.StockMovements.AsNoTracking();
+
+        if (filter.VariantId.HasValue && filter.VariantId.Value != Guid.Empty)
+        {
+            query = query.Where(m => m.VariantId == filter.VariantId.Value);
+        }
+
+        if (filter.Type.HasValue)
+        {
+            query = query.Where(m => m.Type == filter.Type.Value);
+        }
+
+        if (!string.IsNullOrWhiteSpace(filter.ReferenceType))
+        {
+            query = query.Where(m => m.ReferenceType == filter.ReferenceType);
+        }
+
+        if (filter.FromDate.HasValue)
+        {
+            query = query.Where(m => m.CreatedAt >= filter.FromDate.Value);
+        }
+
+        if (filter.ToDate.HasValue)
+        {
+            query = query.Where(m => m.CreatedAt <= filter.ToDate.Value);
+        }
+
+        var list = await query
+            .OrderByDescending(m => m.CreatedAt)
+            .Take(Math.Clamp(filter.Limit, 1, 500))
+            .Select(m => new StockMovementDto(
+                m.Id,
+                m.VariantId,
+                m.Type,
+                m.Quantity,
+                m.OnHandBefore,
+                m.OnHandAfter,
+                m.ReservedBefore,
+                m.ReservedAfter,
+                m.ReferenceType,
+                m.ReferenceId,
+                m.Reason,
+                m.CreatedAt
+            ))
+            .ToListAsync(ct);
+
+        return Result<IReadOnlyList<StockMovementDto>>.Success(list);
+    }
+
+    public async Task<Result<IReadOnlyList<LowStockAlertDto>>> GetLowStockAlertsAsync(int threshold = 10, CancellationToken ct = default)
+    {
+        var variants = await _context.ProductVariants
+            .AsNoTracking()
+            .Include(v => v.Product)
+            .Include(v => v.Inventory)
+            .Include(v => v.Images)
+            .Where(v => v.IsActive)
+            .ToListAsync(ct);
+
+        var alerts = new List<LowStockAlertDto>();
+
+        foreach (var v in variants)
+        {
+            int onHand = v.Inventory?.OnHandQuantity ?? v.StockQuantity;
+            int reserved = v.Inventory?.ReservedQuantity ?? 0;
+            int available = Math.Max(0, onHand - reserved);
+
+            if (available <= threshold)
+            {
+                string status = available == 0 ? "Hết hàng" : "Sắp hết hàng";
+                var thumb = v.Images.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? v.Product?.ThumbnailUrl;
+
+                alerts.Add(new LowStockAlertDto(
+                    v.Id,
+                    v.Sku,
+                    v.Product?.Name ?? "Sản phẩm",
+                    v.Name,
+                    thumb,
+                    onHand,
+                    reserved,
+                    available,
+                    threshold,
+                    status
+                ));
+            }
+        }
+
+        return Result<IReadOnlyList<LowStockAlertDto>>.Success(alerts.OrderBy(a => a.AvailableQuantity).ToList());
+    }
+
+    public async Task<Result<IReadOnlyList<VariantInventoryItemDto>>> GetVariantInventoriesAsync(string? search = null, CancellationToken ct = default)
+    {
+        var query = _context.ProductVariants
+            .AsNoTracking()
+            .Include(v => v.Product).ThenInclude(p => p.Category)
+            .Include(v => v.Product).ThenInclude(p => p.Brand)
+            .Include(v => v.Inventory)
+            .Include(v => v.Images)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var s = search.Trim().ToLower();
+            query = query.Where(v => v.Name.ToLower().Contains(s) || v.Sku.ToLower().Contains(s) || (v.Product != null && v.Product.Name.ToLower().Contains(s)));
+        }
+
+        var variants = await query
+            .OrderBy(v => v.Product.Name)
+            .ThenBy(v => v.Name)
+            .Take(150)
+            .ToListAsync(ct);
+
+        var result = variants.Select(v =>
+        {
+            int onHand = v.Inventory?.OnHandQuantity ?? v.StockQuantity;
+            int reserved = v.Inventory?.ReservedQuantity ?? 0;
+            int available = Math.Max(0, onHand - reserved);
+            var thumb = v.Images.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? v.Product?.ThumbnailUrl;
+
+            return new VariantInventoryItemDto(
+                v.Id,
+                v.ProductId,
+                v.Product?.Name ?? "Sản phẩm",
+                v.Name,
+                v.Sku,
+                v.Product?.Category?.Name,
+                v.Product?.Brand?.Name,
+                thumb,
+                v.CostPrice,
+                v.SalePrice,
+                onHand,
+                reserved,
+                available,
+                v.Inventory?.UpdatedAt ?? v.UpdatedAt
+            );
+        }).ToList();
+
+        return Result<IReadOnlyList<VariantInventoryItemDto>>.Success(result);
+    }
+
     private async Task<Inventory?> GetOrCreateInventoryAsync(Guid variantId, CancellationToken ct)
     {
-        var inventory = await _context.Inventories.AsNoTracking().FirstOrDefaultAsync(i => i.VariantId == variantId, ct);
+        var inventory = await _context.Inventories.FirstOrDefaultAsync(i => i.VariantId == variantId, ct);
         if (inventory != null)
         {
             return inventory;
         }
+
 
         var variant = await _context.ProductVariants.FirstOrDefaultAsync(v => v.Id == variantId, ct);
         if (variant == null)

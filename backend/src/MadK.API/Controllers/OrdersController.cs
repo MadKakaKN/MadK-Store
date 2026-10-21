@@ -13,12 +13,33 @@ namespace MadK.API.Controllers;
 public class OrdersController : ControllerBase
 {
     private readonly IOrderService _orderService;
+    private readonly IVnpayService _vnpayService;
     private readonly ILogger<OrdersController> _logger;
 
-    public OrdersController(IOrderService orderService, ILogger<OrdersController> logger)
+    public OrdersController(
+        IOrderService orderService,
+        IVnpayService vnpayService,
+        ILogger<OrdersController> logger)
     {
         _orderService = orderService;
+        _vnpayService = vnpayService;
         _logger = logger;
+    }
+
+    /// <summary>
+    /// Ước tính tạm tính, phí vận chuyển và áp dụng thử mã giảm giá trước khi đặt hàng.
+    /// Không trừ tồn kho, không tăng lượt sử dụng coupon.
+    /// </summary>
+    [HttpPost("checkout/estimate")]
+    [ProducesResponseType(typeof(Result<MadK.Application.DTOs.Promotions.CheckoutEstimateResponseDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> EstimateCheckout(
+        [FromBody] MadK.Application.DTOs.Promotions.CheckoutEstimateRequestDto request,
+        [FromHeader(Name = "X-Anonymous-Id")] string? headerAnonymousId,
+        CancellationToken ct)
+    {
+        var (userId, anonymousId) = ResolveUserOrAnonymous(headerAnonymousId);
+        var result = await _orderService.EstimateCheckoutAsync(userId, anonymousId, request, ct);
+        return Ok(result);
     }
 
     /// <summary>
@@ -52,6 +73,55 @@ public class OrdersController : ControllerBase
 
         return Ok(result);
     }
+
+    /// <summary>
+    /// Checkout và tạo đơn hàng thanh toán trực tuyến qua VNPay Sandbox:
+    /// - Tạo Order ở trạng thái PendingPayment.
+    /// - Giữ kho tạm thời (15 phút).
+    /// - Tạo bản ghi Payment khởi tạo.
+    /// - Trả về URL thanh toán chuyển tiếp sang cổng VNPay.
+    /// </summary>
+    [HttpPost("checkout/vnpay")]
+    [ProducesResponseType(typeof(Result<MadK.Application.DTOs.Payment.CheckoutVnpayResponseDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<MadK.Application.DTOs.Payment.CheckoutVnpayResponseDto>), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CheckoutVnpay(
+        [FromBody] CheckoutCodRequestDto request,
+        [FromHeader(Name = "Idempotency-Key")] string? headerIdempotencyKey,
+        [FromHeader(Name = "X-Anonymous-Id")] string? headerAnonymousId,
+        CancellationToken ct)
+    {
+        var (userId, anonymousId) = ResolveUserOrAnonymous(headerAnonymousId);
+
+        var effectiveIdempotencyKey = !string.IsNullOrWhiteSpace(headerIdempotencyKey)
+            ? headerIdempotencyKey.Trim()
+            : request.IdempotencyKey;
+
+        var effectiveRequest = request with { IdempotencyKey = effectiveIdempotencyKey };
+        string clientIp = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "127.0.0.1";
+
+        var result = await _vnpayService.CheckoutVnpayAsync(userId, anonymousId, effectiveRequest, clientIp, ct);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Kích hoạt quét và hủy các đơn hàng quá hạn thanh toán online.
+    /// Giải phóng tồn kho đang giữ. Dùng cho background job, test, hoặc admin trigger.
+    /// </summary>
+    [HttpPost("process-expired")]
+    [ProducesResponseType(typeof(Result<int>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> ProcessExpiredOrders(
+        [FromServices] IOrderExpirationService expirationService,
+        CancellationToken ct)
+    {
+        var count = await expirationService.CancelExpiredOrdersAsync(ct);
+        return Ok(Result<int>.Success(count, $"Đã xử lý hủy và hoàn kho {count} đơn hàng quá hạn."));
+    }
+
 
     /// <summary>
     /// Tra cứu chi tiết đơn hàng theo mã đơn (e.g. MK-20261013-XXXXXX).

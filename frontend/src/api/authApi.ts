@@ -84,6 +84,30 @@ export const authApi = {
             error: 'Email hoặc mật khẩu không chính xác (Mock).',
           };
         }
+        let roles = ['Customer'];
+        let permissions: string[] = [];
+        const lowerEmail = data.email.toLowerCase();
+        if (lowerEmail.includes('admin')) {
+          roles = ['Admin'];
+          permissions = [
+            'catalog.manage',
+            'order.view',
+            'inventory.view',
+            'user.view',
+            'audit.view',
+            'discount.manage',
+            'report.revenue',
+            'report.inventory',
+            'report.all',
+          ];
+        } else if (lowerEmail.includes('sales')) {
+          roles = ['Sales'];
+          permissions = ['order.view', 'catalog.manage', 'discount.manage'];
+        } else if (lowerEmail.includes('warehouse')) {
+          roles = ['Warehouse'];
+          permissions = ['inventory.view', 'order.view'];
+        }
+
         return {
           isSuccess: true,
           data: {
@@ -97,8 +121,8 @@ export const authApi = {
               phoneNumber: '0901234567',
               isActive: true,
               emailConfirmed: true,
-              roles: ['Customer'],
-              permissions: [],
+              roles,
+              permissions,
             },
           },
           message: 'Đăng nhập thành công (Mock).',
@@ -211,7 +235,7 @@ export const authApi = {
   },
 };
 
-function handleApiError<T>(err: unknown, fallback: () => ApiEnvelope<T>): ApiEnvelope<T> {
+export function handleApiError<T>(err: unknown, fallback: () => ApiEnvelope<T>): ApiEnvelope<T> {
   const axiosError = err as {
     response?: {
       data?: ApiEnvelope<T>;

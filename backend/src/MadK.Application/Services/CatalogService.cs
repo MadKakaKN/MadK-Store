@@ -9,10 +9,16 @@ namespace MadK.Application.Services;
 public class CatalogService : ICatalogService
 {
     private readonly IAppDbContext _context;
+    private readonly IPricingService? _pricingService;
 
-    public CatalogService(IAppDbContext context)
+    public CatalogService(IAppDbContext context) : this(context, null)
+    {
+    }
+
+    public CatalogService(IAppDbContext context, IPricingService? pricingService)
     {
         _context = context;
+        _pricingService = pricingService;
     }
 
     public async Task<Result<IReadOnlyList<CategoryTreeDto>>> GetCategoryTreeAsync(CancellationToken ct = default)
@@ -311,6 +317,8 @@ public class CatalogService : ICatalogService
             .Include(p => p.Brand)
             .Include(p => p.Variants.Where(v => v.IsActive))
                 .ThenInclude(v => v.Images)
+            .Include(p => p.Variants.Where(v => v.IsActive))
+                .ThenInclude(v => v.PriceSchedules)
             .Include(p => p.Images)
             .AsNoTracking()
             .AsSplitQuery()
@@ -346,25 +354,39 @@ public class CatalogService : ICatalogService
                 Slug = product.Brand.Slug,
                 LogoUrl = product.Brand.LogoUrl
             },
-            Variants = product.Variants.Select(v => new ProductVariantDto
+            Variants = product.Variants.Select(v =>
             {
-                Id = v.Id,
-                Sku = v.Sku,
-                Name = v.Name,
-                Attributes = v.Attributes,
-                OriginalPrice = v.OriginalPrice,
-                SalePrice = v.SalePrice,
-                CostPrice = v.CostPrice,
-                IsActive = v.IsActive,
-                Images = v.Images.OrderBy(i => i.DisplayOrder).Select(i => new ProductImageDto
+                var priceInfo = _pricingService?.CalculateCurrentPrice(v) ?? new MadK.Application.DTOs.Pricing.CurrentPriceResult
                 {
-                    Id = i.Id,
-                    VariantId = i.VariantId,
-                    ImageUrl = i.ImageUrl,
-                    AltText = i.AltText,
-                    DisplayOrder = i.DisplayOrder,
-                    IsPrimary = i.IsPrimary
-                }).ToList()
+                    VariantId = v.Id,
+                    OriginalPrice = v.OriginalPrice,
+                    CurrentPrice = v.SalePrice,
+                    IsOnSale = false
+                };
+                return new ProductVariantDto
+                {
+                    Id = v.Id,
+                    Sku = v.Sku,
+                    Name = v.Name,
+                    Attributes = v.Attributes,
+                    OriginalPrice = priceInfo.OriginalPrice,
+                    SalePrice = priceInfo.CurrentPrice,
+                    CostPrice = v.CostPrice,
+                    IsActive = v.IsActive,
+                    IsOnSale = priceInfo.IsOnSale,
+                    PromotionName = priceInfo.PromotionName,
+                    PromotionEndDate = priceInfo.PromotionEndDate,
+                    DiscountPercent = priceInfo.DiscountPercent,
+                    Images = v.Images.OrderBy(i => i.DisplayOrder).Select(i => new ProductImageDto
+                    {
+                        Id = i.Id,
+                        VariantId = i.VariantId,
+                        ImageUrl = i.ImageUrl,
+                        AltText = i.AltText,
+                        DisplayOrder = i.DisplayOrder,
+                        IsPrimary = i.IsPrimary
+                    }).ToList()
+                };
             }).ToList(),
             Images = product.Images.OrderBy(i => i.DisplayOrder).Select(i => new ProductImageDto
             {

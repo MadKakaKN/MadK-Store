@@ -9,11 +9,22 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=madkstore_dev;Username=madkstore;Password=${POSTGRES_PASSWORD}
       - ConnectionStrings__Redis=redis:6379
+      - EmailSettings__Host=mailpit
+      - EmailSettings__Port=1025
+      - RabbitMq__Enabled=true
+      - RabbitMq__HostName=rabbitmq
+      - RabbitMq__Port=5672
+      - RabbitMq__UserName=madkstore
+      - RabbitMq__Password=${RABBITMQ_PASSWORD:-madkstore_dev_pwd}
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
     restart: unless-stopped
 
   postgres:
@@ -42,6 +53,28 @@ services:
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "1025:1025" # SMTP port
+      - "8025:8025" # Web UI
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "5672:5672"   # AMQP protocol
+      - "15672:15672" # Management Web UI
+    environment:
+      RABBITMQ_DEFAULT_USER: madkstore
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-madkstore_dev_pwd}
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
       timeout: 5s
       retries: 5
     restart: unless-stopped

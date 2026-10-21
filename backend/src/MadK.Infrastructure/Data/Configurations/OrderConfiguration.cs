@@ -49,6 +49,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(o => o.AdminNote).HasColumnName("admin_note");
         builder.Property(o => o.CancelReason).HasColumnName("cancel_reason").HasMaxLength(255);
         builder.Property(o => o.CancelledAt).HasColumnName("cancelled_at");
+        builder.Property(o => o.ExpiresAt).HasColumnName("expires_at");
 
         builder.Property(o => o.IdempotencyKey).HasColumnName("idempotency_key").HasMaxLength(150);
 
@@ -84,6 +85,9 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
 
         builder.HasIndex(o => new { o.Status, o.PaymentStatus })
             .HasDatabaseName("idx_orders_status_payment");
+
+        builder.HasIndex(o => new { o.Status, o.ExpiresAt })
+            .HasDatabaseName("idx_orders_status_expires");
 
         builder.HasIndex(o => o.CreatedAt)
             .HasDatabaseName("idx_orders_created_at");

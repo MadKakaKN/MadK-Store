@@ -46,6 +46,10 @@ out/
 
 # Secrets
 .env
+.env.*
+*.env
+**/.env*
+appsettings.*.local.json
 *.pfx
 *.p12
 

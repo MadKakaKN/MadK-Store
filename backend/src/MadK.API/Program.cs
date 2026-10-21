@@ -52,7 +52,18 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddAuthorization();
+// ──── Policy-based Authorization (Theo ma trận quyền PLAN.md) ────
+builder.Services.AddAuthorization(options =>
+{
+    foreach (var permission in MadK.Domain.Constants.Permissions.All)
+    {
+        options.AddPolicy(permission, policy =>
+            policy.RequireAssertion(ctx =>
+                ctx.User.Identity?.IsAuthenticated == true &&
+                (ctx.User.IsInRole(MadK.Domain.Constants.Roles.Admin) ||
+                 ctx.User.HasClaim(c => c.Type == "permission" && c.Value == permission))));
+    }
+});
 
 // ──── Rate Limiting ────
 builder.Services.AddRateLimiter(options =>
@@ -104,6 +115,12 @@ builder.Services.AddSwaggerGen(options =>
         Title = "MadK Store API",
         Version = "v1",
         Description = "API cho MadK tech store - Phân hệ Catalog & Identity (Xác thực)"
+    });
+
+    options.MapType<IFormFile>(() => new OpenApiSchema
+    {
+        Type = "string",
+        Format = "binary"
     });
 
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -199,6 +216,7 @@ if (app.Environment.IsDevelopment())
 app.UseSerilogRequestLogging();
 
 app.UseCors("AllowFrontend");
+app.UseStaticFiles();
 
 app.UseRateLimiter();
 

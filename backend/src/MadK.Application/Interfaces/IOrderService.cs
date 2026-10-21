@@ -21,6 +21,15 @@ public interface IOrderService
         CancellationToken ct = default);
 
     /// <summary>
+    /// Ước tính tạm tính, phí vận chuyển theo vùng, giảm giá coupon và tổng thanh toán trước khi đặt hàng.
+    /// </summary>
+    Task<Result<MadK.Application.DTOs.Promotions.CheckoutEstimateResponseDto>> EstimateCheckoutAsync(
+        Guid? userId,
+        string? anonymousId,
+        MadK.Application.DTOs.Promotions.CheckoutEstimateRequestDto request,
+        CancellationToken ct = default);
+
+    /// <summary>
     /// Tra cứu chi tiết đơn hàng theo mã đơn (e.g. MK-20261013-XXXXXX).
     /// Chống IDOR: Khách hàng chỉ xem được đơn của mình.
     /// </summary>
@@ -72,5 +81,28 @@ public interface IOrderService
         Guid? staffUserId,
         string staffName,
         UpdateOrderStatusRequestDto request,
+        CancellationToken ct = default);
+
+    /// <summary>
+    /// Cập nhật ghi chú nội bộ cho đơn hàng (Dành cho nhân viên Sales và Admin).
+    /// </summary>
+    Task<Result<OrderDto>> UpdateOrderNoteAsync(
+        string orderNumber,
+        string adminNote,
+        Guid? staffUserId,
+        string staffName,
+        CancellationToken ct = default);
+
+    /// <summary>
+    /// Lấy danh sách toàn bộ đơn hàng trong hệ thống (Dành cho nhân viên Warehouse, Sales và Admin).
+    /// Hỗ trợ lọc theo trạng thái, khoảng ngày đặt hàng, và thông tin khách hàng/mã đơn.
+    /// </summary>
+    Task<Result<PagedResult<OrderDto>>> GetAllOrdersAsync(
+        int page = 1,
+        int pageSize = 20,
+        OrderStatus? status = null,
+        DateTime? fromDate = null,
+        DateTime? toDate = null,
+        string? search = null,
         CancellationToken ct = default);
 }

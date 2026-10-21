@@ -19,6 +19,7 @@ public class AppDbContext : DbContext, IAppDbContext
     public DbSet<Product> Products => Set<Product>();
     public DbSet<ProductVariant> ProductVariants => Set<ProductVariant>();
     public DbSet<ProductImage> ProductImages => Set<ProductImage>();
+    public DbSet<PriceSchedule> PriceSchedules => Set<PriceSchedule>();
 
     // Identity DbSets
     public DbSet<User> Users => Set<User>();
@@ -38,6 +39,16 @@ public class AppDbContext : DbContext, IAppDbContext
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
     public DbSet<OrderStatusHistory> OrderStatusHistories => Set<OrderStatusHistory>();
+    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+    public DbSet<Supplier> Suppliers => Set<Supplier>();
+    public DbSet<PurchaseOrder> PurchaseOrders => Set<PurchaseOrder>();
+    public DbSet<PurchaseOrderItem> PurchaseOrderItems => Set<PurchaseOrderItem>();
+    public DbSet<InventoryAudit> InventoryAudits => Set<InventoryAudit>();
+    public DbSet<InventoryAuditItem> InventoryAuditItems => Set<InventoryAuditItem>();
+    public DbSet<Payment> Payments => Set<Payment>();
+    public DbSet<ReturnRequest> ReturnRequests => Set<ReturnRequest>();
+    public DbSet<ReturnRequestItem> ReturnRequestItems => Set<ReturnRequestItem>();
+    public DbSet<Coupon> Coupons => Set<Coupon>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
