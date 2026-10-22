@@ -4,8 +4,11 @@ import catalogApi from '../../../api/catalogApi';
 import { ProductDetailDto, ProductVariantDto } from '../../../types/catalog';
 import { formatVND } from '../../../utils/format';
 import LoadingSpinner from '../../../components/common/LoadingSpinner';
-import Product3DViewerPlaceholder from '../components/Product3DViewerPlaceholder';
+const Product3DViewer = React.lazy(
+  () => import('../components/product-viewer/Product3DViewer')
+);
 import { useCart } from '../../cart/context/CartContext';
+import SEOHead, { buildProductSchema, buildBreadcrumbSchema } from '../../../components/common/SEOHead';
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -149,8 +152,42 @@ export const ProductDetailPage: React.FC = () => {
     }
   };
 
+  const productImagesList = allImages.map((img) => img.imageUrl).filter(Boolean);
+
+  const productSchema = buildProductSchema({
+    name: product.name,
+    description: product.shortDescription || product.description,
+    images: productImagesList,
+    sku: selectedVariant?.sku || product.slug,
+    brandName: product.brand?.name,
+    categoryName: product.category?.name,
+    price: currentPrice,
+    inStock: !isOutOfStock,
+    slug: product.slug,
+  });
+
+  const productBreadcrumbs = buildBreadcrumbSchema([
+    { name: 'Trang chủ', url: '/' },
+    { name: 'Danh mục', url: '/categories' },
+    { name: product.category.name, url: `/categories/${product.category.slug}` },
+    { name: product.name, url: `/products/${product.slug}` },
+  ]);
+
   return (
     <div className="py-6 sm:py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10 pb-28 sm:pb-12">
+      <SEOHead
+        title={`${product.name} Chính Hãng - Giá Tốt Nhất`}
+        description={
+          product.shortDescription ||
+          `Mua ngay ${product.name} chính hãng tại MadK Store. Giá chỉ từ ${formatVND(currentPrice)}, bảo hành chính hãng, trả góp 0%, tương tác xem mô hình 3D.`
+        }
+        canonicalUrl={`https://madk.store/products/${product.slug}`}
+        ogType="product"
+        ogImage={productImagesList[0] || product.thumbnailUrl}
+        keywords={`madk store, ${product.name}, ${product.brand?.name || ''}, mua ${product.name}`}
+        structuredData={[productSchema, productBreadcrumbs]}
+      />
+
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed top-20 right-4 sm:right-8 z-50 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700 flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-200">
@@ -273,11 +310,25 @@ export const ProductDetailPage: React.FC = () => {
               )}
             </div>
           ) : (
-            /* 3D Viewer Placeholder Component (chừa chỗ cho Three.js WebGL sau này) */
-            <Product3DViewerPlaceholder
-              model3DUrl={product.model3DUrl}
-              productName={product.name}
-            />
+            <React.Suspense
+              fallback={
+                <div className="aspect-square sm:aspect-[4/3] w-full rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl flex flex-col items-center justify-center p-6 text-white text-center">
+                  <div className="w-8 h-8 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin mb-3" />
+                  <span className="text-xs font-semibold text-slate-300">
+                    Đang khởi tạo trình xem 3D Three.js...
+                  </span>
+                </div>
+              }
+            >
+              <Product3DViewer
+                model3DUrl={product.model3DUrl}
+                productName={product.name}
+                thumbnailUrl={product.thumbnailUrl}
+                selectedVariant={selectedVariant}
+                onVariantSelect={setSelectedVariant}
+                onSwitchTo2D={() => setViewMode('2d')}
+              />
+            </React.Suspense>
           )}
         </div>
 

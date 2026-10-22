@@ -100,9 +100,43 @@ builder.Services.AddRateLimiter(options =>
                 QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
                 QueueLimit = 0
             }));
+
+    options.AddPolicy("order-checkout", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 15,
+                Window = TimeSpan.FromMinutes(1),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 0
+            }));
+
+    options.AddPolicy("payment-ipn", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 30,
+                Window = TimeSpan.FromMinutes(1),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 0
+            }));
+
+    options.AddPolicy("general-api", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 120,
+                Window = TimeSpan.FromMinutes(1),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 0
+            }));
 });
 
-// ──── Controllers & Routing ────
+// ──── Controllers & Routing & Compression ────
+builder.Services.AddResponseCompression(options => { options.EnableForHttps = true; });
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 builder.Services.AddControllers();
 
@@ -150,32 +184,51 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // ──── Health Checks (PostgreSQL + Redis) ────
-var dbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+var rawDbConn = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? "Host=localhost;Port=5432;Database=madkstore_dev;Username=madkstore;Password=madkstore_dev_pwd";
-var redisConnectionString = builder.Configuration.GetConnectionString("Redis")
-    ?? "localhost:6379";
+var dbConnectionString = MadK.Infrastructure.DependencyInjection.ResolveConnectionString(rawDbConn);
+var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
 
-builder.Services.AddHealthChecks()
+var healthChecksBuilder = builder.Services.AddHealthChecks()
     .AddNpgSql(
         dbConnectionString,
         name: "postgresql",
-        tags: new[] { "db", "ready" })
-    .AddRedis(
+        tags: new[] { "db", "ready" });
+
+if (!string.IsNullOrWhiteSpace(redisConnectionString) && !redisConnectionString.Equals("disabled", StringComparison.OrdinalIgnoreCase))
+{
+    healthChecksBuilder.AddRedis(
         redisConnectionString,
         name: "redis",
         tags: new[] { "cache", "ready" });
+}
 
 // ──── CORS ────
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        var origins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+        var configuredOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
             ?? new[] { "http://localhost:5173" };
-        policy.WithOrigins(origins)
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+
+        policy.SetIsOriginAllowed(origin =>
+        {
+            if (string.IsNullOrWhiteSpace(origin)) return false;
+            if (configuredOrigins.Contains(origin, StringComparer.OrdinalIgnoreCase)) return true;
+
+            if (Uri.TryCreate(origin, UriKind.Absolute, out var uri))
+            {
+                // Local dev
+                if (uri.Host == "localhost" || uri.Host == "127.0.0.1") return true;
+                // Vercel preview & production deployments
+                if (uri.Host.EndsWith(".vercel.app", StringComparison.OrdinalIgnoreCase)) return true;
+            }
+
+            return false;
+        })
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
     });
 });
 
@@ -183,6 +236,7 @@ var app = builder.Build();
 
 // ──── Custom Middleware ────
 app.UseMiddleware<CorrelationIdMiddleware>();
+app.UseMiddleware<SecurityHeadersMiddleware>();
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
 // ──── Middleware Pipeline ────
@@ -215,8 +269,16 @@ if (app.Environment.IsDevelopment())
 
 app.UseSerilogRequestLogging();
 
+app.UseResponseCompression();
 app.UseCors("AllowFrontend");
-app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        // 1-year immutable caching for static assets (images, 3D glb models)
+        ctx.Context.Response.Headers.Append("Cache-Control", "public, max-age=31536000, immutable");
+    }
+});
 
 app.UseRateLimiter();
 

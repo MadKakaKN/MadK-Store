@@ -21,9 +21,10 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         // PostgreSQL + EF Core
+        var connectionString = ResolveConnectionString(configuration.GetConnectionString("DefaultConnection"));
         services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(
-                configuration.GetConnectionString("DefaultConnection"),
+                connectionString,
                 npgsqlOptions =>
                 {
                     npgsqlOptions.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
@@ -116,6 +117,41 @@ public static class DependencyInjection
         services.AddScoped<IShippingFeeService, MadK.Infrastructure.Services.StandardShippingFeeService>();
 
         return services;
+    }
+
+    /// <summary>
+    /// Resolves connection string from either standard ADO.NET format or URI format (postgres:// or postgresql://).
+    /// </summary>
+    public static string ResolveConnectionString(string? rawConn)
+    {
+        if (string.IsNullOrWhiteSpace(rawConn))
+            return string.Empty;
+
+        if (rawConn.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase) ||
+            rawConn.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase))
+        {
+            try
+            {
+                var uri = new Uri(rawConn);
+                var userInfo = uri.UserInfo.Split(':');
+                var builder = new Npgsql.NpgsqlConnectionStringBuilder
+                {
+                    Host = uri.Host,
+                    Port = uri.Port > 0 ? uri.Port : 5432,
+                    Database = uri.AbsolutePath.TrimStart('/'),
+                    Username = userInfo.Length > 0 ? Uri.UnescapeDataString(userInfo[0]) : "",
+                    Password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : "",
+                    SslMode = Npgsql.SslMode.Require
+                };
+                return builder.ToString();
+            }
+            catch
+            {
+                return rawConn;
+            }
+        }
+
+        return rawConn;
     }
 }
 

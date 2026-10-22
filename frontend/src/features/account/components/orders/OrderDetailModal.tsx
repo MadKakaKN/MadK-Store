@@ -324,7 +324,9 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                           return <span className="font-mono text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold">{snap.code}</span>;
                         }
                       }
-                    } catch {}
+                    } catch {
+                      // Bỏ qua lỗi cú pháp JSON không hợp lệ
+                    }
                     return <span>(Voucher)</span>;
                   })()}
                 </span>

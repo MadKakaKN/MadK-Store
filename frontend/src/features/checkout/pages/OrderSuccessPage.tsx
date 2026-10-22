@@ -6,6 +6,8 @@ import { formatVND } from '../../../utils/format';
 import { OrderStatusBadge } from '../../account/components/orders/OrderStatusBadge';
 import LoadingSpinner from '../../../components/common/LoadingSpinner';
 
+const OrderSuccess3DCanvas = React.lazy(() => import('../components/OrderSuccess3DCanvas'));
+
 export const OrderSuccessPage: React.FC = () => {
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -59,18 +61,23 @@ export const OrderSuccessPage: React.FC = () => {
     <div className="min-h-screen py-8 sm:py-14 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-8 animate-fade-in">
       {/* 1. Header & Congratulations Banner */}
       <div className="text-center space-y-4">
-        {/* Placeholder / Container cho hiệu ứng 3D nhẹ ở giai đoạn sau */}
+        {/* Hiệu ứng 3D nhẹ mừng đặt hàng thành công kèm fallback 2D */}
         <div
           id="order-success-3d-scene"
-          className="relative w-28 h-28 sm:w-36 sm:h-36 mx-auto flex items-center justify-center rounded-3xl bg-gradient-to-tr from-emerald-500/20 via-teal-500/15 to-brand-500/20 border border-emerald-300/40 shadow-xl shadow-emerald-500/10 group cursor-default"
-          title="Vị trí tích hợp hiệu ứng 3D nhẹ bàn phím/hộp quà trong giai đoạn sau"
+          className="relative w-36 h-36 sm:w-44 sm:h-44 mx-auto flex items-center justify-center rounded-3xl bg-gradient-to-tr from-emerald-500/10 via-teal-500/10 to-brand-500/10 border border-emerald-300/30 shadow-xl shadow-emerald-500/10 group overflow-hidden"
+          title="Mô hình quà mừng 3D - MadK Store"
         >
-          {/* Subtle 2D animated pulse & celebratory icon */}
-          <div className="absolute inset-0 rounded-3xl bg-emerald-400/10 animate-ping opacity-25"></div>
-          <div className="relative z-10 text-5xl sm:text-6xl select-none transform group-hover:scale-110 transition-transform duration-300">
-            🎉
-          </div>
-          <span className="absolute -bottom-2 px-2.5 py-0.5 rounded-full bg-emerald-600 text-[10px] font-bold text-white shadow-xs">
+          <React.Suspense
+            fallback={
+              <div className="relative flex flex-col items-center justify-center">
+                <div className="text-5xl sm:text-6xl select-none animate-bounce">🎉</div>
+                <div className="w-4 h-4 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin mt-2" />
+              </div>
+            }
+          >
+            <OrderSuccess3DCanvas />
+          </React.Suspense>
+          <span className="absolute bottom-2 px-2.5 py-0.5 rounded-full bg-emerald-600/90 backdrop-blur-sm text-[10px] font-bold text-white shadow-xs pointer-events-none">
             COD Đã ghi nhận
           </span>
         </div>

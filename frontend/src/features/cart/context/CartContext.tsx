@@ -42,6 +42,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
+  // Nạp giỏ hàng lần đầu khi mount
+  useEffect(() => {
+    refreshCart();
+  }, [refreshCart]);
+
   // Xử lý tự động gộp giỏ hàng (Merge Cart) khi người dùng vừa đăng nhập
   useEffect(() => {
     const currentUserId = user?.id || null;

@@ -1,0 +1,20 @@
+# Robots.txt for MadK Store
+# https://madk.store
+
+User-agent: *
+Allow: /
+Allow: /categories/
+Allow: /products/
+Allow: /policies/
+Allow: /models/
+
+# Disallow private customer areas, transactions & admin panel
+Disallow: /admin/
+Disallow: /account/
+Disallow: /auth/
+Disallow: /cart
+Disallow: /checkout/
+
+# Host and Dynamic Sitemap
+Host: https://madk.store
+Sitemap: https://madk.store/sitemap.xml

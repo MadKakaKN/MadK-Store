@@ -5,6 +5,7 @@ import { CategoryTreeDto, ProductListDto } from '../../../types/catalog';
 import ProductCard from '../components/ProductCard';
 import Hero3DShowcase from '../components/Hero3DShowcase';
 import LoadingSpinner from '../../../components/common/LoadingSpinner';
+import SEOHead, { buildOrganizationSchema, buildWebSiteSchema } from '../../../components/common/SEOHead';
 
 export const HomePage: React.FC = () => {
   const [categories, setCategories] = useState<CategoryTreeDto[]>([]);
@@ -42,6 +43,14 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="py-6 sm:py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12 sm:space-y-16">
+      <SEOHead
+        title="MadK Store - Thiết bị công nghệ chính hãng & Trải nghiệm 3D"
+        description="MadK Store phân phối điện thoại thông minh, laptop gaming, linh kiện PC và phụ kiện công nghệ chính hãng với trải nghiệm tương tác mô hình 3D trực quan."
+        canonicalUrl="https://madk.store/"
+        keywords="madk store, điện thoại chính hãng, laptop gaming, linh kiện pc, trải nghiệm 3d, mua hàng công nghệ"
+        structuredData={[buildOrganizationSchema(), buildWebSiteSchema()]}
+      />
+
       {/* Hero Section Banner */}
       <section className="relative rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-brand-950 text-white p-6 sm:p-10 lg:p-14 overflow-hidden shadow-2xl border border-slate-800">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(14,165,233,0.25),rgba(255,255,255,0))] pointer-events-none" />

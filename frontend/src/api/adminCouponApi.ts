@@ -19,7 +19,7 @@ export interface PagedCouponsResult {
 
 export const adminCouponApi = {
   async getCoupons(filter?: CouponFilterDto): Promise<ApiEnvelope<PagedCouponsResult>> {
-    const params: Record<string, any> = {};
+    const params: Record<string, unknown> = {};
     if (filter?.page) params.page = filter.page;
     if (filter?.pageSize) params.pageSize = filter.pageSize;
     if (filter?.search) params.search = filter.search;

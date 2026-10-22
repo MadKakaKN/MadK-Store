@@ -71,11 +71,29 @@ export const Footer: React.FC = () => {
               Chính sách & Hỗ trợ
             </h4>
             <ul className="space-y-2.5 text-sm">
-              <li className="hover:text-slate-200 cursor-pointer">Chính sách bảo hành 12-24 tháng</li>
-              <li className="hover:text-slate-200 cursor-pointer">Chính sách đổi trả trong 7 ngày</li>
-              <li className="hover:text-slate-200 cursor-pointer">Vận chuyển & Giao nhận hỏa tốc</li>
-              <li className="hover:text-slate-200 cursor-pointer">Bảo mật thông tin khách hàng</li>
-              <li className="hover:text-slate-200 cursor-pointer">Hướng dẫn mua trả góp 0%</li>
+              <li>
+                <Link to="/policies/warranty" className="hover:text-slate-200 transition-colors">
+                  Chính sách bảo hành 12-24 tháng
+                </Link>
+              </li>
+              <li>
+                <Link to="/policies/returns" className="hover:text-slate-200 transition-colors">
+                  Chính sách đổi trả trong 7 ngày
+                </Link>
+              </li>
+              <li>
+                <Link to="/policies/shipping" className="hover:text-slate-200 transition-colors">
+                  Vận chuyển & Giao nhận hỏa tốc
+                </Link>
+              </li>
+              <li>
+                <Link to="/policies/privacy" className="hover:text-slate-200 transition-colors">
+                  Bảo mật thông tin khách hàng
+                </Link>
+              </li>
+              <li className="text-slate-500">
+                <span>Hướng dẫn mua trả góp 0% (Sắp ra mắt)</span>
+              </li>
             </ul>
           </div>
 

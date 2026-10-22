@@ -16,6 +16,13 @@ import VnpayReturnPage from '../features/checkout/pages/VnpayReturnPage';
 import AccountPage from '../features/account/pages/AccountPage';
 import ProtectedRoute from '../features/auth/components/ProtectedRoute';
 import GuestRoute from '../features/auth/components/GuestRoute';
+import NotFoundPage from '../features/common/pages/NotFoundPage';
+
+// Policy pages
+import WarrantyPolicyPage from '../features/policy/pages/WarrantyPolicyPage';
+import ReturnsPolicyPage from '../features/policy/pages/ReturnsPolicyPage';
+import ShippingPolicyPage from '../features/policy/pages/ShippingPolicyPage';
+import PrivacyPolicyPage from '../features/policy/pages/PrivacyPolicyPage';
 
 // Admin feature components
 import AdminLayout from '../features/admin/components/layout/AdminLayout';
@@ -49,6 +56,12 @@ export const AppRoutes: React.FC = () => {
         <Route path="checkout/success" element={<OrderSuccessPage />} />
         <Route path="checkout/vnpay-return" element={<VnpayReturnPage />} />
         <Route path="order-success/:orderNumber" element={<OrderSuccessPage />} />
+
+        {/* Customer Policy Routes (SEO & Crawlers) */}
+        <Route path="policies/warranty" element={<WarrantyPolicyPage />} />
+        <Route path="policies/returns" element={<ReturnsPolicyPage />} />
+        <Route path="policies/shipping" element={<ShippingPolicyPage />} />
+        <Route path="policies/privacy" element={<PrivacyPolicyPage />} />
 
 
         {/* Auth Routes (Guest Only) */}
@@ -96,21 +109,8 @@ export const AppRoutes: React.FC = () => {
           }
         />
 
-        {/* Fallback 404 for Storefront */}
-        <Route
-          path="*"
-          element={
-            <div className="py-24 text-center px-4">
-              <div className="w-20 h-20 mx-auto rounded-3xl bg-slate-100 flex items-center justify-center text-3xl mb-4">
-                🧭
-              </div>
-              <h2 className="text-3xl font-extrabold text-slate-900">404 - Không tìm thấy trang</h2>
-              <p className="mt-2 text-slate-500 max-w-sm mx-auto">
-                Đường dẫn bạn yêu cầu không tồn tại hoặc đã được di chuyển sang địa chỉ mới.
-              </p>
-            </div>
-          }
-        />
+        {/* Fallback 404 for Storefront with 3D Highlight */}
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
 
       {/* ──── Dedicated Admin Feature Area with Layout & Route Guards ──── */}

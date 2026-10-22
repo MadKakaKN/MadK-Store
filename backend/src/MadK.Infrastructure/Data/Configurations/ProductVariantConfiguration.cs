@@ -61,5 +61,8 @@ public class ProductVariantConfiguration : IEntityTypeConfiguration<ProductVaria
         builder.HasIndex(v => v.Attributes)
             .HasMethod("gin")
             .HasDatabaseName("idx_product_variants_attributes_gin");
+
+        builder.HasIndex(v => new { v.ProductId, v.IsActive })
+            .HasDatabaseName("idx_product_variants_product_active");
     }
 }

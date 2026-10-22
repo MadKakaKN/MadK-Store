@@ -207,32 +207,32 @@ Ghi chú: ma trận này là điểm xuất phát, điều chỉnh khi làm đ�
 ## Giai đoạn 5: Hoàn thiện và deploy (1-2 tuần)
 
 **UI 3D (chỉ làm sau khi luồng mua hàng đã chạy ổn)**
-- [ ] Cài `three`, `@react-three/fiber`, `@react-three/drei`
-- [ ] Trình xem sản phẩm 3D trên trang chi tiết: xoay, zoom, đổi màu theo biến thể (5-10 sản phẩm nổi bật)
-- [ ] Hero 3D trang chủ (vật thể xoay nhẹ hoặc phản ứng theo chuột/cuộn trang)
-- [ ] Hiệu ứng 3D nhẹ ở trang "đặt hàng thành công" hoặc 404
-- [ ] Nén model (Draco/Meshopt), texture KTX2/WebP; mỗi model khoảng vài trăm KB đến 2-3 MB
-- [ ] Lazy load model và canvas để không làm chậm tải trang
-- [ ] Tối ưu cho mobile: giới hạn pixel ratio, ít đèn, ít polygon
-- [ ] Fallback ảnh tĩnh khi không hỗ trợ WebGL hoặc thiết bị yếu; nút bật/tắt 3D
-- [ ] Đảm bảo thông tin sản phẩm vẫn là HTML thường (SEO, truy cập)
+- [x] Cài `three`, `@react-three/fiber`, `@react-three/drei`
+- [x] Trình xem sản phẩm 3D trên trang chi tiết: xoay, zoom, đổi màu theo biến thể (5-10 sản phẩm nổi bật)
+- [x] Hero 3D trang chủ (vật thể xoay nhẹ hoặc phản ứng theo chuột/cuộn trang)
+- [x] Hiệu ứng 3D nhẹ ở trang "đặt hàng thành công" hoặc 404
+- [x] Nén model (Draco/Meshopt), texture KTX2/WebP; mỗi model khoảng vài trăm KB đến 2-3 MB
+- [x] Lazy load model và canvas để không làm chậm tải trang
+- [x] Tối ưu cho mobile: giới hạn pixel ratio, ít đèn, ít polygon
+- [x] Fallback ảnh tĩnh khi không hỗ trợ WebGL hoặc thiết bị yếu; nút bật/tắt 3D
+- [x] Đảm bảo thông tin sản phẩm vẫn là HTML thường (SEO, truy cập)
 
 **SEO**
-- [ ] Meta tag, sitemap, robots.txt
-- [ ] Dữ liệu có cấu trúc schema.org Product
-- [ ] Trang chính sách: bảo hành, đổi trả, vận chuyển, bảo mật
+- [x] Meta tag, sitemap, robots.txt
+- [x] Dữ liệu có cấu trúc schema.org Product
+- [x] Trang chính sách: bảo hành, đổi trả, vận chuyển, bảo mật
 
 **Hiệu năng và chất lượng**
-- [ ] Rà soát index, kiểm tra truy vấn chậm
-- [ ] CDN cho ảnh
-- [ ] Load test vài kịch bản chính (xem danh sách, tìm kiếm, đặt hàng)
-- [ ] Test E2E (Playwright) cho luồng: tìm sản phẩm, thêm giỏ, đặt hàng
+- [x] Rà soát index, kiểm tra truy vấn chậm
+- [x] CDN cho ảnh (headers Cache-Control 1y immutable & tài liệu Cloudflare)
+- [x] Load test vài kịch bản chính (xem danh sách, tìm kiếm, đặt hàng)
+- [x] Test E2E (Playwright) cho luồng: tìm sản phẩm, thêm giỏ, đặt hàng
 
 **Vận hành**
-- [ ] Deploy lên VPS/cloud, có HTTPS
-- [ ] Backup database tự động và thử khôi phục
-- [ ] Theo dõi lỗi (Sentry) và giám sát cơ bản
-- [ ] Rà soát bảo mật theo OWASP Top 10 (CORS, mass assignment, IDOR, XSS, SQL injection)
+- [x] Cấu hình deploy lên VPS/cloud, có HTTPS (Nginx reverse proxy, docker-compose.prod.yml)
+- [x] Backup database tự động và thử khôi phục
+- [x] Theo dõi lỗi (Sentry) và giám sát cơ bản
+- [x] Rà soát bảo mật theo OWASP Top 10 (CORS, mass assignment, IDOR, XSS, SQL injection)
 
 **Kết quả:** có link demo chạy ổn định, sẵn sàng đưa vào portfolio.
 

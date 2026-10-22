@@ -19,13 +19,14 @@ export const couponApi = {
         subtotalAmount,
       } as ValidateCouponRequestDto);
       return res.data;
-    } catch (err: any) {
-      if (err.response?.data) {
-        return err.response.data;
+    } catch (err: unknown) {
+      const axiosErr = err as { response?: { data?: ApiEnvelope<CouponCalculationResultDto> }; message?: string };
+      if (axiosErr.response?.data) {
+        return axiosErr.response.data;
       }
       return {
         isSuccess: false,
-        message: err.message || 'Mã giảm giá không hợp lệ',
+        message: axiosErr.message || 'Mã giảm giá không hợp lệ',
         error: 'COUPON_INVALID',
       };
     }
@@ -48,13 +49,14 @@ export const couponApi = {
         { headers }
       );
       return res.data;
-    } catch (err: any) {
-      if (err.response?.data) {
-        return err.response.data;
+    } catch (err: unknown) {
+      const axiosErr = err as { response?: { data?: ApiEnvelope<CheckoutEstimateResponseDto> }; message?: string };
+      if (axiosErr.response?.data) {
+        return axiosErr.response.data;
       }
       return {
         isSuccess: false,
-        message: err.message || 'Không thể tính toán phí giao hàng',
+        message: axiosErr.message || 'Không thể tính toán phí giao hàng',
         error: 'ESTIMATE_ERROR',
       };
     }

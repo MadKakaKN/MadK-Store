@@ -5,10 +5,12 @@ using MadK.Application.Interfaces;
 using MadK.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace MadK.API.Controllers;
 
 [ApiController]
+[EnableRateLimiting("order-checkout")]
 [Route("api/v1/orders")]
 public class OrdersController : ControllerBase
 {
@@ -112,6 +114,7 @@ public class OrdersController : ControllerBase
     /// Kích hoạt quét và hủy các đơn hàng quá hạn thanh toán online.
     /// Giải phóng tồn kho đang giữ. Dùng cho background job, test, hoặc admin trigger.
     /// </summary>
+    [Authorize(Roles = "Admin")]
     [HttpPost("process-expired")]
     [ProducesResponseType(typeof(Result<int>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ProcessExpiredOrders(

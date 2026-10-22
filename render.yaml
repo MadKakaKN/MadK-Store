@@ -1,0 +1,32 @@
+# ==============================================================================
+# Render.com Blueprint - MadK Store Backend API (.NET 8 + Docker)
+# Miễn phí 100% trên Render Free Tier
+# ==============================================================================
+services:
+  - type: web
+    name: madk-api
+    runtime: docker
+    dockerfilePath: ./backend/src/MadK.API/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    region: singapore
+    healthCheckPath: /health
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__DefaultConnection
+        sync: false # Nhập connection string PostgreSQL từ Neon.tech hoặc Supabase
+      - key: ConnectionStrings__Redis
+        value: disabled
+      - key: RabbitMq__Enabled
+        value: "false"
+      - key: Jwt__Issuer
+        value: MadKStore
+      - key: Jwt__Audience
+        value: MadKStoreClient
+      - key: Jwt__Key
+        generateValue: true # Render tự động sinh chuỗi bí mật ngẫu nhiên bảo mật
+      - key: AppSettings__SiteUrl
+        sync: false # Nhập URL Vercel của bạn (ví dụ https://madk-store.vercel.app)
+      - key: Cors__AllowedOrigins__0
+        sync: false # Nhập URL Vercel của bạn

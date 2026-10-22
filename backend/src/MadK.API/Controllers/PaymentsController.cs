@@ -2,10 +2,12 @@ using MadK.Application.Common;
 using MadK.Application.DTOs.Payment;
 using MadK.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace MadK.API.Controllers;
 
 [ApiController]
+[EnableRateLimiting("payment-ipn")]
 [Route("api/v1/payments/vnpay")]
 public class PaymentsController : ControllerBase
 {

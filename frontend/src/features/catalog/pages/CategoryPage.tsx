@@ -12,6 +12,7 @@ import {
 import ProductCard from '../components/ProductCard';
 import LoadingSpinner from '../../../components/common/LoadingSpinner';
 import { formatVND } from '../../../utils/format';
+import SEOHead, { buildBreadcrumbSchema } from '../../../components/common/SEOHead';
 
 const PRICE_PRESETS = [
   { label: 'Tất cả mức giá', min: undefined, max: undefined },
@@ -184,8 +185,37 @@ export const CategoryPage: React.FC = () => {
     return b ? b.name : selectedBrand;
   }, [selectedBrand, allBrands]);
 
+  const pageTitle = categoryDetail?.name
+    ? `${categoryDetail.name} Chính Hãng, Giá Tốt Nhất`
+    : searchQuery
+      ? `Tìm kiếm "${searchQuery}"`
+      : 'Tất Cả Thiết Bị Công Nghệ Chính Hãng';
+
+  const pageDesc = categoryDetail?.description
+    ? categoryDetail.description
+    : `Khám phá danh sách ${categoryDetail?.name || 'sản phẩm công nghệ'} chính hãng tại MadK Store. Giá ưu đãi, trả góp 0%, hỗ trợ trải nghiệm 3D trực quan.`;
+
+  const breadcrumbList = slug
+    ? [
+        { name: 'Trang chủ', url: '/' },
+        { name: 'Danh mục', url: '/categories' },
+        { name: categoryDetail?.name || slug, url: `/categories/${slug}` },
+      ]
+    : [
+        { name: 'Trang chủ', url: '/' },
+        { name: 'Danh mục sản phẩm', url: '/categories' },
+      ];
+
   return (
     <div className="py-6 sm:py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <SEOHead
+        title={pageTitle}
+        description={pageDesc}
+        canonicalUrl={slug ? `https://madk.store/categories/${slug}` : 'https://madk.store/categories'}
+        keywords={`madk store, ${categoryDetail?.name || 'thiết bị công nghệ'}, mua ${categoryDetail?.name || 'công nghệ'}`}
+        structuredData={buildBreadcrumbSchema(breadcrumbList)}
+      />
+
       {/* Breadcrumbs */}
       <nav className="flex items-center text-xs sm:text-sm text-slate-500 mb-6 gap-2">
         <Link to="/" className="hover:text-brand-600 transition-colors">

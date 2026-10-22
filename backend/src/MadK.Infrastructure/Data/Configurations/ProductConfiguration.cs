@@ -94,5 +94,11 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.HasIndex(p => p.SearchVector)
             .HasMethod("gin")
             .HasDatabaseName("idx_products_search_vector_gin");
+
+        builder.HasIndex(p => new { p.IsActive, p.CreatedAt })
+            .HasDatabaseName("idx_products_is_active_created_at");
+
+        builder.HasIndex(p => new { p.IsActive, p.IsFeatured })
+            .HasDatabaseName("idx_products_is_active_featured");
     }
 }

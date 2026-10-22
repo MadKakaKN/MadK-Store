@@ -68,3 +68,8 @@ frontend/.env.local
 # Logs
 logs/
 *.log
+
+# Test & Build Artifacts
+frontend/playwright-report/
+frontend/test-results/
+*.tsbuildinfo

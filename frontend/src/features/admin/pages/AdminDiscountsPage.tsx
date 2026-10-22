@@ -111,8 +111,9 @@ export const AdminDiscountsPage: React.FC = () => {
       } else {
         toast.error(res.error || 'Không thể tạo mã voucher.', 'Lỗi tạo mới');
       }
-    } catch (err: any) {
-      toast.error(err.message || 'Lỗi khi lưu mã giảm giá.', 'Lỗi hệ thống');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Lỗi khi lưu mã giảm giá.';
+      toast.error(msg, 'Lỗi hệ thống');
     } finally {
       setIsSubmitting(false);
     }

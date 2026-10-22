@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { formatVND } from '../../../utils/format';
+
+const Hero3DCanvas = React.lazy(() => import('./hero-3d/Hero3DCanvas'));
 
 interface SpotlightProduct {
   id: string;
@@ -57,6 +59,7 @@ const SPOTLIGHT_PRODUCTS: SpotlightProduct[] = [
 export const Hero3DShowcase: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [displayMode, setDisplayMode] = useState<'3d' | 'video'>('3d');
 
   // Auto rotate spotlight every 7 seconds unless hovered/paused
   useEffect(() => {
@@ -79,57 +82,95 @@ export const Hero3DShowcase: React.FC = () => {
       <div className="absolute -top-24 -right-24 w-72 h-72 bg-brand-500/20 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Header bar with live 3D status badge */}
+      {/* Header bar with live 3D status badge & Mode toggle */}
       <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
           <span className="text-xs font-extrabold uppercase tracking-wider text-slate-300">
             3D Tech Spotlight
           </span>
         </div>
-        <span className="px-2.5 py-1 rounded-lg bg-indigo-950 border border-indigo-500/30 text-indigo-300 text-[11px] font-bold">
-          {activeProduct.badge}
-        </span>
+
+        {/* View Mode Toggle: 3D Canvas vs Video Showcase */}
+        <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-950/80 border border-slate-800">
+          <button
+            type="button"
+            onClick={() => setDisplayMode('3d')}
+            className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+              displayMode === '3d'
+                ? 'bg-indigo-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            3D Canvas
+          </button>
+          <button
+            type="button"
+            onClick={() => setDisplayMode('video')}
+            className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+              displayMode === 'video'
+                ? 'bg-brand-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Video
+          </button>
+        </div>
       </div>
 
-      {/* Main 3D Video & Visual Frame */}
+      {/* Main 3D Canvas / Video & Visual Frame */}
       <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-slate-950 border border-slate-800/80 shadow-inner group">
-        {/* Looping 3D / Tech Video with ambient styling */}
-        <video
-          key={activeProduct.videoUrl}
-          autoPlay
-          loop
-          muted
-          playsInline
-          poster={activeProduct.imageUrl}
-          className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
-        >
-          <source src={activeProduct.videoUrl} type="video/mp4" />
-        </video>
+        {displayMode === '3d' ? (
+          <Suspense
+            fallback={
+              <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center text-slate-400">
+                <div className="w-7 h-7 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin mb-2" />
+                <span className="text-xs font-mono">Đang nạp 3D...</span>
+              </div>
+            }
+          >
+            <Hero3DCanvas />
+          </Suspense>
+        ) : (
+          <>
+            {/* Looping 3D / Tech Video with ambient styling */}
+            <video
+              key={activeProduct.videoUrl}
+              autoPlay
+              loop
+              muted
+              playsInline
+              poster={activeProduct.imageUrl}
+              className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+            >
+              <source src={activeProduct.videoUrl} type="video/mp4" />
+            </video>
 
-        {/* Subtle grid mesh overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0ea5e90a_1px,transparent_1px),linear-gradient(to_bottom,#0ea5e90a_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent pointer-events-none" />
+            {/* Subtle grid mesh overlay */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#0ea5e90a_1px,transparent_1px),linear-gradient(to_bottom,#0ea5e90a_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent pointer-events-none" />
 
-        {/* Floating 3D Device Cutout / Poster */}
-        <div className="absolute inset-0 flex items-center justify-center p-6 pointer-events-none">
-          <img
-            src={activeProduct.imageUrl}
-            alt={activeProduct.name}
-            className="max-h-[85%] max-w-[85%] object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.8)] transform group-hover:scale-110 group-hover:-rotate-1 transition-transform duration-500"
-          />
-        </div>
+            {/* Floating 3D Device Cutout / Poster */}
+            <div className="absolute inset-0 flex items-center justify-center p-6 pointer-events-none">
+              <img
+                src={activeProduct.imageUrl}
+                alt={activeProduct.name}
+                className="max-h-[85%] max-w-[85%] object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.8)] transform group-hover:scale-110 group-hover:-rotate-1 transition-transform duration-500"
+              />
+            </div>
+          </>
+        )}
 
-        {/* Holographic Badge in Video */}
-        <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-900/85 backdrop-blur-md border border-slate-700/80 text-[11px] font-bold text-white shadow-lg">
+        {/* Holographic Badge in Viewport */}
+        <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-900/85 backdrop-blur-md border border-slate-700/80 text-[11px] font-bold text-white shadow-lg pointer-events-none">
           <svg className="w-3.5 h-3.5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 21 16z" />
           </svg>
-          <span>Mô hình 3D</span>
+          <span>{displayMode === '3d' ? 'Tương tác chuột' : 'Mô hình 3D'}</span>
         </div>
 
         {/* Overlay Info at bottom of frame */}
-        <div className="absolute bottom-3 left-3 right-3 z-10 flex items-end justify-between">
+        <div className="absolute bottom-3 left-3 right-3 z-10 flex items-end justify-between pointer-events-none">
           <div>
             <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">
               {activeProduct.categoryName}
@@ -156,7 +197,7 @@ export const Hero3DShowcase: React.FC = () => {
         ))}
       </div>
 
-      {/* Spotlight Selector Tabs (3 Đề xuất sản phẩm tiêu biểu) */}
+      {/* Spotlight Selector Tabs */}
       <div className="mt-4 pt-3 border-t border-slate-800 space-y-2">
         <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
           Chọn thiết bị tiêu biểu:

@@ -302,7 +302,7 @@ public class VnpayService : IVnpayService
                             SubtotalAmount: subtotalAmount,
                             TotalQuantity: totalQuantity
                         ), ct);
-                    if (shippingCalc.IsSuccess)
+                    if (shippingCalc.IsSuccess && shippingCalc.Data != null)
                     {
                         shippingFee = shippingCalc.Data.ShippingFee;
                     }
