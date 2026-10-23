@@ -23,28 +23,24 @@ test.describe('MadK Store - Comprehensive E2E Testing', () => {
     await expect(page).toHaveURL(/search=ROG/);
   });
 
-  test('2. Xem chi tiết sản phẩm và thêm vào giỏ hàng', async ({ page }) => {
-    // Điều hướng trực tiếp tới sản phẩm spotlight
+  test('2. Khách chưa đăng nhập bấm thêm giỏ sẽ được yêu cầu đăng nhập', async ({ page }) => {
+    // Điều hướng trực tiếp tới sản phẩm spotlight khi chưa đăng nhập
     await page.goto('/products/laptop-asus-rog-strix-scar-16');
 
     // Kiểm tra thông tin sản phẩm hiển thị dạng HTML chuẩn
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 
-    // Kiểm tra nút thêm vào giỏ hàng
+    // Kiểm tra có thông báo nhắc đăng nhập
+    await expect(page.getByText(/Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng/i)).toBeVisible();
+
+    // Nhấp nút thêm vào giỏ hàng
     const addToCartBtn = page.getByRole('button', { name: /Thêm vào giỏ/i });
     await expect(addToCartBtn).toBeVisible();
     await addToCartBtn.click();
 
-    // Chờ thông báo đã thêm vào giỏ hàng
-    await expect(page.getByText(/Đã thêm.*vào giỏ hàng/i)).toBeVisible({ timeout: 10000 });
-
-    // Điều hướng vào trang giỏ hàng
-    await page.goto('/cart');
-    await expect(page).toHaveURL(/cart/);
-
-    // Xác nhận có nút Tiến hành đặt hàng trong giỏ
-    const checkoutBtn = page.getByRole('button', { name: /Tiến hành đặt hàng/i });
-    await expect(checkoutBtn).toBeVisible({ timeout: 10000 });
+    // Xác nhận chuyển hướng sang trang đăng nhập với tham số redirect
+    await page.waitForURL((url) => url.pathname.includes('/auth/login'), { timeout: 10000 });
+    expect(page.url()).toContain('redirect');
   });
 
   test('3. Đăng nhập tài khoản khách hàng', async ({ page }) => {
@@ -62,8 +58,15 @@ test.describe('MadK Store - Comprehensive E2E Testing', () => {
     await page.waitForURL((url) => !url.pathname.includes('/auth/login'), { timeout: 10000 });
   });
 
-  test('4. Đặt hàng COD hoàn tất với điểm nhấn 3D', async ({ page }) => {
-    // Thêm sản phẩm vào giỏ
+  test('4. Đặt hàng COD hoàn tất sau khi đăng nhập với điểm nhấn 3D', async ({ page }) => {
+    // Đăng nhập trước
+    await page.goto('/auth/login');
+    await page.locator('input[type="email"], input[name="email"]').fill('customer@madkstore.local');
+    await page.locator('input[type="password"], input[name="password"]').fill('Customer@123');
+    await page.getByRole('button', { name: /Đăng nhập/i }).click();
+    await page.waitForURL((url) => !url.pathname.includes('/auth/login'), { timeout: 10000 });
+
+    // Sau khi đăng nhập, thêm sản phẩm vào giỏ
     await page.goto('/products/laptop-asus-rog-strix-scar-16');
     const addToCartBtn = page.getByRole('button', { name: /Thêm vào giỏ/i });
     await expect(addToCartBtn).toBeVisible();

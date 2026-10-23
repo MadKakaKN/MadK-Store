@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import catalogApi from '../../../api/catalogApi';
 import { ProductDetailDto, ProductVariantDto } from '../../../types/catalog';
 import { formatVND } from '../../../utils/format';
@@ -8,12 +8,15 @@ const Product3DViewer = React.lazy(
   () => import('../components/product-viewer/Product3DViewer')
 );
 import { useCart } from '../../cart/context/CartContext';
+import { useAuth } from '../../auth/context/AuthContext';
 import SEOHead, { buildProductSchema, buildBreadcrumbSchema } from '../../../components/common/SEOHead';
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { addToCart } = useCart();
+  const { isAuthenticated } = useAuth();
 
   const [product, setProduct] = useState<ProductDetailDto | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariantDto | null>(null);
@@ -129,6 +132,13 @@ export const ProductDetailPage: React.FC = () => {
 
   const handleAddToCart = async () => {
     if (isOutOfStock || !selectedVariant) return;
+
+    if (!isAuthenticated) {
+      showToast('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.');
+      navigate(`/auth/login?redirect=${encodeURIComponent(location.pathname)}`);
+      return;
+    }
+
     setIsAddingToCart(true);
     const res = await addToCart(selectedVariant.id, quantity);
     setIsAddingToCart(false);
@@ -136,18 +146,30 @@ export const ProductDetailPage: React.FC = () => {
       const variantLabel = selectedVariant?.name || 'Mặc định';
       showToast(res.message || `Đã thêm ${quantity}x "${product?.name} (${variantLabel})" vào giỏ hàng!`);
     } else {
+      if (res.requireLogin) {
+        navigate(`/auth/login?redirect=${encodeURIComponent(location.pathname)}`);
+      }
       showToast(res.error || 'Không thể thêm vào giỏ hàng.');
     }
   };
 
   const handleBuyNow = async () => {
     if (isOutOfStock || !selectedVariant) return;
+
+    if (!isAuthenticated) {
+      navigate(`/auth/login?redirect=${encodeURIComponent(location.pathname)}`);
+      return;
+    }
+
     setIsAddingToCart(true);
     const res = await addToCart(selectedVariant.id, quantity);
     setIsAddingToCart(false);
     if (res.success) {
       navigate('/cart');
     } else {
+      if (res.requireLogin) {
+        navigate(`/auth/login?redirect=${encodeURIComponent(location.pathname)}`);
+      }
       showToast(res.error || 'Không thể thêm vào giỏ hàng.');
     }
   };
@@ -481,6 +503,22 @@ export const ProductDetailPage: React.FC = () => {
               )}
             </div>
           </div>
+
+          {/* Guest login requirement hint */}
+          {!isAuthenticated && (
+            <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-center justify-between gap-3 shadow-xs">
+              <div className="flex items-center gap-2">
+                <span className="text-base">🔒</span>
+                <span className="font-medium">Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.</span>
+              </div>
+              <Link
+                to={`/auth/login?redirect=${encodeURIComponent(location.pathname)}`}
+                className="font-bold text-brand-700 hover:text-brand-800 underline whitespace-nowrap"
+              >
+                Đăng nhập ngay
+              </Link>
+            </div>
+          )}
 
           {/* Action CTA Buttons (Desktop view) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">

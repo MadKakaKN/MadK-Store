@@ -106,6 +106,51 @@ export const CartPage: React.FC = () => {
     }
   };
 
+  // Trạng thái khách chưa đăng nhập
+  if (!isLoading && !isAuthenticated) {
+    return (
+      <div className="py-8 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+        <nav className="flex items-center text-xs sm:text-sm text-slate-500 mb-8 gap-2">
+          <Link to="/" className="hover:text-brand-600 transition-colors">
+            Trang chủ
+          </Link>
+          <span>&rsaquo;</span>
+          <span className="font-semibold text-slate-900">Giỏ hàng</span>
+        </nav>
+
+        <div className="bg-white rounded-3xl p-8 sm:p-14 border border-slate-200/80 shadow-sm text-center space-y-6">
+          <div className="w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-3xl bg-amber-50 text-amber-600 flex items-center justify-center shadow-inner text-4xl">
+            🔒
+          </div>
+
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+              Vui lòng đăng nhập để xem giỏ hàng
+            </h1>
+            <p className="mt-3 text-sm sm:text-base text-slate-500 max-w-md mx-auto leading-relaxed">
+              Bạn cần đăng nhập tài khoản để lưu trữ sản phẩm trong giỏ hàng, nhận ưu đãi độc quyền và tiến hành thanh toán an toàn.
+            </p>
+          </div>
+
+          <div className="pt-2 flex flex-wrap justify-center gap-3">
+            <Link
+              to="/auth/login?redirect=/cart"
+              className="inline-flex items-center px-7 py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-sm sm:text-base shadow-lg shadow-brand-600/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            >
+              Đăng nhập ngay &rarr;
+            </Link>
+            <Link
+              to="/auth/register"
+              className="inline-flex items-center px-6 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm sm:text-base transition-colors"
+            >
+              Đăng ký tài khoản
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Trạng thái giỏ hàng rỗng
   if (!isLoading && items.length === 0) {
     return (

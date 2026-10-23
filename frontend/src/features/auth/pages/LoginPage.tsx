@@ -6,7 +6,7 @@ export const LoginPage: React.FC = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const redirectUrl = searchParams.get('redirect') || '/account';
+  const redirectUrl = searchParams.get('redirect') || searchParams.get('returnUrl') || '/account';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

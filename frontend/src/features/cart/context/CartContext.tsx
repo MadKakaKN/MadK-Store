@@ -13,7 +13,7 @@ interface CartContextType {
     variantId: string,
     quantity?: number,
     clientPrice?: number
-  ) => Promise<{ success: boolean; message?: string; error?: string }>;
+  ) => Promise<{ success: boolean; message?: string; error?: string; requireLogin?: boolean }>;
   updateQuantity: (itemId: string, quantity: number) => Promise<{ success: boolean; error?: string }>;
   removeItem: (itemId: string) => Promise<{ success: boolean; error?: string }>;
   clearCart: () => Promise<{ success: boolean; error?: string }>;
@@ -29,6 +29,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const prevUserRef = useRef<string | null>(null);
 
   const refreshCart = useCallback(async () => {
+    if (!isAuthenticated) {
+      setCart(null);
+      setIsLoading(false);
+      return;
+    }
+
     try {
       setIsLoading(true);
       const res = await cartApi.getCart();
@@ -40,49 +46,27 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [isAuthenticated]);
 
-  // Nạp giỏ hàng lần đầu khi mount
+  // Nạp giỏ hàng khi mount hoặc khi trạng thái đăng nhập thay đổi
   useEffect(() => {
     refreshCart();
-  }, [refreshCart]);
+  }, [refreshCart, isAuthenticated]);
 
-  // Xử lý tự động gộp giỏ hàng (Merge Cart) khi người dùng vừa đăng nhập
+  // Khi đăng xuất, xóa sạch thông tin giỏ hàng
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setCart(null);
+      guestSessionStorage.clearGuestCart();
+    }
+  }, [isAuthenticated]);
+
+  // Xử lý tự động nạp giỏ hàng khi người dùng vừa đăng nhập
   useEffect(() => {
     const currentUserId = user?.id || null;
-    const wasAnonymous = prevUserRef.current === null;
-
-    if (isAuthenticated && wasAnonymous && currentUserId) {
-      const guestItems = guestSessionStorage.getGuestItems();
-      const guestAnonId = guestSessionStorage.getAnonymousId();
-
-      if (guestItems.length > 0 || guestAnonId) {
-        setIsLoading(true);
-        cartApi
-          .mergeCart({
-            anonymousId: guestAnonId,
-            items: guestItems,
-          })
-          .then((res) => {
-            if (res.isSuccess && res.data) {
-              setCart(res.data);
-            } else {
-              refreshCart();
-            }
-          })
-          .catch(() => {
-            refreshCart();
-          })
-          .finally(() => {
-            setIsLoading(false);
-          });
-      } else {
-        refreshCart();
-      }
-    } else if (prevUserRef.current !== currentUserId) {
+    if (isAuthenticated && currentUserId) {
       refreshCart();
     }
-
     prevUserRef.current = currentUserId;
   }, [isAuthenticated, user?.id, refreshCart]);
 
@@ -90,7 +74,15 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     variantId: string,
     quantity: number = 1,
     clientPrice?: number
-  ): Promise<{ success: boolean; message?: string; error?: string }> => {
+  ): Promise<{ success: boolean; message?: string; error?: string; requireLogin?: boolean }> => {
+    if (!isAuthenticated) {
+      return {
+        success: false,
+        error: 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.',
+        requireLogin: true,
+      };
+    }
+
     try {
       setIsLoading(true);
       const res = await cartApi.addItem({
