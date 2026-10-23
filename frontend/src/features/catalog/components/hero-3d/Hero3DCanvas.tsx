@@ -11,14 +11,27 @@ interface Hero3DCanvasProps {
 }
 
 /**
+ * Loads a texture with automatic SRGB color space conversion
+ */
+function useLoadedTexture(url: string) {
+  return useMemo(() => {
+    const loader = new THREE.TextureLoader();
+    const tex = loader.load(url);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    return tex;
+  }, [url]);
+}
+
+/**
  * High-fidelity 3D Gaming Laptop Model (ROG Strix SCAR 16)
- * Complete with open chassis, RGB front bar, backlit keyboard, touchpad,
- * and illuminated gaming screen with rear ROG Eye logo.
+ * Features real 2K ROG Strix screen display, RGB light bar, per-key backlit keyboard,
+ * glass touchpad, and rear glowing ROG Eye emblem.
  */
 function Laptop3DModel() {
+  const screenTex = useLoadedTexture('/images/products/rog-scar-screen-flat.jpg');
   const rgbBarRef = useRef<THREE.Mesh>(null);
 
-  // Dynamic RGB cycling
+  // Dynamic RGB cycling along front edge
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
     if (rgbBarRef.current) {
@@ -72,7 +85,7 @@ function Laptop3DModel() {
       {/* KEYBOARD RECESS */}
       <mesh position={[0, 0.075, -0.2]} receiveShadow>
         <boxGeometry args={[2.7, 0.02, 1.15]} />
-        <meshStandardMaterial color="#020617" roughness={0.6} />
+        <meshStandardMaterial color="#020617" roughness={0.7} />
       </mesh>
 
       {/* KEYBOARD KEYS */}
@@ -116,7 +129,7 @@ function Laptop3DModel() {
 
         {/* ROG Eye Crimson Logo on back of lid */}
         <mesh position={[0.75, 1.35, -0.045]}>
-          <planeGeometry args={[0.5, 0.4]} />
+          <planeGeometry args={[0.55, 0.45]} />
           <meshBasicMaterial color="#EF4444" transparent opacity={0.95} />
         </mesh>
 
@@ -132,21 +145,15 @@ function Laptop3DModel() {
           <meshStandardMaterial color="#000000" roughness={0.9} />
         </mesh>
 
-        {/* High-Refresh Glowing Gaming Screen */}
+        {/* Photorealistic ROG Strix SCAR 16 Gaming Screen Display */}
         <mesh position={[0, 1.05, 0.048]}>
           <planeGeometry args={[3.04, 1.94]} />
           <meshStandardMaterial
-            color="#0284C7"
-            emissive="#0369A1"
-            emissiveIntensity={0.65}
+            map={screenTex}
+            emissive="#0284C7"
+            emissiveIntensity={0.3}
             roughness={0.1}
           />
-        </mesh>
-
-        {/* ROG Strix Wallpaper Accent inside display */}
-        <mesh position={[0, 1.05, 0.05]}>
-          <planeGeometry args={[1.2, 0.8]} />
-          <meshBasicMaterial color="#38BDF8" transparent opacity={0.7} />
         </mesh>
       </group>
 
@@ -164,75 +171,98 @@ function Laptop3DModel() {
 }
 
 /**
- * High-fidelity 3D Smartphone Model (iPhone 15 Pro Max)
- * Titanium frame, Dynamic Island screen, and Triple Camera island.
+ * Photorealistic 3D Smartphone Model (Apple iPhone 15 Pro Max)
+ * Built with authentic 4K textures for both the Ceramic Shield iOS 17 front display
+ * and Natural Titanium frosted glass back with Apple logo and 3D sapphire camera lenses.
  */
 function Phone3DModel() {
-  return (
-    <group position={[0, 0, 0]} rotation={[0.2, -0.3, 0]}>
-      {/* Titanium Body Shell */}
-      <mesh castShadow receiveShadow>
-        <boxGeometry args={[1.5, 3.1, 0.18]} />
-        <meshStandardMaterial color="#64748B" metalness={0.95} roughness={0.2} />
-      </mesh>
+  const frontTex = useLoadedTexture('/images/products/iphone15-screen-texture.jpg');
+  const backTex = useLoadedTexture('/images/products/iphone15-back-texture.jpg');
 
-      {/* Front Glass Screen */}
-      <mesh position={[0, 0, 0.092]}>
-        <planeGeometry args={[1.42, 3.02]} />
+  return (
+    <group position={[0, 0, 0]} rotation={[0.15, -0.35, 0]}>
+      {/* Curved Titanium Perimeter Frame */}
+      <mesh castShadow receiveShadow>
+        <boxGeometry args={[1.52, 3.12, 0.16]} />
         <meshStandardMaterial
-          color="#0f172a"
-          emissive="#1e1b4b"
-          emissiveIntensity={0.6}
-          roughness={0.08}
+          color="#94A3B8"
+          metalness={0.96}
+          roughness={0.22}
         />
       </mesh>
 
-      {/* Screen Wallpaper Glow */}
-      <mesh position={[0, 0, 0.093]}>
-        <planeGeometry args={[1.2, 2.4]} />
-        <meshBasicMaterial color="#38BDF8" transparent opacity={0.4} />
+      {/* Front Face: Photorealistic iOS 17 Display (9:41, Dynamic Island, Wallpaper) */}
+      <mesh position={[0, 0, 0.082]}>
+        <planeGeometry args={[1.48, 3.08]} />
+        <meshStandardMaterial
+          map={frontTex}
+          emissive="#1E293B"
+          emissiveIntensity={0.2}
+          roughness={0.1}
+          metalness={0.1}
+        />
       </mesh>
 
-      {/* Dynamic Island Pill */}
-      <mesh position={[0, 1.22, 0.095]}>
-        <planeGeometry args={[0.38, 0.1]} />
-        <meshBasicMaterial color="#000000" />
+      {/* Back Face: Natural Titanium Frosted Glass with Apple Logo & Triple Camera */}
+      <mesh position={[0, 0, -0.082]} rotation={[0, Math.PI, 0]}>
+        <planeGeometry args={[1.48, 3.08]} />
+        <meshStandardMaterial
+          map={backTex}
+          roughness={0.4}
+          metalness={0.5}
+        />
       </mesh>
 
-      {/* Back Glass Panel */}
-      <mesh position={[0, 0, -0.092]}>
-        <planeGeometry args={[1.44, 3.04]} />
-        <meshStandardMaterial color="#334155" roughness={0.4} metalness={0.6} />
+      {/* 3D Depth Camera Island Plateau & Lenses */}
+      <mesh position={[-0.34, 0.95, -0.11]}>
+        <boxGeometry args={[0.68, 0.76, 0.05]} />
+        <meshStandardMaterial color="#64748B" metalness={0.8} roughness={0.3} />
       </mesh>
 
-      {/* Camera Bump Plateau */}
-      <mesh position={[-0.32, 0.92, -0.13]}>
-        <boxGeometry args={[0.68, 0.78, 0.08]} />
-        <meshStandardMaterial color="#475569" metalness={0.8} roughness={0.3} />
+      {/* Triple Sapphire Camera Lenses with reflection rings */}
+      <mesh position={[-0.48, 1.12, -0.15]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.13, 0.13, 0.05, 24]} />
+        <meshStandardMaterial color="#020617" metalness={0.95} roughness={0.05} />
+      </mesh>
+      <mesh position={[-0.48, 0.78, -0.15]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.13, 0.13, 0.05, 24]} />
+        <meshStandardMaterial color="#020617" metalness={0.95} roughness={0.05} />
+      </mesh>
+      <mesh position={[-0.18, 0.95, -0.15]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.13, 0.13, 0.05, 24]} />
+        <meshStandardMaterial color="#020617" metalness={0.95} roughness={0.05} />
       </mesh>
 
-      {/* 3 Camera Lenses with Metallic Rings */}
-      <mesh position={[-0.46, 1.08, -0.18]} rotation={[Math.PI / 2, 0, 0]}>
-        <cylinderGeometry args={[0.13, 0.13, 0.04, 24]} />
-        <meshStandardMaterial color="#020617" metalness={0.95} roughness={0.1} />
+      {/* Titanium Side Buttons */}
+      {/* Action Button & Volume Rockers (Left) */}
+      <mesh position={[-0.77, 0.8, 0]}>
+        <boxGeometry args={[0.02, 0.14, 0.04]} />
+        <meshStandardMaterial color="#CBD5E1" metalness={0.95} roughness={0.2} />
       </mesh>
-      <mesh position={[-0.46, 0.76, -0.18]} rotation={[Math.PI / 2, 0, 0]}>
-        <cylinderGeometry args={[0.13, 0.13, 0.04, 24]} />
-        <meshStandardMaterial color="#020617" metalness={0.95} roughness={0.1} />
+      <mesh position={[-0.77, 0.5, 0]}>
+        <boxGeometry args={[0.02, 0.22, 0.04]} />
+        <meshStandardMaterial color="#CBD5E1" metalness={0.95} roughness={0.2} />
       </mesh>
-      <mesh position={[-0.18, 0.92, -0.18]} rotation={[Math.PI / 2, 0, 0]}>
-        <cylinderGeometry args={[0.13, 0.13, 0.04, 24]} />
-        <meshStandardMaterial color="#020617" metalness={0.95} roughness={0.1} />
+      <mesh position={[-0.77, 0.2, 0]}>
+        <boxGeometry args={[0.02, 0.22, 0.04]} />
+        <meshStandardMaterial color="#CBD5E1" metalness={0.95} roughness={0.2} />
+      </mesh>
+
+      {/* Power Button (Right) */}
+      <mesh position={[0.77, 0.45, 0]}>
+        <boxGeometry args={[0.02, 0.35, 0.04]} />
+        <meshStandardMaterial color="#CBD5E1" metalness={0.95} roughness={0.2} />
       </mesh>
     </group>
   );
 }
 
 /**
- * High-fidelity 3D Graphics Card Model (ROG Strix RTX 4090)
+ * Photorealistic 3D Graphics Card Model (ROG Strix RTX 4090)
  * Massive heatsink, spinning triple axial fans, and illuminated RGB ROG bar.
  */
 function GPU3DModel() {
+  const gpuTex = useLoadedTexture('/images/products/rog-strix-rtx-4090.jpg');
   const fan1 = useRef<THREE.Group>(null);
   const fan2 = useRef<THREE.Group>(null);
   const fan3 = useRef<THREE.Group>(null);
@@ -245,35 +275,35 @@ function GPU3DModel() {
 
   return (
     <group position={[0, 0, 0]} rotation={[0.2, -0.3, 0]}>
-      {/* Heavy Die-Cast Shroud */}
+      {/* Heavy Die-Cast Shroud with Real Graphics Texture */}
       <mesh castShadow receiveShadow>
         <boxGeometry args={[3.2, 1.4, 0.58]} />
         <meshStandardMaterial color="#0F172A" metalness={0.9} roughness={0.25} />
       </mesh>
 
-      {/* Heatsink Fin Stack */}
-      <mesh position={[0, 0, -0.05]}>
-        <boxGeometry args={[3.1, 1.3, 0.45]} />
-        <meshStandardMaterial color="#64748B" metalness={0.95} roughness={0.2} />
+      {/* Front Face Texture */}
+      <mesh position={[0, 0, 0.292]}>
+        <planeGeometry args={[3.16, 1.36]} />
+        <meshStandardMaterial map={gpuTex} roughness={0.3} metalness={0.7} />
       </mesh>
 
-      {/* Triple Axial Fans */}
-      <group position={[-0.95, 0, 0.3]} ref={fan1}>
+      {/* Triple Axial Fans Overlay */}
+      <group position={[-0.95, 0, 0.31]} ref={fan1}>
         <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[0.42, 0.42, 0.04, 24]} />
-          <meshStandardMaterial color="#1E293B" metalness={0.8} roughness={0.3} />
+          <cylinderGeometry args={[0.38, 0.38, 0.03, 24]} />
+          <meshStandardMaterial color="#1E293B" metalness={0.8} roughness={0.3} transparent opacity={0.6} />
         </mesh>
       </group>
-      <group position={[0, 0, 0.3]} ref={fan2}>
+      <group position={[0, 0, 0.31]} ref={fan2}>
         <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[0.42, 0.42, 0.04, 24]} />
-          <meshStandardMaterial color="#1E293B" metalness={0.8} roughness={0.3} />
+          <cylinderGeometry args={[0.38, 0.38, 0.03, 24]} />
+          <meshStandardMaterial color="#1E293B" metalness={0.8} roughness={0.3} transparent opacity={0.6} />
         </mesh>
       </group>
-      <group position={[0.95, 0, 0.3]} ref={fan3}>
+      <group position={[0.95, 0, 0.31]} ref={fan3}>
         <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[0.42, 0.42, 0.04, 24]} />
-          <meshStandardMaterial color="#1E293B" metalness={0.8} roughness={0.3} />
+          <cylinderGeometry args={[0.38, 0.38, 0.03, 24]} />
+          <meshStandardMaterial color="#1E293B" metalness={0.8} roughness={0.3} transparent opacity={0.6} />
         </mesh>
       </group>
 
