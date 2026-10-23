@@ -10,6 +10,7 @@ const Product3DViewer = React.lazy(
 import { useCart } from '../../cart/context/CartContext';
 import { useAuth } from '../../auth/context/AuthContext';
 import SEOHead, { buildProductSchema, buildBreadcrumbSchema } from '../../../components/common/SEOHead';
+import AuthRequiredModal from '../../../components/common/AuthRequiredModal';
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -27,6 +28,7 @@ export const ProductDetailPage: React.FC = () => {
   const [viewMode, setViewMode] = useState<'2d' | '3d'>('2d');
   const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'policy'>('desc');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -134,8 +136,7 @@ export const ProductDetailPage: React.FC = () => {
     if (isOutOfStock || !selectedVariant) return;
 
     if (!isAuthenticated) {
-      showToast('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.');
-      navigate(`/auth/login?redirect=${encodeURIComponent(location.pathname)}`);
+      setShowAuthModal(true);
       return;
     }
 
@@ -147,7 +148,7 @@ export const ProductDetailPage: React.FC = () => {
       showToast(res.message || `Đã thêm ${quantity}x "${product?.name} (${variantLabel})" vào giỏ hàng!`);
     } else {
       if (res.requireLogin) {
-        navigate(`/auth/login?redirect=${encodeURIComponent(location.pathname)}`);
+        setShowAuthModal(true);
       }
       showToast(res.error || 'Không thể thêm vào giỏ hàng.');
     }
@@ -157,7 +158,7 @@ export const ProductDetailPage: React.FC = () => {
     if (isOutOfStock || !selectedVariant) return;
 
     if (!isAuthenticated) {
-      navigate(`/auth/login?redirect=${encodeURIComponent(location.pathname)}`);
+      setShowAuthModal(true);
       return;
     }
 
@@ -168,7 +169,7 @@ export const ProductDetailPage: React.FC = () => {
       navigate('/cart');
     } else {
       if (res.requireLogin) {
-        navigate(`/auth/login?redirect=${encodeURIComponent(location.pathname)}`);
+        setShowAuthModal(true);
       }
       showToast(res.error || 'Không thể thêm vào giỏ hàng.');
     }
@@ -511,12 +512,13 @@ export const ProductDetailPage: React.FC = () => {
                 <span className="text-base">🔒</span>
                 <span className="font-medium">Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.</span>
               </div>
-              <Link
-                to={`/auth/login?redirect=${encodeURIComponent(location.pathname)}`}
+              <button
+                type="button"
+                onClick={() => setShowAuthModal(true)}
                 className="font-bold text-brand-700 hover:text-brand-800 underline whitespace-nowrap"
               >
                 Đăng nhập ngay
-              </Link>
+              </button>
             </div>
           )}
 
@@ -702,6 +704,13 @@ export const ProductDetailPage: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* Auth Required Popup Modal (Login & Sign Up) */}
+      <AuthRequiredModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        redirectUrl={location.pathname}
+      />
     </div>
   );
 };

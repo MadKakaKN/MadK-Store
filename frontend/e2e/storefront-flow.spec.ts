@@ -23,20 +23,30 @@ test.describe('MadK Store - Comprehensive E2E Testing', () => {
     await expect(page).toHaveURL(/search=ROG/);
   });
 
-  test('2. Khách chưa đăng nhập bấm thêm giỏ sẽ được yêu cầu đăng nhập', async ({ page }) => {
+  test('2. Khách chưa đăng nhập bấm thêm giỏ sẽ hiển thị popup yêu cầu đăng nhập có 2 nút Login và Sign Up', async ({ page }) => {
     // Điều hướng trực tiếp tới sản phẩm spotlight khi chưa đăng nhập
     await page.goto('/products/laptop-asus-rog-strix-scar-16');
 
     // Kiểm tra thông tin sản phẩm hiển thị dạng HTML chuẩn
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 
-    // Kiểm tra có thông báo nhắc đăng nhập
-    await expect(page.getByText(/Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng/i)).toBeVisible();
-
     // Nhấp nút thêm vào giỏ hàng
     const addToCartBtn = page.getByRole('button', { name: /Thêm vào giỏ/i });
     await expect(addToCartBtn).toBeVisible();
     await addToCartBtn.click();
+
+    // Xác nhận popup modal hiển thị với tiêu đề và 2 nút hành động
+    const modal = page.locator('[role="dialog"]');
+    await expect(modal).toBeVisible({ timeout: 5000 });
+    await expect(modal.getByText(/Đăng nhập để tiếp tục/i)).toBeVisible();
+
+    const loginBtn = modal.getByRole('link', { name: /Đăng nhập \(Login\)/i });
+    const signUpBtn = modal.getByRole('link', { name: /Tạo tài khoản mới \(Sign Up\)/i });
+    await expect(loginBtn).toBeVisible();
+    await expect(signUpBtn).toBeVisible();
+
+    // Nhấp nút Đăng nhập từ popup modal
+    await loginBtn.click();
 
     // Xác nhận chuyển hướng sang trang đăng nhập với tham số redirect
     await page.waitForURL((url) => url.pathname.includes('/auth/login'), { timeout: 10000 });
