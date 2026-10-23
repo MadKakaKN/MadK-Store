@@ -213,25 +213,6 @@ function Phone3DModel() {
         />
       </mesh>
 
-      {/* 3D Depth Camera Island Plateau & Lenses */}
-      <mesh position={[-0.34, 0.95, -0.11]}>
-        <boxGeometry args={[0.68, 0.76, 0.05]} />
-        <meshStandardMaterial color="#64748B" metalness={0.8} roughness={0.3} />
-      </mesh>
-
-      {/* Triple Sapphire Camera Lenses with reflection rings */}
-      <mesh position={[-0.48, 1.12, -0.15]} rotation={[Math.PI / 2, 0, 0]}>
-        <cylinderGeometry args={[0.13, 0.13, 0.05, 24]} />
-        <meshStandardMaterial color="#020617" metalness={0.95} roughness={0.05} />
-      </mesh>
-      <mesh position={[-0.48, 0.78, -0.15]} rotation={[Math.PI / 2, 0, 0]}>
-        <cylinderGeometry args={[0.13, 0.13, 0.05, 24]} />
-        <meshStandardMaterial color="#020617" metalness={0.95} roughness={0.05} />
-      </mesh>
-      <mesh position={[-0.18, 0.95, -0.15]} rotation={[Math.PI / 2, 0, 0]}>
-        <cylinderGeometry args={[0.13, 0.13, 0.05, 24]} />
-        <meshStandardMaterial color="#020617" metalness={0.95} roughness={0.05} />
-      </mesh>
 
       {/* Titanium Side Buttons */}
       {/* Action Button & Volume Rockers (Left) */}
