@@ -129,7 +129,12 @@ export const Hero3DShowcase: React.FC = () => {
               </div>
             }
           >
-            <Hero3DCanvas />
+            <Hero3DCanvas
+              key={activeProduct.slug}
+              productSlug={activeProduct.slug}
+              productCategory={activeProduct.categoryName}
+              productName={activeProduct.name}
+            />
           </Suspense>
         ) : (
           <>
@@ -166,7 +171,7 @@ export const Hero3DShowcase: React.FC = () => {
           <svg className="w-3.5 h-3.5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 21 16z" />
           </svg>
-          <span>{displayMode === '3d' ? 'Tương tác chuột' : 'Mô hình 3D'}</span>
+          <span>{displayMode === '3d' ? 'Xoay 360° chuột' : 'Mô hình 3D'}</span>
         </div>
 
         {/* Overlay Info at bottom of frame */}
