@@ -7,6 +7,7 @@ public interface IIdentityService
 {
     Task<Result<AuthResponseDto>> RegisterAsync(RegisterRequestDto request, CancellationToken cancellationToken = default);
     Task<Result<AuthResponseDto>> LoginAsync(LoginRequestDto request, CancellationToken cancellationToken = default);
+    Task<Result<AuthResponseDto>> SocialLoginAsync(SocialLoginRequestDto request, CancellationToken cancellationToken = default);
     Task<Result<AuthResponseDto>> RefreshTokenAsync(RefreshTokenRequestDto request, CancellationToken cancellationToken = default);
     Task<Result> LogoutAsync(Guid userId, string? refreshToken = null, CancellationToken cancellationToken = default);
     Task<Result> VerifyEmailAsync(VerifyEmailRequestDto request, CancellationToken cancellationToken = default);

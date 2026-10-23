@@ -188,6 +188,123 @@ public class IdentityService : IIdentityService
         return Result<AuthResponseDto>.Success(response, "Đăng nhập thành công.");
     }
 
+    public async Task<Result<AuthResponseDto>> SocialLoginAsync(SocialLoginRequestDto request, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(request.Email))
+        {
+            return Result<AuthResponseDto>.Failure("Email không được để trống khi đăng nhập mạng xã hội.");
+        }
+
+        var normalizedEmail = request.Email.Trim().ToLowerInvariant();
+        var provider = string.IsNullOrWhiteSpace(request.Provider) ? "Google" : request.Provider.Trim();
+
+        var user = await _dbContext.Users
+            .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                    .ThenInclude(r => r.RolePermissions)
+                        .ThenInclude(rp => rp.Permission)
+            .FirstOrDefaultAsync(u => u.Email.ToLower() == normalizedEmail, cancellationToken);
+
+        if (user != null)
+        {
+            if (!user.IsActive)
+            {
+                return Result<AuthResponseDto>.Failure("Tài khoản của bạn đã bị vô hiệu hóa.");
+            }
+
+            if (user.IsLockedOut)
+            {
+                return Result<AuthResponseDto>.Failure("Tài khoản đang bị tạm khóa. Vui lòng thử lại sau.");
+            }
+
+            if (!user.EmailConfirmed)
+            {
+                user.EmailConfirmed = true;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.AvatarUrl) && string.IsNullOrWhiteSpace(user.AvatarUrl))
+            {
+                user.AvatarUrl = request.AvatarUrl;
+            }
+
+            user.FailedLoginAttempts = 0;
+            user.LockoutEnd = null;
+        }
+        else
+        {
+            var customerRole = await _dbContext.Roles
+                .FirstOrDefaultAsync(r => r.Name == "Customer", cancellationToken);
+
+            if (customerRole == null)
+            {
+                customerRole = new Role
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Customer",
+                    Description = "Khách hàng mua sắm mặc định",
+                    CreatedAt = DateTime.UtcNow
+                };
+                _dbContext.Roles.Add(customerRole);
+            }
+
+            var displayName = !string.IsNullOrWhiteSpace(request.FullName)
+                ? request.FullName.Trim()
+                : normalizedEmail.Split('@')[0];
+
+            user = new User
+            {
+                Id = Guid.NewGuid(),
+                Email = normalizedEmail,
+                PasswordHash = _passwordHasher.HashPassword(Guid.NewGuid().ToString("N") + "!Aa1"),
+                FullName = displayName,
+                AvatarUrl = request.AvatarUrl,
+                IsActive = true,
+                EmailConfirmed = true,
+                FailedLoginAttempts = 0,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            user.UserRoles.Add(new UserRole
+            {
+                UserId = user.Id,
+                RoleId = customerRole.Id,
+                User = user,
+                Role = customerRole
+            });
+
+            _dbContext.Users.Add(user);
+        }
+
+        var roles = user.UserRoles.Select(ur => ur.Role.Name).ToList();
+        if (!roles.Any())
+        {
+            roles.Add("Customer");
+        }
+
+        var permissions = user.UserRoles
+            .SelectMany(ur => ur.Role.RolePermissions)
+            .Select(rp => rp.Permission.Code)
+            .Distinct()
+            .ToList();
+
+        var accessToken = _jwtTokenGenerator.GenerateAccessToken(user, roles, permissions);
+        var refreshToken = _jwtTokenGenerator.GenerateRefreshToken(user.Id);
+
+        _dbContext.RefreshTokens.Add(refreshToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        var userDto = MapToUserDto(user, roles, permissions);
+        var response = new AuthResponseDto(
+            AccessToken: accessToken,
+            RefreshToken: refreshToken.Token,
+            ExpiresIn: _jwtTokenGenerator.GetAccessTokenExpirySeconds(),
+            User: userDto
+        );
+
+        _logger.LogInformation("Người dùng {Email} đã đăng nhập thành công qua {Provider}", normalizedEmail, provider);
+        return Result<AuthResponseDto>.Success(response, $"Đăng nhập thành công qua {provider}.");
+    }
+
     public async Task<Result<AuthResponseDto>> RefreshTokenAsync(RefreshTokenRequestDto request, CancellationToken cancellationToken = default)
     {
         var existingToken = await _dbContext.RefreshTokens

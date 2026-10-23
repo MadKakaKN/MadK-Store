@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { UserDto, LoginRequestDto, RegisterRequestDto } from '../../../types/auth';
+import { UserDto, LoginRequestDto, RegisterRequestDto, SocialLoginRequestDto } from '../../../types/auth';
 import authApi, { tokenStorage } from '../../../api/authApi';
 
 interface AuthContextType {
@@ -7,6 +7,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (data: LoginRequestDto) => Promise<{ success: boolean; error?: string }>;
+  socialLogin: (data: SocialLoginRequestDto) => Promise<{ success: boolean; error?: string }>;
   register: (data: RegisterRequestDto) => Promise<{ success: boolean; message?: string; error?: string }>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
@@ -84,6 +85,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const socialLogin = async (
+    data: SocialLoginRequestDto
+  ): Promise<{ success: boolean; error?: string }> => {
+    setIsLoading(true);
+    try {
+      const res = await authApi.socialLogin(data);
+      if (res.isSuccess && res.data) {
+        tokenStorage.setTokens(res.data.accessToken, res.data.refreshToken, res.data.user);
+        setUser(res.data.user);
+        return { success: true };
+      }
+      return { success: false, error: res.error || 'Đăng nhập mạng xã hội không thành công.' };
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Lỗi kết nối khi xác thực mạng xã hội.';
+      return { success: false, error: msg };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const register = async (
     data: RegisterRequestDto
   ): Promise<{ success: boolean; message?: string; error?: string }> => {
@@ -124,6 +145,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isAuthenticated: !!user && !!tokenStorage.getAccessToken(),
     isLoading,
     login,
+    socialLogin,
     register,
     logout,
     refreshUser,

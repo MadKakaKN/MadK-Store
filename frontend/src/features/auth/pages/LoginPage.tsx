@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { SocialAuthButtons } from '../components/SocialAuthButtons';
 
 export const LoginPage: React.FC = () => {
   const { login } = useAuth();
@@ -246,6 +247,13 @@ export const LoginPage: React.FC = () => {
               </button>
             </div>
           </form>
+
+          {/* Social Logins */}
+          <SocialAuthButtons
+            layout="full"
+            onSuccess={() => navigate(redirectUrl, { replace: true })}
+            onError={(err) => setServerError(err)}
+          />
         </div>
       </div>
     </div>

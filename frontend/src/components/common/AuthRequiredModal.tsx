@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { SocialAuthButtons } from '../../features/auth/components/SocialAuthButtons';
 
 export interface AuthRequiredModalProps {
   isOpen: boolean;
@@ -115,10 +116,16 @@ export const AuthRequiredModal: React.FC<AuthRequiredModalProps> = ({
             </svg>
             <span>Tạo tài khoản mới (Sign Up)</span>
           </Link>
+
+          {/* Social 1-click Quick Login */}
+          <SocialAuthButtons
+            layout="compact"
+            onSuccess={onClose}
+          />
         </div>
 
         {/* Dismiss Footer */}
-        <div className="mt-4 pt-2">
+        <div className="mt-4 pt-1">
           <button
             type="button"
             onClick={onClose}

@@ -56,6 +56,23 @@ public class AuthController : ControllerBase
     }
 
     /// <summary>
+    /// Đăng nhập / đăng ký tự động qua tài khoản mạng xã hội (Google, GitHub, Facebook...).
+    /// </summary>
+    [HttpPost("social-login")]
+    [ProducesResponseType(typeof(Result<AuthResponseDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<AuthResponseDto>), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> SocialLogin([FromBody] SocialLoginRequestDto request, CancellationToken ct)
+    {
+        var result = await _identityService.SocialLoginAsync(request, ct);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
+
+    /// <summary>
     /// Làm mới access token bằng refresh token xoay vòng kèm cơ chế phát hiện tái sử dụng trái phép (Token Reuse Detection).
     /// </summary>
     [HttpPost("refresh-token")]

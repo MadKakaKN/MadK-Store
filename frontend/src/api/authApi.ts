@@ -4,6 +4,7 @@ import {
   UserDto,
   RegisterRequestDto,
   LoginRequestDto,
+  SocialLoginRequestDto,
   RefreshTokenRequestDto,
   VerifyEmailRequestDto,
   ForgotPasswordRequestDto,
@@ -128,6 +129,34 @@ export const authApi = {
           message: 'Đăng nhập thành công (Mock).',
         };
       });
+    }
+  },
+
+  async socialLogin(data: SocialLoginRequestDto): Promise<ApiEnvelope<AuthResponseDto>> {
+    try {
+      const res = await apiClient.post<ApiEnvelope<AuthResponseDto>>('/auth/social-login', data);
+      return res.data;
+    } catch (err: unknown) {
+      return handleApiError(err, () => ({
+        isSuccess: true,
+        data: {
+          accessToken: 'mock_jwt_social_' + data.provider.toLowerCase() + '_' + Date.now(),
+          refreshToken: 'mock_refresh_' + Date.now(),
+          expiresIn: 3600,
+          user: {
+            id: 'mock-social-' + Date.now(),
+            email: data.email,
+            fullName: data.fullName || `${data.provider} User`,
+            avatarUrl: data.avatarUrl || null,
+            phoneNumber: null,
+            isActive: true,
+            emailConfirmed: true,
+            roles: ['Customer'],
+            permissions: [],
+          },
+        },
+        message: `Đăng nhập thành công với ${data.provider}!`,
+      }));
     }
   },
 

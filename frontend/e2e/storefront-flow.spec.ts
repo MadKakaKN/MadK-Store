@@ -61,7 +61,7 @@ test.describe('MadK Store - Comprehensive E2E Testing', () => {
     await page.locator('input[type="password"], input[name="password"]').fill('Customer@123');
 
     // Nhấp nút Đăng nhập
-    const submitBtn = page.getByRole('button', { name: /Đăng nhập/i });
+    const submitBtn = page.getByRole('button', { name: 'Đăng nhập', exact: true });
     await submitBtn.click();
 
     // Kiểm tra đăng nhập thành công và chuyển hướng về trang chủ hoặc tài khoản
@@ -73,7 +73,7 @@ test.describe('MadK Store - Comprehensive E2E Testing', () => {
     await page.goto('/auth/login');
     await page.locator('input[type="email"], input[name="email"]').fill('customer@madkstore.local');
     await page.locator('input[type="password"], input[name="password"]').fill('Customer@123');
-    await page.getByRole('button', { name: /Đăng nhập/i }).click();
+    await page.getByRole('button', { name: 'Đăng nhập', exact: true }).click();
     await page.waitForURL((url) => !url.pathname.includes('/auth/login'), { timeout: 10000 });
 
     // Sau khi đăng nhập, thêm sản phẩm vào giỏ
@@ -151,5 +151,26 @@ test.describe('MadK Store - Comprehensive E2E Testing', () => {
 
     // Xác nhận trang hiển thị kết quả thành công và nút điều hướng
     await expect(page.getByText(/thành công|Giao dịch thành công|Đã thanh toán/i).first()).toBeVisible({ timeout: 10000 });
+  });
+
+  test('6. Đăng nhập nhanh bằng tài khoản mạng xã hội (Google) từ Popup Modal', async ({ page }) => {
+    await page.goto('/products/laptop-asus-rog-strix-scar-16');
+
+    // Khách vãng lai bấm Thêm vào giỏ
+    const addToCartBtn = page.getByRole('button', { name: /Thêm vào giỏ/i });
+    await addToCartBtn.click();
+
+    // Modal popup xuất hiện có tùy chọn đăng nhập mạng xã hội
+    const modal = page.locator('[role="dialog"]');
+    await expect(modal).toBeVisible({ timeout: 5000 });
+    const googleBtn = modal.getByRole('button', { name: /Google/i });
+    await expect(googleBtn).toBeVisible();
+
+    // Bấm Đăng nhập nhanh với Google
+    await googleBtn.click();
+
+    // Modal tự động đóng và tài khoản người dùng đăng nhập thành công
+    await expect(modal).not.toBeVisible({ timeout: 5000 });
+    await expect(page.locator('header')).toContainText(/Google/i);
   });
 });

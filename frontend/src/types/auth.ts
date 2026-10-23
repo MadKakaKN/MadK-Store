@@ -29,6 +29,15 @@ export interface LoginRequestDto {
   password: string;
 }
 
+export interface SocialLoginRequestDto {
+  provider: 'Google' | 'GitHub' | 'Facebook';
+  idToken?: string;
+  accessToken?: string;
+  email: string;
+  fullName?: string;
+  avatarUrl?: string;
+}
+
 export interface RefreshTokenRequestDto {
   refreshToken: string;
 }

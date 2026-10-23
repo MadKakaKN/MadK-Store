@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { SocialAuthButtons } from '../components/SocialAuthButtons';
 
 export const RegisterPage: React.FC = () => {
   const { register } = useAuth();
@@ -334,6 +335,13 @@ export const RegisterPage: React.FC = () => {
               </button>
             </div>
           </form>
+
+          {/* Social Sign Up */}
+          <SocialAuthButtons
+            layout="full"
+            onSuccess={() => navigate(redirectUrl, { replace: true })}
+            onError={(err) => setServerError(err)}
+          />
         </div>
       </div>
     </div>
