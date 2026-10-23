@@ -73,3 +73,5 @@ logs/
 frontend/playwright-report/
 frontend/test-results/
 *.tsbuildinfo
+cloudflared.exe
+
