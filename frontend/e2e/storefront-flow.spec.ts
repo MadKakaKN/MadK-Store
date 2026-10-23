@@ -169,8 +169,13 @@ test.describe('MadK Store - Comprehensive E2E Testing', () => {
     // Bấm Đăng nhập nhanh với Google
     await googleBtn.click();
 
+    // Cửa sổ xác thực tài khoản Google OAuth 2.0 xuất hiện
+    const accountBtn = page.getByRole('button', { name: /Nguyễn Văn Minh/i });
+    await expect(accountBtn).toBeVisible({ timeout: 5000 });
+    await accountBtn.click();
+
     // Modal tự động đóng và tài khoản người dùng đăng nhập thành công
-    await expect(modal).not.toBeVisible({ timeout: 5000 });
-    await expect(page.locator('header')).toContainText(/Google/i);
+    await expect(modal).not.toBeVisible({ timeout: 10000 });
+    await expect(page.locator('header')).toContainText(/Nguyễn Văn Minh/i);
   });
 });
