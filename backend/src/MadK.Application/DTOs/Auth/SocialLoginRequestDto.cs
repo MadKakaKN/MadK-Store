@@ -3,7 +3,7 @@ namespace MadK.Application.DTOs.Auth;
 public class SocialLoginRequestDto
 {
     /// <summary>
-    /// Tên nhà cung cấp xác thực xã hội: "Google", "GitHub", "Facebook"
+    /// Tên nhà cung cấp xác thực xã hội: "Google", "Facebook"
     /// </summary>
     public string Provider { get; set; } = "Google";
 

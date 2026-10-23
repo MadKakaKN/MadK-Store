@@ -30,7 +30,7 @@ export interface LoginRequestDto {
 }
 
 export interface SocialLoginRequestDto {
-  provider: 'Google' | 'GitHub' | 'Facebook';
+  provider: 'Google' | 'Facebook';
   idToken?: string;
   accessToken?: string;
   email: string;
