@@ -255,6 +255,16 @@ export const Header: React.FC = () => {
               <span className="hidden xl:inline text-xs font-semibold">Giỏ hàng</span>
             </Link>
 
+            {/* Quick Admin Portal shortcut button on Desktop */}
+            {isAuthenticated && user?.roles?.includes('Admin') && (
+              <Link
+                to="/admin"
+                className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-sm shadow-purple-600/30 transition-all hover:scale-105"
+              >
+                <span>🛡️ Admin Portal</span>
+              </Link>
+            )}
+
             {/* Auth button / User Dropdown */}
             {isAuthenticated && user ? (
               <div className="hidden sm:block relative" ref={userMenuRef}>
@@ -291,22 +301,22 @@ export const Header: React.FC = () => {
                       <p className="text-[11px] text-slate-500 truncate">{user.email}</p>
                     </div>
                     <div className="py-1">
+                      {user.roles?.includes('Admin') && (
+                        <Link
+                          to="/admin"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors mb-1"
+                        >
+                          <span>🛡️ Quản trị hệ thống (Admin)</span>
+                        </Link>
+                      )}
                       <Link
                         to="/account"
                         onClick={() => setUserMenuOpen(false)}
                         className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:text-brand-600 hover:bg-brand-50 rounded-xl transition-colors"
                       >
-                        <span>👤 Hồ sơ & Bảo mật</span>
+                        <span>👤 Hồ sơ khách hàng</span>
                       </Link>
-                      {user.roles?.includes('Admin') && (
-                        <Link
-                          to="/admin"
-                          onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-purple-700 hover:bg-purple-50 rounded-xl transition-colors"
-                        >
-                          <span>🛡️ Quản trị hệ thống</span>
-                        </Link>
-                      )}
                     </div>
                     <div className="pt-1 border-t border-slate-100">
                       <button
@@ -475,24 +485,35 @@ export const Header: React.FC = () => {
               )}
             </Link>
             {isAuthenticated && user ? (
-              <div className="flex items-center gap-3">
-                <Link
-                  to="/account"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-brand-600 font-bold"
-                >
-                  👤 {user.fullName}
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    logout();
-                  }}
-                  className="text-xs text-rose-600 font-semibold hover:underline"
-                >
-                  Đăng xuất
-                </button>
+              <div className="flex flex-col gap-2 w-full pt-1">
+                <div className="flex items-center justify-between">
+                  <Link
+                    to="/account"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-brand-600 font-bold"
+                  >
+                    👤 {user.fullName}
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      logout();
+                    }}
+                    className="text-xs text-rose-600 font-semibold hover:underline"
+                  >
+                    Đăng xuất
+                  </button>
+                </div>
+                {user.roles?.includes('Admin') && (
+                  <Link
+                    to="/admin"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-xs font-bold text-purple-700 bg-purple-50 px-3 py-2 rounded-xl flex items-center justify-center gap-1.5"
+                  >
+                    🛡️ Vào Trang Quản Trị Hệ Thống (Admin)
+                  </Link>
+                )}
               </div>
             ) : (
               <Link

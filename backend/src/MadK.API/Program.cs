@@ -240,16 +240,16 @@ app.UseMiddleware<SecurityHeadersMiddleware>();
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
 // ──── Middleware Pipeline ────
-if (app.Environment.IsDevelopment())
+// ──── Swagger Documentation ────
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "MadK Store API v1");
-    });
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "MadK Store API v1");
+});
 
-    // Automatically apply pending migrations and seed data in development
-    using var scope = app.Services.CreateScope();
+// ──── Automatically apply pending migrations and idempotent seed data ────
+using (var scope = app.Services.CreateScope())
+{
     var dbContext = scope.ServiceProvider.GetRequiredService<MadK.Infrastructure.Data.AppDbContext>();
     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
     try

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { tokenStorage } from '../../../api/authApi';
 import { SocialAuthButtons } from '../components/SocialAuthButtons';
 
 export const LoginPage: React.FC = () => {
@@ -50,7 +51,15 @@ export const LoginPage: React.FC = () => {
     setIsSubmitting(false);
 
     if (result.success) {
-      navigate(redirectUrl, { replace: true });
+      const currentUser = tokenStorage.getUser();
+      const isAdmin = currentUser?.roles?.includes('Admin');
+      const explicitRedirect = searchParams.get('redirect') || searchParams.get('returnUrl');
+
+      if (isAdmin && !explicitRedirect) {
+        navigate('/admin', { replace: true });
+      } else {
+        navigate(redirectUrl, { replace: true });
+      }
     } else {
       setServerError(result.error || 'Đăng nhập không thành công.');
     }
