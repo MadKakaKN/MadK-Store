@@ -185,7 +185,8 @@ export const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({
   };
 
   const redirectToGoogleOAuth = () => {
-    const redirectUri = window.location.origin + window.location.pathname;
+    // Use only origin as redirect_uri to match Google Cloud Console config exactly
+    const redirectUri = window.location.origin;
     const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(
       redirectUri
     )}&response_type=token&scope=${encodeURIComponent('email profile openid')}&prompt=select_account`;
