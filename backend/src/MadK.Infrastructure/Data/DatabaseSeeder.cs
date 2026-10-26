@@ -20,6 +20,9 @@ public static class DatabaseSeeder
     {
         logger?.LogInformation("Starting database seeding...");
 
+        // 0. Ensure all extended tables and soft-delete columns exist in PostgreSQL
+        await EnsureExtendedSchemaAsync(context, logger);
+
         // 1. Seed Categories & Spec Templates
         var categoryMap = await SeedCategoriesAndTemplatesAsync(context, logger);
 
@@ -39,6 +42,228 @@ public static class DatabaseSeeder
         await AddressSeeder.SeedAsync(context, logger);
 
         logger?.LogInformation("Database seeding completed successfully.");
+    }
+
+    public static async Task EnsureExtendedSchemaAsync(AppDbContext context, ILogger? logger = null)
+    {
+        try
+        {
+            logger?.LogInformation("Ensuring extended database schema (soft-delete columns & tables)...");
+
+            // 1. Soft-delete columns for Catalog (Categories, Brands, Products, ProductVariants)
+            await context.Database.ExecuteSqlRawAsync(@"
+                ALTER TABLE categories ADD COLUMN IF NOT EXISTS is_deleted boolean NOT NULL DEFAULT FALSE;
+                ALTER TABLE categories ADD COLUMN IF NOT EXISTS deleted_at timestamp with time zone;
+                ALTER TABLE brands ADD COLUMN IF NOT EXISTS is_deleted boolean NOT NULL DEFAULT FALSE;
+                ALTER TABLE brands ADD COLUMN IF NOT EXISTS deleted_at timestamp with time zone;
+                ALTER TABLE products ADD COLUMN IF NOT EXISTS is_deleted boolean NOT NULL DEFAULT FALSE;
+                ALTER TABLE products ADD COLUMN IF NOT EXISTS deleted_at timestamp with time zone;
+                ALTER TABLE product_variants ADD COLUMN IF NOT EXISTS is_deleted boolean NOT NULL DEFAULT FALSE;
+                ALTER TABLE product_variants ADD COLUMN IF NOT EXISTS deleted_at timestamp with time zone;
+            ");
+
+            // 2. Orders expires_at
+            await context.Database.ExecuteSqlRawAsync(@"
+                ALTER TABLE orders ADD COLUMN IF NOT EXISTS expires_at TIMESTAMP WITH TIME ZONE NULL;
+                CREATE INDEX IF NOT EXISTS idx_orders_status_expires ON orders (status, expires_at);
+            ");
+
+            // 3. Coupons
+            await context.Database.ExecuteSqlRawAsync(@"
+                CREATE TABLE IF NOT EXISTS coupons (
+                    id UUID PRIMARY KEY,
+                    code VARCHAR(50) NOT NULL,
+                    description VARCHAR(255),
+                    discount_type VARCHAR(30) NOT NULL DEFAULT 'Percentage',
+                    discount_value NUMERIC(15, 2) NOT NULL,
+                    max_discount_amount NUMERIC(15, 2),
+                    min_order_amount NUMERIC(15, 2) NOT NULL DEFAULT 0,
+                    start_date TIMESTAMP WITH TIME ZONE,
+                    end_date TIMESTAMP WITH TIME ZONE,
+                    usage_limit INT,
+                    used_count INT NOT NULL DEFAULT 0,
+                    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+                    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+                    updated_at TIMESTAMP WITH TIME ZONE
+                );
+                CREATE UNIQUE INDEX IF NOT EXISTS idx_coupons_code ON coupons(code);
+                CREATE INDEX IF NOT EXISTS idx_coupons_is_active ON coupons(is_active);
+                CREATE INDEX IF NOT EXISTS idx_coupons_start_end_date ON coupons(start_date, end_date);
+            ");
+
+            // 4. Payments
+            await context.Database.ExecuteSqlRawAsync(@"
+                CREATE TABLE IF NOT EXISTS payments (
+                    id UUID PRIMARY KEY,
+                    order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+                    order_number VARCHAR(50) NOT NULL,
+                    txn_ref VARCHAR(100) NOT NULL,
+                    transaction_no VARCHAR(100),
+                    amount NUMERIC(15, 2) NOT NULL,
+                    currency VARCHAR(10) NOT NULL DEFAULT 'VND',
+                    payment_method VARCHAR(30) NOT NULL,
+                    status VARCHAR(30) NOT NULL,
+                    bank_code VARCHAR(50),
+                    bank_tran_no VARCHAR(100),
+                    card_type VARCHAR(50),
+                    order_info VARCHAR(255),
+                    response_code VARCHAR(10),
+                    transaction_status VARCHAR(10),
+                    secure_hash VARCHAR(256),
+                    raw_payload TEXT NOT NULL DEFAULT '{}',
+                    ip_address VARCHAR(50),
+                    payment_time TIMESTAMP WITH TIME ZONE,
+                    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+                    updated_at TIMESTAMP WITH TIME ZONE,
+                    is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
+                    deleted_at TIMESTAMP WITH TIME ZONE
+                );
+                CREATE INDEX IF NOT EXISTS idx_payments_order_id ON payments(order_id);
+                CREATE INDEX IF NOT EXISTS idx_payments_order_number ON payments(order_number);
+                CREATE UNIQUE INDEX IF NOT EXISTS idx_payments_txn_ref ON payments(txn_ref);
+                CREATE INDEX IF NOT EXISTS idx_payments_transaction_no ON payments(transaction_no);
+                CREATE INDEX IF NOT EXISTS idx_payments_status ON payments(status);
+                CREATE INDEX IF NOT EXISTS idx_payments_created_at ON payments(created_at);
+            ");
+
+            // 5. Price Schedules
+            await context.Database.ExecuteSqlRawAsync(@"
+                CREATE TABLE IF NOT EXISTS price_schedules (
+                    id UUID PRIMARY KEY,
+                    variant_id UUID NOT NULL REFERENCES product_variants(id) ON DELETE CASCADE,
+                    price_type INT NOT NULL DEFAULT 2,
+                    price NUMERIC(15,2) NOT NULL,
+                    original_price NUMERIC(15,2) NOT NULL,
+                    start_date TIMESTAMPTZ NOT NULL,
+                    end_date TIMESTAMPTZ NULL,
+                    reason VARCHAR(250) NOT NULL,
+                    note TEXT NULL,
+                    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+                    created_by VARCHAR(150) NULL,
+                    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+                    updated_at TIMESTAMPTZ NULL,
+                    is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
+                    deleted_at TIMESTAMPTZ NULL
+                );
+                CREATE INDEX IF NOT EXISTS idx_price_schedules_variant_id ON price_schedules(variant_id);
+                CREATE INDEX IF NOT EXISTS idx_price_schedules_dates ON price_schedules(variant_id, start_date, end_date, is_active) WHERE is_deleted = FALSE;
+            ");
+
+            // 6. Suppliers, Purchase Orders & Inventory Audits
+            await context.Database.ExecuteSqlRawAsync(@"
+                CREATE TABLE IF NOT EXISTS suppliers (
+                    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                    code VARCHAR(50) NOT NULL UNIQUE,
+                    name VARCHAR(200) NOT NULL,
+                    contact_person VARCHAR(100),
+                    phone VARCHAR(30),
+                    email VARCHAR(100),
+                    address VARCHAR(500),
+                    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+                    notes VARCHAR(1000),
+                    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+                    updated_at TIMESTAMPTZ
+                );
+
+                CREATE TABLE IF NOT EXISTS purchase_orders (
+                    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                    code VARCHAR(50) NOT NULL UNIQUE,
+                    supplier_id UUID NOT NULL REFERENCES suppliers(id) ON DELETE RESTRICT,
+                    status VARCHAR(30) NOT NULL,
+                    total_amount NUMERIC(18, 2) NOT NULL,
+                    notes VARCHAR(1000),
+                    created_by VARCHAR(100),
+                    received_at TIMESTAMPTZ,
+                    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+                    updated_at TIMESTAMPTZ
+                );
+
+                CREATE TABLE IF NOT EXISTS purchase_order_items (
+                    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                    purchase_order_id UUID NOT NULL REFERENCES purchase_orders(id) ON DELETE CASCADE,
+                    variant_id UUID NOT NULL REFERENCES product_variants(id) ON DELETE RESTRICT,
+                    quantity INT NOT NULL,
+                    unit_cost NUMERIC(18, 2) NOT NULL,
+                    total_cost NUMERIC(18, 2) NOT NULL,
+                    notes VARCHAR(500),
+                    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+                    updated_at TIMESTAMPTZ
+                );
+
+                CREATE TABLE IF NOT EXISTS inventory_audits (
+                    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                    code VARCHAR(50) NOT NULL UNIQUE,
+                    status VARCHAR(30) NOT NULL,
+                    notes VARCHAR(1000),
+                    created_by VARCHAR(100),
+                    completed_at TIMESTAMPTZ,
+                    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+                    updated_at TIMESTAMPTZ
+                );
+
+                CREATE TABLE IF NOT EXISTS inventory_audit_items (
+                    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                    inventory_audit_id UUID NOT NULL REFERENCES inventory_audits(id) ON DELETE CASCADE,
+                    variant_id UUID NOT NULL REFERENCES product_variants(id) ON DELETE RESTRICT,
+                    system_quantity INT NOT NULL,
+                    actual_quantity INT NOT NULL,
+                    reason VARCHAR(500),
+                    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+                    updated_at TIMESTAMPTZ
+                );
+            ");
+
+            // 7. Returns and Refunds
+            await context.Database.ExecuteSqlRawAsync(@"
+                CREATE TABLE IF NOT EXISTS return_requests (
+                    id UUID PRIMARY KEY,
+                    order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+                    order_number VARCHAR(50) NOT NULL,
+                    user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+                    customer_name VARCHAR(150),
+                    customer_email VARCHAR(150),
+                    customer_phone VARCHAR(30),
+                    status VARCHAR(30) NOT NULL DEFAULT 'Pending',
+                    reason VARCHAR(255) NOT NULL,
+                    customer_note TEXT,
+                    refund_amount NUMERIC(15, 2) NOT NULL DEFAULT 0,
+                    refund_status VARCHAR(30) NOT NULL DEFAULT 'Pending',
+                    refund_transaction_no VARCHAR(100),
+                    refunded_at TIMESTAMP WITH TIME ZONE,
+                    sales_note TEXT,
+                    rejection_reason TEXT,
+                    processed_by_user_id UUID,
+                    processed_by_name VARCHAR(150),
+                    processed_at TIMESTAMP WITH TIME ZONE,
+                    is_restocked BOOLEAN NOT NULL DEFAULT FALSE,
+                    restocked_at TIMESTAMP WITH TIME ZONE,
+                    idempotency_key VARCHAR(150),
+                    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+                    updated_at TIMESTAMP WITH TIME ZONE
+                );
+
+                CREATE TABLE IF NOT EXISTS return_request_items (
+                    id UUID PRIMARY KEY,
+                    return_request_id UUID NOT NULL REFERENCES return_requests(id) ON DELETE CASCADE,
+                    order_item_id UUID,
+                    variant_id UUID,
+                    product_name VARCHAR(255) NOT NULL,
+                    variant_name VARCHAR(255) NOT NULL,
+                    sku VARCHAR(100) NOT NULL,
+                    quantity INT NOT NULL,
+                    unit_price NUMERIC(15, 2) NOT NULL,
+                    total_price NUMERIC(15, 2) NOT NULL,
+                    reason VARCHAR(255),
+                    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
+                );
+            ");
+
+            logger?.LogInformation("Extended database schema ensured successfully.");
+        }
+        catch (Exception ex)
+        {
+            logger?.LogWarning(ex, "Could not apply extended schema migrations: {Message}", ex.Message);
+        }
     }
 
     private static async Task<Dictionary<string, Category>> SeedCategoriesAndTemplatesAsync(AppDbContext context, ILogger? logger)
