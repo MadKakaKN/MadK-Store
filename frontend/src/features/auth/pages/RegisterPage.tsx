@@ -7,7 +7,8 @@ export const RegisterPage: React.FC = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const redirectUrl = searchParams.get('redirect') || '/account';
+  const explicitRedirect = searchParams.get('redirect');
+  const redirectUrl = explicitRedirect || '/';
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -135,7 +136,7 @@ export const RegisterPage: React.FC = () => {
           <p className="mt-2 text-sm text-slate-600">
             Đã có tài khoản?{' '}
             <Link
-              to={`/auth/login${redirectUrl !== '/account' ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}`}
+              to={`/auth/login${explicitRedirect ? `?redirect=${encodeURIComponent(explicitRedirect)}` : ''}`}
               className="font-bold text-brand-600 hover:text-brand-500 hover:underline"
             >
               Đăng nhập tại đây

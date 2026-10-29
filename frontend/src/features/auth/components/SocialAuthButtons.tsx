@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { SocialLoginRequestDto } from '../../../types/auth';
 
@@ -44,51 +44,6 @@ export const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({
   const GOOGLE_CLIENT_ID =
     import.meta.env.VITE_GOOGLE_CLIENT_ID ||
     '571963960082-jgoog1tegfb5rhkj4k52ialr0i2dnus5.apps.googleusercontent.com';
-
-  // Handle Google OAuth redirect return (when redirect mode is used)
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash && hash.includes('access_token=')) {
-      const params = new URLSearchParams(hash.substring(1));
-      const accessToken = params.get('access_token');
-      if (accessToken) {
-        window.history.replaceState(null, '', window.location.pathname + window.location.search);
-        setIsVerifying(true);
-        setActiveProvider('Google');
-
-        fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
-          .then((r) => r.json())
-          .then(async (profile) => {
-            if (!profile.email) {
-              throw new Error('Không thể lấy email từ tài khoản Google.');
-            }
-            const payload: SocialLoginRequestDto = {
-              provider: 'Google',
-              email: profile.email,
-              fullName: profile.name || profile.given_name || profile.email.split('@')[0],
-              avatarUrl: profile.picture,
-              idToken: accessToken,
-            };
-            const res = await socialLogin(payload);
-            if (res.success) {
-              if (onSuccess) onSuccess();
-            } else {
-              if (onError) onError(res.error || 'Đăng nhập Google không thành công.');
-            }
-          })
-          .catch((err: unknown) => {
-            const msg = err instanceof Error ? err.message : 'Lỗi lấy thông tin tài khoản Google.';
-            if (onError) onError(msg);
-          })
-          .finally(() => {
-            setIsVerifying(false);
-            setActiveProvider(null);
-          });
-      }
-    }
-  }, [socialLogin, onSuccess, onError]);
 
   /**
    * Directly triggers official Google OAuth 2.0 without any mock page

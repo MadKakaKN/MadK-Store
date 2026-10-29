@@ -8,7 +8,8 @@ export const LoginPage: React.FC = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const redirectUrl = searchParams.get('redirect') || searchParams.get('returnUrl') || '/account';
+  const explicitRedirect = searchParams.get('redirect') || searchParams.get('returnUrl');
+  const redirectUrl = explicitRedirect || '/';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -37,6 +38,17 @@ export const LoginPage: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleLoginSuccess = () => {
+    const currentUser = tokenStorage.getUser();
+    const isAdmin = currentUser?.roles?.includes('Admin');
+
+    if (isAdmin && !explicitRedirect) {
+      navigate('/admin', { replace: true });
+    } else {
+      navigate(redirectUrl, { replace: true });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setServerError(null);
@@ -51,15 +63,7 @@ export const LoginPage: React.FC = () => {
     setIsSubmitting(false);
 
     if (result.success) {
-      const currentUser = tokenStorage.getUser();
-      const isAdmin = currentUser?.roles?.includes('Admin');
-      const explicitRedirect = searchParams.get('redirect') || searchParams.get('returnUrl');
-
-      if (isAdmin && !explicitRedirect) {
-        navigate('/admin', { replace: true });
-      } else {
-        navigate(redirectUrl, { replace: true });
-      }
+      handleLoginSuccess();
     } else {
       setServerError(result.error || 'Đăng nhập không thành công.');
     }
@@ -85,7 +89,7 @@ export const LoginPage: React.FC = () => {
           <p className="mt-2 text-sm text-slate-600">
             Chưa có tài khoản?{' '}
             <Link
-              to={`/auth/register${redirectUrl !== '/account' ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}`}
+              to={`/auth/register${explicitRedirect ? `?redirect=${encodeURIComponent(explicitRedirect)}` : ''}`}
               className="font-bold text-brand-600 hover:text-brand-500 hover:underline"
             >
               Đăng ký ngay
@@ -260,7 +264,7 @@ export const LoginPage: React.FC = () => {
           {/* Social Logins */}
           <SocialAuthButtons
             layout="full"
-            onSuccess={() => navigate(redirectUrl, { replace: true })}
+            onSuccess={handleLoginSuccess}
             onError={(err) => setServerError(err)}
           />
         </div>

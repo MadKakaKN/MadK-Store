@@ -19,7 +19,7 @@ export const GuestRoute: React.FC<GuestRouteProps> = ({ children }) => {
   }
 
   if (isAuthenticated) {
-    const redirectUrl = searchParams.get('redirect') || '/account';
+    const redirectUrl = searchParams.get('redirect') || '/';
     return <Navigate to={redirectUrl} replace />;
   }
 

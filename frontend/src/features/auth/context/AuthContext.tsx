@@ -27,6 +27,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return;
     }
 
+    // Nếu là mock token khi backend offline, duy trì user trong cache
+    if (token.startsWith('mock_')) {
+      const cached = tokenStorage.getUser();
+      if (cached) setUser(cached);
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const res = await authApi.getMe();
       if (res.isSuccess && res.data) {

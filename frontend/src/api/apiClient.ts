@@ -9,7 +9,7 @@ export const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 15000,
+  timeout: 45000, // 45s to accommodate Render free tier cold-start
 });
 
 // Interceptor nạp JWT Bearer token nếu đã đăng nhập
@@ -62,9 +62,8 @@ apiClient.interceptors.response.use(
     }
 
     const refreshToken = tokenStorage.getRefreshToken();
-    if (!refreshToken) {
-      tokenStorage.clear();
-      window.dispatchEvent(new CustomEvent('auth:expired'));
+    // Nếu không có refreshToken hoặc là mock token, không gọi backend refresh
+    if (!refreshToken || refreshToken.startsWith('mock_')) {
       return Promise.reject(error);
     }
 
@@ -92,7 +91,7 @@ apiClient.interceptors.response.use(
         { refreshToken },
         {
           headers: { 'Content-Type': 'application/json' },
-          timeout: 10000,
+          timeout: 20000,
         }
       );
 
@@ -117,8 +116,18 @@ apiClient.interceptors.response.use(
       }
     } catch (refreshErr) {
       processQueue(refreshErr as Error, null);
-      tokenStorage.clear();
-      window.dispatchEvent(new CustomEvent('auth:expired'));
+
+      // Chỉ xóa token và báo hết hạn nếu server trả về 401/403 xác nhận token không hợp lệ
+      // Không xóa session khi gặp lỗi mạng tạm thời hoặc server đang khởi động
+      const axiosRefreshErr = refreshErr as AxiosError;
+      if (
+        axiosRefreshErr?.response &&
+        (axiosRefreshErr.response.status === 401 || axiosRefreshErr.response.status === 403)
+      ) {
+        tokenStorage.clear();
+        window.dispatchEvent(new CustomEvent('auth:expired'));
+      }
+
       return Promise.reject(refreshErr);
     } finally {
       isRefreshing = false;
