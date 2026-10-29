@@ -7,7 +7,7 @@ interface GuestRouteProps {
 }
 
 export const GuestRoute: React.FC<GuestRouteProps> = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
   const [searchParams] = useSearchParams();
 
   if (isLoading) {
@@ -19,8 +19,13 @@ export const GuestRoute: React.FC<GuestRouteProps> = ({ children }) => {
   }
 
   if (isAuthenticated) {
-    const redirectUrl = searchParams.get('redirect') || '/';
-    return <Navigate to={redirectUrl} replace />;
+    const redirectParam = searchParams.get('redirect') || searchParams.get('returnUrl');
+    const safeRedirect = redirectParam && !redirectParam.startsWith('/auth') ? redirectParam : '/';
+    const targetUrl = user?.roles?.includes('Admin') && (!redirectParam || redirectParam === '/')
+      ? '/admin'
+      : safeRedirect;
+
+    return <Navigate to={targetUrl} replace />;
   }
 
   return children;

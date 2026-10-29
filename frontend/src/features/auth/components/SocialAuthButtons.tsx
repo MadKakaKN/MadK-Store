@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { tokenStorage } from '../../../api/authApi';
 import { SocialLoginRequestDto } from '../../../types/auth';
 
 declare global {
@@ -61,8 +62,12 @@ export const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({
           avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face',
           idToken: `playwright_verified_token_${Date.now()}`,
         });
-        if (res.success && onSuccess) {
-          onSuccess();
+        if (res.success) {
+          if (onSuccess) {
+            onSuccess();
+          } else {
+            window.location.href = '/';
+          }
         }
       } catch (err: unknown) {
         if (onError) onError(err instanceof Error ? err.message : 'Lỗi đăng nhập kiểm thử.');
@@ -101,14 +106,20 @@ export const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({
               const payload: SocialLoginRequestDto = {
                 provider: 'Google',
                 email: profile.email,
-                fullName: profile.name || profile.given_name || profile.email.split('@')[0],
+                fullName: profile.name || profile.given_name || profile.email?.split('@')[0] || 'Google User',
                 avatarUrl: profile.picture,
                 idToken: tokenResponse.access_token,
               };
 
               const res = await socialLogin(payload);
               if (res.success) {
-                if (onSuccess) onSuccess();
+                if (onSuccess) {
+                  onSuccess();
+                } else {
+                  const currentUser = tokenStorage.getUser();
+                  const isAdmin = currentUser?.roles?.includes('Admin');
+                  window.location.href = isAdmin ? '/admin' : '/';
+                }
               } else {
                 if (onError) onError(res.error || 'Đăng nhập Google không thành công.');
               }
@@ -155,7 +166,6 @@ export const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({
     setIsVerifying(true);
     setActiveProvider('Facebook');
 
-    // Simulate authentic Facebook login or direct token exchange
     try {
       const res = await socialLogin({
         provider: 'Facebook',
@@ -164,8 +174,12 @@ export const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({
         avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face',
         idToken: `facebook_oauth_token_${Date.now()}`,
       });
-      if (res.success && onSuccess) {
-        onSuccess();
+      if (res.success) {
+        if (onSuccess) {
+          onSuccess();
+        } else {
+          window.location.href = '/';
+        }
       } else if (onError) {
         onError(res.error || 'Đăng nhập Facebook không thành công.');
       }

@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { tokenStorage } from '../../../api/authApi';
 import { SocialAuthButtons } from '../components/SocialAuthButtons';
 
 export const LoginPage: React.FC = () => {
   const { login } = useAuth();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const explicitRedirect = searchParams.get('redirect') || searchParams.get('returnUrl');
-  const redirectUrl = explicitRedirect || '/';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -41,12 +39,12 @@ export const LoginPage: React.FC = () => {
   const handleLoginSuccess = () => {
     const currentUser = tokenStorage.getUser();
     const isAdmin = currentUser?.roles?.includes('Admin');
+    const safeRedirect = explicitRedirect && !explicitRedirect.startsWith('/auth') ? explicitRedirect : '/';
 
-    if (isAdmin && !explicitRedirect) {
-      navigate('/admin', { replace: true });
-    } else {
-      navigate(redirectUrl, { replace: true });
-    }
+    const targetUrl = isAdmin && (!explicitRedirect || explicitRedirect === '/') ? '/admin' : safeRedirect;
+
+    // Hard navigation guarantees fresh session & avoids React Router race conditions
+    window.location.href = targetUrl;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

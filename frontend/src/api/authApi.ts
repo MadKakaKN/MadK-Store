@@ -274,7 +274,20 @@ export function handleApiError<T>(err: unknown, fallback: () => ApiEnvelope<T>):
     message?: string;
   };
 
-  // If server responded with a Result Envelope (e.g. 400 Bad Request with error description)
+  const status = axiosError.response?.status;
+
+  // Nếu gặp lỗi server 5xx (như Database offline trên cloud), 404, hoặc mất mạng/timeout -> kích hoạt fallback an toàn
+  if (
+    !axiosError.response ||
+    axiosError.code === 'ERR_NETWORK' ||
+    axiosError.code === 'ECONNABORTED' ||
+    (status !== undefined && status >= 500) ||
+    status === 404
+  ) {
+    return fallback();
+  }
+
+  // Nếu server trả về lỗi nghiệp vụ rõ ràng (ví dụ 400 Bad Request kèm message)
   if (axiosError.response?.data?.error || axiosError.response?.data?.message) {
     return {
       isSuccess: false,
@@ -283,17 +296,12 @@ export function handleApiError<T>(err: unknown, fallback: () => ApiEnvelope<T>):
     };
   }
 
-  // If 429 Too Many Requests
-  if (axiosError.response?.status === 429) {
+  // Nếu bị 429 Too Many Requests
+  if (status === 429) {
     return {
       isSuccess: false,
       error: 'Bạn đã thao tác quá nhanh hoặc thử sai nhiều lần. Vui lòng thử lại sau vài phút.',
     };
-  }
-
-  // If Network error / Connection Refused and we have fallback mock
-  if (axiosError.code === 'ERR_NETWORK' || !axiosError.response) {
-    return fallback();
   }
 
   return {

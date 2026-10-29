@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { tokenStorage } from '../../../api/authApi';
 import { SocialLoginRequestDto } from '../../../types/auth';
@@ -15,7 +14,6 @@ import { SocialLoginRequestDto } from '../../../types/auth';
  */
 export const GoogleOAuthCallback: React.FC = () => {
   const { socialLogin } = useAuth();
-  const navigate = useNavigate();
   const isProcessing = useRef(false);
 
   useEffect(() => {
@@ -60,7 +58,7 @@ export const GoogleOAuthCallback: React.FC = () => {
         const payload: SocialLoginRequestDto = {
           provider: 'Google',
           email: profile.email,
-          fullName: profile.name || profile.given_name || profile.email.split('@')[0],
+          fullName: profile.name || profile.given_name || profile.email?.split('@')[0] || 'Google User',
           avatarUrl: profile.picture,
           idToken: accessToken,
         };
@@ -68,29 +66,24 @@ export const GoogleOAuthCallback: React.FC = () => {
         const res = await socialLogin(payload);
         
         if (res.success) {
-          await new Promise((resolve) => setTimeout(resolve, 100));
           const currentUser = tokenStorage.getUser();
           const isAdmin = currentUser?.roles?.includes('Admin');
-          if (isAdmin) {
-            navigate('/admin', { replace: true });
-          } else {
-            navigate('/', { replace: true });
-          }
+          window.location.href = isAdmin ? '/admin' : '/';
         } else {
           console.error('[GoogleOAuth] Social login failed:', res.error);
-          navigate('/auth/login?error=' + encodeURIComponent(res.error || 'Đăng nhập Google thất bại.'), { replace: true });
+          window.location.href = '/auth/login?error=' + encodeURIComponent(res.error || 'Đăng nhập Google thất bại.');
         }
       } catch (err) {
         console.error('[GoogleOAuth] Error processing Google login:', err);
         const msg = err instanceof Error ? err.message : 'Lỗi xử lý đăng nhập Google.';
-        navigate('/auth/login?error=' + encodeURIComponent(msg), { replace: true });
+        window.location.href = '/auth/login?error=' + encodeURIComponent(msg);
       } finally {
         isProcessing.current = false;
       }
     };
 
     processGoogleLogin();
-  }, [socialLogin, navigate]);
+  }, [socialLogin]);
 
   return null;
 };
