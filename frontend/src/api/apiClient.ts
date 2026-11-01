@@ -2,7 +2,8 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { tokenStorage } from './authApi';
 import { ApiEnvelope, AuthResponseDto } from '../types/auth';
 
-const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1';
+const baseURL = import.meta.env.VITE_API_BASE_URL ||
+  (import.meta.env.PROD ? 'https://madk-api.onrender.com/api/v1' : 'http://localhost:5000/api/v1');
 
 export const apiClient = axios.create({
   baseURL,

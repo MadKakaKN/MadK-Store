@@ -49,6 +49,8 @@ out/
 .env.*
 *.env
 **/.env*
+!frontend/.env.production
+!frontend/.env.example
 appsettings.*.local.json
 *.pfx
 *.p12
