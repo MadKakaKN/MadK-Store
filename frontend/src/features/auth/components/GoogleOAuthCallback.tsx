@@ -43,11 +43,11 @@ export const GoogleOAuthCallback: React.FC = () => {
         const profileRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
-        
+
         if (!profileRes.ok) {
           throw new Error('Google API trả về lỗi.');
         }
-        
+
         const profile = await profileRes.json();
 
         if (!profile.email) {
@@ -64,7 +64,7 @@ export const GoogleOAuthCallback: React.FC = () => {
         };
 
         const res = await socialLogin(payload);
-        
+
         if (res.success) {
           const currentUser = tokenStorage.getUser();
           const isAdmin = currentUser?.roles?.includes('Admin');

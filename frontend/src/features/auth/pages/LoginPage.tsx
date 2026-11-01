@@ -148,11 +148,10 @@ export const LoginPage: React.FC = () => {
                     if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
                   }}
                   placeholder="vidu@madkstore.vn"
-                  className={`w-full px-4 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${
-                    errors.email
+                  className={`w-full px-4 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${errors.email
                       ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10'
                       : 'border-slate-200 bg-white hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10'
-                  }`}
+                    }`}
                 />
               </div>
               {errors.email && <p className="mt-1.5 text-xs text-rose-600 font-medium">{errors.email}</p>}
@@ -183,11 +182,10 @@ export const LoginPage: React.FC = () => {
                     if (errors.password) setErrors((prev) => ({ ...prev, password: undefined }));
                   }}
                   placeholder="Nhập mật khẩu"
-                  className={`w-full pl-4 pr-11 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${
-                    errors.password
+                  className={`w-full pl-4 pr-11 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${errors.password
                       ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10'
                       : 'border-slate-200 bg-white hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10'
-                  }`}
+                    }`}
                 />
                 <button
                   type="button"
