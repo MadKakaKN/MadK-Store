@@ -57,6 +57,30 @@ public class AppDbContext : DbContext, IAppDbContext
         // Apply all entity configurations from this assembly
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
+        // Soft-delete properties are only supported on entities with explicit mappings:
+        // (Category, Brand, Product, ProductVariant, PriceSchedule, Payment).
+        // For other BaseEntity entities, ignore IsDeleted and DeletedAt so EF Core doesn't query nonexistent columns.
+        var softDeleteTypes = new HashSet<Type>
+        {
+            typeof(Category),
+            typeof(Brand),
+            typeof(Product),
+            typeof(ProductVariant),
+            typeof(PriceSchedule),
+            typeof(Payment)
+        };
+
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes().ToList())
+        {
+            if (entityType.ClrType != null &&
+                typeof(BaseEntity).IsAssignableFrom(entityType.ClrType) &&
+                !softDeleteTypes.Contains(entityType.ClrType))
+            {
+                modelBuilder.Entity(entityType.ClrType).Ignore(nameof(BaseEntity.IsDeleted));
+                modelBuilder.Entity(entityType.ClrType).Ignore(nameof(BaseEntity.DeletedAt));
+            }
+        }
+
         // If running against InMemory database for unit tests, ignore Npgsql-specific tsvector
         if (Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory")
         {

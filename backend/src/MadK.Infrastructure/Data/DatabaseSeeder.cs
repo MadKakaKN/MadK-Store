@@ -110,7 +110,7 @@ public static class DatabaseSeeder
                     response_code VARCHAR(10),
                     transaction_status VARCHAR(10),
                     secure_hash VARCHAR(256),
-                    raw_payload TEXT NOT NULL DEFAULT '{}',
+                    raw_payload TEXT NOT NULL DEFAULT '{{}}',
                     ip_address VARCHAR(50),
                     payment_time TIMESTAMP WITH TIME ZONE,
                     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
