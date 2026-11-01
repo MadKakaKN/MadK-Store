@@ -9,6 +9,7 @@ import WebGLFallback from './WebGLFallback';
 export interface Product3DViewerProps {
   model3DUrl?: string;
   productName: string;
+  categorySlug?: string;
   thumbnailUrl?: string;
   selectedVariant?: ProductVariantDto | null;
   onVariantSelect?: (variant: ProductVariantDto) => void;
@@ -18,6 +19,7 @@ export interface Product3DViewerProps {
 export const Product3DViewer: React.FC<Product3DViewerProps> = ({
   model3DUrl,
   productName,
+  categorySlug,
   thumbnailUrl,
   selectedVariant,
   onSwitchTo2D,
@@ -52,6 +54,9 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
     }
     return ''; // Fallback to procedural model
   }, [activeModelOption, model3DUrl]);
+
+  // Pass category override if keyboard demo was selected
+  const effectiveCategorySlug = activeModelOption === 'sample_keyboard' ? 'ban-phim-co' : categorySlug;
 
   // Reset camera view
   const handleResetCamera = () => {
@@ -88,7 +93,7 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
           </span>
 
           <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-300 text-[11px] font-mono">
-            {resolvedSource === 'custom_glb' ? 'GLB Custom' : '3D Tech Demo'}
+            {resolvedSource === 'custom_glb' ? 'GLB Model' : 'Mô hình 3D Chuẩn'}
           </span>
         </div>
 
@@ -99,18 +104,16 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
             onChange={(e) => setActiveModelOption(e.target.value as 'product' | 'sample_keyboard' | 'sample_gadget')}
             className="text-[11px] font-semibold bg-slate-900/90 text-slate-300 border border-slate-700/80 rounded-xl px-2.5 py-1.5 outline-none focus:border-indigo-500 backdrop-blur-md cursor-pointer transition-colors"
           >
-            <option value="product">
-              {model3DUrl ? 'Model sản phẩm (GLB)' : 'Model mặc định'}
-            </option>
-            <option value="sample_keyboard">Mẫu Bàn phím cơ (3D)</option>
-            <option value="sample_gadget">Mẫu Duck Gadget (GLB)</option>
+            <option value="product">Model 3D ({productName.split(' ')[0]})</option>
+            <option value="sample_keyboard">Bàn phím cơ (Demo)</option>
+            <option value="sample_gadget">Mô hình mẫu (GLB)</option>
           </select>
 
           <button
             type="button"
             onClick={() => setShowGuideModal(true)}
-            title="Hướng dẫn thêm model 3D mới"
-            className="w-7 h-7 rounded-xl bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-slate-300 flex items-center justify-center text-xs font-bold transition-all shadow-md"
+            title="Hướng dẫn tiêu chuẩn file 3D GLB"
+            className="w-7 h-7 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center justify-center text-xs font-bold backdrop-blur-md transition-colors"
           >
             ?
           </button>
@@ -127,6 +130,8 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
           maxDpr={maxDpr}
           controlsRef={controlsRef}
           onModelSourceChange={setResolvedSource}
+          categorySlug={effectiveCategorySlug}
+          productName={productName}
         />
       </div>
 
@@ -180,7 +185,7 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
             <span className="text-white font-bold">{customColor ? 'Tùy chỉnh' : variantColorInfo.name}</span>
           </div>
 
-          <div className="flex items-center gap-1.5 flex-shrink-0">
+          <div className="flex items-center gap-2 pr-1">
             {PRESET_3D_PALETTE.map((c) => {
               const isSelected = activeColor.toLowerCase() === c.hex.toLowerCase();
               return (
@@ -188,35 +193,22 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
                   key={c.hex}
                   type="button"
                   onClick={() => setCustomColor(c.hex)}
-                  title={`Xem màu ${c.name}`}
-                  className={`w-6 h-6 rounded-full border-2 transition-all ${
-                    isSelected
-                      ? 'scale-125 border-indigo-400 ring-2 ring-indigo-500/50 shadow-md'
-                      : 'border-slate-600 hover:scale-110 opacity-80'
+                  title={c.name}
+                  className={`w-6 h-6 rounded-full border-2 transition-transform ${
+                    isSelected ? 'scale-125 border-white shadow-md' : 'border-slate-700 hover:scale-110'
                   }`}
                   style={{ backgroundColor: c.hex }}
                 />
               );
             })}
-
-            {customColor && (
-              <button
-                type="button"
-                onClick={() => setCustomColor(null)}
-                title="Khôi phục theo biến thể đang chọn"
-                className="text-[10px] text-indigo-400 hover:text-indigo-300 font-bold px-2 py-1 rounded bg-indigo-950/60 border border-indigo-800/60"
-              >
-                Đặt lại
-              </button>
-            )}
           </div>
         </div>
 
-        {/* Interaction Hints Bar */}
-        <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1 px-1">
+        {/* Interaction hints */}
+        <div className="flex items-center justify-between text-[11px] text-slate-400 font-medium px-2">
           <span className="flex items-center gap-1">
             <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">
-              {isMobile ? '1 ngón' : 'Chuột trái'}
+              {isMobile ? 'Chạm vuốt' : 'Chuột trái'}
             </kbd>
             Xoay 360°
           </span>
@@ -270,39 +262,28 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
                 </p>
               </div>
 
-              <div className="p-3 rounded-2xl bg-slate-800/60 border border-slate-700/60 space-y-1">
-                <strong className="text-white text-xs block">2. Nén tối ưu hóa bằng Draco / gltf-transform:</strong>
-                <p className="font-mono text-[11px] text-emerald-400 bg-slate-950 p-2 rounded-lg">
-                  npx @gltf-transform/cli optimize input.glb output.glb --draco --texture-compress webp
+              <div className="p-3 rounded-2xl bg-slate-800/50 border border-slate-700/50 space-y-1">
+                <strong className="text-white text-xs block">2. Đặt tên Mesh để đổi màu tự động:</strong>
+                <p>
+                  Đặt tên cho các phần tử chính là <strong>Body</strong>, <strong>Case</strong>, <strong>Frame</strong>, hoặc <strong>Chassis</strong> trong Blender/Maya. Hệ thống sẽ tự động bắt và phủ màu theo biến thể bạn chọn!
                 </p>
               </div>
 
-              <div className="p-3 rounded-2xl bg-slate-800/60 border border-slate-700/60 space-y-1">
-                <strong className="text-white text-xs block">3. Nơi đặt file model trong dự án:</strong>
+              <div className="p-3 rounded-2xl bg-slate-800/50 border border-slate-700/50 space-y-1">
+                <strong className="text-white text-xs block">3. Nơi lưu trữ file:</strong>
                 <p>
-                  - <strong>Môi trường Local/Frontend:</strong> Lưu vào thư mục <code className="text-amber-300">frontend/public/models/ten-san-pham.glb</code>, sau đó cấu hình URL là <code className="text-amber-300">/models/ten-san-pham.glb</code>.
-                  <br />
-                  - <strong>Môi trường Production/CDN:</strong> Upload qua trang Quản trị Admin Catalog hoặc đẩy lên S3 / MinIO (<code className="text-amber-300">https://cdn.madkstore.vn/...</code>).
-                </p>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-slate-800/60 border border-slate-700/60 space-y-1">
-                <strong className="text-white text-xs block">4. Gắn vào sản phẩm:</strong>
-                <p>
-                  Điền đường dẫn model vào trường <code className="text-indigo-300">Model3DUrl</code> trong trang <strong>Admin Quản trị Sản phẩm</strong> (hoặc Database column <code>model3d_url</code> trong bảng Products).
+                  Đặt file vào thư mục <code className="bg-slate-950 px-1 py-0.5 rounded text-indigo-300 font-mono">public/models/ten-san-pham.glb</code>, sau đó cập nhật cột <strong>Model3DUrl</strong> trong Admin hoặc Database.
                 </p>
               </div>
             </div>
 
-            <div className="pt-2 flex justify-end">
-              <button
-                type="button"
-                onClick={() => setShowGuideModal(false)}
-                className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md transition-colors"
-              >
-                Đã hiểu
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => setShowGuideModal(false)}
+              className="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-bold text-white text-xs transition-colors shadow-lg shadow-indigo-600/30"
+            >
+              Đã hiểu
+            </button>
           </div>
         </div>
       )}

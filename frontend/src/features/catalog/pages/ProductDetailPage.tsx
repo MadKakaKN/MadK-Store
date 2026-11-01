@@ -346,6 +346,7 @@ export const ProductDetailPage: React.FC = () => {
               <Product3DViewer
                 model3DUrl={product.model3DUrl}
                 productName={product.name}
+                categorySlug={product.category?.slug}
                 thumbnailUrl={product.thumbnailUrl}
                 selectedVariant={selectedVariant}
                 onVariantSelect={setSelectedVariant}

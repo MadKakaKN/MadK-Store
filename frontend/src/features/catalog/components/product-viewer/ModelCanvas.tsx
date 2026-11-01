@@ -59,6 +59,8 @@ interface ModelCanvasProps {
   maxDpr: number;
   controlsRef: React.ComponentProps<typeof OrbitControls>['ref'];
   onModelSourceChange?: (source: 'custom_glb' | 'sample_glb' | 'procedural') => void;
+  categorySlug?: string;
+  productName?: string;
 }
 
 export const ModelCanvas: React.FC<ModelCanvasProps> = ({
@@ -69,6 +71,8 @@ export const ModelCanvas: React.FC<ModelCanvasProps> = ({
   maxDpr,
   controlsRef,
   onModelSourceChange,
+  categorySlug,
+  productName,
 }) => {
   // If modelUrl is a relative path or sample path, use it.
   // If no modelUrl is specified, or if remote fails, CanvasErrorBoundary seamlessly renders ProceduralTechModel.
@@ -126,6 +130,8 @@ export const ModelCanvas: React.FC<ModelCanvasProps> = ({
               <ProceduralTechModel
                 variantColor={variantColor}
                 wireframe={wireframe}
+                categorySlug={categorySlug}
+                productName={productName}
               />
             }
           >
@@ -139,6 +145,8 @@ export const ModelCanvas: React.FC<ModelCanvasProps> = ({
           <ProceduralTechModel
             variantColor={variantColor}
             wireframe={wireframe}
+            categorySlug={categorySlug}
+            productName={productName}
           />
         )}
       </Suspense>
