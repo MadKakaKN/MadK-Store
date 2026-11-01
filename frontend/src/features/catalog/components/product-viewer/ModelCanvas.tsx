@@ -82,7 +82,7 @@ export const ModelCanvas: React.FC<ModelCanvasProps> = ({
     <Canvas
       shadows
       dpr={maxDpr}
-      camera={{ position: [0, 1.8, 3.6], fov: 45 }}
+      camera={{ position: [0, 1.4, 4.4], fov: 42 }}
       gl={{
         powerPreference: 'high-performance',
         antialias: true,
@@ -110,10 +110,11 @@ export const ModelCanvas: React.FC<ModelCanvasProps> = ({
       <OrbitControls
         ref={controlsRef}
         makeDefault
-        enablePan={false}
+        target={[0, -0.1, 0]}
+        enablePan={true}
         enableZoom={true}
         minDistance={1.2}
-        maxDistance={6.5}
+        maxDistance={7.0}
         autoRotate={autoRotate}
         autoRotateSpeed={1.8}
         enableDamping
@@ -153,9 +154,9 @@ export const ModelCanvas: React.FC<ModelCanvasProps> = ({
 
       {/* Studio Floor Contact Shadow */}
       <ContactShadows
-        position={[0, -0.65, 0]}
+        position={[0, -1.05, 0]}
         opacity={0.65}
-        scale={6}
+        scale={6.5}
         blur={1.6}
         far={3}
       />

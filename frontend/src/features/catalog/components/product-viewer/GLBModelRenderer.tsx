@@ -77,7 +77,7 @@ export const GLBModelRenderer: React.FC<GLBModelRendererProps> = ({
   }, [clonedScene, variantColor, wireframe]);
 
   return (
-    <Center top>
+    <Center position={[0, -0.2, 0]}>
       <primitive object={clonedScene} />
     </Center>
   );

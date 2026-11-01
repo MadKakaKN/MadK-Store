@@ -213,6 +213,13 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
             Xoay 360°
           </span>
 
+          <span className="hidden sm:flex items-center gap-1">
+            <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">
+              Chuột phải
+            </kbd>
+            Di chuyển
+          </span>
+
           <span className="flex items-center gap-1">
             <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">
               {isMobile ? '2 ngón' : 'Con lăn'}

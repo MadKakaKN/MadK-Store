@@ -318,7 +318,7 @@ function Laptop3D({ parsedColor, wireframe }: { parsedColor: THREE.Color; wirefr
   }, []);
 
   return (
-    <group position={[0, -0.5, 0]} rotation={[0.22, -0.38, 0]}>
+    <group position={[0, -0.2, 0]} scale={0.84} rotation={[0.18, -0.38, 0]}>
       {/* Lower Base Chassis */}
       <mesh position={[0, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={[3.2, 0.14, 2.2]} />
@@ -704,7 +704,7 @@ export const ProceduralTechModel: React.FC<ProceduralTechModelProps> = ({
   const productType = useMemo(() => detectProductType(categorySlug, productName), [categorySlug, productName]);
 
   return (
-    <Center top>
+    <Center position={[0, -0.2, 0]}>
       <group ref={groupRef}>
         {productType === 'phone' && <Smartphone3D parsedColor={parsedColor} wireframe={wireframe} />}
         {productType === 'tablet' && <Tablet3D parsedColor={parsedColor} wireframe={wireframe} />}
