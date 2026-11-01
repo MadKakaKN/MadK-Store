@@ -84,7 +84,7 @@ export const CategoryPage: React.FC = () => {
       catalogApi.getCategoryFilters(slug).then(setCategoryFilters);
     } else {
       setCategoryDetail(null);
-      setCategoryFilters(null);
+      catalogApi.getCategoryFilters('all').then(setCategoryFilters);
     }
   }, [slug]);
 

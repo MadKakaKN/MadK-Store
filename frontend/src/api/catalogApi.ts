@@ -55,7 +55,11 @@ export const catalogApi = {
   async getCategoryTree(): Promise<CategoryTreeDto[]> {
     try {
       const response = await apiClient.get<Result<CategoryTreeDto[]>>('/categories');
-      if (response.data?.isSuccess && response.data.data) {
+      if (
+        response.data?.isSuccess &&
+        Array.isArray(response.data.data) &&
+        response.data.data.length > 0
+      ) {
         return response.data.data;
       }
       return MOCK_CATEGORY_TREE;
@@ -71,7 +75,7 @@ export const catalogApi = {
   async getCategoryBySlug(slug: string): Promise<CategoryDetailDto | null> {
     try {
       const response = await apiClient.get<Result<CategoryDetailDto>>(`/categories/${encodeURIComponent(slug)}`);
-      if (response.data?.isSuccess && response.data.data) {
+      if (response.data?.isSuccess && response.data.data && response.data.data.name) {
         return response.data.data;
       }
       return getMockCategoryBySlug(slug);
@@ -87,7 +91,12 @@ export const catalogApi = {
   async getCategoryFilters(slug: string): Promise<CategoryFiltersDto> {
     try {
       const response = await apiClient.get<Result<CategoryFiltersDto>>(`/categories/${encodeURIComponent(slug)}/filters`);
-      if (response.data?.isSuccess && response.data.data) {
+      if (
+        response.data?.isSuccess &&
+        response.data.data &&
+        Array.isArray(response.data.data.brands) &&
+        response.data.data.brands.length > 0
+      ) {
         return response.data.data;
       }
       return getMockCategoryFilters(slug);
@@ -105,7 +114,11 @@ export const catalogApi = {
       const response = await apiClient.get<Result<BrandDto[]>>('/brands', {
         params: { isActive },
       });
-      if (response.data?.isSuccess && response.data.data) {
+      if (
+        response.data?.isSuccess &&
+        Array.isArray(response.data.data) &&
+        response.data.data.length > 0
+      ) {
         return response.data.data;
       }
       return MOCK_BRANDS;
@@ -125,7 +138,12 @@ export const catalogApi = {
       const url = `/products${queryString ? `?${queryString}` : ''}`;
       const response = await apiClient.get<Result<PagedResult<ProductListDto>>>(url);
 
-      if (response.data?.isSuccess && response.data.data) {
+      if (
+        response.data?.isSuccess &&
+        response.data.data &&
+        Array.isArray(response.data.data.items) &&
+        response.data.data.items.length > 0
+      ) {
         return response.data.data;
       }
       return getMockProducts(params);
@@ -141,7 +159,7 @@ export const catalogApi = {
   async getProductBySlug(slug: string): Promise<ProductDetailDto | null> {
     try {
       const response = await apiClient.get<Result<ProductDetailDto>>(`/products/${encodeURIComponent(slug)}`);
-      if (response.data?.isSuccess && response.data.data) {
+      if (response.data?.isSuccess && response.data.data && response.data.data.id) {
         return response.data.data;
       }
       return getMockProductBySlug(slug);
