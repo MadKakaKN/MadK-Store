@@ -93,9 +93,14 @@ public class CatalogService : ICatalogService
             return Result<CategoryFiltersDto>.Failure("Không tìm thấy danh mục");
         }
 
+        var categoryIds = await _context.Categories
+            .Where(c => c.Id == category.Id || c.ParentId == category.Id)
+            .Select(c => c.Id)
+            .ToListAsync(ct);
+
         // 1. Available brands with product count
         var brands = await _context.Products
-            .Where(p => p.CategoryId == category.Id && p.IsActive)
+            .Where(p => categoryIds.Contains(p.CategoryId) && p.IsActive)
             .GroupBy(p => new { p.Brand.Id, p.Brand.Name, p.Brand.Slug, p.Brand.LogoUrl })
             .Select(g => new BrandFilterDto
             {
@@ -111,7 +116,7 @@ public class CatalogService : ICatalogService
 
         // 2. Price range
         var prices = await _context.Products
-            .Where(p => p.CategoryId == category.Id && p.IsActive)
+            .Where(p => categoryIds.Contains(p.CategoryId) && p.IsActive)
             .Select(p => p.BasePrice)
             .ToListAsync(ct);
 
@@ -208,14 +213,30 @@ public class CatalogService : ICatalogService
     {
         var query = _context.Products.Where(p => p.IsActive).AsNoTracking();
 
-        // Filter by category
+        // Filter by category (including subcategories)
         if (!string.IsNullOrWhiteSpace(queryParams.CategorySlug))
         {
-            query = query.Where(p => p.Category.Slug == queryParams.CategorySlug);
+            var category = await _context.Categories.FirstOrDefaultAsync(c => c.Slug == queryParams.CategorySlug, ct);
+            if (category != null)
+            {
+                var categoryIds = await _context.Categories
+                    .Where(c => c.Id == category.Id || c.ParentId == category.Id)
+                    .Select(c => c.Id)
+                    .ToListAsync(ct);
+                query = query.Where(p => categoryIds.Contains(p.CategoryId));
+            }
+            else
+            {
+                query = query.Where(p => p.Category.Slug == queryParams.CategorySlug);
+            }
         }
         else if (queryParams.CategoryId.HasValue)
         {
-            query = query.Where(p => p.CategoryId == queryParams.CategoryId.Value);
+            var categoryIds = await _context.Categories
+                .Where(c => c.Id == queryParams.CategoryId.Value || c.ParentId == queryParams.CategoryId.Value)
+                .Select(c => c.Id)
+                .ToListAsync(ct);
+            query = query.Where(p => categoryIds.Contains(p.CategoryId));
         }
 
         // Filter by brand

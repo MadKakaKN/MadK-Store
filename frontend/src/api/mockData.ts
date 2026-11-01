@@ -3478,6 +3478,40 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
   }
 ];
 
+/**
+ * Lấy danh sách tất cả category slugs bao gồm chính slug đó và toàn bộ slug của các danh mục con cháu
+ */
+export function getAllCategorySlugs(targetSlug?: string): string[] {
+  if (!targetSlug || targetSlug === 'all') return [];
+
+  const slugs: string[] = [targetSlug];
+
+  function collectDescendants(node: CategoryTreeDto) {
+    if (node.children && node.children.length > 0) {
+      for (const child of node.children) {
+        slugs.push(child.slug);
+        collectDescendants(child);
+      }
+    }
+  }
+
+  function findNode(nodes: CategoryTreeDto[]): boolean {
+    for (const node of nodes) {
+      if (node.slug === targetSlug) {
+        collectDescendants(node);
+        return true;
+      }
+      if (node.children && node.children.length > 0) {
+        if (findNode(node.children)) return true;
+      }
+    }
+    return false;
+  }
+
+  findNode(MOCK_CATEGORY_TREE);
+  return slugs;
+}
+
 export function getMockProducts(params: ProductQueryParams = {}): PagedResult<ProductListDto> {
   let filtered = MOCK_PRODUCTS.map((p) => {
     let minPrice = p.basePrice;
@@ -3510,8 +3544,12 @@ export function getMockProducts(params: ProductQueryParams = {}): PagedResult<Pr
   });
 
   if (params.categorySlug) {
+    const matchingSlugs = new Set(getAllCategorySlugs(params.categorySlug));
     filtered = filtered.filter(
-      (p) => p.categorySlug === params.categorySlug || p.categorySlug.startsWith(params.categorySlug!)
+      (p) =>
+        matchingSlugs.has(p.categorySlug) ||
+        p.categorySlug === params.categorySlug ||
+        p.categorySlug.startsWith(params.categorySlug!)
     );
   }
 
@@ -3607,10 +3645,16 @@ export function getMockCategoryFilters(slug: string): CategoryFiltersDto {
   const categoryName = cat?.name || 'Tất cả danh mục';
   const categorySlug = cat?.slug || slug;
 
-  // Filter products matching this category
+  const matchingSlugs = new Set(getAllCategorySlugs(slug));
+
+  // Filter products matching this category and all its descendants
   const products = MOCK_PRODUCTS.filter((p) => {
     if (!slug || slug === 'all') return true;
-    return p.category.slug === slug || p.category.slug.startsWith(slug);
+    return (
+      matchingSlugs.has(p.category.slug) ||
+      p.category.slug === slug ||
+      p.category.slug.startsWith(slug)
+    );
   });
 
   // Calculate brand product counts
@@ -3639,10 +3683,15 @@ export function getMockCategoryFilters(slug: string): CategoryFiltersDto {
       { key: 'ram', label: 'RAM', options: ['16GB', '32GB', '64GB'] },
       { key: 'storage', label: 'Ổ cứng SSD', options: ['512GB SSD', '1TB SSD', '2TB SSD'] },
     ];
-  } else if (slug.includes('linh-kien') || slug.includes('vga')) {
+  } else if (slug.includes('linh-kien') || slug.includes('vga') || slug.includes('cpu') || slug.includes('ram') || slug.includes('ssd')) {
     specFilters = [
       { key: 'vram', label: 'Dung lượng VRAM', options: ['8GB', '12GB', '16GB', '24GB'] },
       { key: 'power_consumption', label: 'Nguồn đề xuất', options: ['650W', '750W', '850W', '1000W'] },
+    ];
+  } else if (slug.includes('phu-kien') || slug.includes('ban-phim') || slug.includes('chuot') || slug.includes('tai-nghe')) {
+    specFilters = [
+      { key: 'connection', label: 'Kết nối', options: ['Không dây (Wireless/Bluetooth)', 'Có dây (Type-C USB)'] },
+      { key: 'switch', label: 'Loại Switch / Driver', options: ['Linear', 'Tactile', 'Clicky', 'Custom Gateron'] },
     ];
   }
 
