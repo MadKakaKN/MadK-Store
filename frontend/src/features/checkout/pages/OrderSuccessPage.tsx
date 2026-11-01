@@ -90,7 +90,7 @@ export const OrderSuccessPage: React.FC = () => {
             Cảm ơn bạn đã tin chọn MadK Store!
           </h1>
           <p className="mt-2 text-xs sm:text-sm text-slate-500 max-w-lg mx-auto leading-relaxed">
-            Kiện hàng bàn phím cơ của bạn đang được nhân viên kho chuẩn bị đóng gói cẩn thận. Bạn sẽ thanh toán khi nhận hàng tận nơi.
+            Kiện hàng của bạn đang được nhân viên kho chuẩn bị đóng gói cẩn thận. Bạn sẽ thanh toán khi nhận hàng tận nơi.
           </p>
         </div>
       </div>

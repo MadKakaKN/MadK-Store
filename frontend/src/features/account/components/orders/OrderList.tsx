@@ -153,7 +153,7 @@ export const OrderList: React.FC = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Tìm theo mã đơn (MK-...), tên bàn phím, SKU..."
+            placeholder="Tìm theo mã đơn (MK-...), tên sản phẩm, SKU..."
             className="w-full pl-10 pr-4 py-2.5 rounded-2xl text-xs border border-slate-200 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 bg-white"
           />
           <span className="absolute left-3.5 top-2.5 text-slate-400 text-sm">🔍</span>
@@ -243,7 +243,7 @@ export const OrderList: React.FC = () => {
             <p className="mt-1 text-xs text-slate-500 max-w-sm mx-auto">
               {searchQuery
                 ? 'Thử thay đổi từ khóa tìm kiếm hoặc chọn bộ lọc trạng thái khác.'
-                : 'Khám phá ngay các mẫu bàn phím cơ cao cấp Keychron, MonsGeek, FL-Esports và đặt hàng trải nghiệm ngay.'}
+                : 'Khám phá ngay các mẫu điện thoại, laptop, linh kiện công nghệ chính hãng và đặt hàng trải nghiệm ngay.'}
             </p>
           </div>
           {!searchQuery && (

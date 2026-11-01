@@ -7,13 +7,22 @@ import {
   CheckoutCodRequestDto,
 } from '../types/order';
 import { guestSessionStorage } from './cartApi';
+import { MOCK_PRODUCTS } from './mockData';
 
 const MOCK_ORDERS_KEY = 'madk_mock_orders_store';
 
 function getStoredMockOrders(): OrderDto[] {
   try {
     const raw = localStorage.getItem(MOCK_ORDERS_KEY);
-    return raw ? JSON.parse(raw) : [];
+    const orders: OrderDto[] = raw ? JSON.parse(raw) : [];
+    // Tự động dọn dẹp đơn hàng mẫu cũ (Keychron)
+    const cleaned = orders.filter(
+      (o) => !o.items?.some((i) => i.productNameSnapshot?.includes('Keychron Custom Edition'))
+    );
+    if (cleaned.length !== orders.length) {
+      saveStoredMockOrders(cleaned);
+    }
+    return cleaned;
   } catch {
     return [];
   }
@@ -100,7 +109,7 @@ export const orderApi = {
         const serverMap = new Map(res.data.data.map(o => [o.orderNumber, o]));
         const merged = [...res.data.data, ...stored.filter(o => !serverMap.has(o.orderNumber))];
         saveStoredMockOrders(merged);
-        return res.data;
+        return { isSuccess: true, data: merged };
       }
       return res.data;
     } catch {
@@ -189,6 +198,12 @@ function extractServerBusinessError(err: unknown): string | null {
     const anyErr = err as { response?: { status?: number; data?: { error?: string; message?: string } } };
     if (anyErr.response?.data?.error) return anyErr.response.data.error;
     if (anyErr.response?.data?.message) return anyErr.response.data.message;
+    if (anyErr.response?.status && anyErr.response.status >= 400 && anyErr.response.status < 500) {
+      if (anyErr.response.status === 401) {
+        return 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.';
+      }
+      return `Lỗi hệ thống (${anyErr.response.status}): Vui lòng kiểm tra lại thông tin đơn hàng.`;
+    }
   }
   return null;
 }
@@ -197,29 +212,48 @@ function createFallbackMockOrder(request: CheckoutCodRequestDto): OrderDto {
   const now = new Date().toISOString();
   const orderNumber = generateMockOrderNumber();
   const shippingAddress = request.shippingAddress || {
-    recipientName: 'Khách hàng vãng lai',
-    phoneNumber: '0912345678',
-    provinceName: 'Thành phố Hà Nội',
-    districtName: 'Quận Ba Đình',
-    wardName: 'Phường Phúc Xá',
-    detailedAddress: '123 Hoàng Hoa Thám',
+    recipientName: 'Khách hàng',
+    phoneNumber: '0987654321',
+    provinceName: 'Thành phố Hồ Chí Minh',
+    districtName: 'Quận 1',
+    wardName: 'Phường Bến Nghé',
+    detailedAddress: 'Số 123 Lê Duẩn',
   };
 
-  // Mock items from request or default
-  const items = (request.items || []).map((item, idx) => ({
-    id: 'item_' + idx + '_' + Date.now(),
-    variantId: item.variantId,
-    productId: 'prod_' + item.variantId,
-    productNameSnapshot: 'Bàn phím cơ Keychron Custom Edition',
-    variantNameSnapshot: 'Carbon Black / Gateron Red Switch',
-    skuSnapshot: 'KC-PRO-RED-' + idx,
-    unitPriceSnapshot: 2500000,
-    originalPriceSnapshot: 2800000,
-    quantity: item.quantity,
-    totalPrice: 2500000 * item.quantity,
-    attributesSnapshot: '{"Color":"Carbon Black","Switch":"Red"}',
-    thumbnailUrlSnapshot: 'https://images.unsplash.com/photo-1595225476474-87563907a212?w=400&q=80',
-  }));
+  // Mock items from request with actual matched product/variant details
+  const items = (request.items || []).map((item, idx) => {
+    // Tìm trong danh mục sản phẩm mẫu
+    let matchedProd = null;
+    let matchedVar = null;
+    for (const p of MOCK_PRODUCTS) {
+      const v = p.variants?.find((pv) => pv.id === item.variantId);
+      if (v) {
+        matchedProd = p;
+        matchedVar = v;
+        break;
+      }
+      if (p.id === item.variantId) {
+        matchedProd = p;
+        break;
+      }
+    }
+
+    const price = matchedVar?.salePrice || matchedProd?.basePrice || 1000000;
+    return {
+      id: 'item_' + idx + '_' + Date.now(),
+      variantId: item.variantId,
+      productId: matchedProd?.id || 'prod_' + item.variantId,
+      productNameSnapshot: matchedProd?.name || 'Sản phẩm công nghệ chính hãng',
+      variantNameSnapshot: matchedVar?.name || 'Tiêu chuẩn',
+      skuSnapshot: matchedVar?.sku || `SKU-${idx}`,
+      unitPriceSnapshot: price,
+      originalPriceSnapshot: matchedVar?.originalPrice || price,
+      quantity: item.quantity,
+      totalPrice: price * item.quantity,
+      attributesSnapshot: JSON.stringify(matchedVar?.attributes || {}),
+      thumbnailUrlSnapshot: matchedProd?.thumbnailUrl || 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&q=80',
+    };
+  });
 
   const subtotal = items.reduce((acc, i) => acc + i.totalPrice, 0) || 2500000;
   const shippingFee = 0;

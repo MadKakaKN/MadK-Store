@@ -305,20 +305,24 @@ export const CheckoutPage: React.FC = () => {
       let shippingAddressPayload: ShippingAddressInputDto | null = null;
       let addressIdPayload: string | null = null;
 
-      if (isAuthenticated && !isUsingNewAddress && selectedAddressId) {
+      const isValidUuid = (id?: string | null) =>
+        !!id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+
+      if (isAuthenticated && !isUsingNewAddress && isValidUuid(selectedAddressId)) {
         addressIdPayload = selectedAddressId;
       } else {
+        const chosenAddr = savedAddresses.find((a) => a.id === selectedAddressId);
         shippingAddressPayload = {
-          recipientName: recipientName.trim(),
-          phoneNumber: phoneNumber.trim(),
-          recipientEmail: recipientEmail.trim() || null,
-          provinceCode,
-          provinceName,
-          districtCode,
-          districtName,
-          wardCode,
-          wardName,
-          detailedAddress: detailedAddress.trim(),
+          recipientName: chosenAddr ? chosenAddr.recipientName : recipientName.trim(),
+          phoneNumber: chosenAddr ? chosenAddr.phoneNumber : phoneNumber.trim(),
+          recipientEmail: recipientEmail.trim() || user?.email || null,
+          provinceCode: chosenAddr ? chosenAddr.provinceCode : provinceCode,
+          provinceName: chosenAddr ? chosenAddr.provinceName : provinceName,
+          districtCode: chosenAddr ? chosenAddr.districtCode : districtCode,
+          districtName: chosenAddr ? chosenAddr.districtName : districtName,
+          wardCode: chosenAddr ? chosenAddr.wardCode : wardCode,
+          wardName: chosenAddr ? chosenAddr.wardName : wardName,
+          detailedAddress: chosenAddr ? chosenAddr.detailedAddress : detailedAddress.trim(),
         };
       }
 
@@ -399,7 +403,7 @@ export const CheckoutPage: React.FC = () => {
         <div>
           <h1 className="text-2xl font-black text-slate-900">Giỏ hàng của bạn đang trống</h1>
           <p className="mt-2 text-xs sm:text-sm text-slate-500">
-            Không có sản phẩm nào trong giỏ để thanh toán. Hãy chọn những mẫu bàn phím cơ và phụ kiện yêu thích trước nhé!
+            Không có sản phẩm nào trong giỏ để thanh toán. Hãy chọn những mẫu sản phẩm công nghệ yêu thích trước nhé!
           </p>
         </div>
         <Link

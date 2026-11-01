@@ -266,7 +266,7 @@ export const addressApi = {
   // 1. Đơn vị hành chính Việt Nam (Public)
   async getProvinces(): Promise<ProvinceDto[]> {
     try {
-      const response = await apiClient.get<ApiEnvelope<ProvinceDto[]>>('/api/v1/addresses/provinces');
+      const response = await apiClient.get<ApiEnvelope<ProvinceDto[]>>('/addresses/provinces');
       if (response.data?.isSuccess && response.data.data) {
         return response.data.data;
       }
@@ -280,7 +280,7 @@ export const addressApi = {
     if (!provinceCode) return [];
     try {
       const response = await apiClient.get<ApiEnvelope<DistrictDto[]>>(
-        `/api/v1/addresses/provinces/${provinceCode}/districts`
+        `/addresses/provinces/${provinceCode}/districts`
       );
       if (response.data?.isSuccess && response.data.data) {
         return response.data.data;
@@ -295,7 +295,7 @@ export const addressApi = {
     if (!districtCode) return [];
     try {
       const response = await apiClient.get<ApiEnvelope<WardDto[]>>(
-        `/api/v1/addresses/districts/${districtCode}/wards`
+        `/addresses/districts/${districtCode}/wards`
       );
       if (response.data?.isSuccess && response.data.data) {
         return response.data.data;
@@ -309,7 +309,7 @@ export const addressApi = {
   // 2. Sổ địa chỉ người dùng (Authenticated, chống IDOR)
   async getMyAddresses(userId?: string): Promise<AddressDto[]> {
     try {
-      const response = await apiClient.get<ApiEnvelope<AddressDto[]>>('/api/v1/users/me/addresses');
+      const response = await apiClient.get<ApiEnvelope<AddressDto[]>>('/users/me/addresses');
       if (response.data?.isSuccess && response.data.data) {
         saveLocalAddresses(response.data.data, userId);
         return response.data.data;
@@ -322,7 +322,7 @@ export const addressApi = {
 
   async createAddress(data: CreateAddressRequestDto, userId?: string): Promise<AddressDto> {
     try {
-      const response = await apiClient.post<ApiEnvelope<AddressDto>>('/api/v1/users/me/addresses', data);
+      const response = await apiClient.post<ApiEnvelope<AddressDto>>('/users/me/addresses', data);
       if (response.data?.isSuccess && response.data.data) {
         return response.data.data;
       }
@@ -371,7 +371,7 @@ export const addressApi = {
 
   async updateAddress(id: string, data: UpdateAddressRequestDto, userId?: string): Promise<AddressDto> {
     try {
-      const response = await apiClient.put<ApiEnvelope<AddressDto>>(`/api/v1/users/me/addresses/${id}`, data);
+      const response = await apiClient.put<ApiEnvelope<AddressDto>>(`/users/me/addresses/${id}`, data);
       if (response.data?.isSuccess && response.data.data) {
         return response.data.data;
       }
@@ -429,7 +429,7 @@ export const addressApi = {
 
   async deleteAddress(id: string, userId?: string): Promise<void> {
     try {
-      await apiClient.delete<ApiEnvelope<void>>(`/api/v1/users/me/addresses/${id}`);
+      await apiClient.delete<ApiEnvelope<void>>(`/users/me/addresses/${id}`);
       return;
     } catch {
       // Fallback local mock storage
@@ -448,7 +448,7 @@ export const addressApi = {
 
   async setDefaultAddress(id: string, userId?: string): Promise<void> {
     try {
-      await apiClient.put<ApiEnvelope<void>>(`/api/v1/users/me/addresses/${id}/default`);
+      await apiClient.put<ApiEnvelope<void>>(`/users/me/addresses/${id}/default`);
       return;
     } catch {
       // Fallback local mock storage
