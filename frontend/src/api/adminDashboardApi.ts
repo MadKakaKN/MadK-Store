@@ -75,7 +75,8 @@ async function computeMockRevenueReport(fromDate?: string, toDate?: string): Pro
   try {
     const raw = localStorage.getItem(ADMIN_ORDERS_KEY);
     if (raw) {
-      orders = JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      orders = Array.isArray(parsed) ? parsed.filter((o: OrderDto) => o && o.id && !o.id.startsWith('ord-seed')) : [];
     }
   } catch {
     orders = [];
