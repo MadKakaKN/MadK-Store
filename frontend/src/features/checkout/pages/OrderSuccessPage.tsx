@@ -18,6 +18,13 @@ export const OrderSuccessPage: React.FC = () => {
   const [order, setOrder] = useState<OrderDto | null>(stateOrder || null);
   const [isLoading, setIsLoading] = useState<boolean>(!stateOrder && !!queryOrderNumber);
   const [copied, setCopied] = useState<boolean>(false);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+
+  const handleCopy = (text: string, field: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(field);
+    setTimeout(() => setCopiedField(null), 2500);
+  };
 
   useEffect(() => {
     if (!order && queryOrderNumber) {
@@ -88,7 +95,11 @@ export const OrderSuccessPage: React.FC = () => {
             <OrderSuccess3DCanvas />
           </React.Suspense>
           <span className="absolute bottom-2 px-2.5 py-0.5 rounded-full bg-emerald-600/90 backdrop-blur-sm text-[10px] font-bold text-white shadow-xs pointer-events-none">
-            COD Đã ghi nhận
+            {order?.paymentMethod === 'BankTransfer'
+              ? 'VietQR Chờ chuyển khoản'
+              : order?.paymentMethod === 'MoMo'
+              ? 'MoMo Chờ chuyển tiền'
+              : 'COD Đã ghi nhận'}
           </span>
         </div>
 
@@ -100,7 +111,11 @@ export const OrderSuccessPage: React.FC = () => {
             Cảm ơn bạn đã tin chọn MadK Store!
           </h1>
           <p className="mt-2 text-xs sm:text-sm text-slate-500 max-w-lg mx-auto leading-relaxed">
-            Kiện hàng của bạn đang được nhân viên kho chuẩn bị đóng gói cẩn thận. Bạn sẽ thanh toán khi nhận hàng tận nơi.
+            {order?.paymentMethod === 'BankTransfer'
+              ? 'Đơn hàng của bạn đã được ghi nhận. Vui lòng quét mã VietQR hoặc chuyển khoản theo thông tin bên dưới để đơn hàng được chuẩn bị và giao sớm nhất.'
+              : order?.paymentMethod === 'MoMo'
+              ? 'Đơn hàng của bạn đã được ghi nhận. Vui lòng chuyển tiền qua ứng dụng MoMo theo hướng dẫn bên dưới để đơn hàng được duyệt giao nhanh nhất.'
+              : 'Kiện hàng của bạn đang được nhân viên kho chuẩn bị đóng gói cẩn thận. Bạn sẽ thanh toán khi nhận hàng tận nơi.'}
           </p>
         </div>
       </div>
@@ -135,6 +150,195 @@ export const OrderSuccessPage: React.FC = () => {
             <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
               Dự kiến giao: 2 - 4 ngày làm việc
             </span>
+          </div>
+        </div>
+      )}
+
+      {/* 2.5. VietQR or MoMo Payment Action Card (If Online Payment) */}
+      {order && (order.paymentMethod === 'BankTransfer' || order.paymentMethod === 'MoMo') && (
+        <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-slate-900/20 border border-slate-700/60 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-700/60">
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">
+                {order.paymentMethod === 'BankTransfer' ? '🏛️' : '📱'}
+              </span>
+              <div>
+                <h2 className="text-lg sm:text-xl font-black text-white">
+                  {order.paymentMethod === 'BankTransfer'
+                    ? 'Quét mã VietQR - Techcombank để hoàn tất'
+                    : 'Chuyển tiền qua Ví điện tử MoMo'}
+                </h2>
+                <p className="text-xs text-slate-300 mt-0.5">
+                  Quý khách vui lòng chuyển khoản theo thông tin dưới đây để đơn hàng được chuẩn bị và bàn giao vận chuyển sớm nhất.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 animate-pulse">
+                ⏳ Chờ nhận thanh toán
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            {/* Left: Dynamic QR Code */}
+            <div className="md:col-span-5 flex flex-col items-center justify-center text-center space-y-3">
+              <div className="relative p-3 bg-white rounded-2xl shadow-2xl border-4 border-white">
+                {order.paymentMethod === 'BankTransfer' ? (
+                  <img
+                    src={`https://img.vietqr.io/image/TCB-19050430057012-compact2.png?amount=${Math.round(order.totalAmount)}&addInfo=${encodeURIComponent(`MADK ${order.orderNumber}`)}&accountName=${encodeURIComponent('NGUYEN HOANG KHANG')}`}
+                    alt="Mã VietQR thanh toán Techcombank"
+                    className="w-56 h-auto sm:w-64 object-contain rounded-xl"
+                  />
+                ) : (
+                  <img
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(`2|99|0901316434|NGUYEN HOANG KHANG||0|0|${Math.round(order.totalAmount)}|MADK ${order.orderNumber}|transfer_p2p`)}`}
+                    alt="Mã QR thanh toán MoMo"
+                    className="w-56 h-56 sm:w-64 sm:h-64 object-contain rounded-xl"
+                  />
+                )}
+              </div>
+              <p className="text-[11px] text-slate-400 font-medium max-w-xs leading-relaxed">
+                {order.paymentMethod === 'BankTransfer'
+                  ? 'Quét mã bằng bất kỳ App Ngân hàng nào (Techcombank, VCB, MB, VietinBank, VPBank...)'
+                  : 'Mở ứng dụng MoMo và chọn Quét mã QR'}
+              </p>
+              {order.paymentMethod === 'MoMo' && (
+                <a
+                  href="https://me.momo.vn/0901316434"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 rounded-xl text-xs font-bold bg-pink-600 hover:bg-pink-500 text-white transition-colors flex items-center gap-2 shadow-md shadow-pink-600/30"
+                >
+                  <span>Mở app MoMo trên điện thoại</span>
+                  <span>↗</span>
+                </a>
+              )}
+            </div>
+
+            {/* Right: Payment Details with 1-Click Copy Buttons */}
+            <div className="md:col-span-7 space-y-3 text-xs">
+              {order.paymentMethod === 'BankTransfer' ? (
+                <>
+                  {/* Ngân hàng */}
+                  <div className="p-3.5 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] uppercase font-bold text-slate-400 block">Ngân hàng thụ hưởng</span>
+                      <span className="text-sm font-extrabold text-white mt-0.5 block">Techcombank (TCB)</span>
+                      <span className="text-[11px] text-slate-400">Ngân hàng TMCP Kỹ Thương Việt Nam</span>
+                    </div>
+                  </div>
+
+                  {/* Số tài khoản */}
+                  <div className="p-3.5 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] uppercase font-bold text-slate-400 block">Số tài khoản</span>
+                      <span className="text-base sm:text-lg font-mono font-black text-emerald-400 mt-0.5 block tracking-wider">
+                        19050430057012
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleCopy('19050430057012', 'stk')}
+                      className="px-3 py-1.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-semibold transition-colors flex items-center gap-1.5"
+                    >
+                      <span>{copiedField === 'stk' ? '✓ Đã chép' : '📋 Chép STK'}</span>
+                    </button>
+                  </div>
+
+                  {/* Tên chủ tài khoản */}
+                  <div className="p-3.5 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] uppercase font-bold text-slate-400 block">Tên chủ tài khoản</span>
+                      <span className="text-sm sm:text-base font-extrabold text-white mt-0.5 block uppercase">
+                        NGUYEN HOANG KHANG
+                      </span>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Ví MoMo */}
+                  <div className="p-3.5 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] uppercase font-bold text-slate-400 block">Hình thức</span>
+                      <span className="text-sm font-extrabold text-pink-400 mt-0.5 block">Ví điện tử MoMo</span>
+                    </div>
+                  </div>
+
+                  {/* SĐT MoMo */}
+                  <div className="p-3.5 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] uppercase font-bold text-slate-400 block">Số điện thoại MoMo</span>
+                      <span className="text-base sm:text-lg font-mono font-black text-pink-400 mt-0.5 block tracking-wider">
+                        0901316434
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleCopy('0901316434', 'momo_phone')}
+                      className="px-3 py-1.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-semibold transition-colors flex items-center gap-1.5"
+                    >
+                      <span>{copiedField === 'momo_phone' ? '✓ Đã chép' : '📋 Chép SĐT'}</span>
+                    </button>
+                  </div>
+
+                  {/* Tên người nhận */}
+                  <div className="p-3.5 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] uppercase font-bold text-slate-400 block">Tên người nhận</span>
+                      <span className="text-sm sm:text-base font-extrabold text-white mt-0.5 block uppercase">
+                        NGUYEN HOANG KHANG
+                      </span>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* Số tiền cần thanh toán */}
+              <div className="p-3.5 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Số tiền chính xác</span>
+                  <span className="text-base sm:text-lg font-mono font-black text-amber-400 mt-0.5 block">
+                    {formatVND(order.totalAmount)}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleCopy(Math.round(order.totalAmount).toString(), 'amount')}
+                  className="px-3 py-1.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-semibold transition-colors flex items-center gap-1.5"
+                >
+                  <span>{copiedField === 'amount' ? '✓ Đã chép' : '📋 Chép số tiền'}</span>
+                </button>
+              </div>
+
+              {/* Nội dung chuyển khoản */}
+              <div className="p-3.5 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-emerald-400 block">
+                    Nội dung chuyển khoản (bắt buộc)
+                  </span>
+                  <span className="text-base sm:text-lg font-mono font-black text-emerald-300 mt-0.5 block tracking-wider">
+                    MADK {order.orderNumber}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleCopy(`MADK ${order.orderNumber}`, 'note')}
+                  className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition-colors flex items-center gap-1.5 shadow-sm"
+                >
+                  <span>{copiedField === 'note' ? '✓ Đã chép' : '📋 Chép nội dung'}</span>
+                </button>
+              </div>
+
+              {/* Ghi chú nhắc nhở */}
+              <div className="p-3 rounded-xl bg-slate-800/40 border border-slate-700/40 text-[11px] text-slate-300 leading-relaxed flex items-start gap-2">
+                <span className="text-amber-400 text-base">⚠️</span>
+                <p>
+                  Vui lòng giữ <strong>chính xác nội dung chuyển khoản</strong> để hệ thống tự động ghi nhận thanh toán nhanh nhất. Sau khi chuyển xong, đơn hàng sẽ được cập nhật và đóng gói giao cho bạn.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -180,7 +384,15 @@ export const OrderSuccessPage: React.FC = () => {
               <div className="mt-3 space-y-2 text-xs">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-500">Phương thức:</span>
-                  <span className="font-bold text-slate-900">Thanh toán khi nhận hàng (COD)</span>
+                  <span className="font-bold text-slate-900">
+                    {order.paymentMethod === 'BankTransfer'
+                      ? 'Chuyển khoản ngân hàng (VietQR - Techcombank)'
+                      : order.paymentMethod === 'MoMo'
+                      ? 'Ví điện tử MoMo'
+                      : order.paymentMethod === 'VNPay'
+                      ? 'Thanh toán trực tuyến VNPay'
+                      : 'Thanh toán khi nhận hàng (COD)'}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-500">Phí giao hàng toàn quốc:</span>
@@ -188,15 +400,31 @@ export const OrderSuccessPage: React.FC = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-500">Trạng thái thanh toán:</span>
-                  <span className="font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md">
-                    Chờ thanh toán khi nhận hàng
+                  <span
+                    className={`font-semibold px-2 py-0.5 rounded-md ${
+                      order.paymentStatus === 'Paid'
+                        ? 'text-emerald-700 bg-emerald-50'
+                        : order.paymentMethod === 'BankTransfer' || order.paymentMethod === 'MoMo'
+                        ? 'text-amber-700 bg-amber-50'
+                        : 'text-slate-700 bg-slate-100'
+                    }`}
+                  >
+                    {order.paymentStatus === 'Paid'
+                      ? 'Đã thanh toán thành công'
+                      : order.paymentMethod === 'BankTransfer'
+                      ? 'Chờ chuyển khoản VietQR'
+                      : order.paymentMethod === 'MoMo'
+                      ? 'Chờ chuyển tiền MoMo'
+                      : 'Chờ thanh toán khi nhận hàng'}
                   </span>
                 </div>
               </div>
             </div>
 
             <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-700">Tổng tiền thu hộ (COD):</span>
+              <span className="text-xs font-bold text-slate-700">
+                {order.paymentMethod === 'COD' ? 'Tổng tiền thu hộ (COD):' : 'Tổng thanh toán:'}
+              </span>
               <span className="text-xl font-black text-brand-600 font-mono">
                 {formatVND(order.totalAmount)}
               </span>

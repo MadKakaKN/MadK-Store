@@ -13,5 +13,15 @@ public enum PaymentMethod
     /// <summary>
     /// Cổng thanh toán trực tuyến VNPay.
     /// </summary>
-    VNPay = 2
+    VNPay = 2,
+
+    /// <summary>
+    /// Chuyển khoản ngân hàng trực tiếp (VietQR Napas 247).
+    /// </summary>
+    BankTransfer = 3,
+
+    /// <summary>
+    /// Ví điện tử MoMo (Chuyển tiền MoMo cá nhân).
+    /// </summary>
+    MoMo = 4
 }

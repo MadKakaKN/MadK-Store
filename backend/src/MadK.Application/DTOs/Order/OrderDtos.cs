@@ -28,7 +28,8 @@ public record CheckoutCodRequestDto(
     string? CustomerNote = null,
     string? IdempotencyKey = null,
     string? CouponCode = null,
-    string? CustomerEmail = null
+    string? CustomerEmail = null,
+    PaymentMethod PaymentMethod = PaymentMethod.COD
 );
 
 public record OrderItemDto(

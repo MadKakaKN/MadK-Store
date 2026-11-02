@@ -370,6 +370,14 @@ public class OrderService : IOrderService
 
                 decimal totalAmount = Math.Max(0m, subtotalAmount - discountAmount + shippingFee);
 
+                string initialReason = request.PaymentMethod switch
+                {
+                    PaymentMethod.BankTransfer => "Khởi tạo đơn hàng Chuyển khoản ngân hàng (VietQR)",
+                    PaymentMethod.MoMo => "Khởi tạo đơn hàng Ví điện tử MoMo",
+                    PaymentMethod.VNPay => "Khởi tạo đơn hàng VNPay",
+                    _ => "Khởi tạo đơn hàng COD"
+                };
+
                 var initialHistory = new OrderStatusHistory
                 {
                     Id = Guid.NewGuid(),
@@ -378,7 +386,7 @@ public class OrderService : IOrderService
                     ToStatus = OrderStatus.Pending,
                     ChangedByUserId = userId,
                     ChangedByName = userId.HasValue ? "Khách hàng" : "Khách vãng lai",
-                    Reason = "Khởi tạo đơn hàng COD",
+                    Reason = initialReason,
                     CreatedAt = now
                 };
 
@@ -389,9 +397,9 @@ public class OrderService : IOrderService
                     UserId = userId,
                     CustomerEmail = recipientEmail,
                     CustomerPhone = recipientPhone,
-                    Status = OrderStatus.Pending,       // Theo docs/order-states.md: COD khởi tạo là Pending (chờ duyệt)
-                    PaymentStatus = PaymentStatus.Pending, // COD: Chưa thanh toán
-                    PaymentMethod = PaymentMethod.COD,
+                    Status = OrderStatus.Pending,       // Theo docs/order-states.md: COD & BankTransfer khởi tạo là Pending (chờ duyệt)
+                    PaymentStatus = PaymentStatus.Pending, // Chưa thanh toán
+                    PaymentMethod = request.PaymentMethod,
                     SubtotalAmount = subtotalAmount,
                     DiscountAmount = discountAmount,
                     ShippingFee = shippingFee,
@@ -417,8 +425,8 @@ public class OrderService : IOrderService
                     await tx.CommitAsync(ct);
                 }
 
-                _logger.LogInformation("Successfully created COD order {OrderNumber} for user {UserId}. Subtotal: {Subtotal:N0}đ, Shipping: {Shipping:N0}đ, Discount: {Discount:N0}đ, Total: {Total:N0}đ",
-                    orderNumber, userId, subtotalAmount, shippingFee, discountAmount, totalAmount);
+                _logger.LogInformation("Successfully created {PaymentMethod} order {OrderNumber} for user {UserId}. Subtotal: {Subtotal:N0}đ, Shipping: {Shipping:N0}đ, Discount: {Discount:N0}đ, Total: {Total:N0}đ",
+                    request.PaymentMethod, orderNumber, userId, subtotalAmount, shippingFee, discountAmount, totalAmount);
 
                 // Gửi email xác nhận đặt hàng qua hàng đợi (non-blocking, lỗi gửi không làm hỏng đơn)
                 if (_emailSender != null && !string.IsNullOrWhiteSpace(recipientEmail))
@@ -435,13 +443,21 @@ public class OrderService : IOrderService
                             oi.ThumbnailUrlSnapshot
                         )).ToList();
 
+                        string paymentMethodEmailLabel = request.PaymentMethod switch
+                        {
+                            PaymentMethod.BankTransfer => "Chuyển khoản ngân hàng (VietQR - Techcombank)",
+                            PaymentMethod.MoMo => "Chuyển tiền ví điện tử MoMo",
+                            PaymentMethod.VNPay => "Thanh toán trực tuyến VNPay",
+                            _ => "Thanh toán khi nhận hàng (COD)"
+                        };
+
                         var confirmDto = new OrderConfirmationEmailDto(
                             OrderNumber: order.OrderNumber,
                             RecipientEmail: recipientEmail,
                             RecipientName: recipientName,
                             RecipientPhone: recipientPhone,
                             ShippingAddress: fullAddressDisplay,
-                            PaymentMethod: "Thanh toán khi nhận hàng (COD)",
+                            PaymentMethod: paymentMethodEmailLabel,
                             SubtotalAmount: subtotalAmount,
                             ShippingFee: shippingFee,
                             DiscountAmount: discountAmount,

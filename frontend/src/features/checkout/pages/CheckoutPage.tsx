@@ -8,7 +8,7 @@ import paymentApi from '../../../api/paymentApi';
 import { couponApi } from '../../../api/couponApi';
 import { formatVND } from '../../../utils/format';
 import type { ProvinceDto, DistrictDto, WardDto, AddressDto } from '../../../types/address';
-import type { CheckoutCodRequestDto, ShippingAddressInputDto } from '../../../types/order';
+import type { CheckoutCodRequestDto, ShippingAddressInputDto, PaymentMethod } from '../../../types/order';
 
 export const CheckoutPage: React.FC = () => {
   const { items, totalAmount, itemCount, isLoading: isCartLoading, refreshCart, clearCart } = useCart();
@@ -46,7 +46,7 @@ export const CheckoutPage: React.FC = () => {
 
   // Ghi chú & Phương thức thanh toán
   const [customerNote, setCustomerNote] = useState<string>('');
-  const [paymentMethod, setPaymentMethod] = useState<'COD' | 'VNPay'>('COD');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('BankTransfer');
 
   // Trạng thái Coupon & Phí Vận Chuyển
   const [couponInput, setCouponInput] = useState<string>('');
@@ -336,6 +336,7 @@ export const CheckoutPage: React.FC = () => {
         customerNote: customerNote.trim() || null,
         idempotencyKey: idempotencyKeyRef.current,
         couponCode: appliedCoupon?.code || null,
+        paymentMethod: paymentMethod,
       };
 
       if (paymentMethod === 'VNPay') {
@@ -711,7 +712,71 @@ export const CheckoutPage: React.FC = () => {
               </div>
 
               <div className="space-y-3">
-                {/* COD Option */}
+                {/* 1. VietQR Bank Transfer Option */}
+                <label
+                  className={`p-4 sm:p-5 rounded-2xl border-2 cursor-pointer flex items-start gap-4 transition-all ${
+                    paymentMethod === 'BankTransfer'
+                      ? 'border-emerald-500 bg-emerald-50/40 ring-2 ring-emerald-500/10'
+                      : 'border-slate-200 bg-white hover:border-slate-300'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="BankTransfer"
+                    checked={paymentMethod === 'BankTransfer'}
+                    onChange={() => setPaymentMethod('BankTransfer')}
+                    className="mt-1 text-emerald-600 focus:ring-emerald-500"
+                  />
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">🏛️</span>
+                      <span className="font-extrabold text-sm text-slate-900">
+                        Chuyển khoản ngân hàng (VietQR - Techcombank)
+                      </span>
+                      <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full ml-auto">
+                        Khuyên dùng • Nhanh 24/7
+                      </span>
+                    </div>
+                    <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
+                      Quét mã VietQR Napas 247 qua mọi app ngân hàng (VCB, MB, Tech, ACB...). Tự động điền số tài khoản <strong>19050430057012</strong>, chủ TK <strong>NGUYEN HOANG KHANG</strong> và đúng số tiền.
+                    </p>
+                  </div>
+                </label>
+
+                {/* 2. MoMo Transfer Option */}
+                <label
+                  className={`p-4 sm:p-5 rounded-2xl border-2 cursor-pointer flex items-start gap-4 transition-all ${
+                    paymentMethod === 'MoMo'
+                      ? 'border-pink-500 bg-pink-50/40 ring-2 ring-pink-500/10'
+                      : 'border-slate-200 bg-white hover:border-slate-300'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="MoMo"
+                    checked={paymentMethod === 'MoMo'}
+                    onChange={() => setPaymentMethod('MoMo')}
+                    className="mt-1 text-pink-600 focus:ring-pink-500"
+                  />
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">📱</span>
+                      <span className="font-extrabold text-sm text-slate-900">
+                        Ví điện tử MoMo
+                      </span>
+                      <span className="text-[10px] bg-pink-100 text-pink-800 font-bold px-2 py-0.5 rounded-full ml-auto">
+                        Chuyển 1 chạm
+                      </span>
+                    </div>
+                    <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
+                      Chuyển tiền nhanh qua App MoMo đến <strong>0901316434</strong> (<strong>NGUYEN HOANG KHANG</strong>) hoặc quét mã QR MoMo hiển thị ngay sau khi đặt hàng.
+                    </p>
+                  </div>
+                </label>
+
+                {/* 3. COD Option */}
                 <label
                   className={`p-4 sm:p-5 rounded-2xl border-2 cursor-pointer flex items-start gap-4 transition-all ${
                     paymentMethod === 'COD'
@@ -729,7 +794,7 @@ export const CheckoutPage: React.FC = () => {
                   />
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-lg">💵</span>
+                      <span className="text-xl">💵</span>
                       <span className="font-extrabold text-sm text-slate-900">
                         Thanh toán tiền mặt khi nhận hàng (COD)
                       </span>
@@ -739,38 +804,6 @@ export const CheckoutPage: React.FC = () => {
                     </div>
                     <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
                       Bạn chỉ cần thanh toán khi nhân viên bưu tá giao kiện hàng đến tận nơi. Được kiểm tra tem niêm phong và đóng gói bên ngoài.
-                    </p>
-                  </div>
-                </label>
-
-                {/* VNPay Option (Active Sandbox) */}
-                <label
-                  className={`p-4 sm:p-5 rounded-2xl border-2 cursor-pointer flex items-start gap-4 transition-all ${
-                    paymentMethod === 'VNPay'
-                      ? 'border-brand-500 bg-brand-50/40 ring-2 ring-brand-500/10'
-                      : 'border-slate-200 bg-white hover:border-slate-300'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="VNPay"
-                    checked={paymentMethod === 'VNPay'}
-                    onChange={() => setPaymentMethod('VNPay')}
-                    className="mt-1 text-brand-600 focus:ring-brand-500"
-                  />
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg">💳</span>
-                      <span className="font-extrabold text-sm text-slate-900">
-                        Thanh toán trực tuyến VNPay / QR Code
-                      </span>
-                      <span className="text-[10px] bg-brand-100 text-brand-800 font-bold px-2 py-0.5 rounded-full ml-auto">
-                        Sandbox
-                      </span>
-                    </div>
-                    <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
-                      Quét mã VNPAY-QR, thẻ ATM nội địa hoặc thẻ quốc tế Visa/Mastercard. Giữ hàng tạm 15 phút an toàn tuyệt đối.
                     </p>
                   </div>
                 </label>
@@ -975,7 +1008,11 @@ export const CheckoutPage: React.FC = () => {
                 ) : (
                   <>
                     <span>
-                      {paymentMethod === 'VNPay'
+                      {paymentMethod === 'BankTransfer'
+                        ? 'Xác nhận Đặt hàng & Nhận mã VietQR'
+                        : paymentMethod === 'MoMo'
+                        ? 'Xác nhận Đặt hàng & Chuyển tiền MoMo'
+                        : paymentMethod === 'VNPay'
                         ? 'Chuyển sang Cổng Thanh toán VNPay'
                         : 'Xác nhận Đặt hàng (COD)'}
                     </span>

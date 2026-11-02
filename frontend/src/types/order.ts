@@ -111,6 +111,7 @@ export interface CheckoutCodRequestDto {
   customerNote?: string | null;
   idempotencyKey?: string | null;
   couponCode?: string | null;
+  paymentMethod?: PaymentMethod | null;
 }
 
 export interface CancelOrderRequestDto {

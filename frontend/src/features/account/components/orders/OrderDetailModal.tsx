@@ -231,7 +231,13 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                   <div className="flex items-center justify-between">
                     <span className="text-slate-500">Hình thức:</span>
                     <span className="font-bold text-slate-900">
-                      {order.paymentMethod === 'COD' ? 'Thanh toán khi nhận hàng (COD)' : order.paymentMethod}
+                      {order.paymentMethod === 'BankTransfer'
+                        ? 'Chuyển khoản VietQR (Techcombank)'
+                        : order.paymentMethod === 'MoMo'
+                        ? 'Ví điện tử MoMo'
+                        : order.paymentMethod === 'VNPay'
+                        ? 'Cổng VNPay'
+                        : 'Thanh toán khi nhận hàng (COD)'}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
