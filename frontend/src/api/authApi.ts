@@ -23,7 +23,17 @@ export const tokenStorage = {
   getUser: (): UserDto | null => {
     try {
       const u = localStorage.getItem(USER_KEY);
-      return u ? JSON.parse(u) : null;
+      if (!u) return null;
+      const user = JSON.parse(u);
+      // Dọn dẹp session mock cũ nếu còn lưu trong browser
+      if (
+        user &&
+        (user.id === 'mock-user-id' || (typeof user.id === 'string' && user.id.startsWith('mock-')))
+      ) {
+        tokenStorage.clear();
+        return null;
+      }
+      return user;
     } catch {
       return null;
     }
@@ -45,31 +55,34 @@ export const tokenStorage = {
   },
 };
 
+function extractErrorMessage(err: unknown, defaultMsg: string): string {
+  const axiosError = err as {
+    response?: {
+      data?: { error?: string; message?: string };
+      status?: number;
+    };
+    code?: string;
+    message?: string;
+  };
+  if (axiosError.response?.data?.error) return axiosError.response.data.error;
+  if (axiosError.response?.data?.message) return axiosError.response.data.message;
+  if (axiosError.code === 'ERR_NETWORK') return 'Không thể kết nối đến máy chủ. Vui lòng kiểm tra lại kết nối mạng.';
+  if (axiosError.response?.status === 401) return 'Email hoặc mật khẩu không chính xác.';
+  if (axiosError.response?.status === 403) return 'Bạn không có quyền thực hiện thao tác này.';
+  if (axiosError.response?.status === 429) return 'Bạn đã thao tác quá nhiều lần. Vui lòng thử lại sau vài phút.';
+  return axiosError.message || defaultMsg;
+}
+
 export const authApi = {
   async register(data: RegisterRequestDto): Promise<ApiEnvelope<AuthResponseDto>> {
     try {
       const res = await apiClient.post<ApiEnvelope<AuthResponseDto>>('/auth/register', data);
       return res.data;
     } catch (err: unknown) {
-      return handleApiError(err, () => ({
-        isSuccess: true,
-        data: {
-          accessToken: 'mock_jwt_access_token_' + Date.now(),
-          refreshToken: 'mock_refresh_token_' + Date.now(),
-          expiresIn: 3600,
-          user: {
-            id: 'mock-user-id',
-            email: data.email,
-            fullName: data.fullName,
-            phoneNumber: data.phoneNumber || null,
-            isActive: true,
-            emailConfirmed: false,
-            roles: ['Customer'],
-            permissions: [],
-          },
-        },
-        message: 'Đăng ký tài khoản thành công (Mock). Vui lòng kiểm tra email để xác thực.',
-      }));
+      return {
+        isSuccess: false,
+        error: extractErrorMessage(err, 'Đăng ký tài khoản không thành công. Vui lòng thử lại.'),
+      };
     }
   },
 
@@ -78,57 +91,10 @@ export const authApi = {
       const res = await apiClient.post<ApiEnvelope<AuthResponseDto>>('/auth/login', data);
       return res.data;
     } catch (err: unknown) {
-      return handleApiError(err, () => {
-        if (data.password.length < 6) {
-          return {
-            isSuccess: false,
-            error: 'Email hoặc mật khẩu không chính xác (Mock).',
-          };
-        }
-        let roles = ['Customer'];
-        let permissions: string[] = [];
-        const lowerEmail = data.email.toLowerCase();
-        if (lowerEmail.includes('admin')) {
-          roles = ['Admin'];
-          permissions = [
-            'catalog.manage',
-            'order.view',
-            'inventory.view',
-            'user.view',
-            'audit.view',
-            'discount.manage',
-            'report.revenue',
-            'report.inventory',
-            'report.all',
-          ];
-        } else if (lowerEmail.includes('sales')) {
-          roles = ['Sales'];
-          permissions = ['order.view', 'catalog.manage', 'discount.manage'];
-        } else if (lowerEmail.includes('warehouse')) {
-          roles = ['Warehouse'];
-          permissions = ['inventory.view', 'order.view'];
-        }
-
-        return {
-          isSuccess: true,
-          data: {
-            accessToken: 'mock_jwt_access_token_' + Date.now(),
-            refreshToken: 'mock_refresh_token_' + Date.now(),
-            expiresIn: 3600,
-            user: {
-              id: 'mock-user-id',
-              email: data.email,
-              fullName: data.email.split('@')[0],
-              phoneNumber: '0901234567',
-              isActive: true,
-              emailConfirmed: true,
-              roles,
-              permissions,
-            },
-          },
-          message: 'Đăng nhập thành công (Mock).',
-        };
-      });
+      return {
+        isSuccess: false,
+        error: extractErrorMessage(err, 'Đăng nhập không thành công. Vui lòng kiểm tra lại tài khoản và mật khẩu.'),
+      };
     }
   },
 
@@ -137,26 +103,10 @@ export const authApi = {
       const res = await apiClient.post<ApiEnvelope<AuthResponseDto>>('/auth/social-login', data);
       return res.data;
     } catch (err: unknown) {
-      return handleApiError(err, () => ({
-        isSuccess: true,
-        data: {
-          accessToken: 'mock_jwt_social_' + data.provider.toLowerCase() + '_' + Date.now(),
-          refreshToken: 'mock_refresh_' + Date.now(),
-          expiresIn: 3600,
-          user: {
-            id: 'mock-social-' + Date.now(),
-            email: data.email,
-            fullName: data.fullName || `${data.provider} User`,
-            avatarUrl: data.avatarUrl || null,
-            phoneNumber: null,
-            isActive: true,
-            emailConfirmed: true,
-            roles: ['Customer'],
-            permissions: [],
-          },
-        },
-        message: `Đăng nhập thành công với ${data.provider}!`,
-      }));
+      return {
+        isSuccess: false,
+        error: extractErrorMessage(err, `Đăng nhập qua ${data.provider} không thành công. Vui lòng thử lại.`),
+      };
     }
   },
 
@@ -165,24 +115,10 @@ export const authApi = {
       const res = await apiClient.post<ApiEnvelope<AuthResponseDto>>('/auth/refresh-token', data);
       return res.data;
     } catch (err: unknown) {
-      return handleApiError(err, () => ({
-        isSuccess: true,
-        data: {
-          accessToken: 'mock_refreshed_access_token_' + Date.now(),
-          refreshToken: 'mock_refreshed_rt_' + Date.now(),
-          expiresIn: 3600,
-          user: tokenStorage.getUser() || {
-            id: 'mock-user-id',
-            email: 'customer@madkstore.vn',
-            fullName: 'Khách hàng',
-            isActive: true,
-            emailConfirmed: true,
-            roles: ['Customer'],
-            permissions: [],
-          },
-        },
-        message: 'Làm mới token thành công (Mock).',
-      }));
+      return {
+        isSuccess: false,
+        error: extractErrorMessage(err, 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.'),
+      };
     }
   },
 
@@ -190,11 +126,11 @@ export const authApi = {
     try {
       const res = await apiClient.post<ApiEnvelope>('/auth/logout', { refreshToken });
       return res.data;
-    } catch (err: unknown) {
-      return handleApiError(err, () => ({
+    } catch {
+      return {
         isSuccess: true,
         message: 'Đăng xuất thành công.',
-      }));
+      };
     } finally {
       tokenStorage.clear();
     }
@@ -205,10 +141,10 @@ export const authApi = {
       const res = await apiClient.post<ApiEnvelope>('/auth/verify-email', data);
       return res.data;
     } catch (err: unknown) {
-      return handleApiError(err, () => ({
-        isSuccess: true,
-        message: 'Xác thực email thành công (Mock).',
-      }));
+      return {
+        isSuccess: false,
+        error: extractErrorMessage(err, 'Mã xác thực email không hợp lệ hoặc đã hết hạn.'),
+      };
     }
   },
 
@@ -217,10 +153,10 @@ export const authApi = {
       const res = await apiClient.post<ApiEnvelope>('/auth/forgot-password', data);
       return res.data;
     } catch (err: unknown) {
-      return handleApiError(err, () => ({
-        isSuccess: true,
-        message: 'Nếu email tồn tại trong hệ thống, hướng dẫn đặt lại mật khẩu đã được gửi tới hòm thư của bạn.',
-      }));
+      return {
+        isSuccess: false,
+        error: extractErrorMessage(err, 'Không thể gửi yêu cầu đặt lại mật khẩu. Vui lòng thử lại sau.'),
+      };
     }
   },
 
@@ -229,10 +165,10 @@ export const authApi = {
       const res = await apiClient.post<ApiEnvelope>('/auth/reset-password', data);
       return res.data;
     } catch (err: unknown) {
-      return handleApiError(err, () => ({
-        isSuccess: true,
-        message: 'Đặt lại mật khẩu thành công. Vui lòng đăng nhập với mật khẩu mới.',
-      }));
+      return {
+        isSuccess: false,
+        error: extractErrorMessage(err, 'Mã đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.'),
+      };
     }
   },
 
@@ -241,29 +177,36 @@ export const authApi = {
       const res = await apiClient.post<ApiEnvelope>('/auth/change-password', data);
       return res.data;
     } catch (err: unknown) {
-      return handleApiError(err, () => ({
-        isSuccess: true,
-        message: 'Đổi mật khẩu thành công (Mock).',
-      }));
+      return {
+        isSuccess: false,
+        error: extractErrorMessage(err, 'Đổi mật khẩu không thành công. Vui lòng kiểm tra lại mật khẩu hiện tại.'),
+      };
     }
   },
 
   async getMe(): Promise<ApiEnvelope<UserDto>> {
     try {
       const res = await apiClient.get<ApiEnvelope<UserDto>>('/auth/me');
+      if (res.data?.isSuccess && res.data.data) {
+        tokenStorage.setUser(res.data.data);
+      }
       return res.data;
     } catch (err: unknown) {
-      return handleApiError(err, () => {
-        const cached = tokenStorage.getUser();
-        if (cached) {
-          return { isSuccess: true, data: cached };
-        }
-        return { isSuccess: false, error: 'Không thể tải thông tin người dùng.' };
-      });
+      const cached = tokenStorage.getUser();
+      if (cached) {
+        return { isSuccess: true, data: cached };
+      }
+      return {
+        isSuccess: false,
+        error: extractErrorMessage(err, 'Không thể tải thông tin người dùng.'),
+      };
     }
   },
 };
 
+/**
+ * Helper xử lý lỗi chung cho các API có fallback offline cache an toàn (ví dụ: kho hoặc giá)
+ */
 export function handleApiError<T>(err: unknown, fallback: () => ApiEnvelope<T>): ApiEnvelope<T> {
   const axiosError = err as {
     response?: {
@@ -275,17 +218,6 @@ export function handleApiError<T>(err: unknown, fallback: () => ApiEnvelope<T>):
   };
 
   const status = axiosError.response?.status;
-
-  // Nếu gặp lỗi server 5xx (như Database offline trên cloud), 404, hoặc mất mạng/timeout -> kích hoạt fallback an toàn
-  if (
-    !axiosError.response ||
-    axiosError.code === 'ERR_NETWORK' ||
-    axiosError.code === 'ECONNABORTED' ||
-    (status !== undefined && status >= 500) ||
-    status === 404
-  ) {
-    return fallback();
-  }
 
   // Nếu server trả về lỗi nghiệp vụ rõ ràng (ví dụ 400 Bad Request kèm message)
   if (axiosError.response?.data?.error || axiosError.response?.data?.message) {
@@ -302,6 +234,17 @@ export function handleApiError<T>(err: unknown, fallback: () => ApiEnvelope<T>):
       isSuccess: false,
       error: 'Bạn đã thao tác quá nhanh hoặc thử sai nhiều lần. Vui lòng thử lại sau vài phút.',
     };
+  }
+
+  // Lỗi mạng hoặc 5xx/404 đối với các module có hỗ trợ offline fallback
+  if (
+    !axiosError.response ||
+    axiosError.code === 'ERR_NETWORK' ||
+    axiosError.code === 'ECONNABORTED' ||
+    (status !== undefined && status >= 500) ||
+    status === 404
+  ) {
+    return fallback();
   }
 
   return {
