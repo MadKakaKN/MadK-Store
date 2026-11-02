@@ -8,7 +8,7 @@ import paymentApi from '../../../api/paymentApi';
 import { couponApi } from '../../../api/couponApi';
 import { formatVND } from '../../../utils/format';
 import type { ProvinceDto, DistrictDto, WardDto, AddressDto } from '../../../types/address';
-import type { CheckoutCodRequestDto, ShippingAddressInputDto, PaymentMethod, OrderDto } from '../../../types/order';
+import type { CheckoutCodRequestDto, ShippingAddressInputDto, PaymentMethod } from '../../../types/order';
 
 export const CheckoutPage: React.FC = () => {
   const { items, totalAmount, itemCount, isLoading: isCartLoading, refreshCart, clearCart } = useCart();
@@ -69,14 +69,6 @@ export const CheckoutPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isStockError, setIsStockError] = useState<boolean>(false);
   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
-  const [qrModalOrder, setQrModalOrder] = useState<OrderDto | null>(null);
-  const [copiedField, setCopiedField] = useState<string | null>(null);
-
-  const handleCopy = (text: string, field: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedField(field);
-    setTimeout(() => setCopiedField(null), 2500);
-  };
 
   // 1. Tải danh sách tỉnh thành (dữ liệu mở)
   useEffect(() => {
@@ -386,15 +378,12 @@ export const CheckoutPage: React.FC = () => {
         await clearCart();
         await refreshCart();
 
-        if (paymentMethod === 'BankTransfer' || paymentMethod === 'MoMo') {
-          // Bật Modal Mã QR Thanh toán ngay lập tức cho người dùng quét
-          setQrModalOrder(res.data);
-        } else {
-          navigate(`/checkout/success?orderNumber=${encodeURIComponent(res.data.orderNumber)}`, {
-            replace: true,
-            state: { order: res.data },
-          });
-        }
+        // Chuyển hướng người dùng trực tiếp sang trang Xác nhận đơn hàng & Quét mã QR thanh toán (/checkout/success)
+        navigate(`/checkout/success?orderNumber=${encodeURIComponent(res.data.orderNumber)}`, {
+          replace: true,
+          state: { order: res.data },
+        });
+        return;
       } else {
         const errorText = res.error || 'Đặt hàng không thành công. Vui lòng kiểm tra lại.';
         setErrorMessage(errorText);
@@ -418,7 +407,7 @@ export const CheckoutPage: React.FC = () => {
   };
 
   // Trạng thái giỏ hàng rỗng
-  if (!isCartLoading && items.length === 0) {
+  if (!isCartLoading && items.length === 0 && !isSubmitting) {
     return (
       <div className="py-12 sm:py-20 px-4 max-w-xl mx-auto text-center space-y-6 animate-fade-in">
         <div className="w-20 h-20 rounded-3xl bg-amber-50 text-amber-600 mx-auto flex items-center justify-center text-3xl shadow-inner">
@@ -1065,165 +1054,6 @@ export const CheckoutPage: React.FC = () => {
           </div>
         </div>
       </form>
-
-      {/* QR Payment Modal Popup */}
-      {qrModalOrder && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-md animate-fade-in overflow-y-auto">
-          <div className="relative w-full max-w-lg bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-2xl border border-slate-700 space-y-6 my-8">
-            <div className="flex items-start justify-between gap-4 pb-4 border-b border-slate-700/80">
-              <div className="flex items-center gap-3">
-                <span className="text-3xl">
-                  {qrModalOrder.paymentMethod === 'MoMo' ? '📱' : '🏛️'}
-                </span>
-                <div>
-                  <h3 className="text-lg sm:text-xl font-black text-white">
-                    {qrModalOrder.paymentMethod === 'MoMo'
-                      ? 'Thanh toán qua Ví MoMo'
-                      : 'Mã VietQR - Techcombank'}
-                  </h3>
-                  <p className="text-xs text-slate-300">
-                    Đơn hàng #{qrModalOrder.orderNumber} đã được tạo thành công
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  navigate(`/checkout/success?orderNumber=${encodeURIComponent(qrModalOrder.orderNumber)}`, {
-                    state: { order: qrModalOrder },
-                  });
-                }}
-                className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center text-sm font-bold transition-colors"
-                title="Đóng hộp thoại"
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* QR Code Center */}
-            <div className="flex flex-col items-center justify-center text-center space-y-3">
-              <div className="p-3 bg-white rounded-2xl shadow-2xl border-4 border-white">
-                {qrModalOrder.paymentMethod === 'MoMo' ? (
-                  <img
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encodeURIComponent(
-                      `2|99|0901316434|NGUYEN HOANG KHANG||0|0|${Math.round(qrModalOrder.totalAmount)}|MADK ${qrModalOrder.orderNumber}|transfer_p2p`
-                    )}`}
-                    alt="Mã QR MoMo"
-                    className="w-56 h-56 sm:w-64 sm:h-64 object-contain rounded-xl"
-                  />
-                ) : (
-                  <img
-                    src={`https://img.vietqr.io/image/TCB-19050430057012-compact2.png?amount=${Math.round(
-                      qrModalOrder.totalAmount
-                    )}&addInfo=${encodeURIComponent(`MADK ${qrModalOrder.orderNumber}`)}&accountName=${encodeURIComponent(
-                      'NGUYEN HOANG KHANG'
-                    )}`}
-                    alt="Mã VietQR Techcombank"
-                    className="w-56 h-auto sm:w-64 object-contain rounded-xl"
-                  />
-                )}
-              </div>
-              <p className="text-xs text-emerald-400 font-semibold flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                Quét mã để tự động điền STK, số tiền & nội dung
-              </p>
-            </div>
-
-            {/* Account Details & Copy */}
-            <div className="space-y-2.5 text-xs">
-              {qrModalOrder.paymentMethod === 'MoMo' ? (
-                <>
-                  <div className="p-3 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
-                    <div>
-                      <span className="text-[10px] text-slate-400 uppercase font-bold block">SĐT MoMo</span>
-                      <span className="text-base font-mono font-black text-pink-400">0901316434</span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => handleCopy('0901316434', 'momo')}
-                      className="px-3 py-1.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-semibold transition-colors"
-                    >
-                      {copiedField === 'momo' ? '✓ Đã chép' : '📋 Chép SĐT'}
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="p-3 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
-                    <div>
-                      <span className="text-[10px] text-slate-400 uppercase font-bold block">Ngân hàng & Số tài khoản</span>
-                      <span className="text-sm font-bold text-white block">Techcombank (TCB)</span>
-                      <span className="text-base font-mono font-black text-emerald-400">19050430057012</span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => handleCopy('19050430057012', 'stk')}
-                      className="px-3 py-1.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-semibold transition-colors"
-                    >
-                      {copiedField === 'stk' ? '✓ Đã chép' : '📋 Chép STK'}
-                    </button>
-                  </div>
-                </>
-              )}
-
-              <div className="p-3 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] text-slate-400 uppercase font-bold block">Tên thụ hưởng</span>
-                  <span className="text-sm font-bold text-white uppercase">NGUYEN HOANG KHANG</span>
-                </div>
-                <div className="text-right">
-                  <span className="text-[10px] text-slate-400 uppercase font-bold block">Số tiền</span>
-                  <span className="text-sm sm:text-base font-mono font-black text-amber-400">
-                    {formatVND(qrModalOrder.totalAmount)}
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] text-emerald-400 uppercase font-bold block">Nội dung chuyển khoản (bắt buộc)</span>
-                  <span className="text-base font-mono font-black text-emerald-300">
-                    MADK {qrModalOrder.orderNumber}
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => handleCopy(`MADK ${qrModalOrder.orderNumber}`, 'note')}
-                  className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition-colors"
-                >
-                  {copiedField === 'note' ? '✓ Đã chép' : '📋 Chép nội dung'}
-                </button>
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div className="pt-2 space-y-2">
-              <button
-                type="button"
-                onClick={() => {
-                  navigate(`/checkout/success?orderNumber=${encodeURIComponent(qrModalOrder.orderNumber)}`, {
-                    state: { order: qrModalOrder },
-                  });
-                }}
-                className="w-full py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm shadow-lg shadow-emerald-600/30 transition-all flex items-center justify-center gap-2"
-              >
-                <span>✓ Tôi đã chuyển khoản xong → Xem đơn hàng</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  navigate(`/checkout/success?orderNumber=${encodeURIComponent(qrModalOrder.orderNumber)}`, {
-                    state: { order: qrModalOrder },
-                  });
-                }}
-                className="w-full py-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition-colors"
-              >
-                Chuyển khoản sau (Lưu mã đơn #{qrModalOrder.orderNumber})
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
