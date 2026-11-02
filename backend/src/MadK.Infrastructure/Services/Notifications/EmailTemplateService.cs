@@ -14,19 +14,33 @@ public class EmailTemplateService : IEmailTemplateService
 
     public string RenderEmailConfirmation(string fullName, string confirmationToken)
     {
+        return RenderEmailConfirmation(string.Empty, fullName, confirmationToken);
+    }
+
+    public string RenderEmailConfirmation(string toEmail, string fullName, string confirmationToken)
+    {
         var safeName = WebUtility.HtmlEncode(fullName);
         var safeToken = WebUtility.HtmlEncode(confirmationToken);
+        var verifyUrl = !string.IsNullOrWhiteSpace(toEmail)
+            ? $"https://mad-k-store.vercel.app/auth/verify-email?email={Uri.EscapeDataString(toEmail)}&token={Uri.EscapeDataString(confirmationToken)}"
+            : "https://mad-k-store.vercel.app/auth/verify-email";
 
         var body = $@"
             <div style=""text-align: center; padding: 20px 0;"">
-                <h2 style=""color: #1e293b; margin-bottom: 8px;"">Chào mừng bạn đến với MadK Store!</h2>
-                <p style=""color: #64748b; font-size: 15px; line-height: 1.6;"">
-                    Xin chào <strong>{safeName}</strong>, cảm ơn bạn đã đăng ký tài khoản. Vui lòng sử dụng mã xác thực dưới đây để hoàn tất kích hoạt tài khoản của bạn.
+                <h2 style=""color: #1e293b; margin-bottom: 8px; font-size: 22px; font-weight: 800;"">Chào mừng bạn đến với MadK Store! 🎉</h2>
+                <p style=""color: #64748b; font-size: 15px; line-height: 1.6; max-width: 480px; margin: 0 auto;"">
+                    Xin chào <strong>{safeName}</strong>, cảm ơn bạn đã đăng ký tài khoản. Vui lòng bấm vào nút bên dưới để kích hoạt tài khoản của bạn ngay lập tức.
                 </p>
-                <div style=""margin: 25px 0; padding: 16px; background-color: #f1f5f9; border-radius: 8px; border: 1px dashed #cbd5e1; display: inline-block;"">
-                    <span style=""font-family: monospace; font-size: 24px; font-weight: bold; letter-spacing: 4px; color: {BrandColor};"">{safeToken}</span>
+                <div style=""margin: 30px 0 25px 0;"">
+                    <a href=""{verifyUrl}"" target=""_blank"" style=""background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%); color: #ffffff; padding: 14px 32px; font-size: 15px; font-weight: bold; text-decoration: none; border-radius: 12px; display: inline-block; box-shadow: 0 4px 14px rgba(37,99,235,0.3);"">
+                        👉 Kích hoạt tài khoản ngay
+                    </a>
                 </div>
-                <p style=""color: #94a3b8; font-size: 13px;"">
+                <div style=""margin: 20px 0; padding: 14px 20px; background-color: #f1f5f9; border-radius: 10px; border: 1px dashed #cbd5e1; display: inline-block;"">
+                    <span style=""display: block; font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: bold; margin-bottom: 4px;"">Hoặc mã xác nhận thủ công:</span>
+                    <span style=""font-family: monospace; font-size: 20px; font-weight: bold; letter-spacing: 3px; color: {BrandColor};"">{safeToken}</span>
+                </div>
+                <p style=""color: #94a3b8; font-size: 13px; margin-top: 20px;"">
                     Mã xác thực có hiệu lực trong 24 giờ. Nếu bạn không tạo tài khoản này, vui lòng bỏ qua email.
                 </p>
             </div>";

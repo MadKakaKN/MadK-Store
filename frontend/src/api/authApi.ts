@@ -148,6 +148,18 @@ export const authApi = {
     }
   },
 
+  async resendVerificationEmail(email: string): Promise<ApiEnvelope> {
+    try {
+      const res = await apiClient.post<ApiEnvelope>('/auth/resend-verification-email', { email });
+      return res.data;
+    } catch (err: unknown) {
+      return {
+        isSuccess: false,
+        error: extractErrorMessage(err, 'Không thể gửi lại email xác thực. Vui lòng thử lại sau.'),
+      };
+    }
+  },
+
   async forgotPassword(data: ForgotPasswordRequestDto): Promise<ApiEnvelope> {
     try {
       const res = await apiClient.post<ApiEnvelope>('/auth/forgot-password', data);

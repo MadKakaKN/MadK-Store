@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../auth/context/AuthContext';
 import authApi from '../../../api/authApi';
@@ -38,6 +38,35 @@ export const AccountPage: React.FC = () => {
 
   // Test silent refresh state
   const [refreshTestStatus, setRefreshTestStatus] = useState<string | null>(null);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendMessage, setResendMessage] = useState<{ text: string; isError: boolean } | null>(null);
+
+  const handleResendVerification = async () => {
+    if (!user?.email) return;
+    setResendLoading(true);
+    setResendMessage(null);
+    try {
+      const res = await authApi.resendVerificationEmail(user.email);
+      if (res.isSuccess) {
+        setResendMessage({
+          text: `Đã gửi email kích hoạt tới ${user.email}! Vui lòng kiểm tra hộp thư đến (hoặc hòm thư Rác/Spam).`,
+          isError: false,
+        });
+      } else {
+        setResendMessage({
+          text: res.error || 'Không thể gửi lại email xác thực.',
+          isError: true,
+        });
+      }
+    } catch {
+      setResendMessage({
+        text: 'Có lỗi xảy ra khi kết nối máy chủ gửi email.',
+        isError: true,
+      });
+    } finally {
+      setResendLoading(false);
+    }
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -123,15 +152,26 @@ export const AccountPage: React.FC = () => {
                 </span>
               ))}
             </div>
-            <p className="text-sm text-slate-500 mt-1 flex items-center gap-2">
-              <span>{user?.email}</span>
+            <p className="text-sm text-slate-500 mt-1 flex flex-wrap items-center gap-2">
+              <span className="font-mono text-slate-700">{user?.email}</span>
               {user?.emailConfirmed ? (
                 <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-100">
-                  ✓ Đã xác thực
+                  âœ“ ÄÃ£ xÃ¡c thá»±c
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-lg border border-amber-100">
-                  ! Chưa xác thực email
+                <span className="inline-flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-lg border border-amber-100">
+                    ! ChÆ°a xÃ¡c thá»±c email
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleResendVerification}
+                    disabled={resendLoading}
+                    className="text-xs font-bold text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100 px-2.5 py-0.5 rounded-lg transition-colors border border-brand-200 shadow-2xs disabled:opacity-50 flex items-center gap-1"
+                  >
+                    <span>ðŸ“§</span>
+                    <span>{resendLoading ? "Äang gá»­i..." : "Gá»­i láº¡i email xÃ¡c thá»±c"}</span>
+                  </button>
                 </span>
               )}
             </p>
@@ -156,6 +196,28 @@ export const AccountPage: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {resendMessage && (
+        <div
+          className={`mb-6 p-4 rounded-2xl text-sm animate-fade-in flex items-center justify-between ${
+            resendMessage.isError
+              ? "bg-rose-50 border border-rose-200 text-rose-900"
+              : "bg-emerald-50 border border-emerald-200 text-emerald-900"
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <span>{resendMessage.isError ? "âš ï¸" : "âœ…"}</span>
+            <span>{resendMessage.text}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setResendMessage(null)}
+            className="text-xs font-bold hover:underline"
+          >
+            ÄÃ³ng
+          </button>
+        </div>
+      )}
 
       {refreshTestStatus && (
         <div className="mb-6 p-4 rounded-2xl bg-indigo-50 border border-indigo-200 text-indigo-900 text-sm animate-fade-in flex items-center justify-between">

@@ -36,8 +36,17 @@ public class SmtpTransport : ISmtpTransport
         var envUser = configuration["SMTP_USERNAME"] ?? Environment.GetEnvironmentVariable("SMTP_USERNAME");
         if (!string.IsNullOrWhiteSpace(envUser)) _settings.Username = envUser;
 
-        var envPass = configuration["SMTP_PASSWORD"] ?? Environment.GetEnvironmentVariable("SMTP_PASSWORD");
-        if (!string.IsNullOrWhiteSpace(envPass)) _settings.Password = envPass;
+        var envPass = configuration["SMTP_PASSWORD"]
+            ?? Environment.GetEnvironmentVariable("SMTP_PASSWORD")
+            ?? configuration["EmailSettings:Password"];
+        if (!string.IsNullOrWhiteSpace(envPass))
+        {
+            _settings.Password = envPass.Trim().Replace(" ", "");
+            _settings.UseMock = false;
+        }
+
+        var envMock = configuration["SMTP_USE_MOCK"] ?? Environment.GetEnvironmentVariable("SMTP_USE_MOCK");
+        if (bool.TryParse(envMock, out var mock)) _settings.UseMock = mock;
 
         var envSsl = configuration["SMTP_ENABLE_SSL"] ?? Environment.GetEnvironmentVariable("SMTP_ENABLE_SSL");
         if (bool.TryParse(envSsl, out var ssl)) _settings.EnableSsl = ssl;
@@ -53,9 +62,9 @@ public class SmtpTransport : ISmtpTransport
     {
         ArgumentNullException.ThrowIfNull(message);
 
-        if (_settings.UseMock)
+        if (_settings.UseMock || string.IsNullOrWhiteSpace(_settings.Password))
         {
-            _logger.LogInformation("[MOCK SMTP] Simulated email to: {ToEmail}, Subject: '{Subject}'",
+            _logger.LogInformation("[MOCK SMTP] Simulated email to: {ToEmail}, Subject: '{Subject}' (Password empty or UseMock=true)",
                 message.ToEmail, message.Subject);
             return;
         }
@@ -64,8 +73,8 @@ public class SmtpTransport : ISmtpTransport
         {
             EnableSsl = _settings.EnableSsl,
             DeliveryMethod = SmtpDeliveryMethod.Network,
-            UseDefaultCredentials = string.IsNullOrWhiteSpace(_settings.Username),
-            Timeout = 10000 // 10s
+            UseDefaultCredentials = false,
+            Timeout = 15000 // 15s
         };
 
         if (!string.IsNullOrWhiteSpace(_settings.Username) && !string.IsNullOrWhiteSpace(_settings.Password))

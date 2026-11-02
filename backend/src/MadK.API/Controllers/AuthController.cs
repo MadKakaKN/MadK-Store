@@ -1,4 +1,4 @@
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using MadK.Application.Common;
 using MadK.Application.DTOs.Auth;
 using MadK.Application.Interfaces;
@@ -139,6 +139,18 @@ public class AuthController : ControllerBase
     /// <summary>
     /// Yêu cầu đặt lại mật khẩu khi quên (Chống dò quét tài khoản, gửi token có hạn qua email).
     /// </summary>
+    /// <summary>
+    /// Gá»­i láº¡i email xÃ¡c thá»±c tÃ i khoáº£n.
+    /// </summary>
+    [HttpPost("resend-verification-email")]
+    [EnableRateLimiting("auth-reset-password")]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
+    public async Task<IActionResult> ResendVerificationEmail([FromBody] ForgotPasswordRequestDto request, CancellationToken ct)
+    {
+        var result = await _identityService.ResendVerificationEmailAsync(request.Email, ct);
+        return Ok(result);
+    }
+
     [HttpPost("forgot-password")]
     [EnableRateLimiting("auth-reset-password")]
     [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]

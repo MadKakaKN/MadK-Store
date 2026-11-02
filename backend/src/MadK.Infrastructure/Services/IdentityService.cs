@@ -1,4 +1,4 @@
-using MadK.Application.Common;
+﻿using MadK.Application.Common;
 using MadK.Application.DTOs.Auth;
 using MadK.Application.Interfaces;
 using MadK.Domain.Entities;
@@ -443,6 +443,42 @@ public class IdentityService : IIdentityService
 
         await _dbContext.SaveChangesAsync(cancellationToken);
         return Result.Success("Xác thực email thành công! Bạn có thể tiếp tục sử dụng đầy đủ tính năng hệ thống.");
+    }
+
+        public async Task<Result> ResendVerificationEmailAsync(string email, CancellationToken cancellationToken = default)
+    {
+        var normalizedEmail = email.Trim().ToLowerInvariant();
+
+        var user = await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.Email.ToLower() == normalizedEmail, cancellationToken);
+
+        if (user == null)
+        {
+            return Result.Success("Náº¿u email tá»“n táº¡i trong há»‡ thá»‘ng, chÃºng tÃ´i Ä‘Ã£ gá»­i láº¡i liÃªn káº¿t xÃ¡c thá»±c.");
+        }
+
+        if (user.EmailConfirmed)
+        {
+            return Result.Success("Email cá»§a báº¡n Ä‘Ã£ Ä‘Æ°á»£c xÃ¡c thá»±c trÆ°á»›c Ä‘Ã³.");
+        }
+
+        var confirmationToken = Guid.NewGuid().ToString("N");
+        user.EmailConfirmationToken = confirmationToken;
+        user.EmailConfirmationTokenExpiresAt = DateTime.UtcNow.AddHours(24);
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        try
+        {
+            await _emailSender.SendEmailConfirmationAsync(user.Email, user.FullName, confirmationToken, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Lá»—i khi gá»­i láº¡i email xÃ¡c thá»±c cho {Email}", user.Email);
+            return Result.Failure("KhÃ´ng thá»ƒ gá»­i email lÃºc nÃ y. Vui lÃ²ng thá»­ láº¡i sau.");
+        }
+
+        return Result.Success("Email xÃ¡c thá»±c má»›i Ä‘Ã£ Ä‘Æ°á»£c gá»­i tá»›i hÃ²m thÆ° cá»§a báº¡n.");
     }
 
     public async Task<Result> ForgotPasswordAsync(ForgotPasswordRequestDto request, CancellationToken cancellationToken = default)

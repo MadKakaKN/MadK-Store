@@ -24,7 +24,7 @@ public class QueuedEmailSender : IEmailSender
     {
         try
         {
-            var html = _templateService.RenderEmailConfirmation(fullName, token);
+            var html = _templateService.RenderEmailConfirmation(toEmail, fullName, token);
             var message = new QueuedEmailMessage
             {
                 ToEmail = toEmail.Trim(),
