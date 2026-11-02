@@ -77,29 +77,63 @@ export const VIETNAM_OPEN_DATA_PROVINCES: ProvinceDto[] = [
 ];
 
 export const VIETNAM_OPEN_DATA_DISTRICTS: Record<string, DistrictDto[]> = {
-  // TP. Hồ Chí Minh (79)
+  // TP. Hồ Chí Minh (79) - Toàn bộ 22 quận, huyện, thành phố trực thuộc
   '79': [
     { code: '760', name: 'Quận 1', fullName: 'Quận 1', provinceCode: '79' },
-    { code: '769', name: 'TP. Thủ Đức', fullName: 'Thành phố Thủ Đức', provinceCode: '79' },
     { code: '770', name: 'Quận 3', fullName: 'Quận 3', provinceCode: '79' },
-    { code: '771', name: 'Quận 10', fullName: 'Quận 10', provinceCode: '79' },
+    { code: '773', name: 'Quận 4', fullName: 'Quận 4', provinceCode: '79' },
     { code: '774', name: 'Quận 5', fullName: 'Quận 5', provinceCode: '79' },
+    { code: '775', name: 'Quận 6', fullName: 'Quận 6', provinceCode: '79' },
     { code: '778', name: 'Quận 7', fullName: 'Quận 7', provinceCode: '79' },
+    { code: '776', name: 'Quận 8', fullName: 'Quận 8', provinceCode: '79' },
+    { code: '771', name: 'Quận 10', fullName: 'Quận 10', provinceCode: '79' },
+    { code: '772', name: 'Quận 11', fullName: 'Quận 11', provinceCode: '79' },
+    { code: '761', name: 'Quận 12', fullName: 'Quận 12', provinceCode: '79' },
     { code: '765', name: 'Quận Bình Thạnh', fullName: 'Quận Bình Thạnh', provinceCode: '79' },
+    { code: '777', name: 'Quận Bình Tân', fullName: 'Quận Bình Tân', provinceCode: '79' },
     { code: '764', name: 'Quận Gò Vấp', fullName: 'Quận Gò Vấp', provinceCode: '79' },
+    { code: '768', name: 'Quận Phú Nhuận', fullName: 'Quận Phú Nhuận', provinceCode: '79' },
     { code: '766', name: 'Quận Tân Bình', fullName: 'Quận Tân Bình', provinceCode: '79' },
+    { code: '767', name: 'Quận Tân Phú', fullName: 'Quận Tân Phú', provinceCode: '79' },
+    { code: '769', name: 'TP. Thủ Đức', fullName: 'Thành phố Thủ Đức', provinceCode: '79' },
+    { code: '785', name: 'Huyện Bình Chánh', fullName: 'Huyện Bình Chánh', provinceCode: '79' },
+    { code: '787', name: 'Huyện Cần Giờ', fullName: 'Huyện Cần Giờ', provinceCode: '79' },
+    { code: '783', name: 'Huyện Củ Chi', fullName: 'Huyện Củ Chi', provinceCode: '79' },
+    { code: '784', name: 'Huyện Hóc Môn', fullName: 'Huyện Hóc Môn', provinceCode: '79' },
+    { code: '786', name: 'Huyện Nhà Bè', fullName: 'Huyện Nhà Bè', provinceCode: '79' },
   ],
-  // Hà Nội (01)
+  // Hà Nội (01) - Toàn bộ 30 quận, huyện, thị xã
   '01': [
     { code: '001', name: 'Quận Ba Đình', fullName: 'Quận Ba Đình', provinceCode: '01' },
     { code: '002', name: 'Quận Hoàn Kiếm', fullName: 'Quận Hoàn Kiếm', provinceCode: '01' },
+    { code: '003', name: 'Quận Tây Hồ', fullName: 'Quận Tây Hồ', provinceCode: '01' },
+    { code: '004', name: 'Quận Long Biên', fullName: 'Quận Long Biên', provinceCode: '01' },
     { code: '005', name: 'Quận Cầu Giấy', fullName: 'Quận Cầu Giấy', provinceCode: '01' },
     { code: '006', name: 'Quận Đống Đa', fullName: 'Quận Đống Đa', provinceCode: '01' },
     { code: '007', name: 'Quận Hai Bà Trưng', fullName: 'Quận Hai Bà Trưng', provinceCode: '01' },
     { code: '008', name: 'Quận Hoàng Mai', fullName: 'Quận Hoàng Mai', provinceCode: '01' },
     { code: '009', name: 'Quận Thanh Xuân', fullName: 'Quận Thanh Xuân', provinceCode: '01' },
+    { code: '016', name: 'Huyện Sóc Sơn', fullName: 'Huyện Sóc Sơn', provinceCode: '01' },
+    { code: '017', name: 'Huyện Đông Anh', fullName: 'Huyện Đông Anh', provinceCode: '01' },
+    { code: '018', name: 'Huyện Gia Lâm', fullName: 'Huyện Gia Lâm', provinceCode: '01' },
     { code: '019', name: 'Quận Nam Từ Liêm', fullName: 'Quận Nam Từ Liêm', provinceCode: '01' },
+    { code: '020', name: 'Huyện Thanh Trì', fullName: 'Huyện Thanh Trì', provinceCode: '01' },
     { code: '021', name: 'Quận Bắc Từ Liêm', fullName: 'Quận Bắc Từ Liêm', provinceCode: '01' },
+    { code: '250', name: 'Huyện Mê Linh', fullName: 'Huyện Mê Linh', provinceCode: '01' },
+    { code: '268', name: 'Quận Hà Đông', fullName: 'Quận Hà Đông', provinceCode: '01' },
+    { code: '269', name: 'Thị xã Sơn Tây', fullName: 'Thị xã Sơn Tây', provinceCode: '01' },
+    { code: '271', name: 'Huyện Ba Vì', fullName: 'Huyện Ba Vì', provinceCode: '01' },
+    { code: '272', name: 'Huyện Phúc Thọ', fullName: 'Huyện Phúc Thọ', provinceCode: '01' },
+    { code: '273', name: 'Huyện Đan Phượng', fullName: 'Huyện Đan Phượng', provinceCode: '01' },
+    { code: '274', name: 'Huyện Hoài Đức', fullName: 'Huyện Hoài Đức', provinceCode: '01' },
+    { code: '275', name: 'Huyện Quốc Oai', fullName: 'Huyện Quốc Oai', provinceCode: '01' },
+    { code: '276', name: 'Huyện Thạch Thất', fullName: 'Huyện Thạch Thất', provinceCode: '01' },
+    { code: '277', name: 'Huyện Chương Mỹ', fullName: 'Huyện Chương Mỹ', provinceCode: '01' },
+    { code: '278', name: 'Huyện Thanh Oai', fullName: 'Huyện Thanh Oai', provinceCode: '01' },
+    { code: '279', name: 'Huyện Thường Tín', fullName: 'Huyện Thường Tín', provinceCode: '01' },
+    { code: '280', name: 'Huyện Phú Xuyên', fullName: 'Huyện Phú Xuyên', provinceCode: '01' },
+    { code: '281', name: 'Huyện Ứng Hòa', fullName: 'Huyện Ứng Hòa', provinceCode: '01' },
+    { code: '282', name: 'Huyện Mỹ Đức', fullName: 'Huyện Mỹ Đức', provinceCode: '01' },
   ],
   // Đà Nẵng (48)
   '48': [
@@ -108,29 +142,65 @@ export const VIETNAM_OPEN_DATA_DISTRICTS: Record<string, DistrictDto[]> = {
     { code: '492', name: 'Quận Sơn Trà', fullName: 'Quận Sơn Trà', provinceCode: '48' },
     { code: '493', name: 'Quận Ngũ Hành Sơn', fullName: 'Quận Ngũ Hành Sơn', provinceCode: '48' },
     { code: '494', name: 'Quận Liên Chiểu', fullName: 'Quận Liên Chiểu', provinceCode: '48' },
+    { code: '495', name: 'Quận Cẩm Lệ', fullName: 'Quận Cẩm Lệ', provinceCode: '48' },
+    { code: '497', name: 'Huyện Hòa Vang', fullName: 'Huyện Hòa Vang', provinceCode: '48' },
+    { code: '498', name: 'Huyện Hoàng Sa', fullName: 'Huyện Hoàng Sa', provinceCode: '48' },
   ],
   // Hải Phòng (31)
   '31': [
     { code: '303', name: 'Quận Hồng Bàng', fullName: 'Quận Hồng Bàng', provinceCode: '31' },
     { code: '304', name: 'Quận Ngô Quyền', fullName: 'Quận Ngô Quyền', provinceCode: '31' },
     { code: '305', name: 'Quận Lê Chân', fullName: 'Quận Lê Chân', provinceCode: '31' },
+    { code: '306', name: 'Quận Hải An', fullName: 'Quận Hải An', provinceCode: '31' },
+    { code: '307', name: 'Quận Kiến An', fullName: 'Quận Kiến An', provinceCode: '31' },
+    { code: '308', name: 'Quận Đồ Sơn', fullName: 'Quận Đồ Sơn', provinceCode: '31' },
+    { code: '309', name: 'Quận Dương Kinh', fullName: 'Quận Dương Kinh', provinceCode: '31' },
+    { code: '311', name: 'Huyện Thuỷ Nguyên', fullName: 'Huyện Thuỷ Nguyên', provinceCode: '31' },
+    { code: '312', name: 'Huyện An Dương', fullName: 'Huyện An Dương', provinceCode: '31' },
+    { code: '313', name: 'Huyện An Lão', fullName: 'Huyện An Lão', provinceCode: '31' },
+    { code: '314', name: 'Huyện Kiến Thuỵ', fullName: 'Huyện Kiến Thuỵ', provinceCode: '31' },
+    { code: '315', name: 'Huyện Tiên Lãng', fullName: 'Huyện Tiên Lãng', provinceCode: '31' },
+    { code: '316', name: 'Huyện Vĩnh Bảo', fullName: 'Huyện Vĩnh Bảo', provinceCode: '31' },
+    { code: '317', name: 'Huyện Cát Hải', fullName: 'Huyện Cát Hải', provinceCode: '31' },
+    { code: '318', name: 'Huyện Bạch Long Vĩ', fullName: 'Huyện Bạch Long Vĩ', provinceCode: '31' },
   ],
   // Cần Thơ (92)
   '92': [
     { code: '916', name: 'Quận Ninh Kiều', fullName: 'Quận Ninh Kiều', provinceCode: '92' },
-    { code: '918', name: 'Quận Cái Răng', fullName: 'Quận Cái Răng', provinceCode: '92' },
     { code: '917', name: 'Quận Bình Thủy', fullName: 'Quận Bình Thủy', provinceCode: '92' },
+    { code: '918', name: 'Quận Cái Răng', fullName: 'Quận Cái Răng', provinceCode: '92' },
+    { code: '919', name: 'Quận Ô Môn', fullName: 'Quận Ô Môn', provinceCode: '92' },
+    { code: '923', name: 'Quận Thốt Nốt', fullName: 'Quận Thốt Nốt', provinceCode: '92' },
+    { code: '924', name: 'Huyện Vĩnh Thạnh', fullName: 'Huyện Vĩnh Thạnh', provinceCode: '92' },
+    { code: '925', name: 'Huyện Cờ Đỏ', fullName: 'Huyện Cờ Đỏ', provinceCode: '92' },
+    { code: '926', name: 'Huyện Phong Điền', fullName: 'Huyện Phong Điền', provinceCode: '92' },
+    { code: '927', name: 'Huyện Thới Lai', fullName: 'Huyện Thới Lai', provinceCode: '92' },
   ],
   // Bình Dương (74)
   '74': [
     { code: '718', name: 'TP. Thủ Dầu Một', fullName: 'Thành phố Thủ Dầu Một', provinceCode: '74' },
     { code: '725', name: 'TP. Thuận An', fullName: 'Thành phố Thuận An', provinceCode: '74' },
     { code: '724', name: 'TP. Dĩ An', fullName: 'Thành phố Dĩ An', provinceCode: '74' },
+    { code: '721', name: 'TP. Tân Uyên', fullName: 'Thành phố Tân Uyên', provinceCode: '74' },
+    { code: '723', name: 'TP. Bến Cát', fullName: 'Thành phố Bến Cát', provinceCode: '74' },
+    { code: '720', name: 'Huyện Bàu Bàng', fullName: 'Huyện Bàu Bàng', provinceCode: '74' },
+    { code: '722', name: 'Huyện Bắc Tân Uyên', fullName: 'Huyện Bắc Tân Uyên', provinceCode: '74' },
+    { code: '726', name: 'Huyện Phú Giáo', fullName: 'Huyện Phú Giáo', provinceCode: '74' },
+    { code: '719', name: 'Huyện Dầu Tiếng', fullName: 'Huyện Dầu Tiếng', provinceCode: '74' },
   ],
   // Đồng Nai (75)
   '75': [
     { code: '731', name: 'TP. Biên Hòa', fullName: 'Thành phố Biên Hòa', provinceCode: '75' },
     { code: '732', name: 'TP. Long Khánh', fullName: 'Thành phố Long Khánh', provinceCode: '75' },
+    { code: '734', name: 'Huyện Tân Phú', fullName: 'Huyện Tân Phú', provinceCode: '75' },
+    { code: '735', name: 'Huyện Vĩnh Cửu', fullName: 'Huyện Vĩnh Cửu', provinceCode: '75' },
+    { code: '736', name: 'Huyện Định Quán', fullName: 'Huyện Định Quán', provinceCode: '75' },
+    { code: '737', name: 'Huyện Trảng Bom', fullName: 'Huyện Trảng Bom', provinceCode: '75' },
+    { code: '738', name: 'Huyện Thống Nhất', fullName: 'Huyện Thống Nhất', provinceCode: '75' },
+    { code: '739', name: 'Huyện Cẩm Mỹ', fullName: 'Huyện Cẩm Mỹ', provinceCode: '75' },
+    { code: '740', name: 'Huyện Long Thành', fullName: 'Huyện Long Thành', provinceCode: '75' },
+    { code: '741', name: 'Huyện Xuân Lộc', fullName: 'Huyện Xuân Lộc', provinceCode: '75' },
+    { code: '742', name: 'Huyện Nhơn Trạch', fullName: 'Huyện Nhơn Trạch', provinceCode: '75' },
   ],
 };
 
@@ -235,10 +305,33 @@ function saveLocalAddresses(addresses: AddressDto[], userId?: string) {
 
 export const addressApi = {
   // 1. Đơn vị hành chính Việt Nam (Public)
+  // Cache bộ nhớ tạm để truy xuất siêu tốc
+  _districtsCache: {} as Record<string, DistrictDto[]>,
+  _wardsCache: {} as Record<string, WardDto[]>,
+
   async getProvinces(): Promise<ProvinceDto[]> {
+    // 1. Thử gọi Open API chính thức (Tổng cục Thống kê)
+    try {
+      const res = await fetch('https://provinces.open-api.vn/api/p/');
+      if (res.ok) {
+        const raw = await res.json();
+        if (Array.isArray(raw) && raw.length > 0) {
+          return raw.map((p: any, idx: number) => ({
+            code: String(p.code).padStart(2, '0'),
+            name: p.name.replace(/^(Thành phố|Tỉnh)\s+/, ''),
+            fullName: p.name,
+            displayOrder: idx + 1,
+          }));
+        }
+      }
+    } catch {
+      // Fallback
+    }
+
+    // 2. Thử gọi backend nội bộ
     try {
       const response = await apiClient.get<ApiEnvelope<ProvinceDto[]>>('/addresses/provinces');
-      if (response.data?.isSuccess && Array.isArray(response.data.data)) {
+      if (response.data?.isSuccess && Array.isArray(response.data.data) && response.data.data.length > 0) {
         return response.data.data;
       }
     } catch {
@@ -249,35 +342,130 @@ export const addressApi = {
 
   async getDistricts(provinceCode: string): Promise<DistrictDto[]> {
     if (!provinceCode) return [];
+    const pCodeStr = String(provinceCode).trim();
+    if (this._districtsCache[pCodeStr]) {
+      return this._districtsCache[pCodeStr];
+    }
+
+    // Kiểm tra sessionStorage
+    try {
+      const cached = sessionStorage.getItem(`vn_districts_${pCodeStr}`);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          this._districtsCache[pCodeStr] = parsed;
+          return parsed;
+        }
+      }
+    } catch {}
+
+    const pCodeNum = parseInt(pCodeStr, 10);
+
+    // 1. Gọi trực tiếp Open API chính thức (toàn bộ 705 quận huyện thị xã toàn quốc)
+    try {
+      const res = await fetch(`https://provinces.open-api.vn/api/p/${pCodeNum}?depth=2`);
+      if (res.ok) {
+        const raw = await res.json();
+        if (raw && Array.isArray(raw.districts) && raw.districts.length > 0) {
+          const list: DistrictDto[] = raw.districts.map((d: any) => ({
+            code: String(d.code),
+            name: d.name,
+            fullName: d.name,
+            provinceCode: pCodeStr,
+          }));
+          this._districtsCache[pCodeStr] = list;
+          try {
+            sessionStorage.setItem(`vn_districts_${pCodeStr}`, JSON.stringify(list));
+          } catch {}
+          return list;
+        }
+      }
+    } catch {
+      // Fallback
+    }
+
+    // 2. Thử gọi backend nội bộ
     try {
       const response = await apiClient.get<ApiEnvelope<DistrictDto[]>>(
-        `/addresses/provinces/${provinceCode}/districts`
+        `/addresses/provinces/${pCodeStr}/districts`
       );
-      if (response.data?.isSuccess && response.data.data) {
+      if (response.data?.isSuccess && Array.isArray(response.data.data) && response.data.data.length > 0) {
+        this._districtsCache[pCodeStr] = response.data.data;
         return response.data.data;
       }
     } catch {
       // Fallback open data
     }
-    return VIETNAM_OPEN_DATA_DISTRICTS[provinceCode] || getFallbackDistricts(provinceCode);
+
+    // 3. Fallback danh mục cục bộ đầy đủ
+    const fallbackList = VIETNAM_OPEN_DATA_DISTRICTS[pCodeStr] || getFallbackDistricts(pCodeStr);
+    this._districtsCache[pCodeStr] = fallbackList;
+    return fallbackList;
   },
 
   async getWards(districtCode: string): Promise<WardDto[]> {
     if (!districtCode) return [];
+    const dCodeStr = String(districtCode).trim();
+    if (this._wardsCache[dCodeStr]) {
+      return this._wardsCache[dCodeStr];
+    }
+
+    // Kiểm tra sessionStorage
+    try {
+      const cached = sessionStorage.getItem(`vn_wards_${dCodeStr}`);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          this._wardsCache[dCodeStr] = parsed;
+          return parsed;
+        }
+      }
+    } catch {}
+
+    const dCodeNum = parseInt(dCodeStr, 10);
+
+    // 1. Gọi trực tiếp Open API chính thức (toàn bộ 10.600+ phường xã thị trấn toàn quốc)
+    try {
+      const res = await fetch(`https://provinces.open-api.vn/api/d/${dCodeNum}?depth=2`);
+      if (res.ok) {
+        const raw = await res.json();
+        if (raw && Array.isArray(raw.wards) && raw.wards.length > 0) {
+          const list: WardDto[] = raw.wards.map((w: any) => ({
+            code: String(w.code),
+            name: w.name,
+            fullName: w.name,
+            districtCode: dCodeStr,
+          }));
+          this._wardsCache[dCodeStr] = list;
+          try {
+            sessionStorage.setItem(`vn_wards_${dCodeStr}`, JSON.stringify(list));
+          } catch {}
+          return list;
+        }
+      }
+    } catch {
+      // Fallback
+    }
+
+    // 2. Thử gọi backend nội bộ
     try {
       const response = await apiClient.get<ApiEnvelope<WardDto[]>>(
-        `/addresses/districts/${districtCode}/wards`
+        `/addresses/districts/${dCodeStr}/wards`
       );
-      if (response.data?.isSuccess && response.data.data) {
+      if (response.data?.isSuccess && Array.isArray(response.data.data) && response.data.data.length > 0) {
+        this._wardsCache[dCodeStr] = response.data.data;
         return response.data.data;
       }
     } catch {
       // Fallback open data
     }
-    return VIETNAM_OPEN_DATA_WARDS[districtCode] || getFallbackWards(districtCode);
+
+    // 3. Fallback danh mục cục bộ
+    const fallbackList = VIETNAM_OPEN_DATA_WARDS[dCodeStr] || getFallbackWards(dCodeStr);
+    this._wardsCache[dCodeStr] = fallbackList;
+    return fallbackList;
   },
 
-  // 2. Sổ địa chỉ người dùng (Authenticated, chống IDOR)
   async getMyAddresses(userId?: string): Promise<AddressDto[]> {
     try {
       const response = await apiClient.get<ApiEnvelope<AddressDto[]>>('/users/me/addresses');
