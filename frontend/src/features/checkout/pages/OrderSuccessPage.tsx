@@ -55,6 +55,16 @@ export const OrderSuccessPage: React.FC = () => {
     }
   };
 
+  const parseJsonSafe = (raw?: string | object | null): Record<string, unknown> | null => {
+    if (!raw) return null;
+    if (typeof raw === 'object') return raw as Record<string, unknown>;
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  };
+
   const address = order ? parseAddress(order.shippingAddressSnapshot) : null;
 
   return (
@@ -202,49 +212,96 @@ export const OrderSuccessPage: React.FC = () => {
             <span>📦</span> Sản phẩm trong đơn hàng ({order.items.length} món)
           </h2>
           <div className="divide-y divide-slate-100 border border-slate-100 rounded-2xl overflow-hidden">
-            {order.items.map((item) => (
-              <div
-                key={item.id}
-                className="p-4 flex items-center justify-between gap-4 bg-white hover:bg-slate-50/50 transition-colors"
-              >
-                <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-14 h-14 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center overflow-hidden flex-shrink-0">
-                    {item.thumbnailUrlSnapshot ? (
-                      <img
-                        src={item.thumbnailUrlSnapshot}
-                        alt={item.productNameSnapshot}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <span className="text-xl">⌨️</span>
-                    )}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-xs font-bold text-slate-900 truncate">
-                      {item.productNameSnapshot}
-                    </p>
-                    <p className="text-[11px] text-slate-500 truncate mt-0.5">
-                      Phân loại: <strong className="text-slate-700">{item.variantNameSnapshot}</strong>
-                    </p>
-                    <p className="text-[10px] text-slate-400 font-mono mt-0.5">
-                      SKU: {item.skuSnapshot}
-                    </p>
-                  </div>
-                </div>
+            {order.items.map((item) => {
+              const productName = item.productName || item.productNameSnapshot || 'Sản phẩm công nghệ chính hãng';
+              const variantName = item.variantName || item.variantNameSnapshot || '';
+              const sku = item.sku || item.skuSnapshot || '';
+              const unitPrice = item.unitPrice ?? item.unitPriceSnapshot ?? (item.quantity > 0 ? item.totalPrice / item.quantity : 0);
+              const thumbnail = item.thumbnailUrl || item.thumbnailUrlSnapshot;
+              const attributes = parseJsonSafe(item.attributes || item.attributesSnapshot);
+              const specs = parseJsonSafe(item.specifications || item.specificationsSnapshot);
 
-                <div className="text-right flex-shrink-0">
-                  <p className="text-xs font-black text-brand-600 font-mono">
-                    {formatVND(item.unitPriceSnapshot)}
-                  </p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
-                    Số lượng: <strong className="text-slate-900 font-mono">{item.quantity}</strong>
-                  </p>
-                  <p className="text-xs font-extrabold text-slate-900 mt-1 font-mono">
-                    {formatVND(item.totalPrice)}
-                  </p>
+              return (
+                <div
+                  key={item.id}
+                  className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white hover:bg-slate-50/50 transition-colors"
+                >
+                  <div className="flex items-start sm:items-center gap-4 min-w-0 flex-1">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-100 border border-slate-200/80 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-xs">
+                      {thumbnail ? (
+                        <img
+                          src={thumbnail}
+                          alt={productName}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLElement).style.display = 'none';
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-brand-50 to-slate-100 text-brand-600 text-2xl font-bold">
+                          📱
+                        </div>
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1 space-y-1">
+                      <p className="text-sm font-bold text-slate-900 leading-snug">
+                        {productName}
+                      </p>
+                      {variantName && (
+                        <p className="text-xs text-slate-600">
+                          Phân loại: <strong className="text-slate-800 font-semibold">{variantName}</strong>
+                        </p>
+                      )}
+                      {/* Attributes tags */}
+                      {attributes && typeof attributes === 'object' && Object.keys(attributes).length > 0 && (
+                        <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                          {Object.entries(attributes).map(([k, v]) => (
+                            <span
+                              key={k}
+                              className="inline-flex items-center px-2 py-0.5 rounded-md bg-slate-100 text-[10px] font-semibold text-slate-600 border border-slate-200/60"
+                            >
+                              {String(v)}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      {/* Specifications overview */}
+                      {specs && typeof specs === 'object' && (
+                        <p className="text-[11px] text-slate-400 font-normal">
+                          {[
+                            specs.screen_size && `Màn hình ${specs.screen_size}`,
+                            specs.refresh_rate && `${specs.refresh_rate}`,
+                            specs.ram && `RAM ${specs.ram}`,
+                            specs.storage && `Bộ nhớ ${specs.storage}`,
+                            specs.chip && `Chip ${specs.chip}`,
+                          ].filter(Boolean).join(' • ')}
+                        </p>
+                      )}
+                      {sku && (
+                        <p className="text-[10px] text-slate-400 font-mono">
+                          SKU: <span className="text-slate-500 font-medium">{sku}</span>
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="text-left sm:text-right flex-shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-100 flex sm:flex-col justify-between items-baseline sm:items-end">
+                    <span className="text-xs font-semibold text-slate-400 sm:hidden">Giá & Số lượng:</span>
+                    <div className="text-right">
+                      <p className="text-sm font-black text-brand-600 font-mono">
+                        {formatVND(unitPrice)}
+                      </p>
+                      <p className="text-[11px] text-slate-500 mt-0.5">
+                        Số lượng: <strong className="text-slate-900 font-mono font-bold">{item.quantity}</strong>
+                      </p>
+                      <p className="text-sm font-extrabold text-slate-900 mt-1 font-mono">
+                        {formatVND(item.totalPrice)}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}

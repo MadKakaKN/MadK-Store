@@ -11,10 +11,37 @@ import { MOCK_PRODUCTS } from './mockData';
 
 const MOCK_ORDERS_KEY = 'madk_mock_orders_store';
 
+export function normalizeOrder(order: OrderDto): OrderDto {
+  if (!order) return order;
+  return {
+    ...order,
+    items: (order.items || []).map((item) => ({
+      ...item,
+      productName: item.productName || item.productNameSnapshot || 'Sản phẩm công nghệ chính hãng',
+      productNameSnapshot: item.productNameSnapshot || item.productName || 'Sản phẩm công nghệ chính hãng',
+      variantName: item.variantName || item.variantNameSnapshot || 'Tiêu chuẩn',
+      variantNameSnapshot: item.variantNameSnapshot || item.variantName || 'Tiêu chuẩn',
+      sku: item.sku || item.skuSnapshot || '',
+      skuSnapshot: item.skuSnapshot || item.sku || '',
+      unitPrice: item.unitPrice ?? item.unitPriceSnapshot ?? 0,
+      unitPriceSnapshot: item.unitPriceSnapshot ?? item.unitPrice ?? 0,
+      originalPrice: item.originalPrice ?? item.originalPriceSnapshot ?? item.unitPrice ?? 0,
+      originalPriceSnapshot: item.originalPriceSnapshot ?? item.originalPrice ?? item.unitPriceSnapshot ?? 0,
+      attributes: item.attributes || item.attributesSnapshot || '{}',
+      attributesSnapshot: item.attributesSnapshot || item.attributes || '{}',
+      specifications: item.specifications ?? item.specificationsSnapshot ?? null,
+      specificationsSnapshot: item.specificationsSnapshot ?? item.specifications ?? null,
+      thumbnailUrl: item.thumbnailUrl || item.thumbnailUrlSnapshot || null,
+      thumbnailUrlSnapshot: item.thumbnailUrlSnapshot || item.thumbnailUrl || null,
+    })),
+  };
+}
+
 function getStoredMockOrders(): OrderDto[] {
   try {
     const raw = localStorage.getItem(MOCK_ORDERS_KEY);
-    const orders: OrderDto[] = raw ? JSON.parse(raw) : [];
+    const parsed: OrderDto[] = raw ? JSON.parse(raw) : [];
+    const orders: OrderDto[] = parsed.map(normalizeOrder);
     // Tự động dọn dẹp đơn hàng mẫu cũ (Keychron)
     const cleaned = orders.filter(
       (o) => !o.items?.some((i) => i.productNameSnapshot?.includes('Keychron Custom Edition'))
@@ -66,6 +93,7 @@ export const orderApi = {
       });
 
       if (res.data?.isSuccess && res.data.data) {
+        res.data.data = normalizeOrder(res.data.data);
         // Lưu cache cục bộ để hỗ trợ xem nhanh
         const stored = getStoredMockOrders();
         saveStoredMockOrders([res.data.data, ...stored.filter(o => o.orderNumber !== res.data.data!.orderNumber)]);
@@ -104,10 +132,12 @@ export const orderApi = {
       const params = status ? { status } : {};
       const res = await apiClient.get<ApiEnvelope<OrderDto[]>>('/orders/my-orders', { params });
       if (res.data?.isSuccess && res.data.data) {
+        const normalized = res.data.data.map(normalizeOrder);
+        res.data.data = normalized;
         // Đồng bộ vào cache
         const stored = getStoredMockOrders();
-        const serverMap = new Map(res.data.data.map(o => [o.orderNumber, o]));
-        const merged = [...res.data.data, ...stored.filter(o => !serverMap.has(o.orderNumber))];
+        const serverMap = new Map(normalized.map(o => [o.orderNumber, o]));
+        const merged = [...normalized, ...stored.filter(o => !serverMap.has(o.orderNumber))];
         saveStoredMockOrders(merged);
         return { isSuccess: true, data: merged };
       }
@@ -129,11 +159,14 @@ export const orderApi = {
   async getOrderByNumber(orderNumber: string): Promise<ApiEnvelope<OrderDto>> {
     try {
       const res = await apiClient.get<ApiEnvelope<OrderDto>>(`/orders/${encodeURIComponent(orderNumber)}`);
+      if (res.data?.isSuccess && res.data.data) {
+        res.data.data = normalizeOrder(res.data.data);
+      }
       return res.data;
     } catch {
       const found = getStoredMockOrders().find((o) => o.orderNumber.toUpperCase() === orderNumber.trim().toUpperCase());
       if (found) {
-        return { isSuccess: true, data: found };
+        return { isSuccess: true, data: normalizeOrder(found) };
       }
       return { isSuccess: false, error: 'Không tìm thấy thông tin đơn hàng.' };
     }

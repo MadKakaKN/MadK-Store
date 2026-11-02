@@ -263,46 +263,56 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
               <span>Chi tiết sản phẩm ({order.items.length} món)</span>
             </h3>
             <div className="border border-slate-200 rounded-2xl overflow-hidden divide-y divide-slate-100">
-              {order.items.map((item) => (
-                <div key={item.id} className="p-4 flex items-center justify-between gap-4 bg-white hover:bg-slate-50/50 transition-colors">
-                  <div className="flex items-center gap-4 min-w-0">
-                    <div className="w-14 h-14 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center overflow-hidden flex-shrink-0">
-                      {item.thumbnailUrlSnapshot ? (
-                        <img
-                          src={item.thumbnailUrlSnapshot}
-                          alt={item.productNameSnapshot}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <span className="text-xl">⌨️</span>
-                      )}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-xs font-bold text-slate-900 truncate">
-                        {item.productNameSnapshot}
-                      </p>
-                      <p className="text-[11px] text-slate-500 mt-0.5 truncate">
-                        Phân loại: <strong className="text-slate-700">{item.variantNameSnapshot}</strong>
-                      </p>
-                      <p className="text-[10px] text-slate-400 font-mono mt-0.5">
-                        SKU: {item.skuSnapshot}
-                      </p>
-                    </div>
-                  </div>
+              {order.items.map((item) => {
+                const productName = item.productName || item.productNameSnapshot || 'Sản phẩm công nghệ';
+                const variantName = item.variantName || item.variantNameSnapshot || '';
+                const sku = item.sku || item.skuSnapshot || '';
+                const unitPrice = item.unitPrice ?? item.unitPriceSnapshot ?? (item.quantity > 0 ? item.totalPrice / item.quantity : 0);
+                const thumbnail = item.thumbnailUrl || item.thumbnailUrlSnapshot;
 
-                  <div className="text-right flex-shrink-0">
-                    <p className="text-xs font-black text-brand-600">
-                      {formatVnd(item.unitPriceSnapshot)}
-                    </p>
-                    <p className="text-[11px] text-slate-500 mt-0.5">
-                      x <span className="font-bold text-slate-900">{item.quantity}</span>
-                    </p>
-                    <p className="text-xs font-extrabold text-slate-900 mt-1">
-                      {formatVnd(item.totalPrice)}
-                    </p>
+                return (
+                  <div key={item.id} className="p-4 flex items-center justify-between gap-4 bg-white hover:bg-slate-50/50 transition-colors">
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div className="w-14 h-14 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center overflow-hidden flex-shrink-0">
+                        {thumbnail ? (
+                          <img
+                            src={thumbnail}
+                            alt={productName}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-xl">📱</span>
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-900 truncate">
+                          {productName}
+                        </p>
+                        <p className="text-[11px] text-slate-500 mt-0.5 truncate">
+                          Phân loại: <strong className="text-slate-700">{variantName}</strong>
+                        </p>
+                        {sku && (
+                          <p className="text-[10px] text-slate-400 font-mono mt-0.5">
+                            SKU: {sku}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="text-right flex-shrink-0">
+                      <p className="text-xs font-black text-brand-600">
+                        {formatVnd(unitPrice)}
+                      </p>
+                      <p className="text-[11px] text-slate-500 mt-0.5">
+                        x <span className="font-bold text-slate-900">{item.quantity}</span>
+                      </p>
+                      <p className="text-xs font-extrabold text-slate-900 mt-1">
+                        {formatVnd(item.totalPrice)}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 

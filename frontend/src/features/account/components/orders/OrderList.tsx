@@ -96,9 +96,9 @@ export const OrderList: React.FC = () => {
     const matchNumber = o.orderNumber.toLowerCase().includes(q);
     const matchItem = o.items.some(
       (i) =>
-        i.productNameSnapshot.toLowerCase().includes(q) ||
-        i.variantNameSnapshot.toLowerCase().includes(q) ||
-        i.skuSnapshot.toLowerCase().includes(q)
+        (i.productName || i.productNameSnapshot || '').toLowerCase().includes(q) ||
+        (i.variantName || i.variantNameSnapshot || '').toLowerCase().includes(q) ||
+        (i.sku || i.skuSnapshot || '').toLowerCase().includes(q)
     );
     return matchNumber || matchItem;
   });

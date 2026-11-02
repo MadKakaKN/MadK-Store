@@ -28,15 +28,23 @@ export interface OrderItemDto {
   id: string;
   variantId?: string | null;
   productId?: string | null;
+  productName?: string;
   productNameSnapshot: string;
+  variantName?: string;
   variantNameSnapshot: string;
+  sku?: string;
   skuSnapshot: string;
+  unitPrice?: number;
   unitPriceSnapshot: number;
+  originalPrice?: number;
   originalPriceSnapshot: number;
   quantity: number;
   totalPrice: number;
-  attributesSnapshot?: string | null;
+  attributes?: string | null;
+  attributesSnapshot: string;
+  specifications?: string | null;
   specificationsSnapshot?: string | null;
+  thumbnailUrl?: string | null;
   thumbnailUrlSnapshot?: string | null;
 }
 

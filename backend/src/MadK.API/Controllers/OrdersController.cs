@@ -249,7 +249,7 @@ public class OrdersController : ControllerBase
     private (Guid? UserId, string? AnonymousId) ResolveUserOrAnonymous(string? headerAnonymousId)
     {
         Guid? userId = null;
-        var subClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var subClaim = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
         if (!string.IsNullOrWhiteSpace(subClaim) && Guid.TryParse(subClaim, out var parsed))
         {
             userId = parsed;

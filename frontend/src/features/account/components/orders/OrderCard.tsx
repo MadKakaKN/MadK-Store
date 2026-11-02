@@ -60,34 +60,40 @@ export const OrderCard: React.FC<OrderCardProps> = ({
 
       {/* Items Preview */}
       <div className="space-y-3">
-        {order.items.slice(0, 3).map((item) => (
-          <div key={item.id} className="flex items-center justify-between gap-3 text-xs">
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center overflow-hidden flex-shrink-0">
-                {item.thumbnailUrlSnapshot ? (
-                  <img
-                    src={item.thumbnailUrlSnapshot}
-                    alt={item.productNameSnapshot}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <span className="text-lg">⌨️</span>
-                )}
+        {order.items.slice(0, 3).map((item) => {
+          const productName = item.productName || item.productNameSnapshot || 'Sản phẩm công nghệ';
+          const variantName = item.variantName || item.variantNameSnapshot || '';
+          const thumbnail = item.thumbnailUrl || item.thumbnailUrlSnapshot;
+
+          return (
+            <div key={item.id} className="flex items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center overflow-hidden flex-shrink-0">
+                  {thumbnail ? (
+                    <img
+                      src={thumbnail}
+                      alt={productName}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-lg">📱</span>
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <p className="font-bold text-slate-900 truncate">
+                    {productName}
+                  </p>
+                  <p className="text-[11px] text-slate-500 truncate">
+                    {variantName} <span className="text-slate-400">× {item.quantity}</span>
+                  </p>
+                </div>
               </div>
-              <div className="min-w-0">
-                <p className="font-bold text-slate-900 truncate">
-                  {item.productNameSnapshot}
-                </p>
-                <p className="text-[11px] text-slate-500 truncate">
-                  {item.variantNameSnapshot} <span className="text-slate-400">× {item.quantity}</span>
-                </p>
-              </div>
+              <span className="font-bold text-slate-800 flex-shrink-0 font-mono">
+                {formatVnd(item.totalPrice)}
+              </span>
             </div>
-            <span className="font-bold text-slate-800 flex-shrink-0 font-mono">
-              {formatVnd(item.totalPrice)}
-            </span>
-          </div>
-        ))}
+          );
+        })}
 
         {order.items.length > 3 && (
           <p className="text-xs text-slate-400 italic text-center pt-1">

@@ -45,7 +45,17 @@ public record OrderItemDto(
     string Attributes,
     string? Specifications,
     string? ThumbnailUrl
-);
+)
+{
+    public string ProductNameSnapshot => ProductName;
+    public string VariantNameSnapshot => VariantName;
+    public string SkuSnapshot => Sku;
+    public decimal UnitPriceSnapshot => UnitPrice;
+    public decimal OriginalPriceSnapshot => OriginalPrice;
+    public string AttributesSnapshot => Attributes;
+    public string? SpecificationsSnapshot => Specifications;
+    public string? ThumbnailUrlSnapshot => ThumbnailUrl;
+};
 
 public record OrderStatusHistoryDto(
     Guid Id,
