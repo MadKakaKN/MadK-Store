@@ -17,155 +17,6 @@ import { BrandFormModal } from '../components/catalog/BrandFormModal';
 type ActiveCatalogTab = 'products' | 'categories' | 'brands';
 
 // Fallback Mock Data in case backend is offline
-const MOCK_CATEGORIES: AdminCategoryListDto[] = [
-  {
-    id: 'cat-1',
-    parentId: null,
-    parentName: null,
-    name: 'Điện thoại',
-    slug: 'dien-thoai',
-    description: 'Smartphone chính hãng các dòng iPhone, Galaxy...',
-    iconUrl: '/icons/phone.svg',
-    displayOrder: 1,
-    isActive: true,
-    isDeleted: false,
-    productsCount: 14,
-    hasSchema: true,
-    createdAt: '2026-10-10T00:00:00Z',
-  },
-  {
-    id: 'cat-2',
-    parentId: null,
-    parentName: null,
-    name: 'Laptop & Máy tính',
-    slug: 'laptop-may-tinh',
-    description: 'Laptop gaming, văn phòng, đồ họa cao cấp',
-    iconUrl: '/icons/laptop.svg',
-    displayOrder: 2,
-    isActive: true,
-    isDeleted: false,
-    productsCount: 8,
-    hasSchema: true,
-    createdAt: '2026-10-10T00:00:00Z',
-  },
-  {
-    id: 'cat-3',
-    parentId: null,
-    parentName: null,
-    name: 'Bàn phím cơ Custom',
-    slug: 'ban-phim-co',
-    description: 'Bàn phím cơ không dây, phím nhôm CNC',
-    iconUrl: '/icons/keyboard.svg',
-    displayOrder: 3,
-    isActive: true,
-    isDeleted: false,
-    productsCount: 5,
-    hasSchema: true,
-    createdAt: '2026-10-11T00:00:00Z',
-  },
-];
-
-const MOCK_BRANDS: AdminBrandListDto[] = [
-  {
-    id: 'br-1',
-    name: 'Apple',
-    slug: 'apple',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg',
-    description: 'Thương hiệu công nghệ hàng đầu thế giới từ Mỹ',
-    isActive: true,
-    isDeleted: false,
-    productsCount: 15,
-    createdAt: '2026-10-10T00:00:00Z',
-  },
-  {
-    id: 'br-2',
-    name: 'Samsung',
-    slug: 'samsung',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg',
-    description: 'Tập đoàn điện tử hàng đầu Hàn Quốc',
-    isActive: true,
-    isDeleted: false,
-    productsCount: 7,
-    createdAt: '2026-10-10T00:00:00Z',
-  },
-  {
-    id: 'br-3',
-    name: 'Keychron',
-    slug: 'keychron',
-    logoUrl: 'https://www.keychron.com/cdn/shop/files/Keychron_Logo_black_180x.png',
-    description: 'Chuyên sản xuất bàn phím cơ cao cấp cho Mac và Windows',
-    isActive: true,
-    isDeleted: false,
-    productsCount: 5,
-    createdAt: '2026-10-11T00:00:00Z',
-  },
-];
-
-const MOCK_PRODUCTS: AdminProductListDto[] = [
-  {
-    id: 'p-1',
-    name: 'iPhone 16 Pro Max 256GB',
-    slug: 'iphone-16-pro-max-256gb',
-    categoryId: 'cat-1',
-    categoryName: 'Điện thoại',
-    brandId: 'br-1',
-    brandName: 'Apple',
-    basePrice: 34990000,
-    minPrice: 34490000,
-    maxPrice: 34990000,
-    thumbnailUrl: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&q=80',
-    model3DUrl: '/models/iphone16pro.glb',
-    isFeatured: true,
-    isActive: true,
-    isDeleted: false,
-    variantsCount: 3,
-    totalStock: 45,
-    createdAt: '2026-10-11T00:00:00Z',
-    updatedAt: null,
-  },
-  {
-    id: 'p-2',
-    name: 'MacBook Pro 14 M4 Pro 24GB / 1TB',
-    slug: 'macbook-pro-14-m4-pro',
-    categoryId: 'cat-2',
-    categoryName: 'Laptop & Máy tính',
-    brandId: 'br-1',
-    brandName: 'Apple',
-    basePrice: 54990000,
-    minPrice: 52990000,
-    maxPrice: 54990000,
-    thumbnailUrl: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&q=80',
-    model3DUrl: null,
-    isFeatured: true,
-    isActive: true,
-    isDeleted: false,
-    variantsCount: 2,
-    totalStock: 18,
-    createdAt: '2026-10-11T00:00:00Z',
-    updatedAt: null,
-  },
-  {
-    id: 'p-3',
-    name: 'Bàn phím cơ Keychron Q1 Pro Wireless',
-    slug: 'keychron-q1-pro-wireless',
-    categoryId: 'cat-3',
-    categoryName: 'Bàn phím cơ Custom',
-    brandId: 'br-3',
-    brandName: 'Keychron',
-    basePrice: 4600000,
-    minPrice: 4500000,
-    maxPrice: 4700000,
-    thumbnailUrl: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&q=80',
-    model3DUrl: '/models/keychron_q1.glb',
-    isFeatured: false,
-    isActive: true,
-    isDeleted: false,
-    variantsCount: 2,
-    totalStock: 30,
-    createdAt: '2026-10-12T00:00:00Z',
-    updatedAt: null,
-  },
-];
 
 export const AdminCatalogPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ActiveCatalogTab>('products');
@@ -226,11 +77,11 @@ export const AdminCatalogPage: React.FC = () => {
         adminCatalogApi.getCategories(true),
         adminCatalogApi.getBrands(true),
       ]);
-      setCategories(cats.length > 0 ? cats : MOCK_CATEGORIES);
-      setBrands(brs.length > 0 ? brs : MOCK_BRANDS);
+      setCategories(Array.isArray(cats) ? cats : []);
+      setBrands(Array.isArray(brs) ? brs : []);
     } catch {
-      setCategories(MOCK_CATEGORIES);
-      setBrands(MOCK_BRANDS);
+      setCategories([]);
+      setBrands([]);
     }
   }, []);
 
@@ -249,34 +100,11 @@ export const AdminCatalogPage: React.FC = () => {
       };
 
       const res = await adminCatalogApi.getProducts(filterParams);
-      setProducts(res.items);
-      setTotalItems(res.totalItems);
+      setProducts(res.items || []);
+      setTotalItems(res.totalItems || 0);
     } catch {
-      // Fallback filter locally
-      let filtered = [...MOCK_PRODUCTS];
-      if (searchQuery) {
-        filtered = filtered.filter(
-          (p) =>
-            p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            p.slug.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-      }
-      if (categoryFilter) {
-        filtered = filtered.filter((p) => p.categoryId === categoryFilter);
-      }
-      if (brandFilter) {
-        filtered = filtered.filter((p) => p.brandId === brandFilter);
-      }
-      if (statusFilter === 'active') {
-        filtered = filtered.filter((p) => p.isActive && !p.isDeleted);
-      } else if (statusFilter === 'hidden') {
-        filtered = filtered.filter((p) => !p.isActive && !p.isDeleted);
-      } else if (statusFilter === 'deleted') {
-        filtered = filtered.filter((p) => p.isDeleted);
-      }
-
-      setProducts(filtered);
-      setTotalItems(filtered.length);
+      setProducts([]);
+      setTotalItems(0);
     } finally {
       setIsLoading(false);
     }
