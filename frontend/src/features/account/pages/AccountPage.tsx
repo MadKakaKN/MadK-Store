@@ -152,16 +152,16 @@ export const AccountPage: React.FC = () => {
                 </span>
               ))}
             </div>
-            <p className="text-sm text-slate-500 mt-1 flex flex-wrap items-center gap-2">
+                        <p className="text-sm text-slate-500 mt-1 flex flex-wrap items-center gap-2">
               <span className="font-mono text-slate-700">{user?.email}</span>
               {user?.emailConfirmed ? (
                 <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-100">
-                  âœ“ ÄÃ£ xÃ¡c thá»±c
+                  ✓ Đã xác thực
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-2">
                   <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-lg border border-amber-100">
-                    ! ChÆ°a xÃ¡c thá»±c email
+                    ! Chưa xác thực email
                   </span>
                   <button
                     type="button"
@@ -169,8 +169,8 @@ export const AccountPage: React.FC = () => {
                     disabled={resendLoading}
                     className="text-xs font-bold text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100 px-2.5 py-0.5 rounded-lg transition-colors border border-brand-200 shadow-2xs disabled:opacity-50 flex items-center gap-1"
                   >
-                    <span>ðŸ“§</span>
-                    <span>{resendLoading ? "Äang gá»­i..." : "Gá»­i láº¡i email xÃ¡c thá»±c"}</span>
+                    <span>📧</span>
+                    <span>{resendLoading ? 'Đang gửi...' : 'Gửi lại email xác thực'}</span>
                   </button>
                 </span>
               )}
@@ -206,7 +206,7 @@ export const AccountPage: React.FC = () => {
           }`}
         >
           <div className="flex items-center gap-2">
-            <span>{resendMessage.isError ? "âš ï¸" : "âœ…"}</span>
+            <span>{resendMessage.isError ? "⚠️" : "✅"}</span>
             <span>{resendMessage.text}</span>
           </div>
           <button
