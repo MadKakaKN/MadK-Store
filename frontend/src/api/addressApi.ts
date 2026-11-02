@@ -213,46 +213,17 @@ const getStorageKey = (userId?: string) => `madk_addresses_${userId || 'default_
 function getLocalAddresses(userId?: string): AddressDto[] {
   const raw = localStorage.getItem(getStorageKey(userId));
   if (!raw) {
-    // Initial sample addresses
-    const initial: AddressDto[] = [
-      {
-        id: 'addr-seed-001',
-        userId: userId || 'customer-001',
-        recipientName: 'Nguyễn Văn Khách',
-        phoneNumber: '0987654321',
-        provinceCode: '79',
-        provinceName: 'Thành phố Hồ Chí Minh',
-        districtCode: '760',
-        districtName: 'Quận 1',
-        wardCode: '26734',
-        wardName: 'Phường Bến Nghé',
-        detailedAddress: 'Số 123 Lê Duẩn, Tòa nhà Bitexco Diamond',
-        fullAddress: 'Số 123 Lê Duẩn, Tòa nhà Bitexco Diamond, Phường Bến Nghé, Quận 1, Thành phố Hồ Chí Minh',
-        isDefault: true,
-        createdAt: new Date(Date.now() - 864000000).toISOString(),
-      },
-      {
-        id: 'addr-seed-002',
-        userId: userId || 'customer-001',
-        recipientName: 'Nguyễn Văn Khách (Văn phòng)',
-        phoneNumber: '0987654321',
-        provinceCode: '01',
-        provinceName: 'Thành phố Hà Nội',
-        districtCode: '005',
-        districtName: 'Quận Cầu Giấy',
-        wardCode: '00166',
-        wardName: 'Phường Dịch Vọng',
-        detailedAddress: 'Tầng 8, Tòa nhà MadK Tower, Số 88 Đường Cầu Giấy',
-        fullAddress: 'Tầng 8, Tòa nhà MadK Tower, Số 88 Đường Cầu Giấy, Phường Dịch Vọng, Quận Cầu Giấy, Thành phố Hà Nội',
-        isDefault: false,
-        createdAt: new Date(Date.now() - 432000000).toISOString(),
-      },
-    ];
-    localStorage.setItem(getStorageKey(userId), JSON.stringify(initial));
-    return initial;
+    return [];
   }
   try {
-    return JSON.parse(raw);
+    const list = JSON.parse(raw);
+    if (!Array.isArray(list)) return [];
+    // Tự động dọn dẹp các địa chỉ mock/seed cũ nếu còn lưu trong localStorage của trình duyệt
+    const cleaned = list.filter((a: AddressDto) => a && a.id && !a.id.startsWith('addr-seed-'));
+    if (cleaned.length !== list.length) {
+      saveLocalAddresses(cleaned, userId);
+    }
+    return cleaned;
   } catch {
     return [];
   }
@@ -267,7 +238,7 @@ export const addressApi = {
   async getProvinces(): Promise<ProvinceDto[]> {
     try {
       const response = await apiClient.get<ApiEnvelope<ProvinceDto[]>>('/addresses/provinces');
-      if (response.data?.isSuccess && response.data.data) {
+      if (response.data?.isSuccess && Array.isArray(response.data.data)) {
         return response.data.data;
       }
     } catch {
@@ -310,12 +281,12 @@ export const addressApi = {
   async getMyAddresses(userId?: string): Promise<AddressDto[]> {
     try {
       const response = await apiClient.get<ApiEnvelope<AddressDto[]>>('/users/me/addresses');
-      if (response.data?.isSuccess && response.data.data) {
+      if (response.data?.isSuccess && Array.isArray(response.data.data)) {
         saveLocalAddresses(response.data.data, userId);
         return response.data.data;
       }
     } catch {
-      // Fallback local mock storage
+      // Fallback local storage khi mất kết nối mạng
     }
     return getLocalAddresses(userId);
   },
