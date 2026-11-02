@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { addressApi } from '../../../api/addressApi';
 import type { ProvinceDto, DistrictDto, WardDto, AddressDto, CreateAddressRequestDto } from '../../../types/address';
 
@@ -192,15 +192,22 @@ export const AddressModal: React.FC<AddressModalProps> = ({
 
     setIsSubmitting(true);
     try {
+      const selectedProv = provinces.find((p) => p.code === provinceCode);
+      const selectedDist = districts.find((d) => d.code === districtCode);
+      const selectedWard = wards.find((w) => w.code === wardCode);
+
       const payload: CreateAddressRequestDto = {
         recipientName: recipientName.trim(),
         phoneNumber: phoneNumber.trim(),
         provinceCode,
-        districtCode,
-        wardCode,
-        detailedAddress: detailedAddress.trim(),
-        isDefault,
-      };
+        provinceName: selectedProv?.fullName || selectedProv?.name || "",
+ districtCode,
+        districtName: selectedDist?.fullName || selectedDist?.name || "",
+ wardCode,
+        wardName: selectedWard?.fullName || selectedWard?.name || "",
+ detailedAddress: detailedAddress.trim(),
+ isDefault,
+ };
 
       if (initialData) {
         await addressApi.updateAddress(initialData.id, payload, userId);

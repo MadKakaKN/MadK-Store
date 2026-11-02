@@ -1,4 +1,4 @@
-using MadK.Application.Common;
+﻿using MadK.Application.Common;
 using MadK.Application.DTOs.Address;
 using MadK.Application.Interfaces;
 using MadK.Domain.Entities;
@@ -123,22 +123,14 @@ public class AddressService : IAddressService
         }
 
         // Tìm thông tin Tỉnh, Huyện, Xã
+        // Tim thong tin Tinh, Huyen, Xa trong DB hoac lay theo ten tu client Open API
         var province = await _context.Provinces.FirstOrDefaultAsync(p => p.Code == request.ProvinceCode.Trim(), ct);
-        var district = await _context.Districts.FirstOrDefaultAsync(d => d.Code == request.DistrictCode.Trim() && d.ProvinceCode == request.ProvinceCode.Trim(), ct);
-        var ward = await _context.Wards.FirstOrDefaultAsync(w => w.Code == request.WardCode.Trim() && w.DistrictCode == request.DistrictCode.Trim(), ct);
+        var district = await _context.Districts.FirstOrDefaultAsync(d => d.Code == request.DistrictCode.Trim(), ct);
+        var ward = await _context.Wards.FirstOrDefaultAsync(w => w.Code == request.WardCode.Trim(), ct);
 
-        if (province == null)
-        {
-            return Result<AddressDto>.Failure($"Mã tỉnh/thành phố '{request.ProvinceCode}' không hợp lệ.");
-        }
-        if (district == null)
-        {
-            return Result<AddressDto>.Failure($"Mã quận/huyện '{request.DistrictCode}' không thuộc tỉnh/thành phố '{province.FullName}'.");
-        }
-        if (ward == null)
-        {
-            return Result<AddressDto>.Failure($"Mã phường/xã '{request.WardCode}' không thuộc quận/huyện '{district.FullName}'.");
-        }
+        string provinceName = province?.FullName ?? (!string.IsNullOrWhiteSpace(request.ProvinceName) ? request.ProvinceName.Trim() : $"Tinh/Thanh ({request.ProvinceCode})");
+        string districtName = district?.FullName ?? (!string.IsNullOrWhiteSpace(request.DistrictName) ? request.DistrictName.Trim() : $"Quan/Huyen ({request.DistrictCode})");
+        string wardName = ward?.FullName ?? (!string.IsNullOrWhiteSpace(request.WardName) ? request.WardName.Trim() : $"Phuong/Xa ({request.WardCode})");
 
         var existingAddresses = await _context.Addresses
             .Where(a => a.UserId == currentUserId)
@@ -160,12 +152,12 @@ public class AddressService : IAddressService
             UserId = currentUserId,
             RecipientName = request.RecipientName.Trim(),
             PhoneNumber = request.PhoneNumber.Trim(),
-            ProvinceCode = province.Code,
-            ProvinceName = province.FullName,
-            DistrictCode = district.Code,
-            DistrictName = district.FullName,
-            WardCode = ward.Code,
-            WardName = ward.FullName,
+            ProvinceCode = request.ProvinceCode.Trim(),
+            ProvinceName = provinceName,
+            DistrictCode = request.DistrictCode.Trim(),
+            DistrictName = districtName,
+            WardCode = request.WardCode.Trim(),
+            WardName = wardName,
             DetailedAddress = request.DetailedAddress.Trim(),
             IsDefault = isDefault,
             CreatedAt = DateTime.UtcNow
@@ -208,22 +200,14 @@ public class AddressService : IAddressService
         }
 
         // Tìm thông tin Tỉnh, Huyện, Xã
+        // Tim thong tin Tinh, Huyen, Xa trong DB hoac lay theo ten duoc truyen len
         var province = await _context.Provinces.FirstOrDefaultAsync(p => p.Code == request.ProvinceCode.Trim(), ct);
-        var district = await _context.Districts.FirstOrDefaultAsync(d => d.Code == request.DistrictCode.Trim() && d.ProvinceCode == request.ProvinceCode.Trim(), ct);
-        var ward = await _context.Wards.FirstOrDefaultAsync(w => w.Code == request.WardCode.Trim() && w.DistrictCode == request.DistrictCode.Trim(), ct);
+        var district = await _context.Districts.FirstOrDefaultAsync(d => d.Code == request.DistrictCode.Trim(), ct);
+        var ward = await _context.Wards.FirstOrDefaultAsync(w => w.Code == request.WardCode.Trim(), ct);
 
-        if (province == null)
-        {
-            return Result<AddressDto>.Failure($"Mã tỉnh/thành phố '{request.ProvinceCode}' không hợp lệ.");
-        }
-        if (district == null)
-        {
-            return Result<AddressDto>.Failure($"Mã quận/huyện '{request.DistrictCode}' không thuộc tỉnh/thành phố '{province.FullName}'.");
-        }
-        if (ward == null)
-        {
-            return Result<AddressDto>.Failure($"Mã phường/xã '{request.WardCode}' không thuộc quận/huyện '{district.FullName}'.");
-        }
+        string provinceName = province?.FullName ?? (!string.IsNullOrWhiteSpace(request.ProvinceName) ? request.ProvinceName.Trim() : address.ProvinceName);
+        string districtName = district?.FullName ?? (!string.IsNullOrWhiteSpace(request.DistrictName) ? request.DistrictName.Trim() : address.DistrictName);
+        string wardName = ward?.FullName ?? (!string.IsNullOrWhiteSpace(request.WardName) ? request.WardName.Trim() : address.WardName);
 
         var otherAddresses = await _context.Addresses
             .Where(a => a.UserId == currentUserId && a.Id != addressId)
@@ -246,12 +230,12 @@ public class AddressService : IAddressService
 
         address.RecipientName = request.RecipientName.Trim();
         address.PhoneNumber = request.PhoneNumber.Trim();
-        address.ProvinceCode = province.Code;
-        address.ProvinceName = province.FullName;
-        address.DistrictCode = district.Code;
-        address.DistrictName = district.FullName;
-        address.WardCode = ward.Code;
-        address.WardName = ward.FullName;
+        address.ProvinceCode = request.ProvinceCode.Trim();
+        address.ProvinceName = provinceName;
+        address.DistrictCode = request.DistrictCode.Trim();
+        address.DistrictName = districtName;
+        address.WardCode = request.WardCode.Trim();
+        address.WardName = wardName;
         address.DetailedAddress = request.DetailedAddress.Trim();
         address.IsDefault = isDefault;
         address.UpdatedAt = DateTime.UtcNow;

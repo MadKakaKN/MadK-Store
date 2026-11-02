@@ -1,4 +1,4 @@
-import apiClient from './apiClient';
+﻿import apiClient from './apiClient';
 import type {
   ProvinceDto,
   DistrictDto,
@@ -470,8 +470,12 @@ export const addressApi = {
     try {
       const response = await apiClient.get<ApiEnvelope<AddressDto[]>>('/users/me/addresses');
       if (response.data?.isSuccess && Array.isArray(response.data.data)) {
-        saveLocalAddresses(response.data.data, userId);
-        return response.data.data;
+        const local = getLocalAddresses(userId);
+        if (response.data.data.length > 0 || local.length === 0) {
+          saveLocalAddresses(response.data.data, userId);
+          return response.data.data;
+        }
+        return local;
       }
     } catch {
       // Fallback local storage khi mất kết nối mạng
@@ -483,10 +487,20 @@ export const addressApi = {
     try {
       const response = await apiClient.post<ApiEnvelope<AddressDto>>('/users/me/addresses', data);
       if (response.data?.isSuccess && response.data.data) {
+        const current = getLocalAddresses(userId);
+        const filtered = current.filter((a) => a.id !== response.data.data!.id);
+        saveLocalAddresses([response.data.data, ...filtered], userId);
         return response.data.data;
       }
-    } catch {
-      // Fallback local mock storage
+      if (response.data && !response.data.isSuccess) {
+        throw new Error(response.data.error || 'Máy chủ không thể tạo địa chỉ.');
+      }
+    } catch (err: unknown) {
+      const axiosErr = err as { response?: { data?: { error?: string; message?: string } } };
+      const serverMsg = axiosErr?.response?.data?.error || axiosErr?.response?.data?.message;
+      if (serverMsg) {
+        throw new Error(serverMsg);
+      }
     }
 
     const current = getLocalAddresses(userId);
@@ -502,9 +516,9 @@ export const addressApi = {
       current.forEach((a) => (a.isDefault = false));
     }
 
-    const provName = prov?.fullName || 'Tỉnh/Thành';
-    const distName = dist?.fullName || 'Quận/Huyện';
-    const wardName = ward?.fullName || 'Phường/Xã';
+    const provName = data.provinceName || prov?.fullName || 'Tỉnh/Thành';
+    const distName = data.districtName || dist?.fullName || 'Quận/Huyện';
+    const wardName = data.wardName || ward?.fullName || 'Phường/Xã';
 
     const newAddr: AddressDto = {
       id: 'addr-' + Date.now(),
@@ -532,12 +546,21 @@ export const addressApi = {
     try {
       const response = await apiClient.put<ApiEnvelope<AddressDto>>(`/users/me/addresses/${id}`, data);
       if (response.data?.isSuccess && response.data.data) {
+        const current = getLocalAddresses(userId);
+        const updatedList = current.map((a) => (a.id === id ? response.data.data! : a));
+        saveLocalAddresses(updatedList, userId);
         return response.data.data;
       }
-    } catch {
-      // Fallback local mock storage
+      if (response.data && !response.data.isSuccess) {
+        throw new Error(response.data.error || 'Máy chủ không thể cập nhật địa chỉ.');
+      }
+    } catch (err: unknown) {
+      const axiosErr = err as { response?: { data?: { error?: string; message?: string } } };
+      const serverMsg = axiosErr?.response?.data?.error || axiosErr?.response?.data?.message;
+      if (serverMsg) {
+        throw new Error(serverMsg);
+      }
     }
-
     const current = getLocalAddresses(userId);
     const idx = current.findIndex((a) => a.id === id);
     if (idx === -1) {

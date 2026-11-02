@@ -46,7 +46,10 @@ public record CreateAddressRequestDto(
     string DistrictCode,
     string WardCode,
     string DetailedAddress,
-    bool IsDefault = false
+    bool IsDefault = false,
+    string? ProvinceName = null,
+    string? DistrictName = null,
+    string? WardName = null
 );
 
 public record UpdateAddressRequestDto(
@@ -56,5 +59,8 @@ public record UpdateAddressRequestDto(
     string DistrictCode,
     string WardCode,
     string DetailedAddress,
-    bool IsDefault = false
+    bool IsDefault = false,
+    string? ProvinceName = null,
+    string? DistrictName = null,
+    string? WardName = null
 );

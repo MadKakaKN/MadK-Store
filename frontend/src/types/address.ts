@@ -45,6 +45,9 @@ export interface CreateAddressRequestDto {
   wardCode: string;
   detailedAddress: string;
   isDefault?: boolean;
+  provinceName?: string;
+  districtName?: string;
+  wardName?: string;
 }
 
 export interface UpdateAddressRequestDto {
@@ -55,4 +58,7 @@ export interface UpdateAddressRequestDto {
   wardCode: string;
   detailedAddress: string;
   isDefault?: boolean;
+  provinceName?: string;
+  districtName?: string;
+  wardName?: string;
 }
