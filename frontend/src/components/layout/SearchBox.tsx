@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MOCK_PRODUCTS } from '../../api/mockData';
+import catalogApi from '../../api/catalogApi';
+import { ProductListDto } from '../../types/catalog';
 
 export interface TrendingItem {
   id: string;
@@ -124,9 +125,41 @@ interface SearchBoxProps {
 export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNavigate }) => {
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const [liveResults, setLiveResults] = useState<ProductListDto[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+
+  const [trendingProducts, setTrendingProducts] = useState<TrendingItem[]>(TRENDING_STORE_PRODUCTS);
+
+  // Load real featured products from database for trending list
+  useEffect(() => {
+    let isMounted = true;
+    catalogApi
+      .getProducts({ isFeatured: true, pageSize: 10 })
+      .then((res) => {
+        if (isMounted && res.items && res.items.length > 0) {
+          setTrendingProducts(
+            res.items.map((p) => ({
+              id: p.id,
+              name: p.name,
+              slug: p.slug,
+              price: p.minPrice || p.basePrice,
+              thumbnailUrl:
+                p.thumbnailUrl ||
+                'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=300&q=80',
+              categoryName: p.categoryName || 'Sản phẩm',
+              has3D: !!p.model3DUrl,
+            }))
+          );
+        }
+      })
+      .catch(() => {});
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -139,16 +172,29 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Filter products live when typing
-  const liveResults = React.useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
-    return MOCK_PRODUCTS.filter(
-      (p) =>
-        p.name.toLowerCase().includes(q) ||
-        p.category.name.toLowerCase().includes(q) ||
-        p.brand.name.toLowerCase().includes(q)
-    ).slice(0, 6);
+  // Realtime search with debounce calling backend API (Supabase)
+  useEffect(() => {
+    const q = query.trim();
+    if (!q) {
+      setLiveResults([]);
+      setIsSearching(false);
+      return;
+    }
+
+    setIsSearching(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await catalogApi.getProducts({ search: q, pageSize: 6 });
+        setLiveResults(res.items || []);
+      } catch (err) {
+        console.warn('Realtime search failed:', err);
+        setLiveResults([]);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 250);
+
+    return () => clearTimeout(timer);
   }, [query]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -297,7 +343,7 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
 
               {/* 2-Column Grid of Store Products */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {TRENDING_STORE_PRODUCTS.map((prod) => (
+                {trendingProducts.map((prod) => (
                   <button
                     key={prod.id}
                     type="button"
@@ -358,40 +404,63 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
                 <span>
                   Gợi ý tìm kiếm cho: <strong className="text-slate-900">"{query}"</strong>
                 </span>
-                <span>{liveResults.length} kết quả</span>
+                {!isSearching && <span>{liveResults.length} kết quả</span>}
               </div>
 
-              {liveResults.length > 0 ? (
+              {isSearching ? (
+                <div className="py-8 flex flex-col items-center justify-center space-y-2 text-slate-400">
+                  <div className="w-5 h-5 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
+                  <span className="text-xs">Đang tìm kiếm trong kho dữ liệu...</span>
+                </div>
+              ) : liveResults.length > 0 ? (
                 <div className="space-y-1">
-                  {liveResults.map((p) => (
-                    <button
-                      key={p.id}
-                      type="button"
-                      onClick={() => handleSelectProduct(p.slug)}
-                      className="w-full flex items-center gap-3 p-2 rounded-2xl hover:bg-slate-50 transition-colors text-left group"
-                    >
-                      <img
-                        src={p.thumbnailUrl}
-                        alt={p.name}
-                        className="w-10 h-10 rounded-xl object-cover bg-slate-100 flex-shrink-0"
-                      />
-                      <div className="flex-1 min-w-0">
-                        <div className="text-xs sm:text-sm font-semibold text-slate-900 group-hover:text-brand-600 truncate transition-colors">
-                          {p.name}
+                  {liveResults.map((p) => {
+                    const price = p.minPrice || p.basePrice || 0;
+                    return (
+                      <button
+                        key={p.id}
+                        type="button"
+                        onClick={() => handleSelectProduct(p.slug)}
+                        className="w-full flex items-center gap-3 p-2 rounded-2xl hover:bg-slate-50 transition-colors text-left group"
+                      >
+                        <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 border border-slate-200/60">
+                          {p.thumbnailUrl ? (
+                            <img
+                              src={p.thumbnailUrl}
+                              alt={p.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-base">📦</div>
+                          )}
+                          {p.model3DUrl && (
+                            <span className="absolute bottom-0 right-0 px-1 py-0.2 rounded-tl bg-indigo-600 text-white text-[8px] font-bold">
+                              3D
+                            </span>
+                          )}
                         </div>
-                        <div className="flex items-center gap-2 text-[11px]">
-                          <span className="font-bold text-emerald-600">
-                            {p.basePrice.toLocaleString('vi-VN')} đ
-                          </span>
-                          <span className="text-slate-400">•</span>
-                          <span className="text-slate-500">{p.category.name}</span>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs sm:text-sm font-semibold text-slate-900 group-hover:text-brand-600 truncate transition-colors">
+                            {p.name}
+                          </div>
+                          <div className="flex items-center gap-2 text-[11px]">
+                            <span className="font-bold text-emerald-600">
+                              {price.toLocaleString('vi-VN')} đ
+                            </span>
+                            {p.categoryName && (
+                              <>
+                                <span className="text-slate-400">•</span>
+                                <span className="text-slate-500 truncate">{p.categoryName}</span>
+                              </>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                      <span className="text-xs text-slate-400 group-hover:text-brand-600 transition-colors">
-                        →
-                      </span>
-                    </button>
-                  ))}
+                        <span className="text-xs text-slate-400 group-hover:text-brand-600 transition-colors">
+                          →
+                        </span>
+                      </button>
+                    );
+                  })}
 
                   <button
                     type="button"
