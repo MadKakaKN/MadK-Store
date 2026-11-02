@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../auth/context/AuthContext';
 import authApi from '../../../api/authApi';
@@ -6,7 +6,7 @@ import { AddressList } from '../components/AddressList';
 import { OrderList } from '../components/orders/OrderList';
 
 export const AccountPage: React.FC = () => {
-  const { user, logout, refreshUser } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -35,38 +35,6 @@ export const AccountPage: React.FC = () => {
   const [pwdSubmitting, setPwdSubmitting] = useState(false);
   const [pwdSuccess, setPwdSuccess] = useState<string | null>(null);
   const [pwdError, setPwdError] = useState<string | null>(null);
-
-  // Test silent refresh state
-  const [refreshTestStatus, setRefreshTestStatus] = useState<string | null>(null);
-  const [resendLoading, setResendLoading] = useState(false);
-  const [resendMessage, setResendMessage] = useState<{ text: string; isError: boolean } | null>(null);
-
-  const handleResendVerification = async () => {
-    if (!user?.email) return;
-    setResendLoading(true);
-    setResendMessage(null);
-    try {
-      const res = await authApi.resendVerificationEmail(user.email);
-      if (res.isSuccess) {
-        setResendMessage({
-          text: `Đã gửi email kích hoạt tới ${user.email}! Vui lòng kiểm tra hộp thư đến (hoặc hòm thư Rác/Spam).`,
-          isError: false,
-        });
-      } else {
-        setResendMessage({
-          text: res.error || 'Không thể gửi lại email xác thực.',
-          isError: true,
-        });
-      }
-    } catch {
-      setResendMessage({
-        text: 'Có lỗi xảy ra khi kết nối máy chủ gửi email.',
-        isError: true,
-      });
-    } finally {
-      setResendLoading(false);
-    }
-  };
 
   const handleLogout = async () => {
     await logout();
@@ -108,23 +76,7 @@ export const AccountPage: React.FC = () => {
     }
   };
 
-  const handleTestSilentRefresh = async () => {
-    setRefreshTestStatus('Đang kiểm tra làm mới token ngầm...');
-    try {
-      // Gọi getMe qua apiClient (nếu token hết hạn, interceptor sẽ tự động refresh token)
-      const res = await authApi.getMe();
-      if (res.isSuccess) {
-        setRefreshTestStatus('✅ Phiên làm việc hợp lệ! Dữ liệu tài khoản đã được đồng bộ mà không gián đoạn.');
-        refreshUser();
-      } else {
-        setRefreshTestStatus(`⚠️ ${res.error || 'Phiên làm việc không phản hồi'}`);
-      }
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Lỗi kiểm tra token';
-      setRefreshTestStatus(`❌ Lỗi: ${msg}`);
-    }
-    setTimeout(() => setRefreshTestStatus(null), 5000);
-  };
+  
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -152,28 +104,8 @@ export const AccountPage: React.FC = () => {
                 </span>
               ))}
             </div>
-                        <p className="text-sm text-slate-500 mt-1 flex flex-wrap items-center gap-2">
-              <span className="font-mono text-slate-700">{user?.email}</span>
-              {user?.emailConfirmed ? (
-                <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-100">
-                  ✓ Đã xác thực
-                </span>
-              ) : (
-                <span className="inline-flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-lg border border-amber-100">
-                    ! Chưa xác thực email
-                  </span>
-                  <button
-                    type="button"
-                    onClick={handleResendVerification}
-                    disabled={resendLoading}
-                    className="text-xs font-bold text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100 px-2.5 py-0.5 rounded-lg transition-colors border border-brand-200 shadow-2xs disabled:opacity-50 flex items-center gap-1"
-                  >
-                    <span>📧</span>
-                    <span>{resendLoading ? 'Đang gửi...' : 'Gửi lại email xác thực'}</span>
-                  </button>
-                </span>
-              )}
+            <p className="text-sm text-slate-500 mt-1 font-mono">
+              {user?.email}
             </p>
           </div>
         </div>
@@ -181,56 +113,13 @@ export const AccountPage: React.FC = () => {
         <div className="flex items-center gap-3">
           <button
             type="button"
-            onClick={handleTestSilentRefresh}
-            className="px-4 py-2.5 rounded-2xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors border border-slate-200 shadow-2xs"
-            title="Thử nghiệm cơ chế làm mới token ngầm không làm gián đoạn người dùng"
-          >
-            🔄 Kiểm tra Token ngầm
-          </button>
-          <button
-            type="button"
             onClick={handleLogout}
-            className="px-4 py-2.5 rounded-2xl text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 transition-colors border border-rose-200 shadow-2xs"
+            className="px-5 py-2.5 rounded-2xl text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 transition-colors border border-rose-200 shadow-2xs"
           >
             Đăng xuất
           </button>
         </div>
       </div>
-
-      {resendMessage && (
-        <div
-          className={`mb-6 p-4 rounded-2xl text-sm animate-fade-in flex items-center justify-between ${
-            resendMessage.isError
-              ? "bg-rose-50 border border-rose-200 text-rose-900"
-              : "bg-emerald-50 border border-emerald-200 text-emerald-900"
-          }`}
-        >
-          <div className="flex items-center gap-2">
-            <span>{resendMessage.isError ? "⚠️" : "✅"}</span>
-            <span>{resendMessage.text}</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => setResendMessage(null)}
-            className="text-xs font-bold hover:underline"
-          >
-            ÄÃ³ng
-          </button>
-        </div>
-      )}
-
-      {refreshTestStatus && (
-        <div className="mb-6 p-4 rounded-2xl bg-indigo-50 border border-indigo-200 text-indigo-900 text-sm animate-fade-in flex items-center justify-between">
-          <span>{refreshTestStatus}</span>
-          <button
-            type="button"
-            onClick={() => setRefreshTestStatus(null)}
-            className="text-xs text-indigo-600 font-bold hover:underline"
-          >
-            Đóng
-          </button>
-        </div>
-      )}
 
       {/* Main Account Tabs Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">

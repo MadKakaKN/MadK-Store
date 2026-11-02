@@ -116,7 +116,7 @@ public class IdentityService : IIdentityService
             User: userDto
         );
 
-        return Result<AuthResponseDto>.Success(response, "Đăng ký tài khoản thành công. Vui lòng kiểm tra email để xác thực tài khoản.");
+        return Result<AuthResponseDto>.Success(response, "Đăng ký tài khoản thành công! Chào mừng bạn đến với MadK Store.");
     }
 
     public async Task<Result<AuthResponseDto>> LoginAsync(LoginRequestDto request, CancellationToken cancellationToken = default)
@@ -163,6 +163,14 @@ public class IdentityService : IIdentityService
         // Reset failed login attempts on successful login
         user.FailedLoginAttempts = 0;
         user.LockoutEnd = null;
+
+        if (!user.EmailConfirmed)
+        {
+            user.EmailConfirmed = true;
+            user.EmailConfirmationToken = null;
+            user.EmailConfirmationTokenExpiresAt = null;
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
 
         var roles = user.UserRoles.Select(ur => ur.Role.Name).Distinct().ToList();
         var permissions = user.UserRoles
