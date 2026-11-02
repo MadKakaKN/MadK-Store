@@ -1,73 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import DataTable, { ColumnDef } from '../components/common/DataTable';
 import Badge, { BadgeVariant } from '../components/common/Badge';
 import ConfirmModal from '../components/common/ConfirmModal';
 import { useToast } from '../components/common/ToastContext';
-
-interface AdminUserRow {
-  id: string;
-  email: string;
-  fullName: string;
-  phoneNumber: string;
-  roles: string[];
-  isActive: boolean;
-  createdAt: string;
-}
-
-const INITIAL_USERS: AdminUserRow[] = [
-  {
-    id: 'u-1',
-    email: 'admin@madkstore.vn',
-    fullName: 'Quản Trị Viên Hệ Thống',
-    phoneNumber: '0901234567',
-    roles: ['Admin'],
-    isActive: true,
-    createdAt: '2026-10-11',
-  },
-  {
-    id: 'u-2',
-    email: 'sales@madkstore.vn',
-    fullName: 'Nguyễn Thị Sales',
-    phoneNumber: '0912345678',
-    roles: ['Sales'],
-    isActive: true,
-    createdAt: '2026-10-12',
-  },
-  {
-    id: 'u-3',
-    email: 'warehouse@madkstore.vn',
-    fullName: 'Trần Văn Kho',
-    phoneNumber: '0923456789',
-    roles: ['Warehouse'],
-    isActive: true,
-    createdAt: '2026-10-12',
-  },
-  {
-    id: 'u-4',
-    email: 'customer@madkstore.vn',
-    fullName: 'Nguyễn Văn Khách',
-    phoneNumber: '0987654321',
-    roles: ['Customer'],
-    isActive: true,
-    createdAt: '2026-10-13',
-  },
-  {
-    id: 'u-5',
-    email: 'leminh@example.com',
-    fullName: 'Lê Văn Minh',
-    phoneNumber: '0934567890',
-    roles: ['Customer'],
-    isActive: false,
-    createdAt: '2026-10-14',
-  },
-];
+import adminUserApi, { AdminUserListItemDto } from '../../../api/adminUserApi';
 
 const AVAILABLE_ROLES = ['Admin', 'Sales', 'Warehouse', 'Customer'];
 
 export const AdminUsersPage: React.FC = () => {
-  const [users, setUsers] = useState<AdminUserRow[]>(INITIAL_USERS);
+  const [users, setUsers] = useState<AdminUserListItemDto[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [totalItems, setTotalItems] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [selectedUser, setSelectedUser] = useState<AdminUserRow | null>(null);
+  const [selectedUser, setSelectedUser] = useState<AdminUserListItemDto | null>(null);
   const [isRoleModalOpen, setIsRoleModalOpen] = useState<boolean>(false);
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
   const [isLockModalOpen, setIsLockModalOpen] = useState<boolean>(false);
@@ -75,15 +22,36 @@ export const AdminUsersPage: React.FC = () => {
 
   const toast = useToast();
 
-  const filteredUsers = users.filter(
-    (u) =>
-      !searchQuery ||
-      u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      u.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      u.phoneNumber.includes(searchQuery)
-  );
+  const fetchUsers = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const res = await adminUserApi.getUsers({
+        page: currentPage,
+        pageSize,
+        search: searchQuery.trim() || undefined,
+      });
 
-  const handleOpenRoleModal = (user: AdminUserRow) => {
+      if (res.isSuccess && res.data) {
+        setUsers(res.data.items || []);
+        setTotalItems(res.data.totalItems || 0);
+      } else {
+        toast.error(res.error || 'Không thể tải danh sách người dùng.', 'Lỗi');
+      }
+    } catch {
+      toast.error('Lỗi kết nối khi tải danh sách người dùng.', 'Lỗi');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [currentPage, pageSize, searchQuery, toast]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchUsers();
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [fetchUsers]);
+
+  const handleOpenRoleModal = (user: AdminUserListItemDto) => {
     setSelectedUser(user);
     setSelectedRoles([...user.roles]);
     setIsRoleModalOpen(true);
@@ -104,25 +72,27 @@ export const AdminUsersPage: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      setUsers((prev) =>
-        prev.map((u) => (u.id === selectedUser.id ? { ...u, roles: selectedRoles } : u))
-      );
-
-      toast.success(
-        `Đã gán vai trò [${selectedRoles.join(', ')}] cho ${selectedUser.email}`,
-        'Phân quyền thành công'
-      );
-      setIsRoleModalOpen(false);
+      const res = await adminUserApi.updateUserRoles(selectedUser.id, selectedRoles);
+      if (res.isSuccess) {
+        setUsers((prev) =>
+          prev.map((u) => (u.id === selectedUser.id ? { ...u, roles: selectedRoles } : u))
+        );
+        toast.success(
+          `Đã gán vai trò [${selectedRoles.join(', ')}] cho ${selectedUser.email}`,
+          'Phân quyền thành công'
+        );
+        setIsRoleModalOpen(false);
+      } else {
+        toast.error(res.error || 'Có lỗi xảy ra khi phân quyền.', 'Lỗi');
+      }
     } catch {
-      toast.error('Có lỗi xảy ra khi phân quyền.', 'Lỗi');
+      toast.error('Lỗi kết nối máy chủ khi phân quyền.', 'Lỗi');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleOpenLockModal = (user: AdminUserRow) => {
+  const handleOpenLockModal = (user: AdminUserListItemDto) => {
     setSelectedUser(user);
     setIsLockModalOpen(true);
   };
@@ -131,32 +101,34 @@ export const AdminUsersPage: React.FC = () => {
     if (!selectedUser) return;
     setIsSubmitting(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
       const newStatus = !selectedUser.isActive;
-      setUsers((prev) =>
-        prev.map((u) => (u.id === selectedUser.id ? { ...u, isActive: newStatus } : u))
-      );
-
-      toast.success(
-        `Tài khoản ${selectedUser.email} đã được ${newStatus ? 'mở khóa' : 'vô hiệu hóa'}.`,
-        'Cập nhật thành công'
-      );
-      setIsLockModalOpen(false);
+      const res = await adminUserApi.updateUserStatus(selectedUser.id, newStatus);
+      if (res.isSuccess) {
+        setUsers((prev) =>
+          prev.map((u) => (u.id === selectedUser.id ? { ...u, isActive: newStatus } : u))
+        );
+        toast.success(
+          `Tài khoản ${selectedUser.email} đã được ${newStatus ? 'mở khóa' : 'vô hiệu hóa'}.`,
+          'Cập nhật thành công'
+        );
+        setIsLockModalOpen(false);
+      } else {
+        toast.error(res.error || 'Có lỗi xảy ra.', 'Lỗi');
+      }
     } catch {
-      toast.error('Có lỗi xảy ra.', 'Lỗi');
+      toast.error('Lỗi kết nối máy chủ.', 'Lỗi');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const columns: ColumnDef<AdminUserRow>[] = [
+  const columns: ColumnDef<AdminUserListItemDto>[] = [
     {
       key: 'fullName',
       title: 'Họ và tên',
       render: (row) => (
         <div>
-          <div className="font-semibold text-xs text-slate-900">{row.fullName}</div>
+          <div className="font-semibold text-xs text-slate-900">{row.fullName || 'Chưa đặt tên'}</div>
           <div className="text-[11px] text-slate-500 font-mono">{row.email}</div>
         </div>
       ),
@@ -164,22 +136,30 @@ export const AdminUsersPage: React.FC = () => {
     {
       key: 'phoneNumber',
       title: 'Số điện thoại',
-      render: (row) => <span className="text-xs font-mono text-slate-700">{row.phoneNumber}</span>,
+      render: (row) => (
+        <span className="text-xs font-mono text-slate-700">{row.phoneNumber || '—'}</span>
+      ),
     },
     {
       key: 'roles',
       title: 'Vai trò (Roles)',
       render: (row) => (
         <div className="flex flex-wrap gap-1">
-          {row.roles.map((r) => {
-            const variant: BadgeVariant =
-              r === 'Admin' ? 'purple' : r === 'Sales' ? 'info' : r === 'Warehouse' ? 'warning' : 'neutral';
-            return (
-              <Badge key={r} variant={variant} size="sm">
-                {r}
-              </Badge>
-            );
-          })}
+          {row.roles && row.roles.length > 0 ? (
+            row.roles.map((r) => {
+              const variant: BadgeVariant =
+                r === 'Admin' ? 'purple' : r === 'Sales' ? 'info' : r === 'Warehouse' ? 'warning' : 'neutral';
+              return (
+                <Badge key={r} variant={variant} size="sm">
+                  {r}
+                </Badge>
+              );
+            })
+          ) : (
+            <Badge variant="neutral" size="sm">
+              Customer
+            </Badge>
+          )}
         </div>
       ),
     },
@@ -195,7 +175,11 @@ export const AdminUsersPage: React.FC = () => {
     {
       key: 'createdAt',
       title: 'Ngày tạo',
-      render: (row) => <span className="text-xs text-slate-500">{row.createdAt}</span>,
+      render: (row) => (
+        <span className="text-xs text-slate-500">
+          {row.createdAt ? new Date(row.createdAt).toLocaleDateString('vi-VN') : '—'}
+        </span>
+      ),
     },
     {
       key: 'actions',
@@ -232,20 +216,29 @@ export const AdminUsersPage: React.FC = () => {
       <div>
         <h1 className="text-xl font-bold text-slate-900">Quản lý Người dùng & Phân quyền</h1>
         <p className="text-xs text-slate-500 mt-0.5">
-          Xem danh sách tài khoản, điều chỉnh vai trò và kiểm soát trạng thái hoạt động.
+          Xem danh sách tài khoản thực tế từ hệ thống, điều chỉnh vai trò và kiểm soát trạng thái hoạt động.
         </p>
       </div>
 
       <DataTable
         columns={columns}
-        data={filteredUsers}
+        data={users}
         keyExtractor={(item) => item.id}
+        isLoading={isLoading}
         searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
+        onSearchChange={(q) => {
+          setSearchQuery(q);
+          setCurrentPage(1);
+        }}
         searchPlaceholder="Tìm theo tên, email hoặc số điện thoại..."
-        currentPage={1}
-        pageSize={10}
-        onPageChange={() => {}}
+        totalItems={totalItems}
+        currentPage={currentPage}
+        pageSize={pageSize}
+        onPageChange={setCurrentPage}
+        onPageSizeChange={(ps) => {
+          setPageSize(ps);
+          setCurrentPage(1);
+        }}
       />
 
       {/* Role Assignment Modal */}
