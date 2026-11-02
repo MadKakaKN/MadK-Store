@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useSearchParams, Link } from 'react-router-dom';
+import { useLocation, useSearchParams, useParams, Link } from 'react-router-dom';
 import { OrderDto } from '../../../types/order';
-import orderApi from '../../../api/orderApi';
+import orderApi, { normalizeOrder } from '../../../api/orderApi';
 import { formatVND } from '../../../utils/format';
 import { OrderStatusBadge } from '../../account/components/orders/OrderStatusBadge';
 import LoadingSpinner from '../../../components/common/LoadingSpinner';
@@ -11,12 +11,31 @@ const OrderSuccess3DCanvas = React.lazy(() => import('../components/OrderSuccess
 export const OrderSuccessPage: React.FC = () => {
   const location = useLocation();
   const [searchParams] = useSearchParams();
+  const { orderNumber: paramOrderNumber } = useParams<{ orderNumber?: string }>();
 
-  const queryOrderNumber = searchParams.get('orderNumber');
+  const queryOrderNumber = searchParams.get('orderNumber') || paramOrderNumber;
   const stateOrder = location.state?.order as OrderDto | undefined;
 
-  const [order, setOrder] = useState<OrderDto | null>(stateOrder || null);
-  const [isLoading, setIsLoading] = useState<boolean>(!stateOrder && !!queryOrderNumber);
+  // Khôi phục thông tin đơn hàng từ state hoặc cache sessionStorage
+  const getInitialOrder = (): OrderDto | null => {
+    if (stateOrder) return normalizeOrder(stateOrder);
+    try {
+      const cached = sessionStorage.getItem('last_created_order');
+      if (cached) {
+        const parsed = JSON.parse(cached) as OrderDto;
+        if (!queryOrderNumber || parsed.orderNumber === queryOrderNumber) {
+          return normalizeOrder(parsed);
+        }
+      }
+    } catch {
+      // ignore parse error
+    }
+    return null;
+  };
+
+  const initialOrder = getInitialOrder();
+  const [order, setOrder] = useState<OrderDto | null>(initialOrder);
+  const [isLoading, setIsLoading] = useState<boolean>(!initialOrder && !!queryOrderNumber);
   const [copied, setCopied] = useState<boolean>(false);
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
@@ -31,7 +50,7 @@ export const OrderSuccessPage: React.FC = () => {
       setIsLoading(true);
       orderApi.getOrderByNumber(queryOrderNumber).then((res) => {
         if (res.isSuccess && res.data) {
-          setOrder(res.data);
+          setOrder(normalizeOrder(res.data));
         }
         setIsLoading(false);
       });
@@ -74,6 +93,12 @@ export const OrderSuccessPage: React.FC = () => {
 
   const address = order ? parseAddress(order.shippingAddressSnapshot) : null;
 
+  const isBankTransfer =
+    order?.paymentMethod === 'BankTransfer' || (order?.paymentMethod as unknown) === 3;
+  const isMoMo =
+    order?.paymentMethod === 'MoMo' || (order?.paymentMethod as unknown) === 4;
+  const isOnlinePayment = isBankTransfer || isMoMo;
+
   return (
     <div className="min-h-screen py-8 sm:py-14 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-8 animate-fade-in">
       {/* 1. Header & Congratulations Banner */}
@@ -95,9 +120,9 @@ export const OrderSuccessPage: React.FC = () => {
             <OrderSuccess3DCanvas />
           </React.Suspense>
           <span className="absolute bottom-2 px-2.5 py-0.5 rounded-full bg-emerald-600/90 backdrop-blur-sm text-[10px] font-bold text-white shadow-xs pointer-events-none">
-            {order?.paymentMethod === 'BankTransfer'
+            {isBankTransfer
               ? 'VietQR Chờ chuyển khoản'
-              : order?.paymentMethod === 'MoMo'
+              : isMoMo
               ? 'MoMo Chờ chuyển tiền'
               : 'COD Đã ghi nhận'}
           </span>
@@ -111,9 +136,9 @@ export const OrderSuccessPage: React.FC = () => {
             Cảm ơn bạn đã tin chọn MadK Store!
           </h1>
           <p className="mt-2 text-xs sm:text-sm text-slate-500 max-w-lg mx-auto leading-relaxed">
-            {order?.paymentMethod === 'BankTransfer'
+            {isBankTransfer
               ? 'Đơn hàng của bạn đã được ghi nhận. Vui lòng quét mã VietQR hoặc chuyển khoản theo thông tin bên dưới để đơn hàng được chuẩn bị và giao sớm nhất.'
-              : order?.paymentMethod === 'MoMo'
+              : isMoMo
               ? 'Đơn hàng của bạn đã được ghi nhận. Vui lòng chuyển tiền qua ứng dụng MoMo theo hướng dẫn bên dưới để đơn hàng được duyệt giao nhanh nhất.'
               : 'Kiện hàng của bạn đang được nhân viên kho chuẩn bị đóng gói cẩn thận. Bạn sẽ thanh toán khi nhận hàng tận nơi.'}
           </p>
@@ -155,16 +180,16 @@ export const OrderSuccessPage: React.FC = () => {
       )}
 
       {/* 2.5. VietQR or MoMo Payment Action Card (If Online Payment) */}
-      {order && (order.paymentMethod === 'BankTransfer' || order.paymentMethod === 'MoMo') && (
+      {order && isOnlinePayment && (
         <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-slate-900/20 border border-slate-700/60 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-700/60">
             <div className="flex items-center gap-3">
               <span className="text-3xl">
-                {order.paymentMethod === 'BankTransfer' ? '🏛️' : '📱'}
+                {isBankTransfer ? '🏛️' : '📱'}
               </span>
               <div>
                 <h2 className="text-lg sm:text-xl font-black text-white">
-                  {order.paymentMethod === 'BankTransfer'
+                  {isBankTransfer
                     ? 'Quét mã VietQR - Techcombank để hoàn tất'
                     : 'Chuyển tiền qua Ví điện tử MoMo'}
                 </h2>
@@ -184,7 +209,7 @@ export const OrderSuccessPage: React.FC = () => {
             {/* Left: Dynamic QR Code */}
             <div className="md:col-span-5 flex flex-col items-center justify-center text-center space-y-3">
               <div className="relative p-3 bg-white rounded-2xl shadow-2xl border-4 border-white">
-                {order.paymentMethod === 'BankTransfer' ? (
+                {isBankTransfer ? (
                   <img
                     src={`https://img.vietqr.io/image/TCB-19050430057012-compact2.png?amount=${Math.round(order.totalAmount)}&addInfo=${encodeURIComponent(`MADK ${order.orderNumber}`)}&accountName=${encodeURIComponent('NGUYEN HOANG KHANG')}`}
                     alt="Mã VietQR thanh toán Techcombank"
@@ -199,11 +224,11 @@ export const OrderSuccessPage: React.FC = () => {
                 )}
               </div>
               <p className="text-[11px] text-slate-400 font-medium max-w-xs leading-relaxed">
-                {order.paymentMethod === 'BankTransfer'
+                {isBankTransfer
                   ? 'Quét mã bằng bất kỳ App Ngân hàng nào (Techcombank, VCB, MB, VietinBank, VPBank...)'
                   : 'Mở ứng dụng MoMo và chọn Quét mã QR'}
               </p>
-              {order.paymentMethod === 'MoMo' && (
+              {isMoMo && (
                 <a
                   href="https://me.momo.vn/0901316434"
                   target="_blank"
@@ -218,7 +243,7 @@ export const OrderSuccessPage: React.FC = () => {
 
             {/* Right: Payment Details with 1-Click Copy Buttons */}
             <div className="md:col-span-7 space-y-3 text-xs">
-              {order.paymentMethod === 'BankTransfer' ? (
+              {isBankTransfer ? (
                 <>
                   {/* Ngân hàng */}
                   <div className="p-3.5 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
@@ -385,11 +410,11 @@ export const OrderSuccessPage: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-slate-500">Phương thức:</span>
                   <span className="font-bold text-slate-900">
-                    {order.paymentMethod === 'BankTransfer'
+                    {isBankTransfer
                       ? 'Chuyển khoản ngân hàng (VietQR - Techcombank)'
-                      : order.paymentMethod === 'MoMo'
+                      : isMoMo
                       ? 'Ví điện tử MoMo'
-                      : order.paymentMethod === 'VNPay'
+                      : order.paymentMethod === 'VNPay' || (order.paymentMethod as unknown) === 2
                       ? 'Thanh toán trực tuyến VNPay'
                       : 'Thanh toán khi nhận hàng (COD)'}
                   </span>
@@ -404,16 +429,16 @@ export const OrderSuccessPage: React.FC = () => {
                     className={`font-semibold px-2 py-0.5 rounded-md ${
                       order.paymentStatus === 'Paid'
                         ? 'text-emerald-700 bg-emerald-50'
-                        : order.paymentMethod === 'BankTransfer' || order.paymentMethod === 'MoMo'
+                        : isOnlinePayment
                         ? 'text-amber-700 bg-amber-50'
                         : 'text-slate-700 bg-slate-100'
                     }`}
                   >
                     {order.paymentStatus === 'Paid'
                       ? 'Đã thanh toán thành công'
-                      : order.paymentMethod === 'BankTransfer'
+                      : isBankTransfer
                       ? 'Chờ chuyển khoản VietQR'
-                      : order.paymentMethod === 'MoMo'
+                      : isMoMo
                       ? 'Chờ chuyển tiền MoMo'
                       : 'Chờ thanh toán khi nhận hàng'}
                   </span>

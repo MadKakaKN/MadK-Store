@@ -12,8 +12,19 @@ const ORDERS_CACHE_KEY = 'madk_orders_cache';
 
 export function normalizeOrder(order: OrderDto): OrderDto {
   if (!order) return order;
+  const rawPm = order.paymentMethod as unknown;
+  const normalizedPaymentMethod =
+    rawPm === 3 || rawPm === 'BankTransfer'
+      ? 'BankTransfer'
+      : rawPm === 4 || rawPm === 'MoMo'
+      ? 'MoMo'
+      : rawPm === 2 || rawPm === 'VNPay'
+      ? 'VNPay'
+      : 'COD';
+
   return {
     ...order,
+    paymentMethod: normalizedPaymentMethod,
     items: (order.items || []).map((item) => ({
       ...item,
       productName: item.productName || item.productNameSnapshot || 'Sản phẩm công nghệ chính hãng',

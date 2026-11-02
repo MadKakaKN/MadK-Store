@@ -22,6 +22,9 @@ export const CheckoutPage: React.FC = () => {
       : 'idemp_' + Date.now() + '_' + Math.random().toString(36).substring(2, 10)
   );
 
+  // Đánh dấu đã đặt hàng thành công để ngăn chặn hiển thị màn hình 'giỏ hàng trống' trong quá trình chuyển trang
+  const hasPlacedOrderRef = useRef<boolean>(false);
+
   // Trạng thái địa chỉ người dùng đã đăng nhập
   const [savedAddresses, setSavedAddresses] = useState<AddressDto[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
@@ -374,9 +377,16 @@ export const CheckoutPage: React.FC = () => {
       const res = await orderApi.checkoutCod(checkoutPayload);
 
       if (res.isSuccess && res.data) {
-        // Đặt hàng thành công!
-        await clearCart();
-        await refreshCart();
+        // Đặt hàng thành công! Đánh dấu cờ để không bị chuyển sang màn hình giỏ rỗng
+        hasPlacedOrderRef.current = true;
+        try {
+          sessionStorage.setItem('last_created_order', JSON.stringify(res.data));
+        } catch {
+          // ignore storage error
+        }
+
+        // Dọn giỏ hàng bất đồng bộ ở background, KHÔNG await chặn luồng UI
+        clearCart().catch(() => {});
 
         // Chuyển hướng người dùng trực tiếp sang trang Xác nhận đơn hàng & Quét mã QR thanh toán (/checkout/success)
         navigate(`/checkout/success?orderNumber=${encodeURIComponent(res.data.orderNumber)}`, {
@@ -406,8 +416,19 @@ export const CheckoutPage: React.FC = () => {
     }
   };
 
-  // Trạng thái giỏ hàng rỗng
-  if (!isCartLoading && items.length === 0 && !isSubmitting) {
+  // Nếu vừa đặt hàng thành công, hiển thị trạng thái chuyển tiếp mượt mà, ngăn giật sang giỏ hàng trống
+  if (hasPlacedOrderRef.current) {
+    return (
+      <div className="py-20 px-4 max-w-xl mx-auto text-center space-y-4 animate-fade-in">
+        <div className="w-12 h-12 border-4 border-brand-600 border-t-transparent rounded-full animate-spin mx-auto" />
+        <h2 className="text-xl font-bold text-slate-800">Đang chuẩn bị mã thanh toán...</h2>
+        <p className="text-xs text-slate-500">Đơn hàng đã được tạo thành công. Đang chuyển đến màn hình quét mã QR...</p>
+      </div>
+    );
+  }
+
+  // Trạng thái giỏ hàng rỗng (chỉ hiển thị khi KHÔNG trong quá trình submit và chưa đặt đơn)
+  if (!isCartLoading && items.length === 0 && !isSubmitting && !hasPlacedOrderRef.current) {
     return (
       <div className="py-12 sm:py-20 px-4 max-w-xl mx-auto text-center space-y-6 animate-fade-in">
         <div className="w-20 h-20 rounded-3xl bg-amber-50 text-amber-600 mx-auto flex items-center justify-center text-3xl shadow-inner">
