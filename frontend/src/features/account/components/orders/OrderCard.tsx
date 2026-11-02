@@ -40,6 +40,13 @@ export const OrderCard: React.FC<OrderCardProps> = ({
     order.status === 'Confirmed' ||
     order.status === 'PendingPayment';
 
+  const isBankTransfer =
+    order.paymentMethod === 'BankTransfer' || (order.paymentMethod as unknown) === 3;
+  const isMoMo =
+    order.paymentMethod === 'MoMo' || (order.paymentMethod as unknown) === 4;
+  const isUnpaidOnline =
+    (isBankTransfer || isMoMo) && order.paymentStatus === 'Pending' && order.status !== 'Cancelled';
+
   const totalQuantity = order.items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
@@ -132,6 +139,16 @@ export const OrderCard: React.FC<OrderCardProps> = ({
               className="px-3.5 py-2 rounded-xl text-xs font-semibold text-orange-700 bg-orange-50 hover:bg-orange-100 transition-colors border border-orange-200 flex items-center gap-1"
             >
               <span>↩️</span> Đổi trả
+            </button>
+          )}
+
+          {isUnpaidOnline && (
+            <button
+              type="button"
+              onClick={() => onViewDetails(order)}
+              className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-sm shadow-blue-500/20 transition-all flex items-center gap-1.5"
+            >
+              <span>{isBankTransfer ? '🏦 Quét VietQR' : '📱 Trả qua MoMo'}</span>
             </button>
           )}
 

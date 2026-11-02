@@ -219,7 +219,7 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatus, OrderStatusMeta> = {
 };
 
 export const PAYMENT_STATUS_CONFIG: Record<PaymentStatus, { label: string; color: string }> = {
-  Pending: { label: 'Chưa thanh toán (COD)', color: 'text-amber-600 bg-amber-50' },
+  Pending: { label: 'Chưa thanh toán', color: 'text-amber-600 bg-amber-50' },
   Paid: { label: 'Đã thanh toán', color: 'text-emerald-600 bg-emerald-50' },
   Failed: { label: 'Thanh toán thất bại', color: 'text-rose-600 bg-rose-50' },
   Refunded: { label: 'Đã hoàn tiền', color: 'text-slate-600 bg-slate-100' },
