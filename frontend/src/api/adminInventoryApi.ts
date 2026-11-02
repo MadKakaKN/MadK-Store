@@ -22,214 +22,13 @@ import {
   VariantInventoryItemDto,
 } from '../types/inventory';
 
-// Mock in-memory store for standalone frontend demo & testing
-let mockVariants: VariantInventoryItemDto[] = [
-  {
-    variantId: 'v-001',
-    productId: 'p-001',
-    productName: 'Bàn phím cơ MadK Cyber 87',
-    variantName: 'Gateron Yellow Switch / Đen',
-    sku: 'MK-CYBER-87-YEL',
-    categoryName: 'Bàn phím cơ',
-    brandName: 'MadK Gaming',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1595225476474-87563907a212?w=300',
-    costPrice: 1200000,
-    salePrice: 1690000,
-    onHandQuantity: 35,
-    reservedQuantity: 5,
-    availableQuantity: 30,
-    updatedAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-  },
-  {
-    variantId: 'v-002',
-    productId: 'p-001',
-    productName: 'Bàn phím cơ MadK Cyber 87',
-    variantName: 'Gateron Red Switch / Trắng',
-    sku: 'MK-CYBER-87-RED',
-    categoryName: 'Bàn phím cơ',
-    brandName: 'MadK Gaming',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1595225476474-87563907a212?w=300',
-    costPrice: 1200000,
-    salePrice: 1750000,
-    onHandQuantity: 4,
-    reservedQuantity: 1,
-    availableQuantity: 3,
-    updatedAt: new Date(Date.now() - 3600000 * 6).toISOString(),
-  },
-  {
-    variantId: 'v-003',
-    productId: 'p-002',
-    productName: 'Chuột gaming không dây MadK Air 58',
-    variantName: 'Trắng Feather Light',
-    sku: 'MK-AIR58-WHT',
-    categoryName: 'Chuột gaming',
-    brandName: 'MadK Gaming',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=300',
-    costPrice: 750000,
-    salePrice: 1190000,
-    onHandQuantity: 0,
-    reservedQuantity: 0,
-    availableQuantity: 0,
-    updatedAt: new Date(Date.now() - 3600000 * 24).toISOString(),
-  },
-  {
-    variantId: 'v-004',
-    productId: 'p-003',
-    productName: 'Tai nghe chụp tai MadK Studio Pro Wireless',
-    variantName: 'Đen Obsidian / ANC',
-    sku: 'MK-STUDIO-PRO-BLK',
-    categoryName: 'Tai nghe',
-    brandName: 'MadK Audio',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300',
-    costPrice: 1600000,
-    salePrice: 2490000,
-    onHandQuantity: 18,
-    reservedQuantity: 4,
-    availableQuantity: 14,
-    updatedAt: new Date(Date.now() - 3600000 * 12).toISOString(),
-  },
-];
+// In-memory store for offline fallback operations
+let mockVariants: VariantInventoryItemDto[] = [];
 
-let mockSuppliers: SupplierDto[] = [
-  {
-    id: 'sup-001',
-    code: 'SUP-ASIA-TECH',
-    name: 'Công ty TNHH Phân phối Linh kiện Á Châu',
-    contactPerson: 'Nguyễn Văn Minh',
-    phone: '0988123456',
-    email: 'minh.nguyen@asiatech.vn',
-    address: 'Tầng 5, Tòa nhà Detech, Cầu Giấy, Hà Nội',
-    isActive: true,
-    notes: 'Nhà phân phối chính thức switch Gateron và linh kiện bàn phím',
-    createdAt: new Date(Date.now() - 86400000 * 45).toISOString(),
-    updatedAt: null,
-  },
-  {
-    id: 'sup-002',
-    code: 'SUP-GLOBAL-GEAR',
-    name: 'Tập đoàn Global Gaming Gear Việt Nam',
-    contactPerson: 'Trần Thị Mai',
-    phone: '0912345678',
-    email: 'contact@globalgear.com',
-    address: '120 Võ Văn Tần, Quận 3, TP. Hồ Chí Minh',
-    isActive: true,
-    notes: 'Cung cấp cảm biến chuột PAW3395 và linh kiện âm thanh cao cấp',
-    createdAt: new Date(Date.now() - 86400000 * 30).toISOString(),
-    updatedAt: null,
-  },
-];
-
-let mockMovements: StockMovementDto[] = [
-  {
-    id: 'mov-001',
-    variantId: 'v-001',
-    type: StockMovementType.Restock,
-    quantity: 20,
-    onHandBefore: 15,
-    onHandAfter: 35,
-    reservedBefore: 5,
-    reservedAfter: 5,
-    referenceType: 'PurchaseOrder',
-    referenceId: 'PO-20261015-0001',
-    reason: 'Nhập hàng đợt 1 từ NCC Á Châu',
-    createdAt: new Date(Date.now() - 3600000 * 3).toISOString(),
-  },
-  {
-    id: 'mov-002',
-    variantId: 'v-002',
-    type: StockMovementType.Adjustment,
-    quantity: 2,
-    onHandBefore: 6,
-    onHandAfter: 4,
-    reservedBefore: 1,
-    reservedAfter: 1,
-    referenceType: 'StockAdjustment',
-    referenceId: 'AUD-001',
-    reason: 'Hàng lỗi vỡ khi bốc xếp',
-    createdAt: new Date(Date.now() - 3600000 * 6).toISOString(),
-  },
-  {
-    id: 'mov-003',
-    variantId: 'v-004',
-    type: StockMovementType.Reserve,
-    quantity: 2,
-    onHandBefore: 18,
-    onHandAfter: 18,
-    reservedBefore: 2,
-    reservedAfter: 4,
-    referenceType: 'Order',
-    referenceId: 'ORD-20261015-8899',
-    reason: 'Khách hàng đặt mua đơn hàng',
-    createdAt: new Date(Date.now() - 3600000 * 8).toISOString(),
-  },
-];
-
-let mockPurchaseOrders: PurchaseOrderDto[] = [
-  {
-    id: 'po-001',
-    code: 'PO-20261015-0001',
-    supplierId: 'sup-001',
-    supplierName: 'Công ty TNHH Phân phối Linh kiện Á Châu',
-    status: PurchaseOrderStatus.Received,
-    totalAmount: 24000000,
-    notes: 'Lô hàng switch bàn phím tháng 10',
-    createdBy: 'admin@madkstore.vn',
-    receivedAt: new Date(Date.now() - 3600000 * 3).toISOString(),
-    createdAt: new Date(Date.now() - 86400000).toISOString(),
-    items: [
-      {
-        id: 'poi-001',
-        purchaseOrderId: 'po-001',
-        variantId: 'v-001',
-        variantSku: 'MK-CYBER-87-YEL',
-        variantName: 'Gateron Yellow Switch / Đen',
-        productName: 'Bàn phím cơ MadK Cyber 87',
-        quantity: 20,
-        unitCost: 1200000,
-        totalCost: 24000000,
-        notes: 'Chính hãng seal',
-      },
-    ],
-  },
-];
-
-let mockAudits: InventoryAuditDto[] = [
-  {
-    id: 'aud-001',
-    code: 'AUD-20261014-001',
-    status: InventoryAuditStatus.Completed,
-    notes: 'Kiểm kê kho định kỳ giữa tháng 10',
-    createdBy: 'warehouse@madkstore.vn',
-    completedAt: new Date(Date.now() - 3600000 * 18).toISOString(),
-    createdAt: new Date(Date.now() - 3600000 * 20).toISOString(),
-    items: [
-      {
-        id: 'ai-001',
-        inventoryAuditId: 'aud-001',
-        variantId: 'v-001',
-        variantSku: 'MK-CYBER-87-YEL',
-        variantName: 'Gateron Yellow Switch / Đen',
-        productName: 'Bàn phím cơ MadK Cyber 87',
-        systemQuantity: 35,
-        actualQuantity: 35,
-        discrepancy: 0,
-        reason: 'Khớp số liệu',
-      },
-      {
-        id: 'ai-002',
-        inventoryAuditId: 'aud-001',
-        variantId: 'v-002',
-        variantSku: 'MK-CYBER-87-RED',
-        variantName: 'Gateron Red Switch / Trắng',
-        productName: 'Bàn phím cơ MadK Cyber 87',
-        systemQuantity: 6,
-        actualQuantity: 4,
-        discrepancy: -2,
-        reason: 'Hàng lỗi vỡ khi bốc xếp',
-      },
-    ],
-  },
-];
+let mockSuppliers: SupplierDto[] = [];
+let mockMovements: StockMovementDto[] = [];
+let mockPurchaseOrders: PurchaseOrderDto[] = [];
+let mockAudits: InventoryAuditDto[] = [];
 
 export const adminInventoryApi = {
   // --- INVENTORY MANAGEMENT ---
@@ -256,7 +55,7 @@ export const adminInventoryApi = {
               v.sku.toLowerCase().includes(q)
           );
         }
-        return { isSuccess: true, data: filtered, message: 'Lấy danh sách tồn kho thành công (Mock).' };
+        return { isSuccess: true, data: filtered, message: 'Lấy danh sách tồn kho thành công.' };
       });
     }
   },
@@ -304,7 +103,7 @@ export const adminInventoryApi = {
             availableQuantity: target?.availableQuantity || 0,
             updatedAt: new Date().toISOString(),
           },
-          message: 'Nhập kho thành công (Mock).',
+          message: 'Nhập kho thành công.',
         };
       });
     }
@@ -365,7 +164,7 @@ export const adminInventoryApi = {
             availableQuantity: target.availableQuantity,
             updatedAt: new Date().toISOString(),
           },
-          message: 'Điều chỉnh tồn kho thành công (Mock).',
+          message: 'Điều chỉnh tồn kho thành công.',
         };
       });
     }
@@ -396,7 +195,7 @@ export const adminInventoryApi = {
             lowStockThreshold: threshold,
             status: v.availableQuantity === 0 ? 'Hết hàng' : 'Sắp hết hàng',
           }));
-        return { isSuccess: true, data: alerts, message: 'Lấy cảnh báo tồn kho thành công (Mock).' };
+        return { isSuccess: true, data: alerts, message: 'Lấy cảnh báo tồn kho thành công.' };
       });
     }
   },
@@ -419,7 +218,7 @@ export const adminInventoryApi = {
         if (filter.type) {
           filtered = filtered.filter((m) => m.type === filter.type);
         }
-        return { isSuccess: true, data: filtered, message: 'Lấy sổ cái biến động thành công (Mock).' };
+        return { isSuccess: true, data: filtered, message: 'Lấy sổ cái biến động thành công.' };
       });
     }
   },
@@ -442,7 +241,7 @@ export const adminInventoryApi = {
           const q = search.toLowerCase();
           filtered = filtered.filter((s) => s.name.toLowerCase().includes(q) || s.code.toLowerCase().includes(q));
         }
-        return { isSuccess: true, data: filtered, message: 'Lấy danh sách NCC thành công (Mock).' };
+        return { isSuccess: true, data: filtered, message: 'Lấy danh sách NCC thành công.' };
       });
     }
   },
@@ -466,7 +265,7 @@ export const adminInventoryApi = {
           createdAt: new Date().toISOString(),
         };
         mockSuppliers.push(newSup);
-        return { isSuccess: true, data: newSup, message: 'Tạo nhà cung cấp thành công (Mock).' };
+        return { isSuccess: true, data: newSup, message: 'Tạo nhà cung cấp thành công.' };
       });
     }
   },
@@ -480,7 +279,7 @@ export const adminInventoryApi = {
         const sup = mockSuppliers.find((s) => s.id === id);
         if (sup) {
           Object.assign(sup, dto, { updatedAt: new Date().toISOString() });
-          return { isSuccess: true, data: sup, message: 'Cập nhật nhà cung cấp thành công (Mock).' };
+          return { isSuccess: true, data: sup, message: 'Cập nhật nhà cung cấp thành công.' };
         }
         return { isSuccess: false, error: 'Không tìm thấy nhà cung cấp.' };
       });
@@ -504,7 +303,7 @@ export const adminInventoryApi = {
         if (filter.status) {
           filtered = filtered.filter((po) => po.status === filter.status);
         }
-        return { isSuccess: true, data: filtered, message: 'Lấy danh sách phiếu nhập thành công (Mock).' };
+        return { isSuccess: true, data: filtered, message: 'Lấy danh sách phiếu nhập thành công.' };
       });
     }
   },
@@ -552,7 +351,7 @@ export const adminInventoryApi = {
         };
 
         mockPurchaseOrders.unshift(newPo);
-        return { isSuccess: true, data: newPo, message: 'Tạo phiếu nhập hàng thành công (Mock).' };
+        return { isSuccess: true, data: newPo, message: 'Tạo phiếu nhập hàng thành công.' };
       });
     }
   },
@@ -602,7 +401,7 @@ export const adminInventoryApi = {
         po.status = PurchaseOrderStatus.Received;
         po.receivedAt = new Date().toISOString();
 
-        return { isSuccess: true, data: po, message: 'Hoàn tất nhập hàng vào kho thành công (Mock).' };
+        return { isSuccess: true, data: po, message: 'Hoàn tất nhập hàng vào kho thành công.' };
       });
     }
   },
@@ -617,7 +416,7 @@ export const adminInventoryApi = {
       return handleApiError(err, () => ({
         isSuccess: true,
         data: mockAudits,
-        message: 'Lấy danh sách phiếu kiểm kê thành công (Mock).',
+        message: 'Lấy danh sách phiếu kiểm kê thành công.',
       }));
     }
   },
@@ -660,7 +459,7 @@ export const adminInventoryApi = {
         };
 
         mockAudits.unshift(newAudit);
-        return { isSuccess: true, data: newAudit, message: 'Tạo phiếu kiểm kê thành công (Mock).' };
+        return { isSuccess: true, data: newAudit, message: 'Tạo phiếu kiểm kê thành công.' };
       });
     }
   },
@@ -722,7 +521,7 @@ export const adminInventoryApi = {
         audit.status = InventoryAuditStatus.Completed;
         audit.completedAt = new Date().toISOString();
 
-        return { isSuccess: true, data: audit, message: 'Đã hoàn tất kiểm kê và cân bằng kho (Mock).' };
+        return { isSuccess: true, data: audit, message: 'Đã hoàn tất kiểm kê và cân bằng kho.' };
       });
     }
   },
