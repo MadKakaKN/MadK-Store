@@ -2,7 +2,6 @@ import apiClient from './apiClient';
 import { ApiEnvelope } from '../types/auth';
 import {
   CartDto,
-  CartItemDto,
   AddToCartRequestDto,
   UpdateCartItemRequestDto,
   MergeCartRequestDto,
@@ -54,34 +53,13 @@ const getHeaders = () => {
   };
 };
 
-function createFallbackCart(guestItems: MergeCartItemDto[]): CartDto {
-  const items: CartItemDto[] = guestItems.map((gi, idx) => ({
-    id: 'cart_item_' + gi.variantId + '_' + idx,
-    cartId: 'cart_mock',
-    variantId: gi.variantId,
-    productId: 'prod_' + gi.variantId,
-    productName: 'ROG Strix SCAR 16 (2024)',
-    productSlug: 'laptop-asus-rog-strix-scar-16',
-    variantName: 'Core i9-14900HX / RTX 4090 / 32GB RAM / 1TB SSD',
-    sku: 'ROG-SCAR-16-01',
-    originalPrice: 74990000,
-    price: 69990000,
-    quantity: gi.quantity,
-    totalPrice: 69990000 * gi.quantity,
-    thumbnailUrl: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&q=80',
-    stockQuantity: 10,
-    isActive: true,
-  }));
-
-  const totalQuantity = items.reduce((sum, i) => sum + i.quantity, 0);
-  const totalAmount = items.reduce((sum, i) => sum + i.totalPrice, 0);
-
+function createEmptyCart(): CartDto {
   return {
-    id: 'cart_mock',
+    id: 'cart_empty',
     anonymousId: guestSessionStorage.getAnonymousId(),
-    items,
-    totalQuantity,
-    totalAmount,
+    items: [],
+    totalQuantity: 0,
+    totalAmount: 0,
     updatedAt: new Date().toISOString(),
   };
 }
@@ -97,10 +75,9 @@ export const cartApi = {
       });
       return res.data;
     } catch {
-      const guestItems = guestSessionStorage.getGuestItems();
       return {
         isSuccess: true,
-        data: createFallbackCart(guestItems),
+        data: createEmptyCart(),
       };
     }
   },
@@ -110,7 +87,7 @@ export const cartApi = {
    * Chú ý: clientPrice gửi đi nếu có sẽ bị SERVER HOÀN TOÀN BỎ QUA và tính theo DB.
    */
   async addItem(request: AddToCartRequestDto): Promise<ApiEnvelope<CartDto>> {
-    // Luôn lưu vào guest localStorage nếu chưa đăng nhập để đảm bảo merge khi đăng nhập
+    // Lưu vào guest localStorage nếu chưa đăng nhập để đảm bảo merge khi đăng nhập
     const guestItems = guestSessionStorage.getGuestItems();
     const existingIndex = guestItems.findIndex((i) => i.variantId === request.variantId);
     if (existingIndex >= 0) {
@@ -125,11 +102,15 @@ export const cartApi = {
         headers: getHeaders(),
       });
       return res.data;
-    } catch {
+    } catch (err: unknown) {
+      const anyErr = err as { response?: { data?: { error?: string; message?: string } } };
+      const errorMsg =
+        anyErr.response?.data?.error ||
+        anyErr.response?.data?.message ||
+        'Không thể thêm sản phẩm vào giỏ hàng. Vui lòng kiểm tra lại.';
       return {
-        isSuccess: true,
-        data: createFallbackCart(guestItems),
-        message: 'Đã thêm sản phẩm vào giỏ hàng thành công.',
+        isSuccess: false,
+        error: errorMsg,
       };
     }
   },
@@ -143,11 +124,11 @@ export const cartApi = {
         headers: getHeaders(),
       });
       return res.data;
-    } catch {
-      const guestItems = guestSessionStorage.getGuestItems();
+    } catch (err: unknown) {
+      const anyErr = err as { response?: { data?: { error?: string; message?: string } } };
       return {
-        isSuccess: true,
-        data: createFallbackCart(guestItems),
+        isSuccess: false,
+        error: anyErr.response?.data?.error || anyErr.response?.data?.message || 'Không thể cập nhật số lượng.',
       };
     }
   },
@@ -161,13 +142,11 @@ export const cartApi = {
         headers: getHeaders(),
       });
       return res.data;
-    } catch {
-      let guestItems = guestSessionStorage.getGuestItems();
-      guestItems = guestItems.filter((i) => !itemId.includes(i.variantId));
-      guestSessionStorage.setGuestItems(guestItems);
+    } catch (err: unknown) {
+      const anyErr = err as { response?: { data?: { error?: string; message?: string } } };
       return {
-        isSuccess: true,
-        data: createFallbackCart(guestItems),
+        isSuccess: false,
+        error: anyErr.response?.data?.error || anyErr.response?.data?.message || 'Không thể xóa sản phẩm khỏi giỏ hàng.',
       };
     }
   },
@@ -185,7 +164,7 @@ export const cartApi = {
     } catch {
       return {
         isSuccess: true,
-        data: createFallbackCart([]),
+        data: createEmptyCart(),
       };
     }
   },
@@ -205,7 +184,7 @@ export const cartApi = {
       guestSessionStorage.clearGuestCart();
       return {
         isSuccess: true,
-        data: createFallbackCart(request.items),
+        data: createEmptyCart(),
       };
     }
   },
