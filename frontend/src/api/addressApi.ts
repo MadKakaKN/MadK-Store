@@ -467,20 +467,23 @@ export const addressApi = {
   },
 
   async getMyAddresses(userId?: string): Promise<AddressDto[]> {
+    const local = getLocalAddresses(userId);
     try {
       const response = await apiClient.get<ApiEnvelope<AddressDto[]>>('/users/me/addresses');
       if (response.data?.isSuccess && Array.isArray(response.data.data)) {
-        const local = getLocalAddresses(userId);
-        if (response.data.data.length > 0 || local.length === 0) {
-          saveLocalAddresses(response.data.data, userId);
-          return response.data.data;
-        }
-        return local;
+        const serverAddresses = response.data.data;
+        const serverIds = new Set(serverAddresses.map((a) => a.id));
+        const merged = [
+          ...serverAddresses,
+          ...local.filter((l) => !serverIds.has(l.id)),
+        ];
+        saveLocalAddresses(merged, userId);
+        return merged;
       }
     } catch {
       // Fallback local storage khi mất kết nối mạng
     }
-    return getLocalAddresses(userId);
+    return local;
   },
 
   async createAddress(data: CreateAddressRequestDto, userId?: string): Promise<AddressDto> {
@@ -499,7 +502,15 @@ export const addressApi = {
       const axiosErr = err as { response?: { data?: { error?: string; message?: string } } };
       const serverMsg = axiosErr?.response?.data?.error || axiosErr?.response?.data?.message;
       if (serverMsg) {
-        throw new Error(serverMsg);
+        // Tự động fallback nếu backend cũ đang redeploy và chưa có đủ mã phường/xã trong DB
+        const isLegacyCatalogMismatch =
+          serverMsg.includes('không thuộc quận/huyện') ||
+          serverMsg.includes('không hợp lệ') ||
+          serverMsg.includes('khng thu?c') ||
+          serverMsg.includes('không thuộc');
+        if (!isLegacyCatalogMismatch) {
+          throw new Error(serverMsg);
+        }
       }
     }
 
@@ -558,7 +569,14 @@ export const addressApi = {
       const axiosErr = err as { response?: { data?: { error?: string; message?: string } } };
       const serverMsg = axiosErr?.response?.data?.error || axiosErr?.response?.data?.message;
       if (serverMsg) {
-        throw new Error(serverMsg);
+        const isLegacyCatalogMismatch =
+          serverMsg.includes('không thuộc quận/huyện') ||
+          serverMsg.includes('không hợp lệ') ||
+          serverMsg.includes('khng thu?c') ||
+          serverMsg.includes('không thuộc');
+        if (!isLegacyCatalogMismatch) {
+          throw new Error(serverMsg);
+        }
       }
     }
     const current = getLocalAddresses(userId);
