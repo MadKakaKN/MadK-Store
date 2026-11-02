@@ -138,7 +138,11 @@ builder.Services.AddRateLimiter(options =>
 // ──── Controllers & Routing & Compression ────
 builder.Services.AddResponseCompression(options => { options.EnableForHttps = true; });
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
 
 // ──── Swagger ────
 builder.Services.AddEndpointsApiExplorer();

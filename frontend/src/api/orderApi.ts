@@ -85,7 +85,24 @@ export const orderApi = {
         headers['X-Anonymous-Id'] = anonId;
       }
 
-      const res = await apiClient.post<ApiEnvelope<OrderDto>>('/orders/checkout/cod', request, {
+      const paymentMethodMap: Record<string, number> = {
+        COD: 1,
+        VNPay: 2,
+        BankTransfer: 3,
+        MoMo: 4,
+      };
+
+      const numericPaymentMethod =
+        request.paymentMethod && typeof request.paymentMethod === 'string'
+          ? (paymentMethodMap[request.paymentMethod] ?? 1)
+          : request.paymentMethod ?? 1;
+
+      const payload = {
+        ...request,
+        paymentMethod: numericPaymentMethod,
+      };
+
+      const res = await apiClient.post<ApiEnvelope<OrderDto>>('/orders/checkout/cod', payload, {
         headers,
       });
 
@@ -185,9 +202,35 @@ export const orderApi = {
 
 function extractServerBusinessError(err: unknown): string | null {
   if (err && typeof err === 'object') {
-    const anyErr = err as { response?: { status?: number; data?: { error?: string; message?: string } } };
+    const anyErr = err as {
+      response?: {
+        status?: number;
+        data?: {
+          error?: string;
+          message?: string;
+          title?: string;
+          errors?: Record<string, string[]>;
+        };
+      };
+    };
     if (anyErr.response?.data?.error) return anyErr.response.data.error;
     if (anyErr.response?.data?.message) return anyErr.response.data.message;
+
+    // Trích xuất lỗi chi tiết từ Model Validation của ASP.NET Core
+    if (anyErr.response?.data?.errors && typeof anyErr.response.data.errors === 'object') {
+      const errorKeys = Object.keys(anyErr.response.data.errors);
+      for (const key of errorKeys) {
+        const msgs = anyErr.response.data.errors[key];
+        if (Array.isArray(msgs) && msgs.length > 0) {
+          return msgs[0];
+        }
+      }
+    }
+
+    if (anyErr.response?.data?.title && anyErr.response.data.title !== 'One or more validation errors occurred.') {
+      return anyErr.response.data.title;
+    }
+
     if (anyErr.response?.status && anyErr.response.status >= 400 && anyErr.response.status < 500) {
       if (anyErr.response.status === 401) {
         return 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.';

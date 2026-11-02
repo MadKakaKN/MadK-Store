@@ -1,8 +1,11 @@
+using System.Text.Json.Serialization;
+
 namespace MadK.Domain.Enums;
 
 /// <summary>
 /// Phương thức thanh toán được hỗ trợ.
 /// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum PaymentMethod
 {
     /// <summary>
