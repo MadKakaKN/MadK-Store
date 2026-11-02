@@ -734,166 +734,70 @@ export const CheckoutPage: React.FC = () => {
                 </h2>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {/* 1. VietQR Bank Transfer Option */}
-                <div
-                  className={`p-4 sm:p-5 rounded-2xl border-2 transition-all ${
+                <label
+                  className={`p-4 sm:p-5 rounded-2xl border-2 cursor-pointer flex items-start gap-4 transition-all ${
                     paymentMethod === 'BankTransfer'
                       ? 'border-emerald-500 bg-emerald-50/40 ring-2 ring-emerald-500/10'
                       : 'border-slate-200 bg-white hover:border-slate-300'
                   }`}
                 >
-                  <label className="cursor-pointer flex items-start gap-4">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="BankTransfer"
-                      checked={paymentMethod === 'BankTransfer'}
-                      onChange={() => setPaymentMethod('BankTransfer')}
-                      className="mt-1 text-emerald-600 focus:ring-emerald-500"
-                    />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl">🏛️</span>
-                        <span className="font-extrabold text-sm text-slate-900">
-                          Chuyển khoản ngân hàng (VietQR - Techcombank)
-                        </span>
-                        <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full ml-auto">
-                          Khuyên dùng • Nhanh 24/7
-                        </span>
-                      </div>
-                      <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
-                        Quét mã VietQR Napas 247 qua mọi app ngân hàng (VCB, MB, Tech, ACB...). Tự động điền số tài khoản <strong>19050430057012</strong>, chủ TK <strong>NGUYEN HOANG KHANG</strong> và đúng số tiền.
-                      </p>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="BankTransfer"
+                    checked={paymentMethod === 'BankTransfer'}
+                    onChange={() => setPaymentMethod('BankTransfer')}
+                    className="mt-1 text-emerald-600 focus:ring-emerald-500"
+                  />
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">🏛️</span>
+                      <span className="font-extrabold text-sm text-slate-900">
+                        Chuyển khoản ngân hàng (VietQR - Techcombank)
+                      </span>
+                      <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full ml-auto">
+                        Khuyên dùng • Nhanh 24/7
+                      </span>
                     </div>
-                  </label>
-
-                  {/* Inline VietQR Live Preview */}
-                  {paymentMethod === 'BankTransfer' && (
-                    <div className="mt-4 pt-4 border-t border-emerald-200/80 space-y-4 animate-fade-in">
-                      <div className="flex flex-col sm:flex-row items-center gap-5 p-4 rounded-2xl bg-white border border-emerald-200 shadow-xs">
-                        <div className="p-2.5 bg-white rounded-xl shadow-md border border-slate-200 flex-shrink-0 text-center">
-                          <img
-                            src={`https://img.vietqr.io/image/TCB-19050430057012-compact2.png?amount=${Math.round(finalTotal)}&addInfo=MADK%20TECH&accountName=NGUYEN%20HOANG%20KHANG`}
-                            alt="Mã VietQR Techcombank"
-                            className="w-48 h-auto object-contain rounded-lg mx-auto"
-                          />
-                          <span className="text-[10px] text-emerald-700 font-bold mt-1.5 block">
-                            Quét bằng bất kỳ App Ngân hàng
-                          </span>
-                        </div>
-                        <div className="flex-1 space-y-2 text-xs w-full">
-                          <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
-                            <span className="text-slate-500">Ngân hàng:</span>
-                            <span className="font-extrabold text-slate-900">Techcombank (TCB)</span>
-                          </div>
-                          <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
-                            <span className="text-slate-500">Số tài khoản:</span>
-                            <div className="flex items-center gap-2">
-                              <span className="font-mono font-black text-emerald-600 text-sm">19050430057012</span>
-                              <button
-                                type="button"
-                                onClick={(e) => { e.preventDefault(); handleCopy('19050430057012', 'stk'); }}
-                                className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-[10px] transition-colors"
-                              >
-                                {copiedField === 'stk' ? '✓ Đã chép' : 'Chép'}
-                              </button>
-                            </div>
-                          </div>
-                          <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
-                            <span className="text-slate-500">Chủ tài khoản:</span>
-                            <span className="font-bold text-slate-900 uppercase">NGUYEN HOANG KHANG</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-slate-500">Số tiền:</span>
-                            <span className="font-mono font-black text-brand-600 text-sm">{formatVND(finalTotal)}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                    <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
+                      Quét mã VietQR Napas 247 qua mọi app ngân hàng (VCB, MB, Tech, ACB...). Mã QR thanh toán sẽ hiện lên ngay sau khi bạn nhấn nút xác nhận đặt hàng bên dưới.
+                    </p>
+                  </div>
+                </label>
 
                 {/* 2. MoMo Transfer Option */}
-                <div
-                  className={`p-4 sm:p-5 rounded-2xl border-2 transition-all ${
+                <label
+                  className={`p-4 sm:p-5 rounded-2xl border-2 cursor-pointer flex items-start gap-4 transition-all ${
                     paymentMethod === 'MoMo'
                       ? 'border-pink-500 bg-pink-50/40 ring-2 ring-pink-500/10'
                       : 'border-slate-200 bg-white hover:border-slate-300'
                   }`}
                 >
-                  <label className="cursor-pointer flex items-start gap-4">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="MoMo"
-                      checked={paymentMethod === 'MoMo'}
-                      onChange={() => setPaymentMethod('MoMo')}
-                      className="mt-1 text-pink-600 focus:ring-pink-500"
-                    />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl">📱</span>
-                        <span className="font-extrabold text-sm text-slate-900">
-                          Ví điện tử MoMo
-                        </span>
-                        <span className="text-[10px] bg-pink-100 text-pink-800 font-bold px-2 py-0.5 rounded-full ml-auto">
-                          Chuyển 1 chạm
-                        </span>
-                      </div>
-                      <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
-                        Chuyển tiền nhanh qua App MoMo đến <strong>0901316434</strong> (<strong>NGUYEN HOANG KHANG</strong>) hoặc quét mã QR MoMo.
-                      </p>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="MoMo"
+                    checked={paymentMethod === 'MoMo'}
+                    onChange={() => setPaymentMethod('MoMo')}
+                    className="mt-1 text-pink-600 focus:ring-pink-500"
+                  />
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">📱</span>
+                      <span className="font-extrabold text-sm text-slate-900">
+                        Ví điện tử MoMo
+                      </span>
+                      <span className="text-[10px] bg-pink-100 text-pink-800 font-bold px-2 py-0.5 rounded-full ml-auto">
+                        Chuyển 1 chạm
+                      </span>
                     </div>
-                  </label>
-
-                  {/* Inline MoMo Live Preview */}
-                  {paymentMethod === 'MoMo' && (
-                    <div className="mt-4 pt-4 border-t border-pink-200/80 space-y-4 animate-fade-in">
-                      <div className="flex flex-col sm:flex-row items-center gap-5 p-4 rounded-2xl bg-white border border-pink-200 shadow-xs">
-                        <div className="p-2.5 bg-white rounded-xl shadow-md border border-slate-200 flex-shrink-0 text-center">
-                          <img
-                            src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(
-                              `2|99|0901316434|NGUYEN HOANG KHANG||0|0|${Math.round(finalTotal)}|MADK STORE|transfer_p2p`
-                            )}`}
-                            alt="Mã QR MoMo"
-                            className="w-44 h-44 object-contain rounded-lg mx-auto"
-                          />
-                          <span className="text-[10px] text-pink-700 font-bold mt-1.5 block">
-                            Quét bằng Ứng dụng MoMo
-                          </span>
-                        </div>
-                        <div className="flex-1 space-y-2 text-xs w-full">
-                          <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
-                            <span className="text-slate-500">Ví điện tử:</span>
-                            <span className="font-extrabold text-pink-600">MoMo</span>
-                          </div>
-                          <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
-                            <span className="text-slate-500">Số điện thoại:</span>
-                            <div className="flex items-center gap-2">
-                              <span className="font-mono font-black text-pink-600 text-sm">0901316434</span>
-                              <button
-                                type="button"
-                                onClick={(e) => { e.preventDefault(); handleCopy('0901316434', 'momo'); }}
-                                className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-[10px] transition-colors"
-                              >
-                                {copiedField === 'momo' ? '✓ Đã chép' : 'Chép'}
-                              </button>
-                            </div>
-                          </div>
-                          <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
-                            <span className="text-slate-500">Tên người nhận:</span>
-                            <span className="font-bold text-slate-900 uppercase">NGUYEN HOANG KHANG</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-slate-500">Số tiền:</span>
-                            <span className="font-mono font-black text-brand-600 text-sm">{formatVND(finalTotal)}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                    <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
+                      Chuyển tiền nhanh qua App MoMo đến <strong>0901316434</strong> (<strong>NGUYEN HOANG KHANG</strong>). Mã QR MoMo sẽ hiển thị ngay khi bạn nhấn xác nhận đặt hàng.
+                    </p>
+                  </div>
+                </label>
 
                 {/* 3. COD Option */}
                 <label
