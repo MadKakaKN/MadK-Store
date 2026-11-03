@@ -359,7 +359,8 @@ export const ProductDetailPage: React.FC = () => {
                 model3DUrl={product.model3DUrl}
                 productName={product.name}
                 categorySlug={product.category?.slug}
-                thumbnailUrl={product.thumbnailUrl}
+                productSlug={product.slug}
+                thumbnailUrl={product.thumbnailUrl || `/images/products/${product.slug}.png`}
                 selectedVariant={selectedVariant}
                 onVariantSelect={setSelectedVariant}
                 onSwitchTo2D={() => setViewMode('2d')}

@@ -10,6 +10,7 @@ export interface Product3DViewerProps {
   model3DUrl?: string;
   productName: string;
   categorySlug?: string;
+  productSlug?: string;
   thumbnailUrl?: string;
   selectedVariant?: ProductVariantDto | null;
   onVariantSelect?: (variant: ProductVariantDto) => void;
@@ -66,6 +67,7 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
   model3DUrl,
   productName,
   categorySlug,
+  productSlug,
   thumbnailUrl,
   selectedVariant,
   onSwitchTo2D,
@@ -188,6 +190,8 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
           onModelSourceChange={setResolvedSource}
           categorySlug={effectiveCategorySlug}
           productName={productName}
+          thumbnailUrl={thumbnailUrl}
+          productSlug={productSlug}
         />
       </div>
 

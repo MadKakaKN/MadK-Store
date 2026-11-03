@@ -61,6 +61,8 @@ interface ModelCanvasProps {
   onModelSourceChange?: (source: 'custom_glb' | 'sample_glb' | 'procedural') => void;
   categorySlug?: string;
   productName?: string;
+  thumbnailUrl?: string;
+  productSlug?: string;
 }
 
 export const ModelCanvas: React.FC<ModelCanvasProps> = ({
@@ -73,6 +75,8 @@ export const ModelCanvas: React.FC<ModelCanvasProps> = ({
   onModelSourceChange,
   categorySlug,
   productName,
+  thumbnailUrl,
+  productSlug,
 }) => {
   // If modelUrl is a relative path or sample path, use it.
   // If no modelUrl is specified, or if remote fails, CanvasErrorBoundary seamlessly renders ProceduralTechModel.
@@ -133,6 +137,8 @@ export const ModelCanvas: React.FC<ModelCanvasProps> = ({
                 wireframe={wireframe}
                 categorySlug={categorySlug}
                 productName={productName}
+                thumbnailUrl={thumbnailUrl}
+                productSlug={productSlug}
               />
             }
           >
@@ -149,6 +155,8 @@ export const ModelCanvas: React.FC<ModelCanvasProps> = ({
             wireframe={wireframe}
             categorySlug={categorySlug}
             productName={productName}
+            thumbnailUrl={thumbnailUrl}
+            productSlug={productSlug}
           />
         )}
       </Suspense>
