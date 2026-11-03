@@ -25,7 +25,10 @@ export const ProductDetailPage: React.FC = () => {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
-  const [viewMode, setViewMode] = useState<'2d' | '3d'>('2d');
+  const [viewMode, setViewMode] = useState<'2d' | '3d'>(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('view') === '3d' || params.get('tab') === '3d' ? '3d' : '2d';
+  });
   const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'policy'>('desc');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
