@@ -140,6 +140,7 @@ export const ModelCanvas: React.FC<ModelCanvasProps> = ({
               url={modelUrl!}
               variantColor={variantColor}
               wireframe={wireframe}
+              onLoaded={() => onModelSourceChange?.('custom_glb')}
             />
           </CanvasErrorBoundary>
         ) : (

@@ -6,18 +6,28 @@ interface GLBModelRendererProps {
   url: string;
   variantColor: string;
   wireframe?: boolean;
+  onLoaded?: () => void;
 }
 
 export const GLBModelRenderer: React.FC<GLBModelRendererProps> = ({
   url,
   variantColor,
   wireframe = false,
+  onLoaded,
 }) => {
   const gltf = useGLTF(url);
 
   // Deep-clone the scene so that runtime material/color changes don't corrupt cached assets
-  const clonedScene = useMemo(() => {
+  const { clonedScene, normalizedScale } = useMemo(() => {
     const clone = gltf.scene.clone(true);
+
+    // Compute bounding box to normalize model dimensions to fit the 3D viewport nicely
+    const bbox = new THREE.Box3().setFromObject(clone);
+    const size = new THREE.Vector3();
+    bbox.getSize(size);
+    const maxDim = Math.max(size.x, size.y, size.z);
+    // Ideal bounding diameter in Three.js viewport is ~2.3
+    const normalizedScale = maxDim > 0 ? 2.3 / maxDim : 1;
 
     // Ensure cloned materials are independent instances
     clone.traverse((child) => {
@@ -34,8 +44,12 @@ export const GLBModelRenderer: React.FC<GLBModelRendererProps> = ({
       }
     });
 
-    return clone;
+    return { clonedScene: clone, normalizedScale };
   }, [gltf.scene]);
+
+  useEffect(() => {
+    onLoaded?.();
+  }, [onLoaded]);
 
   // Apply color mapping and wireframe whenever variantColor or wireframe changes
   useEffect(() => {
@@ -77,8 +91,8 @@ export const GLBModelRenderer: React.FC<GLBModelRendererProps> = ({
   }, [clonedScene, variantColor, wireframe]);
 
   return (
-    <Center position={[0, -0.2, 0]}>
-      <primitive object={clonedScene} />
+    <Center position={[0, -0.1, 0]}>
+      <primitive object={clonedScene} scale={normalizedScale} />
     </Center>
   );
 };

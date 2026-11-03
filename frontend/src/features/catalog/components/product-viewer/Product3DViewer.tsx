@@ -16,6 +16,52 @@ export interface Product3DViewerProps {
   onSwitchTo2D?: () => void;
 }
 
+export function resolveModel3DUrl(url?: string, productName?: string, categorySlug?: string): string {
+  const raw = (url || '').trim();
+  const name = (productName || '').toLowerCase();
+  const cat = (categorySlug || '').toLowerCase();
+
+  if (raw) {
+    if (raw.includes('iphone-15-pro-max.glb') || (raw.includes('models.madkstore.vn') && raw.includes('iphone'))) {
+      return '/models/iphone-15-pro-max.glb';
+    }
+    if (raw.includes('galaxy-s24-ultra.glb') || (raw.includes('models.madkstore.vn') && raw.includes('galaxy'))) {
+      return '/models/galaxy-s24-ultra.glb';
+    }
+    if (raw.includes('macbook-pro-16.glb') || (raw.includes('models.madkstore.vn') && raw.includes('macbook'))) {
+      return '/models/macbook-pro-16.glb';
+    }
+    if (raw.includes('smartwatch.glb') || raw.includes('watch.glb')) {
+      return '/models/smartwatch.glb';
+    }
+    // Handle mock domain replacement
+    if (raw.includes('models.madkstore.vn/')) {
+      const filename = raw.split('/').pop();
+      if (filename) return `/models/${filename}`;
+    }
+    // If it's a relative path or valid http(s) URL
+    if (raw.startsWith('/models/') || raw.startsWith('http://') || raw.startsWith('https://')) {
+      return raw;
+    }
+  }
+
+  // Smart product-based detection fallback
+  if (name.includes('iphone') || name.includes('15 pro max')) {
+    return '/models/iphone-15-pro-max.glb';
+  }
+  if (name.includes('galaxy') || name.includes('s24')) {
+    return '/models/galaxy-s24-ultra.glb';
+  }
+  if (name.includes('macbook')) {
+    return '/models/macbook-pro-16.glb';
+  }
+  if (name.includes('watch') || cat.includes('dong-ho')) {
+    return '/models/smartwatch.glb';
+  }
+
+  return raw;
+}
+
 export const Product3DViewer: React.FC<Product3DViewerProps> = ({
   model3DUrl,
   productName,
@@ -30,11 +76,10 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
   const [autoRotate, setAutoRotate] = useState(true);
   const [wireframe, setWireframe] = useState(false);
   const [customColor, setCustomColor] = useState<string | null>(null);
-  const [activeModelOption, setActiveModelOption] = useState<'product' | 'sample_keyboard' | 'sample_gadget'>('product');
+  const [activeModelOption, setActiveModelOption] = useState<
+    'product' | 'sample_iphone' | 'sample_macbook' | 'sample_watch' | 'sample_keyboard' | 'sample_gadget'
+  >('product');
   const [showGuideModal, setShowGuideModal] = useState(false);
-  const [resolvedSource, setResolvedSource] = useState<'custom_glb' | 'sample_glb' | 'procedural'>(
-    model3DUrl ? 'custom_glb' : 'procedural'
-  );
 
   // Automatically sync with selected variant color, or allow user override
   const variantColorInfo = useMemo(() => extractVariantColor(selectedVariant), [selectedVariant]);
@@ -42,18 +87,26 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
 
   // Determine actual model URL based on selection
   const effectiveModelUrl = useMemo(() => {
-    if (activeModelOption === 'sample_keyboard') {
-      return ''; // Trigger procedural high-detail keyboard
+    switch (activeModelOption) {
+      case 'sample_iphone':
+        return '/models/iphone-15-pro-max.glb';
+      case 'sample_macbook':
+        return '/models/macbook-pro-16.glb';
+      case 'sample_watch':
+        return '/models/smartwatch.glb';
+      case 'sample_gadget':
+        return '/models/sample-gadget.glb';
+      case 'sample_keyboard':
+        return ''; // Trigger procedural high-detail keyboard
+      case 'product':
+      default:
+        return resolveModel3DUrl(model3DUrl, productName, categorySlug);
     }
-    if (activeModelOption === 'sample_gadget') {
-      return '/models/sample-gadget.glb';
-    }
-    // 'product'
-    if (model3DUrl && model3DUrl.trim().length > 0) {
-      return model3DUrl;
-    }
-    return ''; // Fallback to procedural model
-  }, [activeModelOption, model3DUrl]);
+  }, [activeModelOption, model3DUrl, productName, categorySlug]);
+
+  const [resolvedSource, setResolvedSource] = useState<'custom_glb' | 'sample_glb' | 'procedural'>(
+    effectiveModelUrl ? 'custom_glb' : 'procedural'
+  );
 
   // Pass category override if keyboard demo was selected
   const effectiveCategorySlug = activeModelOption === 'sample_keyboard' ? 'ban-phim-co' : categorySlug;
@@ -93,7 +146,7 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
           </span>
 
           <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-300 text-[11px] font-mono">
-            {resolvedSource === 'custom_glb' ? 'GLB Model' : 'Mô hình 3D Chuẩn'}
+            {resolvedSource === 'custom_glb' ? 'Mô hình Thực tế (GLB)' : 'Mô hình 3D Chuẩn'}
           </span>
         </div>
 
@@ -101,12 +154,15 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
         <div className="flex items-center gap-1.5">
           <select
             value={activeModelOption}
-            onChange={(e) => setActiveModelOption(e.target.value as 'product' | 'sample_keyboard' | 'sample_gadget')}
+            onChange={(e) => setActiveModelOption(e.target.value as any)}
             className="text-[11px] font-semibold bg-slate-900/90 text-slate-300 border border-slate-700/80 rounded-xl px-2.5 py-1.5 outline-none focus:border-indigo-500 backdrop-blur-md cursor-pointer transition-colors"
           >
-            <option value="product">Model 3D ({productName.split(' ')[0]})</option>
-            <option value="sample_keyboard">Bàn phím cơ (Demo)</option>
+            <option value="product">Sản phẩm hiện tại ({productName.split(' ')[0]})</option>
+            <option value="sample_iphone">iPhone 15 Pro Max (GLB thực tế)</option>
+            <option value="sample_macbook">MacBook Pro 16" (GLB thực tế)</option>
+            <option value="sample_watch">Đồng hồ Chronograph (GLB thực tế)</option>
             <option value="sample_gadget">Mô hình mẫu (GLB)</option>
+            <option value="sample_keyboard">Bàn phím cơ (3D Procedural)</option>
           </select>
 
           <button

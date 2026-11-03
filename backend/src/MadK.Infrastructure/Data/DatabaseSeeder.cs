@@ -624,6 +624,17 @@ public static class DatabaseSeeder
         Dictionary<string, Brand> brandMap,
         ILogger? logger)
     {
+        // Self-heal and sync authentic local 3D model paths
+        try
+        {
+            await context.Database.ExecuteSqlRawAsync(@"
+                UPDATE products SET model_3d_url = '/models/iphone-15-pro-max.glb' WHERE slug LIKE '%iphone-15-pro-max%' OR model_3d_url LIKE '%iphone-15-pro-max%';
+                UPDATE products SET model_3d_url = '/models/galaxy-s24-ultra.glb' WHERE slug LIKE '%galaxy-s24-ultra%' OR model_3d_url LIKE '%galaxy-s24-ultra%';
+                UPDATE products SET model_3d_url = '/models/macbook-pro-16.glb' WHERE slug LIKE '%macbook-pro-16%' OR model_3d_url LIKE '%macbook-pro-16%';
+            ");
+        }
+        catch { /* ignore if table not yet created */ }
+
         var existingProductSlugs = (await context.Products.Select(p => p.Slug).ToListAsync()).ToHashSet();
         var productSeeds = GetProductSeedModels();
 
@@ -744,7 +755,7 @@ public static class DatabaseSeeder
             Desc = "iPhone 15 Pro Max là đỉnh cao công nghệ với khung vỏ titan hàng không vũ trụ siêu nhẹ và bền bỉ. Màn hình Super Retina XDR 6.7 inch với ProMotion 120Hz mượt mà.",
             BasePrice = 34990000m,
             IsFeatured = true,
-            Model3DUrl = "https://models.madkstore.vn/iphone-15-pro-max.glb",
+            Model3DUrl = "/models/iphone-15-pro-max.glb",
             ImageUrl = "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&q=80",
             Specs = new() { { "os", "iOS" }, { "screen_size", "6.7 inch" }, { "refresh_rate", "120Hz" }, { "ram", "8GB" }, { "storage", "256GB" }, { "network", "5G" } },
             Variants = new()
@@ -821,7 +832,7 @@ public static class DatabaseSeeder
             Desc = "Galaxy S24 Ultra mở ra kỷ nguyên mới với trí tuệ nhân tạo Galaxy AI, màn hình phẳng Dynamic AMOLED 2X 120Hz rực rỡ và kính chống chói Corning Gorilla Armor.",
             BasePrice = 31990000m,
             IsFeatured = true,
-            Model3DUrl = "https://models.madkstore.vn/galaxy-s24-ultra.glb",
+            Model3DUrl = "/models/galaxy-s24-ultra.glb",
             ImageUrl = "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&q=80",
             Specs = new() { { "os", "Android" }, { "screen_size", "6.8 inch" }, { "refresh_rate", "120Hz" }, { "ram", "12GB" }, { "storage", "256GB" }, { "network", "5G" } },
             Variants = new()
@@ -1175,7 +1186,7 @@ public static class DatabaseSeeder
             Desc = "Cỗ máy làm việc di động hoàn hảo nhất lịch sử Apple, xử lý các tác vụ render 3D và lập trình máy học nhẹ nhàng với chip M3 Max.",
             BasePrice = 89990000m,
             IsFeatured = true,
-            Model3DUrl = "https://models.madkstore.vn/macbook-pro-16.glb",
+            Model3DUrl = "/models/macbook-pro-16.glb",
             ImageUrl = "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&q=80",
             Specs = new() { { "cpu", "Apple M3 Pro" }, { "ram", "32GB" }, { "storage", "1TB SSD" }, { "weight", "Trên 1.5kg" } },
             Variants = new()
