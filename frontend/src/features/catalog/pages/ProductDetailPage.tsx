@@ -294,12 +294,17 @@ export const ProductDetailPage: React.FC = () => {
                 )}
 
                 <img
-                  src={allImages[selectedImageIndex]?.imageUrl || product.thumbnailUrl}
+                  src={
+                    (allImages[selectedImageIndex]?.imageUrl && !allImages[selectedImageIndex]?.imageUrl.includes('unsplash'))
+                      ? allImages[selectedImageIndex].imageUrl
+                      : (product.thumbnailUrl && !product.thumbnailUrl.includes('unsplash'))
+                        ? product.thumbnailUrl
+                        : `/images/products/${product.slug}.png`
+                  }
                   alt={product.name}
                   className="w-full h-full object-contain object-center hover:scale-105 transition-transform duration-500"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src =
-                      'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=600&q=80';
+                    (e.target as HTMLImageElement).src = `/images/products/${product.slug}.png`;
                   }}
                 />
               </div>
@@ -323,8 +328,7 @@ export const ProductDetailPage: React.FC = () => {
                         alt=""
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).src =
-                            'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=100&q=80';
+                          (e.target as HTMLImageElement).src = `/images/products/${product.slug}.png`;
                         }}
                       />
                     </button>

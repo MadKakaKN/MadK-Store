@@ -631,6 +631,8 @@ public static class DatabaseSeeder
                 UPDATE products SET model_3d_url = '/models/iphone-15-pro-max.glb' WHERE slug LIKE '%iphone-15-pro-max%' OR model_3d_url LIKE '%iphone-15-pro-max%';
                 UPDATE products SET model_3d_url = '/models/galaxy-s24-ultra.glb' WHERE slug LIKE '%galaxy-s24-ultra%' OR model_3d_url LIKE '%galaxy-s24-ultra%';
                 UPDATE products SET model_3d_url = '/models/macbook-pro-16.glb' WHERE slug LIKE '%macbook-pro-16%' OR model_3d_url LIKE '%macbook-pro-16%';
+                UPDATE products SET thumbnail_url = '/images/products/' || slug || '.png' WHERE thumbnail_url LIKE '%unsplash%' OR thumbnail_url LIKE '%madkstore%';
+                UPDATE product_images SET image_url = '/images/products/' || (SELECT slug FROM products WHERE products.id = product_images.product_id) || '.png' WHERE image_url LIKE '%unsplash%' OR image_url LIKE '%madkstore%';
             ");
         }
         catch { /* ignore if table not yet created */ }
@@ -756,7 +758,7 @@ public static class DatabaseSeeder
             BasePrice = 34990000m,
             IsFeatured = true,
             Model3DUrl = "/models/iphone-15-pro-max.glb",
-            ImageUrl = "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&q=80",
+            ImageUrl = "/images/products/dien-thoai-iphone-15-pro-max.png",
             Specs = new() { { "os", "iOS" }, { "screen_size", "6.7 inch" }, { "refresh_rate", "120Hz" }, { "ram", "8GB" }, { "storage", "256GB" }, { "network", "5G" } },
             Variants = new()
             {
@@ -776,7 +778,7 @@ public static class DatabaseSeeder
             Desc = "iPhone 15 Pro sở hữu toàn bộ sức mạnh của chip A17 Pro trong một thân máy nhỏ gọn vừa vặn tay cầm.",
             BasePrice = 28490000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&q=80",
+            ImageUrl = "/images/products/dien-thoai-iphone-15-pro.png",
             Specs = new() { { "os", "iOS" }, { "screen_size", "6.1 inch" }, { "refresh_rate", "120Hz" }, { "ram", "8GB" }, { "storage", "128GB" }, { "network", "5G" } },
             Variants = new()
             {
@@ -795,7 +797,7 @@ public static class DatabaseSeeder
             Desc = "iPhone 15 mang Dynamic Island xuống dòng tiêu chuẩn cùng camera chính 48MP nâng cấp vượt bậc.",
             BasePrice = 19990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1695048065036-75f8546b14f8?w=600&q=80",
+            ImageUrl = "/images/products/dien-thoai-iphone-15.png",
             Specs = new() { { "os", "iOS" }, { "screen_size", "6.1 inch" }, { "refresh_rate", "60Hz" }, { "ram", "8GB" }, { "storage", "128GB" }, { "network", "5G" } },
             Variants = new()
             {
@@ -814,7 +816,7 @@ public static class DatabaseSeeder
             Desc = "Lựa chọn thực dụng với chất lượng hoàn thiện tuyệt đối và chế độ chụp ban đêm xuất sắc.",
             BasePrice = 16990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1678652197831-2d180705cd2c?w=600&q=80",
+            ImageUrl = "/images/products/dien-thoai-iphone-14.png",
             Specs = new() { { "os", "iOS" }, { "screen_size", "6.1 inch" }, { "refresh_rate", "60Hz" }, { "ram", "8GB" }, { "storage", "128GB" }, { "network", "5G" } },
             Variants = new()
             {
@@ -833,7 +835,7 @@ public static class DatabaseSeeder
             BasePrice = 31990000m,
             IsFeatured = true,
             Model3DUrl = "/models/galaxy-s24-ultra.glb",
-            ImageUrl = "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&q=80",
+            ImageUrl = "/images/products/dien-thoai-samsung-galaxy-s24-ultra.png",
             Specs = new() { { "os", "Android" }, { "screen_size", "6.8 inch" }, { "refresh_rate", "120Hz" }, { "ram", "12GB" }, { "storage", "256GB" }, { "network", "5G" } },
             Variants = new()
             {
@@ -852,7 +854,7 @@ public static class DatabaseSeeder
             Desc = "Sự cân bằng hoàn hảo giữa kích thước màn hình lớn, dung lượng pin bền bỉ và hiệu năng đỉnh cao.",
             BasePrice = 24990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&q=80",
+            ImageUrl = "/images/products/dien-thoai-samsung-galaxy-s24-plus.png",
             Specs = new() { { "os", "Android" }, { "screen_size", "6.7 inch" }, { "refresh_rate", "120Hz" }, { "ram", "12GB" }, { "storage", "256GB" }, { "network", "5G" } },
             Variants = new()
             {
@@ -870,7 +872,7 @@ public static class DatabaseSeeder
             Desc = "Flagship nhỏ gọn đỉnh cao trong thế giới Android với đầy đủ tính năng thông minh Galaxy AI.",
             BasePrice = 18990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&q=80",
+            ImageUrl = "/images/products/dien-thoai-samsung-galaxy-s24.png",
             Specs = new() { { "os", "Android" }, { "screen_size", "6.1 inch" }, { "refresh_rate", "120Hz" }, { "ram", "8GB" }, { "storage", "256GB" }, { "network", "5G" } },
             Variants = new()
             {
@@ -888,7 +890,7 @@ public static class DatabaseSeeder
             Desc = "Siêu phẩm điện thoại gập mở ra thế giới đa nhiệm chuyên nghiệp với giao diện Taskbar thông minh.",
             BasePrice = 35990000m,
             IsFeatured = true,
-            ImageUrl = "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600&q=80",
+            ImageUrl = "/images/products/dien-thoai-samsung-galaxy-z-fold5.png",
             Specs = new() { { "os", "Android" }, { "screen_size", "6.8 inch" }, { "refresh_rate", "120Hz" }, { "ram", "12GB" }, { "storage", "512GB" }, { "network", "5G" } },
             Variants = new()
             {
@@ -906,7 +908,7 @@ public static class DatabaseSeeder
             Desc = "Điện thoại gập thời trang với màn hình phụ kích thước lớn cho phép trả lời tin nhắn và chụp ảnh selfie tức thì.",
             BasePrice = 19990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600&q=80",
+            ImageUrl = "/images/products/dien-thoai-samsung-galaxy-z-flip5.png",
             Specs = new() { { "os", "Android" }, { "screen_size", "6.7 inch" }, { "refresh_rate", "120Hz" }, { "ram", "8GB" }, { "storage", "256GB" }, { "network", "5G" } },
             Variants = new()
             {
@@ -924,7 +926,7 @@ public static class DatabaseSeeder
             Desc = "Sản phẩm tầm trung đáng mua nhất phân khúc với độ hoàn thiện cao cấp và chuẩn chống nước IP67.",
             BasePrice = 9690000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600&q=80",
+            ImageUrl = "/images/products/dien-thoai-samsung-galaxy-a55-5g.png",
             Specs = new() { { "os", "Android" }, { "screen_size", "6.7 inch" }, { "refresh_rate", "120Hz" }, { "ram", "8GB" }, { "storage", "128GB" }, { "network", "5G" } },
             Variants = new()
             {
@@ -945,7 +947,7 @@ public static class DatabaseSeeder
             Desc = "Mẫu iPad mỏng nhất từ trước đến nay của Apple với sức mạnh đồ họa đỉnh cao từ vi xử lý M4 thế hệ mới.",
             BasePrice = 28990000m,
             IsFeatured = true,
-            ImageUrl = "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80",
+            ImageUrl = "/images/products/may-tinh-bang-ipad-pro-m4-11-inch.png",
             Specs = new() { { "os", "iPadOS" }, { "screen_size", "11 inch" }, { "chip", "Apple M4" }, { "storage", "256GB" } },
             Variants = new()
             {
@@ -964,7 +966,7 @@ public static class DatabaseSeeder
             Desc = "Công cụ đồ họa chuyên nghiệp cho các nhà thiết kế và họa sĩ số với khả năng tương thích Apple Pencil Pro.",
             BasePrice = 37990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80",
+            ImageUrl = "/images/products/may-tinh-bang-ipad-pro-m4-13-inch.png",
             Specs = new() { { "os", "iPadOS" }, { "screen_size", "12.9 inch" }, { "chip", "Apple M4" }, { "storage", "512GB" } },
             Variants = new()
             {
@@ -982,7 +984,7 @@ public static class DatabaseSeeder
             Desc = "Dòng máy tính bảng mỏng nhẹ, mạnh mẽ, đáp ứng hoàn hảo từ học tập tới dựng video 4K.",
             BasePrice = 16990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80",
+            ImageUrl = "/images/products/may-tinh-bang-ipad-air-m2-11-inch.png",
             Specs = new() { { "os", "iPadOS" }, { "screen_size", "11 inch" }, { "chip", "Apple M2" }, { "storage", "128GB" } },
             Variants = new()
             {
@@ -1000,7 +1002,7 @@ public static class DatabaseSeeder
             Desc = "Sự lựa chọn hoàn hảo cho gia đình và học sinh với màn hình Liquid Retina sắc nét.",
             BasePrice = 9990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80",
+            ImageUrl = "/images/products/may-tinh-bang-ipad-gen-10-10-9-inch.png",
             Specs = new() { { "os", "iPadOS" }, { "screen_size", "10.9 inch" }, { "chip", "Apple M2" }, { "storage", "128GB" } },
             Variants = new()
             {
@@ -1018,7 +1020,7 @@ public static class DatabaseSeeder
             Desc = "Chiếc tablet Android đỉnh nhất thế giới với bút S-Pen thế hệ mới và chế độ Samsung DeX biến máy tính bảng thành laptop.",
             BasePrice = 27990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80",
+            ImageUrl = "/images/products/may-tinh-bang-samsung-galaxy-tab-s9-ultra.png",
             Specs = new() { { "os", "Android" }, { "screen_size", "12.9 inch" }, { "chip", "Snapdragon 8 Gen 2" }, { "storage", "256GB" } },
             Variants = new()
             {
@@ -1039,7 +1041,7 @@ public static class DatabaseSeeder
             Desc = "Cỗ máy chiến game tối thượng dành cho game thủ Esports với hệ thống tản nhiệt ba quạt và keo tản nhiệt kim loại lỏng Conductonaut Extreme.",
             BasePrice = 69990000m,
             IsFeatured = true,
-            ImageUrl = "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+            ImageUrl = "/images/products/laptop-asus-rog-strix-scar-16.png",
             Specs = new() { { "cpu", "Intel Core i9" }, { "gpu", "RTX 4090" }, { "ram", "32GB" }, { "storage", "1TB SSD" }, { "screen", "16 inch 240Hz" } },
             Variants = new()
             {
@@ -1057,7 +1059,7 @@ public static class DatabaseSeeder
             Desc = "Sự kết hợp hoàn hảo giữa độ mỏng nhẹ thời trang và sức mạnh đồ họa đỉnh cao cho cả sáng tạo lẫn chơi game.",
             BasePrice = 52990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+            ImageUrl = "/images/products/laptop-asus-rog-zephyrus-g16.png",
             Specs = new() { { "cpu", "Intel Core i9" }, { "gpu", "RTX 4070" }, { "ram", "32GB" }, { "storage", "1TB SSD" }, { "screen", "16 inch 240Hz" } },
             Variants = new()
             {
@@ -1075,7 +1077,7 @@ public static class DatabaseSeeder
             Desc = "Chiếc laptop gaming quốc dân với độ bền bỉ vượt thời gian và tỷ lệ hiệu năng trên giá tiền tốt nhất.",
             BasePrice = 24990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+            ImageUrl = "/images/products/laptop-asus-tuf-gaming-a15.png",
             Specs = new() { { "cpu", "AMD Ryzen 7" }, { "gpu", "RTX 4060" }, { "ram", "16GB" }, { "storage", "512GB SSD" }, { "screen", "15.6 inch 144Hz" } },
             Variants = new()
             {
@@ -1093,7 +1095,7 @@ public static class DatabaseSeeder
             Desc = "Cỗ máy thi đấu gaming được trang bị hệ thống làm mát buồng hơi Legion Coldfront Vapor và bàn phím Legion TrueStrike có LED RGB từng phím.",
             BasePrice = 64990000m,
             IsFeatured = true,
-            ImageUrl = "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+            ImageUrl = "/images/products/laptop-lenovo-legion-pro-7i.png",
             Specs = new() { { "cpu", "Intel Core i9" }, { "gpu", "RTX 4080" }, { "ram", "32GB" }, { "storage", "1TB SSD" }, { "screen", "16 inch 240Hz" } },
             Variants = new()
             {
@@ -1111,7 +1113,7 @@ public static class DatabaseSeeder
             Desc = "Mẫu laptop gaming được đánh giá cao nhất nhờ tản nhiệt mát mẻ và bàn phím gõ êm ái.",
             BasePrice = 36990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+            ImageUrl = "/images/products/laptop-lenovo-legion-5-pro.png",
             Specs = new() { { "cpu", "AMD Ryzen 7" }, { "gpu", "RTX 4070" }, { "ram", "16GB" }, { "storage", "1TB SSD" }, { "screen", "16 inch 165Hz" } },
             Variants = new()
             {
@@ -1129,7 +1131,7 @@ public static class DatabaseSeeder
             Desc = "Hiệu năng bùng nổ cho game thủ hardcore với khả năng ép xung một nút bấm PredatorSense.",
             BasePrice = 48990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+            ImageUrl = "/images/products/laptop-acer-predator-helios-16.png",
             Specs = new() { { "cpu", "Intel Core i9" }, { "gpu", "RTX 4070" }, { "ram", "16GB" }, { "storage", "1TB SSD" }, { "screen", "16 inch 240Hz" } },
             Variants = new()
             {
@@ -1147,7 +1149,7 @@ public static class DatabaseSeeder
             Desc = "Chiếc laptop Nitro thế hệ mới với phong cách thiết kế hiện đại, tinh giản.",
             BasePrice = 19990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+            ImageUrl = "/images/products/laptop-acer-nitro-v-15.png",
             Specs = new() { { "cpu", "Intel Core i7" }, { "gpu", "RTX 4060" }, { "ram", "16GB" }, { "storage", "512GB SSD" }, { "screen", "15.6 inch 144Hz" } },
             Variants = new()
             {
@@ -1165,7 +1167,7 @@ public static class DatabaseSeeder
             Desc = "Biểu tượng gaming vũ trụ Alienware mang sức mạnh thay thế máy tính để bàn hoàn hảo.",
             BasePrice = 89990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+            ImageUrl = "/images/products/laptop-dell-alienware-m18-r2.png",
             Specs = new() { { "cpu", "Intel Core i9" }, { "gpu", "RTX 4090" }, { "ram", "64GB" }, { "storage", "2TB SSD" }, { "screen", "18 inch 240Hz" } },
             Variants = new()
             {
@@ -1187,7 +1189,7 @@ public static class DatabaseSeeder
             BasePrice = 89990000m,
             IsFeatured = true,
             Model3DUrl = "/models/macbook-pro-16.glb",
-            ImageUrl = "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&q=80",
+            ImageUrl = "/images/products/laptop-apple-macbook-pro-16-m3-max.png",
             Specs = new() { { "cpu", "Apple M3 Pro" }, { "ram", "32GB" }, { "storage", "1TB SSD" }, { "weight", "Trên 1.5kg" } },
             Variants = new()
             {
@@ -1206,7 +1208,7 @@ public static class DatabaseSeeder
             Desc = "Laptop đồ họa nhỏ gọn cho người sáng tạo nội dung di chuyển liên tục.",
             BasePrice = 39990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&q=80",
+            ImageUrl = "/images/products/laptop-apple-macbook-pro-14-m3.png",
             Specs = new() { { "cpu", "Apple M3" }, { "ram", "16GB" }, { "storage", "512GB SSD" }, { "weight", "1.2kg - 1.5kg" } },
             Variants = new()
             {
@@ -1224,7 +1226,7 @@ public static class DatabaseSeeder
             Desc = "Chiếc laptop được yêu thích nhất thế giới với khả năng vận hành hoàn toàn không cần quạt tản nhiệt, tĩnh lặng tuyệt đối.",
             BasePrice = 27990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=600&q=80",
+            ImageUrl = "/images/products/laptop-apple-macbook-air-13-m3.png",
             Specs = new() { { "cpu", "Apple M3" }, { "ram", "16GB" }, { "storage", "256GB SSD" }, { "weight", "1.2kg - 1.5kg" } },
             Variants = new()
             {
@@ -1243,7 +1245,7 @@ public static class DatabaseSeeder
             Desc = "Trải nghiệm không gian làm việc rộng rãi cùng thời lượng pin 18 giờ liên tục.",
             BasePrice = 32990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=600&q=80",
+            ImageUrl = "/images/products/laptop-apple-macbook-air-15-m3.png",
             Specs = new() { { "cpu", "Apple M3" }, { "ram", "16GB" }, { "storage", "512GB SSD" }, { "weight", "1.2kg - 1.5kg" } },
             Variants = new()
             {
@@ -1261,7 +1263,7 @@ public static class DatabaseSeeder
             Desc = "Kiệt tác thiết kế mang phong cách tương lai với màn hình OLED 3.5K cảm ứng tuyệt đẹp.",
             BasePrice = 44990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=600&q=80",
+            ImageUrl = "/images/products/laptop-dell-xps-13-plus-9320.png",
             Specs = new() { { "cpu", "Intel Core i7" }, { "ram", "16GB" }, { "storage", "512GB SSD" }, { "weight", "1.2kg - 1.5kg" } },
             Variants = new()
             {
@@ -1279,7 +1281,7 @@ public static class DatabaseSeeder
             Desc = "Chiếc máy tính xách tay thực dụng, đáng tin cậy phục vụ nhu cầu xử lý văn bản và kế toán hàng ngày.",
             BasePrice = 17990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=600&q=80",
+            ImageUrl = "/images/products/laptop-dell-inspiron-14-5440.png",
             Specs = new() { { "cpu", "Intel Core i5" }, { "ram", "16GB" }, { "storage", "512GB SSD" }, { "weight", "1.2kg - 1.5kg" } },
             Variants = new()
             {
@@ -1297,7 +1299,7 @@ public static class DatabaseSeeder
             Desc = "Huyền thoại laptop doanh nhân tiếp tục hoàn thiện với thanh Communications Bar mới tích hợp camera FHD và mic AI.",
             BasePrice = 56990000m,
             IsFeatured = true,
-            ImageUrl = "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&q=80",
+            ImageUrl = "/images/products/laptop-lenovo-thinkpad-x1-carbon-gen-12.png",
             Specs = new() { { "cpu", "Intel Core i7" }, { "ram", "32GB" }, { "storage", "1TB SSD" }, { "weight", "Dưới 1.2kg" } },
             Variants = new()
             {
@@ -1315,7 +1317,7 @@ public static class DatabaseSeeder
             Desc = "Mỏng nhẹ chuẩn thanh lịch với pin dung lượng lớn 75Wh cho cả ngày dài làm việc linh hoạt.",
             BasePrice = 28990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&q=80",
+            ImageUrl = "/images/products/laptop-asus-zenbook-14-oled.png",
             Specs = new() { { "cpu", "Intel Core i7" }, { "ram", "16GB" }, { "storage", "512GB SSD" }, { "weight", "1.2kg - 1.5kg" } },
             Variants = new()
             {
@@ -1337,7 +1339,7 @@ public static class DatabaseSeeder
             BasePrice = 4500000m,
             IsFeatured = true,
             Model3DUrl = "https://models.madkstore.vn/keychron-q1-pro.glb",
-            ImageUrl = "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80",
+            ImageUrl = "/images/products/ban-phim-co-keychron-q1-pro-wireless.png",
             Specs = new() { { "switch", "Tactile" }, { "layout", "75%" }, { "connectivity", "Không dây (Bluetooth/2.4G)" }, { "hotswap", "Có" } },
             Variants = new()
             {
@@ -1356,7 +1358,7 @@ public static class DatabaseSeeder
             Desc = "Chiếc bàn phím cơ hoàn hảo cho người mới bắt đầu bước chân vào bộ môn phím custom.",
             BasePrice = 2190000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80",
+            ImageUrl = "/images/products/ban-phim-co-keychron-v1-max.png",
             Specs = new() { { "switch", "Linear" }, { "layout", "75%" }, { "connectivity", "Không dây (Bluetooth/2.4G)" }, { "hotswap", "Có" } },
             Variants = new()
             {
@@ -1374,7 +1376,7 @@ public static class DatabaseSeeder
             Desc = "Thiết kế nhỏ gọn 84 phím bấm đầy đủ hàng phím F tiện lợi cho cả lập trình và soạn thảo văn bản.",
             BasePrice = 2490000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80",
+            ImageUrl = "/images/products/ban-phim-co-keychron-k2-pro.png",
             Specs = new() { { "switch", "Tactile" }, { "layout", "75%" }, { "connectivity", "Không dây (Bluetooth/2.4G)" }, { "hotswap", "Có" } },
             Variants = new()
             {
@@ -1392,7 +1394,7 @@ public static class DatabaseSeeder
             Desc = "Sự lựa chọn chuẩn chỉ cho ai quen layout TKL không có cụm số phụ.",
             BasePrice = 2690000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80",
+            ImageUrl = "/images/products/ban-phim-co-keychron-k8-pro.png",
             Specs = new() { { "switch", "Linear" }, { "layout", "TKL" }, { "connectivity", "Không dây (Bluetooth/2.4G)" }, { "hotswap", "Có" } },
             Variants = new()
             {
@@ -1410,7 +1412,7 @@ public static class DatabaseSeeder
             Desc = "Bàn phím gaming đỉnh cao với kê tay da mềm mại có dải LED đồng bộ rực rỡ.",
             BasePrice = 5490000m,
             IsFeatured = true,
-            ImageUrl = "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&q=80",
+            ImageUrl = "/images/products/ban-phim-co-razer-blackwidow-v4-pro.png",
             Specs = new() { { "switch", "Linear" }, { "layout", "Fullsize" }, { "connectivity", "Có dây" }, { "hotswap", "Không" } },
             Variants = new()
             {
@@ -1428,7 +1430,7 @@ public static class DatabaseSeeder
             Desc = "Vũ khí tối thượng của game thủ Valorant và CS2 với khả năng kích hoạt phím cực nhạy.",
             BasePrice = 5190000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&q=80",
+            ImageUrl = "/images/products/ban-phim-co-razer-huntsman-v3-pro-tkl.png",
             Specs = new() { { "switch", "Linear" }, { "layout", "TKL" }, { "connectivity", "Có dây" }, { "hotswap", "Không" } },
             Variants = new()
             {
@@ -1446,7 +1448,7 @@ public static class DatabaseSeeder
             Desc = "Bàn phím cơ từ tính cao cấp với công nghệ xử lý siêu nhanh CORSAIR AXON 8000Hz.",
             BasePrice = 4990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80",
+            ImageUrl = "/images/products/ban-phim-co-corsair-k70-max-rgb.png",
             Specs = new() { { "switch", "Linear" }, { "layout", "Fullsize" }, { "connectivity", "Có dây" }, { "hotswap", "Không" } },
             Variants = new()
             {
@@ -1464,7 +1466,7 @@ public static class DatabaseSeeder
             Desc = "Bàn phím không dây 75% thanh lịch với núm xoay đa chức năng và pin lên tới 266 giờ.",
             BasePrice = 3890000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80",
+            ImageUrl = "/images/products/ban-phim-co-corsair-k65-plus-wireless.png",
             Specs = new() { { "switch", "Linear" }, { "layout", "75%" }, { "connectivity", "Không dây (Bluetooth/2.4G)" }, { "hotswap", "Có" } },
             Variants = new()
             {
@@ -1485,7 +1487,7 @@ public static class DatabaseSeeder
             Desc = "Chuột thi đấu Esports được các tuyển thủ chuyên nghiệp toàn cầu tin dùng nhất.",
             BasePrice = 3890000m,
             IsFeatured = true,
-            ImageUrl = "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+            ImageUrl = "/images/products/chuot-gaming-logitech-g-pro-x-superlight-2.png",
             Specs = new() { { "sensor", "Optical HERO" }, { "weight", "Siêu nhẹ (<63g)" }, { "connectivity", "Không dây 2.4GHz" } },
             Variants = new()
             {
@@ -1505,7 +1507,7 @@ public static class DatabaseSeeder
             Desc = "Mẫu chuột đa năng với 13 nút lập trình, nút cuộn 2 chế độ và pin sạc không dây POWERPLAY.",
             BasePrice = 3290000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+            ImageUrl = "/images/products/chuot-gaming-logitech-g502-x-plus.png",
             Specs = new() { { "sensor", "Optical HERO" }, { "weight", "Nặng (>85g)" }, { "connectivity", "Không dây 2.4GHz" } },
             Variants = new()
             {
@@ -1523,7 +1525,7 @@ public static class DatabaseSeeder
             Desc = "Chuột gaming quốc dân bán chạy nhất thế giới với thiết kế công thái học đầm tay.",
             BasePrice = 990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+            ImageUrl = "/images/products/chuot-gaming-logitech-g502-hero.png",
             Specs = new() { { "sensor", "Optical HERO" }, { "weight", "Nặng (>85g)" }, { "connectivity", "Có dây" } },
             Variants = new()
             {
@@ -1541,7 +1543,7 @@ public static class DatabaseSeeder
             Desc = "Sự hoàn thiện tinh xảo cho trải nghiệm cầm nắm tay phải thoải mái trong những trận đấu dài.",
             BasePrice = 3690000m,
             IsFeatured = true,
-            ImageUrl = "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+            ImageUrl = "/images/products/chuot-gaming-razer-deathadder-v3-pro.png",
             Specs = new() { { "sensor", "Focus Pro" }, { "weight", "Siêu nhẹ (<63g)" }, { "connectivity", "Không dây 2.4GHz" } },
             Variants = new()
             {
@@ -1560,7 +1562,7 @@ public static class DatabaseSeeder
             Desc = "Thiết kế đối xứng hoàn hảo cho game thủ cầm kiểu claw-grip hoặc fingertip-grip.",
             BasePrice = 4190000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+            ImageUrl = "/images/products/chuot-gaming-razer-viper-v3-pro.png",
             Specs = new() { { "sensor", "Focus Pro" }, { "weight", "Siêu nhẹ (<63g)" }, { "connectivity", "Không dây 2.4GHz" } },
             Variants = new()
             {
@@ -1578,7 +1580,7 @@ public static class DatabaseSeeder
             Desc = "Chuột công thái học cao cấp với đầy đủ tính năng giải trí và tùy biến sâu.",
             BasePrice = 3890000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+            ImageUrl = "/images/products/chuot-gaming-razer-basilisk-v3-pro.png",
             Specs = new() { { "sensor", "Focus Pro" }, { "weight", "Nặng (>85g)" }, { "connectivity", "Không dây 2.4GHz" } },
             Variants = new()
             {
@@ -1596,7 +1598,7 @@ public static class DatabaseSeeder
             Desc = "Chuột không dây tối ưu cho game thủ MOBA và MMO với khả năng gán macro phức tạp.",
             BasePrice = 3590000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+            ImageUrl = "/images/products/chuot-gaming-corsair-darkstar-wireless-mmo.png",
             Specs = new() { { "sensor", "PixArt 3395" }, { "weight", "Nặng (>85g)" }, { "connectivity", "Không dây 2.4GHz" } },
             Variants = new()
             {
@@ -1618,7 +1620,7 @@ public static class DatabaseSeeder
             BasePrice = 8490000m,
             IsFeatured = true,
             Model3DUrl = "https://models.madkstore.vn/sony-wh-1000xm5.glb",
-            ImageUrl = "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=80",
+            ImageUrl = "/images/products/tai-nghe-sony-wh-1000xm5-wireless.png",
             Specs = new() { { "type", "Over-ear" }, { "anc", "Có" }, { "battery", "20 - 30 giờ" }, { "connectivity", "Bluetooth 5.3" } },
             Variants = new()
             {
@@ -1637,7 +1639,7 @@ public static class DatabaseSeeder
             Desc = "Âm trường rộng mở, đàm thoại AI rõ ràng và đệm tai bọt polyurethane cách âm xuất sắc.",
             BasePrice = 5990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&q=80",
+            ImageUrl = "/images/products/tai-nghe-sony-wf-1000xm5-tws.png",
             Specs = new() { { "type", "In-ear (TWS)" }, { "anc", "Có" }, { "battery", "Dưới 10 giờ" }, { "connectivity", "Bluetooth 5.3" } },
             Variants = new()
             {
@@ -1655,7 +1657,7 @@ public static class DatabaseSeeder
             Desc = "Tai nghe over-ear cao cấp tích hợp chế độ Transparency Mode tự nhiên nhất phân khúc.",
             BasePrice = 12490000m,
             IsFeatured = true,
-            ImageUrl = "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&q=80",
+            ImageUrl = "/images/products/tai-nghe-apple-airpods-max.png",
             Specs = new() { { "type", "Over-ear" }, { "anc", "Có" }, { "battery", "20 - 30 giờ" }, { "connectivity", "Bluetooth 5.3" } },
             Variants = new()
             {
@@ -1674,7 +1676,7 @@ public static class DatabaseSeeder
             Desc = "Mẫu tai nghe không dây được trang bị tính năng Adaptive Audio tự động cân bằng âm thanh theo môi trường.",
             BasePrice = 5490000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=600&q=80",
+            ImageUrl = "/images/products/tai-nghe-apple-airpods-pro-2-usb-c.png",
             Specs = new() { { "type", "In-ear (TWS)" }, { "anc", "Có" }, { "battery", "Dưới 10 giờ" }, { "connectivity", "Bluetooth 5.3" } },
             Variants = new()
             {
@@ -1692,7 +1694,7 @@ public static class DatabaseSeeder
             Desc = "Âm thanh định vị chuẩn xác đến từng bước chân cho các tuyển thủ bắn súng góc nhìn thứ nhất.",
             BasePrice = 5890000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&q=80",
+            ImageUrl = "/images/products/tai-nghe-logitech-g-pro-x-2-lightspeed.png",
             Specs = new() { { "type", "Over-ear" }, { "anc", "Không" }, { "battery", "Trên 30 giờ" }, { "connectivity", "Wireless 2.4GHz" } },
             Variants = new()
             {
@@ -1710,7 +1712,7 @@ public static class DatabaseSeeder
             Desc = "Khả năng thu âm giọng nói trong trẻo cấp độ phòng thu và cách âm thụ động siêu tốt.",
             BasePrice = 4690000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&q=80",
+            ImageUrl = "/images/products/tai-nghe-razer-blackshark-v2-pro-2023.png",
             Specs = new() { { "type", "Over-ear" }, { "anc", "Không" }, { "battery", "Trên 30 giờ" }, { "connectivity", "Wireless 2.4GHz" } },
             Variants = new()
             {
@@ -1728,7 +1730,7 @@ public static class DatabaseSeeder
             Desc = "Lựa chọn lý tưởng cho các streamer và nhà sáng tạo âm thanh yêu thích chất âm thoáng đãng.",
             BasePrice = 4490000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&q=80",
+            ImageUrl = "/images/products/tai-nghe-corsair-virtuoso-pro-open-back.png",
             Specs = new() { { "type", "Over-ear" }, { "anc", "Không" }, { "battery", "Dưới 10 giờ" }, { "connectivity", "Jack 3.5mm/Type-C" } },
             Variants = new()
             {
@@ -1749,7 +1751,7 @@ public static class DatabaseSeeder
             Desc = "Bộ vi xử lý máy tính để bàn mạnh nhất của Intel thế hệ Raptor Lake Refresh phục vụ render nặng và chơi game max setting.",
             BasePrice = 14990000m,
             IsFeatured = true,
-            ImageUrl = "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80",
+            ImageUrl = "/images/products/cpu-intel-core-i9-14900k.png",
             Specs = new() { { "socket", "LGA1700" }, { "cores_threads", "24 nhân 32 luồng" }, { "boost_clock", "Lên đến 6.0 GHz" } },
             Variants = new()
             {
@@ -1767,7 +1769,7 @@ public static class DatabaseSeeder
             Desc = "Nâng cấp vượt bậc số lượng nhân xử lý giúp đa nhiệm và render video nhanh hơn 20% so với thế hệ trước.",
             BasePrice = 10890000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80",
+            ImageUrl = "/images/products/cpu-intel-core-i7-14700k.png",
             Specs = new() { { "socket", "LGA1700" }, { "cores_threads", "14 nhân 20 luồng" }, { "boost_clock", "Lên đến 5.4 GHz" } },
             Variants = new()
             {
@@ -1785,7 +1787,7 @@ public static class DatabaseSeeder
             Desc = "Sự lựa chọn chuẩn xác cho dàn PC gaming hiện đại với khả năng ép xung linh hoạt.",
             BasePrice = 7890000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80",
+            ImageUrl = "/images/products/cpu-intel-core-i5-14600k.png",
             Specs = new() { { "socket", "LGA1700" }, { "cores_threads", "14 nhân 20 luồng" }, { "boost_clock", "Lên đến 5.4 GHz" } },
             Variants = new()
             {
@@ -1803,7 +1805,7 @@ public static class DatabaseSeeder
             Desc = "Sức mạnh tối thượng kết hợp hoàn hảo giữa năng lực render công việc đồ họa nặng và hiệu năng gaming số 1.",
             BasePrice = 16490000m,
             IsFeatured = true,
-            ImageUrl = "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80",
+            ImageUrl = "/images/products/cpu-amd-ryzen-9-7950x3d.png",
             Specs = new() { { "socket", "AM5" }, { "cores_threads", "24 nhân 32 luồng" }, { "boost_clock", "Lên đến 6.0 GHz" } },
             Variants = new()
             {
@@ -1821,7 +1823,7 @@ public static class DatabaseSeeder
             Desc = "Mẫu CPU được cộng đồng game thủ thế giới đánh giá là vi xử lý gaming tối ưu nhất với mức ăn điện cực thấp.",
             BasePrice = 10990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80",
+            ImageUrl = "/images/products/cpu-amd-ryzen-7-7800x3d.png",
             Specs = new() { { "socket", "AM5" }, { "cores_threads", "8 nhân 16 luồng" }, { "boost_clock", "Lên đến 5.0 GHz" } },
             Variants = new()
             {
@@ -1839,7 +1841,7 @@ public static class DatabaseSeeder
             Desc = "Bước khởi đầu hoàn hảo gia nhập hệ sinh thái socket AM5 thế hệ mới của AMD.",
             BasePrice = 5790000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80",
+            ImageUrl = "/images/products/cpu-amd-ryzen-5-7600x.png",
             Specs = new() { { "socket", "AM5" }, { "cores_threads", "6 nhân 12 luồng" }, { "boost_clock", "Lên đến 5.0 GHz" } },
             Variants = new()
             {
@@ -1861,7 +1863,7 @@ public static class DatabaseSeeder
             BasePrice = 58990000m,
             IsFeatured = true,
             Model3DUrl = "https://models.madkstore.vn/rtx-4090.glb",
-            ImageUrl = "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80",
+            ImageUrl = "/images/products/vga-asus-rog-strix-geforce-rtx-4090.png",
             Specs = new() { { "vram", "24GB GDDR6X" }, { "bus_width", "384-bit" }, { "power_consumption", "1000W" } },
             Variants = new()
             {
@@ -1879,7 +1881,7 @@ public static class DatabaseSeeder
             Desc = "Hiệu năng chơi game 4K mượt mà với công nghệ DLSS 3 Frame Generation đột phá.",
             BasePrice = 31990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80",
+            ImageUrl = "/images/products/vga-asus-tuf-gaming-geforce-rtx-4080-super.png",
             Specs = new() { { "vram", "16GB GDDR6X" }, { "bus_width", "256-bit" }, { "power_consumption", "850W" } },
             Variants = new()
             {
@@ -1897,7 +1899,7 @@ public static class DatabaseSeeder
             Desc = "Chiếc card hoàn hảo cho độ phân giải 2K và 4K với bộ nhớ VRAM 16GB rộng rãi.",
             BasePrice = 23990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80",
+            ImageUrl = "/images/products/vga-msi-geforce-rtx-4070-ti-super.png",
             Specs = new() { { "vram", "16GB GDDR6X" }, { "bus_width", "256-bit" }, { "power_consumption", "750W" } },
             Variants = new()
             {
@@ -1915,7 +1917,7 @@ public static class DatabaseSeeder
             Desc = "Card đồ họa chuyên trị các tựa game AAA ở độ phân giải Full HD max setting.",
             BasePrice = 11490000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80",
+            ImageUrl = "/images/products/vga-gigabyte-geforce-rtx-4060-ti.png",
             Specs = new() { { "vram", "8GB GDDR6" }, { "bus_width", "128-bit" }, { "power_consumption", "650W" } },
             Variants = new()
             {
@@ -1933,7 +1935,7 @@ public static class DatabaseSeeder
             Desc = "Lựa chọn quốc dân cho các dàn máy tính gaming nhỏ gọn hoặc thùng máy Micro-ATX.",
             BasePrice = 8490000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80",
+            ImageUrl = "/images/products/vga-asus-dual-geforce-rtx-4060.png",
             Specs = new() { { "vram", "8GB GDDR6" }, { "bus_width", "128-bit" }, { "power_consumption", "550W" } },
             Variants = new()
             {
@@ -1951,7 +1953,7 @@ public static class DatabaseSeeder
             Desc = "Sức mạnh rasterization hàng đầu cho trải nghiệm gaming 4K với dung lượng bộ nhớ VRAM khổng lồ.",
             BasePrice = 27990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80",
+            ImageUrl = "/images/products/vga-powercolor-hellhound-radeon-rx-7900-xtx.png",
             Specs = new() { { "vram", "24GB GDDR6X" }, { "bus_width", "384-bit" }, { "power_consumption", "850W" } },
             Variants = new()
             {
@@ -1972,7 +1974,7 @@ public static class DatabaseSeeder
             Desc = "Dòng RAM cao cấp bậc nhất của Corsair với khả năng tản nhiệt bằng công nghệ DHX độc quyền.",
             BasePrice = 4490000m,
             IsFeatured = true,
-            ImageUrl = "https://images.unsplash.com/photo-1541029074-12826c71c4c9?w=600&q=80",
+            ImageUrl = "/images/products/ram-corsair-dominator-titanium-rgb-32gb-ddr5.png",
             Specs = new() { { "type", "DDR5" }, { "bus_speed", "6000MHz" }, { "capacity", "32GB (2x16GB)" } },
             Variants = new()
             {
@@ -1991,7 +1993,7 @@ public static class DatabaseSeeder
             Desc = "Thanh RAM hiệu năng cao tương thích rộng rãi với hầu hết các tản nhiệt khí hiện nay.",
             BasePrice = 3290000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1541029074-12826c71c4c9?w=600&q=80",
+            ImageUrl = "/images/products/ram-corsair-vengeance-rgb-32gb-ddr5.png",
             Specs = new() { { "type", "DDR5" }, { "bus_speed", "5600MHz" }, { "capacity", "32GB (2x16GB)" } },
             Variants = new()
             {
@@ -2009,7 +2011,7 @@ public static class DatabaseSeeder
             Desc = "Sự ổn định đáng tin cậy đã được kiểm tra 100% tốc độ thực tế tại nhà máy.",
             BasePrice = 3190000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1541029074-12826c71c4c9?w=600&q=80",
+            ImageUrl = "/images/products/ram-kingston-fury-beast-rgb-32gb-ddr5.png",
             Specs = new() { { "type", "DDR5" }, { "bus_speed", "5600MHz" }, { "capacity", "32GB (2x16GB)" } },
             Variants = new()
             {
@@ -2027,7 +2029,7 @@ public static class DatabaseSeeder
             Desc = "Tối đa hóa hiệu năng xử lý đa luồng, máy ảo và dựng hình 3D dung lượng lớn.",
             BasePrice = 6290000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1541029074-12826c71c4c9?w=600&q=80",
+            ImageUrl = "/images/products/ram-kingston-fury-renegade-64gb-ddr5.png",
             Specs = new() { { "type", "DDR5" }, { "bus_speed", "6400MHz" }, { "capacity", "64GB (2x32GB)" } },
             Variants = new()
             {
@@ -2045,7 +2047,7 @@ public static class DatabaseSeeder
             Desc = "Thanh RAM DDR4 quốc dân bền bỉ phục vụ nâng cấp máy tính văn phòng và dàn máy gaming tiết kiệm.",
             BasePrice = 1190000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1541029074-12826c71c4c9?w=600&q=80",
+            ImageUrl = "/images/products/ram-corsair-vengeance-lpx-16gb-ddr4.png",
             Specs = new() { { "type", "DDR4" }, { "bus_speed", "3200MHz" }, { "capacity", "16GB (2x8GB)" } },
             Variants = new()
             {
@@ -2066,7 +2068,7 @@ public static class DatabaseSeeder
             Desc = "Ổ cứng NVMe PCIe 4.0 đỉnh cao nhất hiện nay, tăng tốc load game tức thì và giải phóng toàn bộ tiềm năng của PC & PS5.",
             BasePrice = 4890000m,
             IsFeatured = true,
-            ImageUrl = "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&q=80",
+            ImageUrl = "/images/products/ssd-samsung-990-pro-2tb.png",
             Specs = new() { { "form_factor", "M.2 NVMe PCIe 4.0" }, { "capacity", "2TB" }, { "read_speed", "Lên đến 7450 MB/s" } },
             Variants = new()
             {
@@ -2084,7 +2086,7 @@ public static class DatabaseSeeder
             Desc = "Lựa chọn hoàn hảo để cài đặt hệ điều hành và các ứng dụng đồ họa chuyên nghiệp.",
             BasePrice = 2890000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&q=80",
+            ImageUrl = "/images/products/ssd-samsung-990-pro-1tb.png",
             Specs = new() { { "form_factor", "M.2 NVMe PCIe 4.0" }, { "capacity", "1TB" }, { "read_speed", "Lên đến 7450 MB/s" } },
             Variants = new()
             {
@@ -2102,7 +2104,7 @@ public static class DatabaseSeeder
             Desc = "Tấm tản nhiệt nhôm graphene mỏng nhẹ cho phép lắp đặt dễ dàng trên cả laptop và bo mạch chủ máy bàn.",
             BasePrice = 2390000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&q=80",
+            ImageUrl = "/images/products/ssd-kingston-kc3000-1tb.png",
             Specs = new() { { "form_factor", "M.2 NVMe PCIe 4.0" }, { "capacity", "1TB" }, { "read_speed", "Lên đến 7450 MB/s" } },
             Variants = new()
             {
@@ -2120,7 +2122,7 @@ public static class DatabaseSeeder
             Desc = "Giải pháp nâng cấp dung lượng lưu trữ tốc độ cao giá rẻ hàng đầu thị trường.",
             BasePrice = 1190000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&q=80",
+            ImageUrl = "/images/products/ssd-kingston-nv2-500gb.png",
             Specs = new() { { "form_factor", "M.2 NVMe PCIe 4.0" }, { "capacity", "500GB" }, { "read_speed", "Lên đến 3500 MB/s" } },
             Variants = new()
             {
@@ -2138,7 +2140,7 @@ public static class DatabaseSeeder
             Desc = "Tốc độ đọc ghi nhanh gấp đôi chuẩn PCIe 4.0, thiết kế dành cho các dàn máy tính cao cấp thế hệ mới nhất.",
             BasePrice = 7990000m,
             IsFeatured = false,
-            ImageUrl = "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&q=80",
+            ImageUrl = "/images/products/ssd-crucial-t700-2tb-pcie-5.png",
             Specs = new() { { "form_factor", "M.2 NVMe PCIe 5.0" }, { "capacity", "2TB" }, { "read_speed", "Lên đến 12400 MB/s" } },
             Variants = new()
             {

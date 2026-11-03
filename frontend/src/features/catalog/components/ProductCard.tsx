@@ -43,16 +43,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       {/* Image thumbnail */}
       <Link
         to={`/products/${product.slug}`}
-        className="block relative aspect-square bg-slate-50 overflow-hidden"
+        className="block relative aspect-square bg-slate-50 overflow-hidden flex items-center justify-center p-3"
       >
         <img
-          src={product.thumbnailUrl || 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&q=80'}
+          src={
+            product.thumbnailUrl && !product.thumbnailUrl.includes('unsplash')
+              ? product.thumbnailUrl
+              : `/images/products/${product.slug}.png`
+          }
           alt={product.name}
           loading="lazy"
-          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-500"
           onError={(e) => {
-            (e.target as HTMLImageElement).src =
-              'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=400&q=80';
+            (e.target as HTMLImageElement).src = `/images/products/${product.slug}.png`;
           }}
         />
       </Link>
