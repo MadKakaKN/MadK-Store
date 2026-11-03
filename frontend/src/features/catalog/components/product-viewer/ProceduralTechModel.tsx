@@ -822,7 +822,7 @@ function Keyboard3D({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 10. GAMING MOUSE (Ergonomic Shell, Split Clickers, PTFE Skates, Sensor)
+// 10. GAMING MOUSE (Aerodynamic Shell, Split Clickers, PTFE Skates, Sensor)
 // ─────────────────────────────────────────────────────────────────────────────
 function Mouse3D({
   parsedColor,
@@ -832,6 +832,7 @@ function Mouse3D({
   parsedColor: THREE.Color;
   wireframe: boolean;
   productName?: string;
+  texture?: THREE.Texture | null;
 }) {
   const name = (productName || '').toLowerCase();
   const isBasiliskOrG502 = name.includes('basilisk') || name.includes('g502') || name.includes('darkstar');
@@ -852,117 +853,182 @@ function Mouse3D({
   });
 
   return (
-    <group position={[0, -0.15, 0]} scale={0.95} rotation={[0.4, -0.4, 0]}>
-      {/* ── BASE CHASSIS (Sitting flat) ── */}
+    <group position={[0, -0.15, 0]} scale={0.96} rotation={[0.42, -0.42, 0]}>
+      {/* ── BASE CHASSIS (Smooth aerodynamic tub resting flat) ── */}
       <group position={[0, 0, 0]}>
-        {/* Main Underside Plate */}
+        {/* Main Baseplate Tub */}
         <mesh position={[0, 0.04, 0]} receiveShadow>
-          <boxGeometry args={[1.35, 0.08, 2.4]} />
+          <cylinderGeometry args={[0.62, 0.66, 0.08, 32]} />
           <meshStandardMaterial color="#0f172a" roughness={0.7} metalness={0.2} wireframe={wireframe} />
         </mesh>
+        <mesh position={[0, 0.04, -0.55]} receiveShadow>
+          <cylinderGeometry args={[0.56, 0.6, 0.08, 32]} />
+          <meshStandardMaterial color="#0f172a" roughness={0.7} metalness={0.2} />
+        </mesh>
+        <mesh position={[0, 0.04, 0.55]} receiveShadow>
+          <cylinderGeometry args={[0.58, 0.62, 0.08, 32]} />
+          <meshStandardMaterial color="#0f172a" roughness={0.7} metalness={0.2} />
+        </mesh>
 
-        {/* Flared Thumb Rest Wing on Left Side (Basilisk / G502) */}
+        {/* Flared Thumb Rest Wing on Left Side (Razer Basilisk / Logitech G502 / Corsair Darkstar) */}
         {isBasiliskOrG502 && (
-          <group position={[-0.85, 0.04, 0.1]}>
-            <mesh rotation={[0, 0, -0.05]} receiveShadow>
-              <boxGeometry args={[0.48, 0.06, 1.2]} />
-              <meshStandardMaterial color="#0f172a" roughness={0.8} />
+          <group position={[-0.78, 0.04, 0.12]} rotation={[0, 0, -0.06]}>
+            <mesh scale={[0.45, 0.08, 1.15]} receiveShadow>
+              <sphereGeometry args={[1, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.5]} />
+              <meshStandardMaterial color="#0f172a" roughness={0.85} metalness={0.15} />
             </mesh>
-            <mesh position={[0, 0.04, 0]}>
-              <boxGeometry args={[0.42, 0.02, 1.1]} />
-              <meshStandardMaterial color="#020617" roughness={0.95} />
+            {/* Rubber Grip Traction Texture Lines */}
+            {[-0.25, 0, 0.25].map((z, idx) => (
+              <mesh key={idx} position={[0.02, 0.05, z]} rotation={[0, 0, Math.PI / 2]}>
+                <capsuleGeometry args={[0.015, 0.28, 8, 16]} />
+                <meshStandardMaterial color="#020617" roughness={0.95} />
+              </mesh>
+            ))}
+            {/* Sniper DPI Clutch Button at front of wing */}
+            <mesh position={[0.06, 0.08, -0.55]} rotation={[0, 0, -0.1]}>
+              <capsuleGeometry args={[0.04, 0.16, 8, 16]} />
+              <meshStandardMaterial color="#334155" metalness={0.9} roughness={0.2} />
             </mesh>
           </group>
         )}
 
-        {/* Pure White PTFE Glide Feet */}
-        <mesh position={[0, 0.005, -1.05]}>
-          <boxGeometry args={[1.1, 0.015, 0.22]} />
+        {/* ── 100% VIRGIN-GRADE PURE WHITE PTFE GLIDE FEET ── */}
+        {/* Front Smile Skate */}
+        <mesh position={[0, 0.005, -0.98]} rotation={[-Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[0.25, 0.42, 24, 1, 0, Math.PI]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.15} metalness={0.1} />
+        </mesh>
+        {/* Rear Crescent Skate */}
+        <mesh position={[0, 0.005, 0.98]} rotation={[-Math.PI / 2, 0, Math.PI]}>
+          <ringGeometry args={[0.3, 0.48, 24, 1, 0, Math.PI]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.15} metalness={0.1} />
+        </mesh>
+        {/* Thumb Wing Skate */}
+        {isBasiliskOrG502 && (
+          <mesh position={[-0.78, 0.005, 0.12]} rotation={[-Math.PI / 2, 0, 0]}>
+            <capsuleGeometry args={[0.06, 0.35, 8, 16]} />
+            <meshStandardMaterial color="#ffffff" roughness={0.15} />
+          </mesh>
+        )}
+        {/* Optical Sensor Ring */}
+        <mesh position={[0, 0.005, 0.02]} rotation={[-Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[0.1, 0.18, 24]} />
           <meshStandardMaterial color="#ffffff" roughness={0.2} />
         </mesh>
-        <mesh position={[0, 0.005, 1.05]}>
-          <boxGeometry args={[1.15, 0.015, 0.24]} />
-          <meshStandardMaterial color="#ffffff" roughness={0.2} />
+        {/* Glowing Optical Tracking Laser Aperture */}
+        <mesh position={[0, 0.01, 0.02]} rotation={[-Math.PI / 2, 0, 0]}>
+          <circleGeometry args={[0.06, 16]} />
+          <meshStandardMaterial color="#ef4444" emissive="#ef4444" emissiveIntensity={2.0} />
         </mesh>
-        <mesh position={[0, 0.005, 0.05]}>
-          <ringGeometry args={[0.1, 0.2, 20]} />
-          <meshStandardMaterial color="#ffffff" roughness={0.2} />
-        </mesh>
-        <mesh position={[0, 0.01, 0.05]} rotation={[-Math.PI / 2, 0, 0]}>
-          <circleGeometry args={[0.08, 16]} />
-          <meshStandardMaterial color="#ef4444" emissive="#ef4444" emissiveIntensity={1.5} />
+        {/* Profile Switch Button & Power Slider */}
+        <mesh position={[0.26, 0.01, 0.2]}>
+          <cylinderGeometry args={[0.04, 0.04, 0.02, 16]} />
+          <meshStandardMaterial color="#475569" metalness={0.8} />
         </mesh>
       </group>
 
-      {/* ── ERGONOMIC PALM ARCH & SHELL ── */}
-      <group position={[0, 0.1, 0]}>
-        {/* Rear Palm Hump */}
-        <mesh position={[0, 0.32, 0.35]} rotation={[-0.2, 0, 0]} castShadow>
-          <boxGeometry args={[1.32, 0.48, 1.25]} />
-          <meshStandardMaterial color={parsedColor} roughness={0.35} metalness={0.25} wireframe={wireframe} />
+      {/* ── ERGONOMIC SCULPTED PALM DOME (Smooth organic curved surface) ── */}
+      <group position={[0, 0.08, 0]}>
+        {/* Sculpted Palm Arch (Ellipsoid dome with natural hand curvature) */}
+        <group position={[0, 0.22, 0.18]} rotation={[-0.14, 0, isBasiliskOrG502 ? -0.06 : 0]}>
+          <mesh scale={[0.76, 0.48, 1.25]} castShadow receiveShadow>
+            <sphereGeometry args={[1, 32, 24, 0, Math.PI * 2, 0, Math.PI * 0.55]} />
+            <meshStandardMaterial
+              color={parsedColor}
+              roughness={0.32}
+              metalness={0.28}
+              wireframe={wireframe}
+            />
+          </mesh>
+        </group>
+
+        {/* Dynamic Chroma RGB Illuminated Brand Crest on Palm Rest */}
+        <mesh ref={rgbRef} position={[0, 0.58, 0.48]} rotation={[-0.32, 0, 0]}>
+          <circleGeometry args={[0.15, 24]} />
+          <meshStandardMaterial color="#10b981" emissive="#10b981" emissiveIntensity={1.9} />
         </mesh>
 
-        {/* Mid-body Waist Bridge */}
-        <mesh position={[0, 0.38, -0.2]} rotation={[0.15, 0, 0]} castShadow>
-          <boxGeometry args={[1.28, 0.44, 0.75]} />
-          <meshStandardMaterial color={parsedColor} roughness={0.35} metalness={0.25} wireframe={wireframe} />
-        </mesh>
+        {/* ── SPLIT PRIMARY CLICK BUTTON PADDLES (Independent Left & Right) ── */}
+        {/* Left Click Trigger (Contoured finger trough) */}
+        <group position={[-0.33, 0.24, -0.68]} rotation={[0.22, 0, 0.04]}>
+          <mesh scale={[0.34, 0.16, 0.88]} castShadow>
+            <sphereGeometry args={[1, 24, 20, 0, Math.PI * 2, 0, Math.PI * 0.5]} />
+            <meshStandardMaterial
+              color={parsedColor}
+              roughness={0.28}
+              metalness={0.32}
+              wireframe={wireframe}
+            />
+          </mesh>
+        </group>
 
-        {/* Illuminated Brand RGB Logo on Palm Rest */}
-        <mesh ref={rgbRef} position={[0, 0.58, 0.5]} rotation={[-0.28, 0, 0]}>
-          <circleGeometry args={[0.16, 24]} />
-          <meshStandardMaterial color="#10b981" emissive="#10b981" emissiveIntensity={1.8} />
-        </mesh>
+        {/* Right Click Trigger (Contoured finger trough) */}
+        <group position={[0.33, 0.24, -0.68]} rotation={[0.22, 0, -0.04]}>
+          <mesh scale={[0.34, 0.16, 0.88]} castShadow>
+            <sphereGeometry args={[1, 24, 20, 0, Math.PI * 2, 0, Math.PI * 0.5]} />
+            <meshStandardMaterial
+              color={parsedColor}
+              roughness={0.28}
+              metalness={0.32}
+              wireframe={wireframe}
+            />
+          </mesh>
+        </group>
 
-        {/* ── SPLIT PRIMARY CLICK BUTTONS (Separate Left & Right Triggers) ── */}
-        <mesh position={[-0.34, 0.32, -0.82]} rotation={[0.26, 0, 0.04]} castShadow>
-          <boxGeometry args={[0.56, 0.14, 0.95]} />
-          <meshStandardMaterial color={parsedColor} roughness={0.3} metalness={0.3} wireframe={wireframe} />
-        </mesh>
-        <mesh position={[0.34, 0.32, -0.82]} rotation={[0.26, 0, -0.04]} castShadow>
-          <boxGeometry args={[0.56, 0.14, 0.95]} />
-          <meshStandardMaterial color={parsedColor} roughness={0.3} metalness={0.3} wireframe={wireframe} />
-        </mesh>
-
-        {/* Center Trench dividing clicks */}
-        <mesh position={[0, 0.28, -0.75]}>
-          <boxGeometry args={[0.16, 0.2, 1.05]} />
+        {/* Center Recessed Trench Channel between clicks */}
+        <mesh position={[0, 0.22, -0.65]}>
+          <boxGeometry args={[0.14, 0.18, 0.95]} />
           <meshBasicMaterial color="#020617" />
         </mesh>
 
-        {/* ── SCROLL WHEEL & DPI BUTTON ── */}
-        <group position={[0, 0.44, -0.72]}>
+        {/* ── HYPERSCROLL TACTILE WHEEL & DPI BUTTONS ── */}
+        <group position={[0, 0.45, -0.66]}>
+          {/* Metal Wheel Rim Hub */}
           <mesh rotation={[0, 0, Math.PI / 2]}>
-            <cylinderGeometry args={[0.15, 0.15, 0.1, 24]} />
-            <meshStandardMaterial color="#0f172a" roughness={0.9} />
+            <cylinderGeometry args={[0.16, 0.16, 0.08, 32]} />
+            <meshStandardMaterial color="#cbd5e1" metalness={0.95} roughness={0.15} />
           </mesh>
-          <mesh ref={wheelRgbRef} rotation={[0, 0, Math.PI / 2]}>
-            <cylinderGeometry args={[0.155, 0.155, 0.04, 24]} />
-            <meshStandardMaterial color="#06b6d4" emissive="#06b6d4" emissiveIntensity={1.6} />
+          {/* Knurled Rubber Outer Tire Tread */}
+          <mesh rotation={[0, 0, Math.PI / 2]}>
+            <cylinderGeometry args={[0.168, 0.168, 0.045, 32]} />
+            <meshStandardMaterial color="#020617" roughness={0.95} />
+          </mesh>
+          {/* Dual Translucent RGB Side Glow Rims */}
+          {[-0.038, 0.038].map((x, idx) => (
+            <mesh key={idx} ref={idx === 0 ? wheelRgbRef : undefined} position={[x, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
+              <ringGeometry args={[0.12, 0.162, 24]} />
+              <meshStandardMaterial color="#06b6d4" emissive="#06b6d4" emissiveIntensity={1.7} />
+            </mesh>
+          ))}
+        </group>
+
+        {/* Tactile DPI Switch Buttons behind Wheel */}
+        <group position={[0, 0.44, -0.38]}>
+          <mesh position={[0, 0, -0.06]}>
+            <boxGeometry args={[0.08, 0.05, 0.09]} />
+            <meshStandardMaterial color="#475569" metalness={0.85} roughness={0.2} />
+          </mesh>
+          <mesh position={[0, 0, 0.06]}>
+            <boxGeometry args={[0.08, 0.05, 0.09]} />
+            <meshStandardMaterial color="#475569" metalness={0.85} roughness={0.2} />
           </mesh>
         </group>
 
-        {/* DPI Toggle Button */}
-        <mesh position={[0, 0.44, -0.42]}>
-          <boxGeometry args={[0.1, 0.06, 0.16]} />
-          <meshStandardMaterial color="#334155" metalness={0.8} roughness={0.3} />
-        </mesh>
-
-        {/* ── SIDE THUMB BUTTONS ── */}
-        <group position={[-0.66, 0.36, 0]}>
-          <mesh position={[0, 0, -0.15]} rotation={[0, 0.1, 0]}>
-            <boxGeometry args={[0.07, 0.12, 0.28]} />
-            <meshStandardMaterial color="#1e293b" metalness={0.8} roughness={0.2} />
+        {/* ── SIDE THUMB BUTTONS (Mouse 4 & Mouse 5) ── */}
+        <group position={[-0.64, 0.38, -0.02]} rotation={[0, 0.08, 0]}>
+          <mesh position={[0, 0, -0.15]}>
+            <capsuleGeometry args={[0.04, 0.22, 10, 16]} />
+            <meshStandardMaterial color="#020617" roughness={0.2} metalness={0.85} />
           </mesh>
-          <mesh position={[0, 0, 0.18]} rotation={[0, -0.1, 0]}>
-            <boxGeometry args={[0.07, 0.12, 0.28]} />
-            <meshStandardMaterial color="#1e293b" metalness={0.8} roughness={0.2} />
+          <mesh position={[0, 0, 0.16]}>
+            <capsuleGeometry args={[0.04, 0.22, 10, 16]} />
+            <meshStandardMaterial color="#020617" roughness={0.2} metalness={0.85} />
           </mesh>
         </group>
 
-        {/* Front USB-C Port */}
-        <mesh position={[0, 0.12, -1.22]}>
-          <boxGeometry args={[0.22, 0.06, 0.06]} />
+        {/* ── FRONT BUMPER & SPEEDFLEX USB-C PORT ── */}
+        <mesh position={[0, 0.12, -1.24]}>
+          <boxGeometry args={[0.24, 0.07, 0.05]} />
           <meshBasicMaterial color="#020617" />
         </mesh>
       </group>

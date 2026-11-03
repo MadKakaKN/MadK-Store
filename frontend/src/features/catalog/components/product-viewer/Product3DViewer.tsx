@@ -32,6 +32,22 @@ export function resolveModel3DUrl(url?: string, productName?: string, _categoryS
     return '/models/macbook-pro-16.glb';
   }
 
+  // Authentic Studio & Gaming Over-Ear Headphones (Corsair Virtuoso Pro, Sony WH-1000XM5, AirPods Max, Logitech G Pro X 2, Razer BlackShark)
+  const isOverEar =
+    name.includes('virtuoso') ||
+    name.includes('wh-1000xm5') ||
+    name.includes('airpods max') ||
+    name.includes('g pro x 2') ||
+    name.includes('blackshark') ||
+    ((name.includes('tai nghe') || name.includes('headphone')) &&
+      !name.includes('tws') &&
+      !name.includes('wf-1000') &&
+      !name.includes('airpods pro'));
+
+  if (isOverEar) {
+    return '/models/headphones.glb';
+  }
+
   // For Samsung and all other brands/products, use our dedicated tailored 3D procedural models
   // to ensure each brand's unique hardware design, cameras, hinge, and textures are 100% authentic!
   return '';

@@ -76,11 +76,29 @@ export const GLBModelRenderer: React.FC<GLBModelRendererProps> = ({
               matName.includes('screen') ||
               matName.includes('led') ||
               matName.includes('emitter') ||
+              matName.includes('cushion') ||
+              matName.includes('headbandpad') ||
+              matName.includes('pad') ||
+              matName.includes('foam') ||
+              matName.includes('grille') ||
+              matName.includes('metal') ||
+              matName.includes('slider') ||
+              matName.includes('port') ||
+              matName.includes('button') ||
+              matName.includes('hinge') ||
+              meshName.includes('cushion') ||
+              meshName.includes('headbandpad') ||
+              meshName.includes('pad') ||
+              meshName.includes('grille') ||
+              meshName.includes('slider') ||
+              meshName.includes('port') ||
+              meshName.includes('button') ||
+              meshName.includes('hinge') ||
               meshName.includes('glass') ||
               meshName.includes('screen');
 
             if (!isAccentOrGlass) {
-              // Smoothly apply variant color
+              // Smoothly apply variant color to primary shells and housing
               mat.color.copy(targetColor);
               mat.needsUpdate = true;
             }
