@@ -231,7 +231,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
                 <span>📍</span>
-                <span>Địa chỉ nhận hàng (Snapshot)</span>
+                <span>Địa chỉ nhận hàng</span>
               </h3>
               {address ? (
                 <div className="space-y-1 text-xs text-slate-700">
@@ -546,7 +546,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
           <div className="pt-4 border-t border-slate-100">
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2">
               <span>🕒</span>
-              <span>Lịch sử chuyển trạng thái (Audit Trail)</span>
+              <span>Lịch sử đơn hàng</span>
             </h3>
             <OrderHistoryTimeline history={order.statusHistory} />
           </div>

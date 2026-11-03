@@ -244,7 +244,7 @@ export const AddressModal: React.FC<AddressModalProps> = ({
                 {initialData ? 'Chỉnh sửa địa chỉ nhận hàng' : 'Thêm địa chỉ nhận hàng mới'}
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">
-                Nguồn danh mục chuẩn: Tổng cục Thống kê Việt Nam (GSO)
+                Vui lòng nhập địa chỉ chính xác để nhận hàng nhanh chóng
               </p>
             </div>
             <button

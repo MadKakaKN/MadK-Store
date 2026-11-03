@@ -91,18 +91,11 @@ export const AccountPage: React.FC = () => {
               <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
                 {user?.fullName || 'Người dùng MadK'}
               </h1>
-              {user?.roles?.map((role) => (
-                <span
-                  key={role}
-                  className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider ${
-                    role === 'Admin'
-                      ? 'bg-purple-100 text-purple-700 border border-purple-200'
-                      : 'bg-brand-50 text-brand-700 border border-brand-200'
-                  }`}
-                >
-                  {role}
+              {user?.roles?.includes('Admin') && (
+                <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider bg-purple-100 text-purple-700 border border-purple-200">
+                  Quản trị viên
                 </span>
-              ))}
+              )}
             </div>
             <p className="text-sm text-slate-500 mt-1 font-mono">
               {user?.email}
@@ -163,9 +156,7 @@ export const AccountPage: React.FC = () => {
             >
               <span className="text-lg">📍</span>
               <span>Sổ địa chỉ</span>
-              <span className="ml-auto text-[10px] bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded-full">
-                VN 63 tỉnh
-              </span>
+
             </button>
 
             <button
@@ -179,9 +170,7 @@ export const AccountPage: React.FC = () => {
             >
               <span className="text-lg">📦</span>
               <span>Đơn hàng của tôi</span>
-              <span className="ml-auto text-[10px] bg-brand-100 text-brand-700 font-bold px-2 py-0.5 rounded-full">
-                Trực tiếp
-              </span>
+
             </button>
           </div>
         </div>
@@ -217,35 +206,8 @@ export const AccountPage: React.FC = () => {
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Trạng thái tài khoản</label>
                   <p className="mt-1 text-sm font-semibold text-emerald-600 flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Đang hoạt động (Active)
+                    Đang hoạt động
                   </p>
-                </div>
-              </div>
-
-              {/* Roles & Permissions detail */}
-              <div className="mt-8 pt-6 border-t border-slate-100">
-                <h3 className="text-sm font-bold text-slate-900 mb-3">Phân quyền hệ thống (RBAC)</h3>
-                <div className="flex flex-wrap gap-2">
-                  {user?.roles?.map((r) => (
-                    <span
-                      key={r}
-                      className="px-3 py-1 rounded-xl bg-slate-100 text-slate-700 text-xs font-medium border border-slate-200"
-                    >
-                      Vai trò: <strong>{r}</strong>
-                    </span>
-                  ))}
-                  {user?.permissions && user.permissions.length > 0 ? (
-                    user.permissions.map((p) => (
-                      <span
-                        key={p}
-                        className="px-2.5 py-1 rounded-xl bg-indigo-50 text-indigo-700 text-xs font-mono border border-indigo-100"
-                      >
-                        {p}
-                      </span>
-                    ))
-                  ) : (
-                    <span className="text-xs text-slate-500 italic py-1">Quyền chuẩn khách hàng storefront</span>
-                  )}
                 </div>
               </div>
             </div>

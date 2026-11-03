@@ -94,7 +94,7 @@ export const AddressList: React.FC<AddressListProps> = ({ userId }) => {
             </span>
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
-            Quản lý địa chỉ giao hàng của bạn chuẩn theo phân cấp hành chính Việt Nam (Tỉnh/Thành, Quận/Huyện, Phường/Xã)
+            Quản lý danh sách địa chỉ nhận hàng của bạn để thanh toán thuận tiện hơn.
           </p>
         </div>
 
