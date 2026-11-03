@@ -86,6 +86,11 @@ export const GLBModelRenderer: React.FC<GLBModelRendererProps> = ({
               matName.includes('port') ||
               matName.includes('button') ||
               matName.includes('hinge') ||
+              matName.includes('ptfe') ||
+              matName.includes('laser') ||
+              matName.includes('rubber') ||
+              matName.includes('wheel') ||
+              matName.includes('chassis') ||
               meshName.includes('cushion') ||
               meshName.includes('headbandpad') ||
               meshName.includes('pad') ||
@@ -94,6 +99,11 @@ export const GLBModelRenderer: React.FC<GLBModelRendererProps> = ({
               meshName.includes('port') ||
               meshName.includes('button') ||
               meshName.includes('hinge') ||
+              meshName.includes('ptfe') ||
+              meshName.includes('laser') ||
+              meshName.includes('rubber') ||
+              meshName.includes('wheel') ||
+              meshName.includes('chassis') ||
               meshName.includes('glass') ||
               meshName.includes('screen');
 

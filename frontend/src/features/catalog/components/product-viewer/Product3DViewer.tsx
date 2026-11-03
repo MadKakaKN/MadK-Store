@@ -48,6 +48,22 @@ export function resolveModel3DUrl(url?: string, productName?: string, _categoryS
     return '/models/headphones.glb';
   }
 
+  // Gaming Mice (Razer Basilisk V3 Pro, Logitech G502 X, Superlight 2, DeathAdder V3, Viper V3, Corsair Darkstar...)
+  const isMouse =
+    name.includes('chuot') ||
+    name.includes('chuột') ||
+    name.includes('mouse') ||
+    name.includes('basilisk') ||
+    name.includes('g502') ||
+    name.includes('superlight') ||
+    name.includes('deathadder') ||
+    name.includes('viper') ||
+    name.includes('darkstar');
+
+  if (isMouse) {
+    return '/models/gaming-mouse.glb';
+  }
+
   // For Samsung and all other brands/products, use our dedicated tailored 3D procedural models
   // to ensure each brand's unique hardware design, cameras, hinge, and textures are 100% authentic!
   return '';
