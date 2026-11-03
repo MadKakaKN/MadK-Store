@@ -304,7 +304,11 @@ export const ProductDetailPage: React.FC = () => {
                   alt={product.name}
                   className="w-full h-full object-contain object-center hover:scale-105 transition-transform duration-500"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = `/images/products/${product.slug}.png`;
+                    const target = e.target as HTMLImageElement;
+                    if (!target.dataset.fallback) {
+                      target.dataset.fallback = '1';
+                      target.src = `/images/products/${product.slug}.png`;
+                    }
                   }}
                 />
               </div>
@@ -324,11 +328,15 @@ export const ProductDetailPage: React.FC = () => {
                       }`}
                     >
                       <img
-                        src={img.imageUrl}
+                        src={img.imageUrl || `/images/products/${product.slug}.png`}
                         alt=""
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).src = `/images/products/${product.slug}.png`;
+                          const target = e.target as HTMLImageElement;
+                          if (!target.dataset.fallback) {
+                            target.dataset.fallback = '1';
+                            target.src = `/images/products/${product.slug}.png`;
+                          }
                         }}
                       />
                     </button>

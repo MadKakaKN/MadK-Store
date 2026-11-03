@@ -45,9 +45,9 @@ const TRENDING_STORE_PRODUCTS: TrendingItem[] = [
   {
     id: 'p-12',
     name: 'ASUS ROG Strix SCAR 16',
-    slug: 'laptop-asus-rog-strix-scar-16-2024',
+    slug: 'laptop-asus-rog-strix-scar-16',
     price: 74990000,
-    thumbnailUrl: '/images/products/laptop-asus-rog-strix-scar-16-2024.png',
+    thumbnailUrl: '/images/products/laptop-asus-rog-strix-scar-16.png',
     categoryName: 'Laptop Gaming',
     has3D: true,
   },
@@ -63,9 +63,9 @@ const TRENDING_STORE_PRODUCTS: TrendingItem[] = [
   {
     id: 'p-31',
     name: 'VGA ASUS ROG Strix RTX 4090',
-    slug: 'vga-asus-rog-strix-geforce-rtx-4090-oc-24gb',
+    slug: 'vga-asus-rog-strix-geforce-rtx-4090',
     price: 59990000,
-    thumbnailUrl: '/images/products/vga-asus-rog-strix-geforce-rtx-4090-oc-24gb.png',
+    thumbnailUrl: '/images/products/vga-asus-rog-strix-geforce-rtx-4090.png',
     categoryName: 'Card đồ họa',
     has3D: true,
   },
@@ -90,18 +90,18 @@ const TRENDING_STORE_PRODUCTS: TrendingItem[] = [
   {
     id: 'p-51',
     name: 'Tai nghe Sony WH-1000XM5',
-    slug: 'tai-nghe-chong-on-sony-wh-1000xm5',
+    slug: 'tai-nghe-sony-wh-1000xm5-wireless',
     price: 8490000,
-    thumbnailUrl: '/images/products/tai-nghe-chong-on-sony-wh-1000xm5.png',
+    thumbnailUrl: '/images/products/tai-nghe-sony-wh-1000xm5-wireless.png',
     categoryName: 'Tai nghe',
     has3D: true,
   },
   {
     id: 'p-71',
     name: 'SSD Samsung 990 PRO 2TB NVMe',
-    slug: 'o-cung-ssd-samsung-990-pro-m2-nvme-pcie-40-2tb',
+    slug: 'ssd-samsung-990-pro-2tb',
     price: 4890000,
-    thumbnailUrl: '/images/products/o-cung-ssd-samsung-990-pro-m2-nvme-pcie-40-2tb.png',
+    thumbnailUrl: '/images/products/ssd-samsung-990-pro-2tb.png',
     categoryName: 'Ổ cứng SSD',
     has3D: true,
   },
@@ -148,7 +148,7 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
               price: p.minPrice || p.basePrice,
               thumbnailUrl:
                 p.thumbnailUrl ||
-                'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=300&q=80',
+                `/images/products/${p.slug}.png`,
               categoryName: p.categoryName || 'Sản phẩm',
               has3D: !!p.model3DUrl,
             }))
@@ -356,6 +356,13 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
                         alt={prod.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                         loading="lazy"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          if (!target.dataset.fallback) {
+                            target.dataset.fallback = '1';
+                            target.src = `/images/products/${prod.slug}.png`;
+                          }
+                        }}
                       />
                       {prod.has3D && (
                         <span className="absolute bottom-0 right-0 px-1 py-0.2 rounded-tl bg-indigo-600 text-white text-[8px] font-bold">
@@ -424,11 +431,18 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
                         className="w-full flex items-center gap-3 p-2 rounded-2xl hover:bg-slate-50 transition-colors text-left group"
                       >
                         <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 border border-slate-200/60">
-                          {p.thumbnailUrl ? (
+                          {p.thumbnailUrl || p.slug ? (
                             <img
-                              src={p.thumbnailUrl}
+                              src={p.thumbnailUrl || `/images/products/${p.slug}.png`}
                               alt={p.name}
                               className="w-full h-full object-cover"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                if (!target.dataset.fallback) {
+                                  target.dataset.fallback = '1';
+                                  target.src = `/images/products/${p.slug}.png`;
+                                }
+                              }}
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-base">📦</div>

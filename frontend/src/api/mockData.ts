@@ -178,7 +178,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "description": "<p>iPhone 15 Pro Max là đỉnh cao công nghệ với khung vỏ titan hàng không vũ trụ siêu nhẹ và bền bỉ. Màn hình Super Retina XDR 6.7 inch với ProMotion 120Hz mượt mà.</p>",
     "specifications": "{}",
     "model3DUrl": "https://models.madkstore.vn/iphone-15-pro-max.glb",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&q=80",
+    "thumbnailUrl": "/images/products/dien-thoai-iphone-15-pro-max.png",
     "basePrice": 34990000,
     "isFeatured": true,
     "category": {
@@ -208,7 +208,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-1-1",
-        "imageUrl": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&q=80",
+        "imageUrl": "/images/products/apple.png",
         "altText": "iPhone 15 Pro Max chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -222,7 +222,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Thiết kế titan nhỏ gọn 6.1 inch, camera chuyên nghiệp, nút Action tiện lợi.",
     "description": "<p>iPhone 15 Pro sở hữu toàn bộ sức mạnh của chip A17 Pro trong một thân máy nhỏ gọn vừa vặn tay cầm.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&q=80",
+    "thumbnailUrl": "/images/products/dien-thoai-iphone-15-pro.png",
     "basePrice": 28490000,
     "isFeatured": false,
     "category": {
@@ -252,7 +252,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-2-1",
-        "imageUrl": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&q=80",
+        "imageUrl": "/images/products/apple.png",
         "altText": "iPhone 15 Pro chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -266,7 +266,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Mặt lưng kính pha màu rực rỡ, Dynamic Island và camera 48MP.",
     "description": "<p>iPhone 15 mang Dynamic Island xuống dòng tiêu chuẩn cùng camera chính 48MP nâng cấp vượt bậc.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1695048065036-75f8546b14f8?w=600&q=80",
+    "thumbnailUrl": "/images/products/dien-thoai-iphone-15.png",
     "basePrice": 19990000,
     "isFeatured": false,
     "category": {
@@ -296,7 +296,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-3-1",
-        "imageUrl": "https://images.unsplash.com/photo-1695048065036-75f8546b14f8?w=600&q=80",
+        "imageUrl": "/images/products/apple.png",
         "altText": "iPhone 15 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -310,7 +310,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Hiệu năng bền bỉ với chip A15 Bionic, thời lượng pin cả ngày.",
     "description": "<p>Lựa chọn thực dụng với chất lượng hoàn thiện tuyệt đối và chế độ chụp ban đêm xuất sắc.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1678652197831-2d180705cd2c?w=600&q=80",
+    "thumbnailUrl": "/images/products/dien-thoai-iphone-14.png",
     "basePrice": 16990000,
     "isFeatured": false,
     "category": {
@@ -340,7 +340,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-4-1",
-        "imageUrl": "https://images.unsplash.com/photo-1678652197831-2d180705cd2c?w=600&q=80",
+        "imageUrl": "/images/products/apple.png",
         "altText": "iPhone 14 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -355,7 +355,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "description": "<p>Galaxy S24 Ultra mở ra kỷ nguyên mới với trí tuệ nhân tạo Galaxy AI, màn hình phẳng Dynamic AMOLED 2X 120Hz rực rỡ và kính chống chói Corning Gorilla Armor.</p>",
     "specifications": "{}",
     "model3DUrl": "https://models.madkstore.vn/galaxy-s24-ultra.glb",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&q=80",
+    "thumbnailUrl": "/images/products/dien-thoai-samsung-galaxy-s24-ultra.png",
     "basePrice": 31990000,
     "isFeatured": true,
     "category": {
@@ -385,7 +385,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-5-1",
-        "imageUrl": "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&q=80",
+        "imageUrl": "/images/products/samsung.png",
         "altText": "Samsung Galaxy S24 Ultra chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -399,7 +399,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Màn hình 6.7 inch QHD+ sắc nét, dung lượng pin 4900mAh cùng Galaxy AI tiện ích.",
     "description": "<p>Sự cân bằng hoàn hảo giữa kích thước màn hình lớn, dung lượng pin bền bỉ và hiệu năng đỉnh cao.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&q=80",
+    "thumbnailUrl": "/images/products/dien-thoai-samsung-galaxy-s24-plus.png",
     "basePrice": 24990000,
     "isFeatured": false,
     "category": {
@@ -429,7 +429,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-6-1",
-        "imageUrl": "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&q=80",
+        "imageUrl": "/images/products/samsung.png",
         "altText": "Samsung Galaxy S24 Plus chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -443,7 +443,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Kích thước 6.2 inch nhỏ gọn, viền siêu mỏng, chip Exynos 2400 mạnh mẽ.",
     "description": "<p>Flagship nhỏ gọn đỉnh cao trong thế giới Android với đầy đủ tính năng thông minh Galaxy AI.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&q=80",
+    "thumbnailUrl": "/images/products/dien-thoai-samsung-galaxy-s24.png",
     "basePrice": 18990000,
     "isFeatured": false,
     "category": {
@@ -473,7 +473,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-7-1",
-        "imageUrl": "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&q=80",
+        "imageUrl": "/images/products/samsung.png",
         "altText": "Samsung Galaxy S24 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -487,7 +487,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Bản lề Flex gập không kẽ hở, màn hình mở rộng 7.6 inch đa nhiệm mượt mà.",
     "description": "<p>Siêu phẩm điện thoại gập mở ra thế giới đa nhiệm chuyên nghiệp với giao diện Taskbar thông minh.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600&q=80",
+    "thumbnailUrl": "/images/products/dien-thoai-samsung-galaxy-z-fold5.png",
     "basePrice": 35990000,
     "isFeatured": true,
     "category": {
@@ -517,7 +517,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-8-1",
-        "imageUrl": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600&q=80",
+        "imageUrl": "/images/products/samsung.png",
         "altText": "Samsung Galaxy Z Fold5 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -531,7 +531,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Màn hình ngoài Flex Window 3.4 inch độc đáo, thiết kế gập vỏ sò thời thượng.",
     "description": "<p>Điện thoại gập thời trang với màn hình phụ kích thước lớn cho phép trả lời tin nhắn và chụp ảnh selfie tức thì.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600&q=80",
+    "thumbnailUrl": "/images/products/dien-thoai-samsung-galaxy-z-flip5.png",
     "basePrice": 19990000,
     "isFeatured": false,
     "category": {
@@ -561,7 +561,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-9-1",
-        "imageUrl": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600&q=80",
+        "imageUrl": "/images/products/samsung.png",
         "altText": "Samsung Galaxy Z Flip5 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -575,7 +575,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Khung kim loại sang trọng, camera chụp đêm sắc nét và bảo mật Samsung Knox.",
     "description": "<p>Sản phẩm tầm trung đáng mua nhất phân khúc với độ hoàn thiện cao cấp và chuẩn chống nước IP67.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600&q=80",
+    "thumbnailUrl": "/images/products/dien-thoai-samsung-galaxy-a55-5g.png",
     "basePrice": 9690000,
     "isFeatured": false,
     "category": {
@@ -605,7 +605,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-10-1",
-        "imageUrl": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600&q=80",
+        "imageUrl": "/images/products/samsung.png",
         "altText": "Samsung Galaxy A55 5G chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -619,7 +619,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Màn hình OLED Ultra Retina XDR đột phá, chip Apple M4 siêu mỏng 5.3mm.",
     "description": "<p>Mẫu iPad mỏng nhất từ trước đến nay của Apple với sức mạnh đồ họa đỉnh cao từ vi xử lý M4 thế hệ mới.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80",
+    "thumbnailUrl": "/images/products/may-tinh-bang-ipad-pro-m4-11-inch.png",
     "basePrice": 28990000,
     "isFeatured": true,
     "category": {
@@ -649,7 +649,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-11-1",
-        "imageUrl": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80",
+        "imageUrl": "/images/products/apple.png",
         "altText": "iPad Pro M4 11 inch chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -663,7 +663,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Không gian hiển thị rộng rãi 13 inch, màn hình Tandem OLED cực đỉnh.",
     "description": "<p>Công cụ đồ họa chuyên nghiệp cho các nhà thiết kế và họa sĩ số với khả năng tương thích Apple Pencil Pro.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80",
+    "thumbnailUrl": "/images/products/may-tinh-bang-ipad-pro-m4-13-inch.png",
     "basePrice": 37990000,
     "isFeatured": false,
     "category": {
@@ -693,7 +693,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-12-1",
-        "imageUrl": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80",
+        "imageUrl": "/images/products/apple.png",
         "altText": "iPad Pro M4 13 inch chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -707,7 +707,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Trang bị chip Apple M2 vượt trội, thiết kế thanh lịch nhiều sắc màu.",
     "description": "<p>Dòng máy tính bảng mỏng nhẹ, mạnh mẽ, đáp ứng hoàn hảo từ học tập tới dựng video 4K.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80",
+    "thumbnailUrl": "/images/products/may-tinh-bang-ipad-air-m2-11-inch.png",
     "basePrice": 16990000,
     "isFeatured": false,
     "category": {
@@ -737,7 +737,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-13-1",
-        "imageUrl": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80",
+        "imageUrl": "/images/products/apple.png",
         "altText": "iPad Air M2 11 inch chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -751,7 +751,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Thiết kế tràn viền mới, cổng sạc Type-C, camera đặt ngang thông minh.",
     "description": "<p>Sự lựa chọn hoàn hảo cho gia đình và học sinh với màn hình Liquid Retina sắc nét.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80",
+    "thumbnailUrl": "/images/products/may-tinh-bang-ipad-gen-10-10-9-inch.png",
     "basePrice": 9990000,
     "isFeatured": false,
     "category": {
@@ -781,7 +781,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-14-1",
-        "imageUrl": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80",
+        "imageUrl": "/images/products/apple.png",
         "altText": "iPad Gen 10 10.9 inch chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -795,7 +795,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Màn hình khổng lồ 14.6 inch Dynamic AMOLED 2X, chuẩn chống nước IP68.",
     "description": "<p>Chiếc tablet Android đỉnh nhất thế giới với bút S-Pen thế hệ mới và chế độ Samsung DeX biến máy tính bảng thành laptop.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80",
+    "thumbnailUrl": "/images/products/may-tinh-bang-samsung-galaxy-tab-s9-ultra.png",
     "basePrice": 27990000,
     "isFeatured": false,
     "category": {
@@ -825,7 +825,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-15-1",
-        "imageUrl": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80",
+        "imageUrl": "/images/products/samsung.png",
         "altText": "Samsung Galaxy Tab S9 Ultra chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -839,7 +839,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Quái thú gaming Intel Core i9-14900HX, RTX 4090, màn hình Mini LED 240Hz Nebula HDR.",
     "description": "<p>Cỗ máy chiến game tối thượng dành cho game thủ Esports với hệ thống tản nhiệt ba quạt và keo tản nhiệt kim loại lỏng Conductonaut Extreme.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+    "thumbnailUrl": "/images/products/laptop-asus-rog-strix-scar-16.png",
     "basePrice": 69990000,
     "isFeatured": true,
     "category": {
@@ -869,7 +869,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-16-1",
-        "imageUrl": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+        "imageUrl": "/images/products/asus.png",
         "altText": "ASUS ROG Strix SCAR 16 (2024) chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -883,7 +883,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Mỏng nhẹ kim loại nguyên khối, màn hình ROG Nebula OLED 240Hz, RTX 4070.",
     "description": "<p>Sự kết hợp hoàn hảo giữa độ mỏng nhẹ thời trang và sức mạnh đồ họa đỉnh cao cho cả sáng tạo lẫn chơi game.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+    "thumbnailUrl": "/images/products/laptop-asus-rog-zephyrus-g16.png",
     "basePrice": 52990000,
     "isFeatured": false,
     "category": {
@@ -913,7 +913,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-17-1",
-        "imageUrl": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+        "imageUrl": "/images/products/asus.png",
         "altText": "ASUS ROG Zephyrus G16 OLED chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -927,7 +927,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Độ bền chuẩn quân đội MIL-STD-810H, AMD Ryzen 7 7735HS, RTX 4060 140W.",
     "description": "<p>Chiếc laptop gaming quốc dân với độ bền bỉ vượt thời gian và tỷ lệ hiệu năng trên giá tiền tốt nhất.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+    "thumbnailUrl": "/images/products/laptop-asus-tuf-gaming-a15.png",
     "basePrice": 24990000,
     "isFeatured": false,
     "category": {
@@ -957,7 +957,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-18-1",
-        "imageUrl": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+        "imageUrl": "/images/products/asus.png",
         "altText": "ASUS TUF Gaming A15 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -971,7 +971,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Sức mạnh AI Engine+ thông minh, chip i9-14900HX, card đồ họa RTX 4080.",
     "description": "<p>Cỗ máy thi đấu gaming được trang bị hệ thống làm mát buồng hơi Legion Coldfront Vapor và bàn phím Legion TrueStrike có LED RGB từng phím.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+    "thumbnailUrl": "/images/products/laptop-lenovo-legion-pro-7i.png",
     "basePrice": 64990000,
     "isFeatured": true,
     "category": {
@@ -1001,7 +1001,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-19-1",
-        "imageUrl": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+        "imageUrl": "/images/products/lenovo.png",
         "altText": "Lenovo Legion Pro 7i Gen 9 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1015,7 +1015,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Màn hình tỉ lệ vàng 16:10 2.5K 165Hz chuẩn màu 100% sRGB, Ryzen 7, RTX 4070.",
     "description": "<p>Mẫu laptop gaming được đánh giá cao nhất nhờ tản nhiệt mát mẻ và bàn phím gõ êm ái.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+    "thumbnailUrl": "/images/products/laptop-lenovo-legion-5-pro.png",
     "basePrice": 36990000,
     "isFeatured": false,
     "category": {
@@ -1045,7 +1045,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-20-1",
-        "imageUrl": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+        "imageUrl": "/images/products/lenovo.png",
         "altText": "Lenovo Legion 5 Pro chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1059,7 +1059,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Quạt kim loại 3D AeroBlade thế hệ 5, Core i9-14900HX, RTX 4070.",
     "description": "<p>Hiệu năng bùng nổ cho game thủ hardcore với khả năng ép xung một nút bấm PredatorSense.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+    "thumbnailUrl": "/images/products/laptop-acer-predator-helios-16.png",
     "basePrice": 48990000,
     "isFeatured": false,
     "category": {
@@ -1089,7 +1089,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-21-1",
-        "imageUrl": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+        "imageUrl": "/images/products/acer.png",
         "altText": "Acer Predator Helios 16 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1103,7 +1103,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Gaming thế hệ mới với Core i7-13620H, RTX 4060, màn hình 144Hz IPS.",
     "description": "<p>Chiếc laptop Nitro thế hệ mới với phong cách thiết kế hiện đại, tinh giản.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+    "thumbnailUrl": "/images/products/laptop-acer-nitro-v-15.png",
     "basePrice": 19990000,
     "isFeatured": false,
     "category": {
@@ -1133,7 +1133,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-22-1",
-        "imageUrl": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+        "imageUrl": "/images/products/acer.png",
         "altText": "Acer Nitro V 15 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1147,7 +1147,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Kích thước khổng lồ 18 inch 240Hz QHD+, i9-14900HX, RTX 4090 175W max công suất.",
     "description": "<p>Biểu tượng gaming vũ trụ Alienware mang sức mạnh thay thế máy tính để bàn hoàn hảo.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+    "thumbnailUrl": "/images/products/laptop-dell-alienware-m18-r2.png",
     "basePrice": 89990000,
     "isFeatured": false,
     "category": {
@@ -1177,7 +1177,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-23-1",
-        "imageUrl": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+        "imageUrl": "/images/products/dell.png",
         "altText": "Dell Alienware m18 R2 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1192,7 +1192,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "description": "<p>Cỗ máy làm việc di động hoàn hảo nhất lịch sử Apple, xử lý các tác vụ render 3D và lập trình máy học nhẹ nhàng với chip M3 Max.</p>",
     "specifications": "{}",
     "model3DUrl": "https://models.madkstore.vn/macbook-pro-16.glb",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&q=80",
+    "thumbnailUrl": "/images/products/laptop-apple-macbook-pro-16-m3-max.png",
     "basePrice": 89990000,
     "isFeatured": true,
     "category": {
@@ -1222,7 +1222,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-24-1",
-        "imageUrl": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&q=80",
+        "imageUrl": "/images/products/apple.png",
         "altText": "MacBook Pro 16 M3 Max chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1236,7 +1236,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Màn hình 14.2 inch ProMotion 120Hz, vỏ nhôm tái chế nguyên khối bền bỉ.",
     "description": "<p>Laptop đồ họa nhỏ gọn cho người sáng tạo nội dung di chuyển liên tục.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&q=80",
+    "thumbnailUrl": "/images/products/laptop-apple-macbook-pro-14-m3.png",
     "basePrice": 39990000,
     "isFeatured": false,
     "category": {
@@ -1266,7 +1266,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-25-1",
-        "imageUrl": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&q=80",
+        "imageUrl": "/images/products/apple.png",
         "altText": "MacBook Pro 14 M3 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1280,7 +1280,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Siêu mỏng 11.3mm, nhẹ 1.24kg, hỗ trợ xuất 2 màn hình ngoài.",
     "description": "<p>Chiếc laptop được yêu thích nhất thế giới với khả năng vận hành hoàn toàn không cần quạt tản nhiệt, tĩnh lặng tuyệt đối.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=600&q=80",
+    "thumbnailUrl": "/images/products/laptop-apple-macbook-air-13-m3.png",
     "basePrice": 27990000,
     "isFeatured": false,
     "category": {
@@ -1310,7 +1310,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-26-1",
-        "imageUrl": "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=600&q=80",
+        "imageUrl": "/images/products/apple.png",
         "altText": "MacBook Air 13 M3 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1324,7 +1324,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Màn hình 15.3 inch rộng rãi trong thân hình siêu mỏng nhẹ chỉ 1.5kg.",
     "description": "<p>Trải nghiệm không gian làm việc rộng rãi cùng thời lượng pin 18 giờ liên tục.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=600&q=80",
+    "thumbnailUrl": "/images/products/laptop-apple-macbook-air-15-m3.png",
     "basePrice": 32990000,
     "isFeatured": false,
     "category": {
@@ -1354,7 +1354,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-27-1",
-        "imageUrl": "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=600&q=80",
+        "imageUrl": "/images/products/apple.png",
         "altText": "MacBook Air 15 M3 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1368,7 +1368,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Bàn di chuột tàng hình bằng kính liền mạch, bàn phím tràn viền không khoảng cách.",
     "description": "<p>Kiệt tác thiết kế mang phong cách tương lai với màn hình OLED 3.5K cảm ứng tuyệt đẹp.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=600&q=80",
+    "thumbnailUrl": "/images/products/laptop-dell-xps-13-plus-9320.png",
     "basePrice": 44990000,
     "isFeatured": false,
     "category": {
@@ -1398,7 +1398,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-28-1",
-        "imageUrl": "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=600&q=80",
+        "imageUrl": "/images/products/dell.png",
         "altText": "Dell XPS 13 Plus 9320 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1412,7 +1412,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Bền bỉ, pin khỏe, màn hình 14 inch chống chói góc rộng cho dân văn phòng.",
     "description": "<p>Chiếc máy tính xách tay thực dụng, đáng tin cậy phục vụ nhu cầu xử lý văn bản và kế toán hàng ngày.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=600&q=80",
+    "thumbnailUrl": "/images/products/laptop-dell-inspiron-14-5440.png",
     "basePrice": 17990000,
     "isFeatured": false,
     "category": {
@@ -1442,7 +1442,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-29-1",
-        "imageUrl": "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=600&q=80",
+        "imageUrl": "/images/products/dell.png",
         "altText": "Dell Inspiron 14 5440 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1456,7 +1456,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Vỏ sợi carbon siêu nhẹ 1.09kg, bàn phím gõ sướng nhất phân khúc, bảo mật doanh nghiệp.",
     "description": "<p>Huyền thoại laptop doanh nhân tiếp tục hoàn thiện với thanh Communications Bar mới tích hợp camera FHD và mic AI.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&q=80",
+    "thumbnailUrl": "/images/products/laptop-lenovo-thinkpad-x1-carbon-gen-12.png",
     "basePrice": 56990000,
     "isFeatured": true,
     "category": {
@@ -1486,7 +1486,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-30-1",
-        "imageUrl": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&q=80",
+        "imageUrl": "/images/products/lenovo.png",
         "altText": "Lenovo ThinkPad X1 Carbon Gen 12 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1500,7 +1500,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Màn hình OLED 3K 120Hz rực rỡ, chip Intel Core Ultra 7 tích hợp NPU AI.",
     "description": "<p>Mỏng nhẹ chuẩn thanh lịch với pin dung lượng lớn 75Wh cho cả ngày dài làm việc linh hoạt.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&q=80",
+    "thumbnailUrl": "/images/products/laptop-asus-zenbook-14-oled.png",
     "basePrice": 28990000,
     "isFeatured": false,
     "category": {
@@ -1530,7 +1530,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-31-1",
-        "imageUrl": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&q=80",
+        "imageUrl": "/images/products/asus.png",
         "altText": "ASUS Zenbook 14 OLED chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1545,7 +1545,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "description": "<p>Bàn phím cơ custom không dây cao cấp nhất của Keychron hỗ trợ phần mềm QMK/VIA tùy biến từng phím bấm.</p>",
     "specifications": "{}",
     "model3DUrl": "https://models.madkstore.vn/keychron-q1-pro.glb",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80",
+    "thumbnailUrl": "/images/products/ban-phim-co-keychron-q1-pro-wireless.png",
     "basePrice": 4500000,
     "isFeatured": true,
     "category": {
@@ -1575,7 +1575,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-32-1",
-        "imageUrl": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80",
+        "imageUrl": "/images/products/keychron.png",
         "altText": "Bàn phím cơ Keychron Q1 Pro Wireless chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1589,7 +1589,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Layout 75%, 3 chế độ kết nối (2.4GHz/BT/Type-C), foam tiêu âm dày dặn.",
     "description": "<p>Chiếc bàn phím cơ hoàn hảo cho người mới bắt đầu bước chân vào bộ môn phím custom.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80",
+    "thumbnailUrl": "/images/products/ban-phim-co-keychron-v1-max.png",
     "basePrice": 2190000,
     "isFeatured": false,
     "category": {
@@ -1619,7 +1619,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-33-1",
-        "imageUrl": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80",
+        "imageUrl": "/images/products/keychron.png",
         "altText": "Bàn phím cơ Keychron V1 Max chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1633,7 +1633,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Bản nâng cấp của K2 huyền thoại với hỗ trợ QMK/VIA và lót foam cách âm.",
     "description": "<p>Thiết kế nhỏ gọn 84 phím bấm đầy đủ hàng phím F tiện lợi cho cả lập trình và soạn thảo văn bản.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80",
+    "thumbnailUrl": "/images/products/ban-phim-co-keychron-k2-pro.png",
     "basePrice": 2490000,
     "isFeatured": false,
     "category": {
@@ -1663,7 +1663,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-34-1",
-        "imageUrl": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80",
+        "imageUrl": "/images/products/keychron.png",
         "altText": "Bàn phím cơ Keychron K2 Pro chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1677,7 +1677,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Layout TKL tiêu chuẩn, kết nối Bluetooth đa thiết bị, hotswap 5-pin.",
     "description": "<p>Sự lựa chọn chuẩn chỉ cho ai quen layout TKL không có cụm số phụ.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80",
+    "thumbnailUrl": "/images/products/ban-phim-co-keychron-k8-pro.png",
     "basePrice": 2690000,
     "isFeatured": false,
     "category": {
@@ -1707,7 +1707,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-35-1",
-        "imageUrl": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80",
+        "imageUrl": "/images/products/keychron.png",
         "altText": "Bàn phím cơ Keychron K8 Pro chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1721,7 +1721,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Switch cơ học Razer Green/Yellow, núm xoay Command Dial, đèn nền Chroma RGB 3 phía.",
     "description": "<p>Bàn phím gaming đỉnh cao với kê tay da mềm mại có dải LED đồng bộ rực rỡ.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&q=80",
+    "thumbnailUrl": "/images/products/ban-phim-co-razer-blackwidow-v4-pro.png",
     "basePrice": 5490000,
     "isFeatured": true,
     "category": {
@@ -1751,7 +1751,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-36-1",
-        "imageUrl": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&q=80",
+        "imageUrl": "/images/products/razer.png",
         "altText": "Bàn phím cơ Razer BlackWidow V4 Pro chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1765,7 +1765,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Switch quang học Analog Gen-2, tính năng Rapid Trigger phản hồi tức thì.",
     "description": "<p>Vũ khí tối thượng của game thủ Valorant và CS2 với khả năng kích hoạt phím cực nhạy.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&q=80",
+    "thumbnailUrl": "/images/products/ban-phim-co-razer-huntsman-v3-pro-tkl.png",
     "basePrice": 5190000,
     "isFeatured": false,
     "category": {
@@ -1795,7 +1795,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-37-1",
-        "imageUrl": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&q=80",
+        "imageUrl": "/images/products/razer.png",
         "altText": "Bàn phím cơ Razer Huntsman V3 Pro TKL chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1809,7 +1809,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Switch từ tính CORSAIR MGX điều chỉnh điểm nhận lệnh từ 0.4mm đến 3.6mm.",
     "description": "<p>Bàn phím cơ từ tính cao cấp với công nghệ xử lý siêu nhanh CORSAIR AXON 8000Hz.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80",
+    "thumbnailUrl": "/images/products/ban-phim-co-corsair-k70-max-rgb.png",
     "basePrice": 4990000,
     "isFeatured": false,
     "category": {
@@ -1839,7 +1839,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-38-1",
-        "imageUrl": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80",
+        "imageUrl": "/images/products/corsair.png",
         "altText": "Bàn phím cơ Corsair K70 MAX RGB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1853,7 +1853,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Layout 75%, hotswap, switch Corsair MLX Red bôi trơn sẵn mượt mà.",
     "description": "<p>Bàn phím không dây 75% thanh lịch với núm xoay đa chức năng và pin lên tới 266 giờ.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80",
+    "thumbnailUrl": "/images/products/ban-phim-co-corsair-k65-plus-wireless.png",
     "basePrice": 3890000,
     "isFeatured": false,
     "category": {
@@ -1883,7 +1883,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-39-1",
-        "imageUrl": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80",
+        "imageUrl": "/images/products/corsair.png",
         "altText": "Bàn phím cơ Corsair K65 PLUS WIRELESS chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1897,7 +1897,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Siêu nhẹ 60g, cảm biến HERO 2 32000 DPI, switch lai quang học LIGHTFORCE.",
     "description": "<p>Chuột thi đấu Esports được các tuyển thủ chuyên nghiệp toàn cầu tin dùng nhất.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+    "thumbnailUrl": "/images/products/chuot-gaming-logitech-g-pro-x-superlight-2.png",
     "basePrice": 3890000,
     "isFeatured": true,
     "category": {
@@ -1927,7 +1927,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-40-1",
-        "imageUrl": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+        "imageUrl": "/images/products/logitech.png",
         "altText": "Chuột gaming Logitech G Pro X Superlight 2 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1941,7 +1941,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Huyền thoại tái sinh với switch lai LIGHTFORCE, LED LIGHTSYNC RGB 8 vùng.",
     "description": "<p>Mẫu chuột đa năng với 13 nút lập trình, nút cuộn 2 chế độ và pin sạc không dây POWERPLAY.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+    "thumbnailUrl": "/images/products/chuot-gaming-logitech-g502-x-plus.png",
     "basePrice": 3290000,
     "isFeatured": false,
     "category": {
@@ -1971,7 +1971,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-41-1",
-        "imageUrl": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+        "imageUrl": "/images/products/logitech.png",
         "altText": "Chuột gaming Logitech G502 X PLUS chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1985,7 +1985,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Cảm biến HERO 25K, 11 nút lập trình, 5 tạ tùy chỉnh trọng lượng.",
     "description": "<p>Chuột gaming quốc dân bán chạy nhất thế giới với thiết kế công thái học đầm tay.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+    "thumbnailUrl": "/images/products/chuot-gaming-logitech-g502-hero.png",
     "basePrice": 990000,
     "isFeatured": false,
     "category": {
@@ -2015,7 +2015,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-42-1",
-        "imageUrl": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+        "imageUrl": "/images/products/logitech.png",
         "altText": "Chuột gaming Logitech G502 HERO High Performance chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2029,7 +2029,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Form công thái học huyền thoại, siêu nhẹ 63g, cảm biến Focus Pro 30K.",
     "description": "<p>Sự hoàn thiện tinh xảo cho trải nghiệm cầm nắm tay phải thoải mái trong những trận đấu dài.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+    "thumbnailUrl": "/images/products/chuot-gaming-razer-deathadder-v3-pro.png",
     "basePrice": 3690000,
     "isFeatured": true,
     "category": {
@@ -2059,7 +2059,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-43-1",
-        "imageUrl": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+        "imageUrl": "/images/products/razer.png",
         "altText": "Chuột gaming Razer DeathAdder V3 Pro chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2073,7 +2073,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Siêu nhẹ 54g, tần số phản hồi không dây True 8000Hz HyperPolling.",
     "description": "<p>Thiết kế đối xứng hoàn hảo cho game thủ cầm kiểu claw-grip hoặc fingertip-grip.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+    "thumbnailUrl": "/images/products/chuot-gaming-razer-viper-v3-pro.png",
     "basePrice": 4190000,
     "isFeatured": false,
     "category": {
@@ -2103,7 +2103,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-44-1",
-        "imageUrl": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+        "imageUrl": "/images/products/razer.png",
         "altText": "Chuột gaming Razer Viper V3 Pro chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2117,7 +2117,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Con lăn Razer HyperScroll Tilt Wheel, LED Chroma 13 vùng, sạc không dây Qi.",
     "description": "<p>Chuột công thái học cao cấp với đầy đủ tính năng giải trí và tùy biến sâu.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+    "thumbnailUrl": "/images/products/chuot-gaming-razer-basilisk-v3-pro.png",
     "basePrice": 3890000,
     "isFeatured": false,
     "category": {
@@ -2147,7 +2147,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-45-1",
-        "imageUrl": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+        "imageUrl": "/images/products/razer.png",
         "altText": "Chuột gaming Razer Basilisk V3 Pro chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2161,7 +2161,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "15 nút lập trình, cụm phím sườn độc đáo, cảm biến Marksman 26000 DPI.",
     "description": "<p>Chuột không dây tối ưu cho game thủ MOBA và MMO với khả năng gán macro phức tạp.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+    "thumbnailUrl": "/images/products/chuot-gaming-corsair-darkstar-wireless-mmo.png",
     "basePrice": 3590000,
     "isFeatured": false,
     "category": {
@@ -2191,7 +2191,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-46-1",
-        "imageUrl": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=80",
+        "imageUrl": "/images/products/corsair.png",
         "altText": "Chuột gaming Corsair Darkstar Wireless MMO chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2206,7 +2206,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "description": "<p>Chuẩn mực tai nghe chống ồn chủ động toàn cầu mang đến không gian tĩnh lặng tuyệt đối cho âm nhạc hi-res.</p>",
     "specifications": "{}",
     "model3DUrl": "https://models.madkstore.vn/sony-wh-1000xm5.glb",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=80",
+    "thumbnailUrl": "/images/products/tai-nghe-sony-wh-1000xm5-wireless.png",
     "basePrice": 8490000,
     "isFeatured": true,
     "category": {
@@ -2236,7 +2236,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-47-1",
-        "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=80",
+        "imageUrl": "/images/products/sony.png",
         "altText": "Tai nghe chống ồn Sony WH-1000XM5 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2250,7 +2250,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Chống ồn in-ear tốt nhất thị trường, chip V2 và QN2e, âm thanh Hi-Res LDAC.",
     "description": "<p>Âm trường rộng mở, đàm thoại AI rõ ràng và đệm tai bọt polyurethane cách âm xuất sắc.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&q=80",
+    "thumbnailUrl": "/images/products/tai-nghe-sony-wf-1000xm5-tws.png",
     "basePrice": 5990000,
     "isFeatured": false,
     "category": {
@@ -2280,7 +2280,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-48-1",
-        "imageUrl": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&q=80",
+        "imageUrl": "/images/products/sony.png",
         "altText": "Tai nghe True Wireless Sony WF-1000XM5 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2294,7 +2294,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Khung thép không gỉ bọc lưới knit-mesh, Spatial Audio cá nhân hóa, chip H1 kép.",
     "description": "<p>Tai nghe over-ear cao cấp tích hợp chế độ Transparency Mode tự nhiên nhất phân khúc.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&q=80",
+    "thumbnailUrl": "/images/products/tai-nghe-apple-airpods-max.png",
     "basePrice": 12490000,
     "isFeatured": true,
     "category": {
@@ -2324,7 +2324,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-49-1",
-        "imageUrl": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&q=80",
+        "imageUrl": "/images/products/apple.png",
         "altText": "Tai nghe Apple AirPods Max chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2338,7 +2338,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Chip H2, chống ồn chủ động mạnh gấp đôi, kháng nước và bụi bẩn IP54.",
     "description": "<p>Mẫu tai nghe không dây được trang bị tính năng Adaptive Audio tự động cân bằng âm thanh theo môi trường.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=600&q=80",
+    "thumbnailUrl": "/images/products/tai-nghe-apple-airpods-pro-2-usb-c.png",
     "basePrice": 5490000,
     "isFeatured": false,
     "category": {
@@ -2368,7 +2368,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-50-1",
-        "imageUrl": "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=600&q=80",
+        "imageUrl": "/images/products/apple.png",
         "altText": "Tai nghe Apple AirPods Pro 2 USB-C chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2382,7 +2382,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Màng loa Graphene 50mm đầu tiên trên thế giới, kết nối LIGHTSPEED, pin 50 giờ.",
     "description": "<p>Âm thanh định vị chuẩn xác đến từng bước chân cho các tuyển thủ bắn súng góc nhìn thứ nhất.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&q=80",
+    "thumbnailUrl": "/images/products/tai-nghe-logitech-g-pro-x-2-lightspeed.png",
     "basePrice": 5890000,
     "isFeatured": false,
     "category": {
@@ -2412,7 +2412,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-51-1",
-        "imageUrl": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&q=80",
+        "imageUrl": "/images/products/logitech.png",
         "altText": "Tai nghe gaming Logitech G PRO X 2 LIGHTSPEED chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2426,7 +2426,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Mic Razer HyperClear Super Wideband, màng loa TriForce Titanium 50mm, pin 70 giờ.",
     "description": "<p>Khả năng thu âm giọng nói trong trẻo cấp độ phòng thu và cách âm thụ động siêu tốt.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&q=80",
+    "thumbnailUrl": "/images/products/tai-nghe-razer-blackshark-v2-pro-2023.png",
     "basePrice": 4690000,
     "isFeatured": false,
     "category": {
@@ -2456,7 +2456,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-52-1",
-        "imageUrl": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&q=80",
+        "imageUrl": "/images/products/razer.png",
         "altText": "Tai nghe gaming Razer BlackShark V2 Pro 2023 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2470,7 +2470,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Thiết kế mở Open-Back, màng loa Graphene 50mm, âm trường tự nhiên rộng lớn.",
     "description": "<p>Lựa chọn lý tưởng cho các streamer và nhà sáng tạo âm thanh yêu thích chất âm thoáng đãng.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&q=80",
+    "thumbnailUrl": "/images/products/tai-nghe-corsair-virtuoso-pro-open-back.png",
     "basePrice": 4490000,
     "isFeatured": false,
     "category": {
@@ -2500,7 +2500,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-53-1",
-        "imageUrl": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&q=80",
+        "imageUrl": "/images/products/corsair.png",
         "altText": "Tai nghe Corsair Virtuoso Pro Open Back chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2514,7 +2514,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "24 nhân 32 luồng, xung nhịp Turbo 6.0 GHz, socket LGA1700, hỗ trợ DDR4 & DDR5.",
     "description": "<p>Bộ vi xử lý máy tính để bàn mạnh nhất của Intel thế hệ Raptor Lake Refresh phục vụ render nặng và chơi game max setting.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80",
+    "thumbnailUrl": "/images/products/cpu-intel-core-i9-14900k.png",
     "basePrice": 14990000,
     "isFeatured": true,
     "category": {
@@ -2544,7 +2544,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-54-1",
-        "imageUrl": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80",
+        "imageUrl": "/images/products/intel.png",
         "altText": "CPU Intel Core i9-14900K chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2558,7 +2558,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "20 nhân 28 luồng (thêm 4 E-core), xung nhịp 5.6 GHz, lựa chọn toàn diện.",
     "description": "<p>Nâng cấp vượt bậc số lượng nhân xử lý giúp đa nhiệm và render video nhanh hơn 20% so với thế hệ trước.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80",
+    "thumbnailUrl": "/images/products/cpu-intel-core-i7-14700k.png",
     "basePrice": 10890000,
     "isFeatured": false,
     "category": {
@@ -2588,7 +2588,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-55-1",
-        "imageUrl": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80",
+        "imageUrl": "/images/products/intel.png",
         "altText": "CPU Intel Core i7-14700K chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2602,7 +2602,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "14 nhân 20 luồng, xung nhịp 5.3 GHz, vua phân khúc gaming tầm trung.",
     "description": "<p>Sự lựa chọn chuẩn xác cho dàn PC gaming hiện đại với khả năng ép xung linh hoạt.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80",
+    "thumbnailUrl": "/images/products/cpu-intel-core-i5-14600k.png",
     "basePrice": 7890000,
     "isFeatured": false,
     "category": {
@@ -2632,7 +2632,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-56-1",
-        "imageUrl": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80",
+        "imageUrl": "/images/products/intel.png",
         "altText": "CPU Intel Core i5-14600K chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2646,7 +2646,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "16 nhân 32 luồng, công nghệ 3D V-Cache 144MB bộ nhớ đệm, socket AM5.",
     "description": "<p>Sức mạnh tối thượng kết hợp hoàn hảo giữa năng lực render công việc đồ họa nặng và hiệu năng gaming số 1.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80",
+    "thumbnailUrl": "/images/products/cpu-amd-ryzen-9-7950x3d.png",
     "basePrice": 16490000,
     "isFeatured": true,
     "category": {
@@ -2676,7 +2676,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-57-1",
-        "imageUrl": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80",
+        "imageUrl": "/images/products/amd.png",
         "altText": "CPU AMD Ryzen 9 7950X3D chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2690,7 +2690,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "8 nhân 16 luồng, 3D V-Cache 96MB, CPU chơi game tốt nhất thế giới.",
     "description": "<p>Mẫu CPU được cộng đồng game thủ thế giới đánh giá là vi xử lý gaming tối ưu nhất với mức ăn điện cực thấp.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80",
+    "thumbnailUrl": "/images/products/cpu-amd-ryzen-7-7800x3d.png",
     "basePrice": 10990000,
     "isFeatured": false,
     "category": {
@@ -2720,7 +2720,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-58-1",
-        "imageUrl": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80",
+        "imageUrl": "/images/products/amd.png",
         "altText": "CPU AMD Ryzen 7 7800X3D chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2734,7 +2734,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "6 nhân 12 luồng, xung nhịp 5.3 GHz, socket AM5 nền tảng DDR5 bền vững.",
     "description": "<p>Bước khởi đầu hoàn hảo gia nhập hệ sinh thái socket AM5 thế hệ mới của AMD.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80",
+    "thumbnailUrl": "/images/products/cpu-amd-ryzen-5-7600x.png",
     "basePrice": 5790000,
     "isFeatured": false,
     "category": {
@@ -2764,7 +2764,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-59-1",
-        "imageUrl": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&q=80",
+        "imageUrl": "/images/products/amd.png",
         "altText": "CPU AMD Ryzen 5 7600X chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2779,7 +2779,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "description": "<p>Chiếc card đồ họa mạnh mẽ và hầm hố nhất thế giới, sẵn sàng cân mọi tựa game 4K Ray Tracing và huấn luyện mô hình AI.</p>",
     "specifications": "{}",
     "model3DUrl": "https://models.madkstore.vn/rtx-4090.glb",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80",
+    "thumbnailUrl": "/images/products/vga-asus-rog-strix-geforce-rtx-4090.png",
     "basePrice": 58990000,
     "isFeatured": true,
     "category": {
@@ -2809,7 +2809,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-60-1",
-        "imageUrl": "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80",
+        "imageUrl": "/images/products/asus.png",
         "altText": "VGA ASUS ROG Strix GeForce RTX 4090 OC 24GB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2823,7 +2823,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Độ bền chuẩn quân sự, quạt vòng bi kép Axial-tech, 16GB GDDR6X.",
     "description": "<p>Hiệu năng chơi game 4K mượt mà với công nghệ DLSS 3 Frame Generation đột phá.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80",
+    "thumbnailUrl": "/images/products/vga-asus-tuf-gaming-geforce-rtx-4080-super.png",
     "basePrice": 31990000,
     "isFeatured": false,
     "category": {
@@ -2853,7 +2853,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-61-1",
-        "imageUrl": "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80",
+        "imageUrl": "/images/products/asus.png",
         "altText": "VGA ASUS TUF Gaming GeForce RTX 4080 SUPER 16GB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2867,7 +2867,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Thiết kế mỏng nhẹ Slim, 16GB VRAM 256-bit, tản nhiệt TRI FROZR 3.",
     "description": "<p>Chiếc card hoàn hảo cho độ phân giải 2K và 4K với bộ nhớ VRAM 16GB rộng rãi.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80",
+    "thumbnailUrl": "/images/products/vga-msi-geforce-rtx-4070-ti-super.png",
     "basePrice": 23990000,
     "isFeatured": false,
     "category": {
@@ -2897,7 +2897,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-62-1",
-        "imageUrl": "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80",
+        "imageUrl": "/images/products/nvidia.png",
         "altText": "VGA MSI GeForce RTX 4070 Ti SUPER Gaming X Slim chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2911,7 +2911,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Hệ thống 3 quạt tản nhiệt WINDFORCE, ống đồng tiếp xúc trực tiếp, DLSS 3.",
     "description": "<p>Card đồ họa chuyên trị các tựa game AAA ở độ phân giải Full HD max setting.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80",
+    "thumbnailUrl": "/images/products/vga-gigabyte-geforce-rtx-4060-ti.png",
     "basePrice": 11490000,
     "isFeatured": false,
     "category": {
@@ -2941,7 +2941,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-63-1",
-        "imageUrl": "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80",
+        "imageUrl": "/images/products/nvidia.png",
         "altText": "VGA Gigabyte GeForce RTX 4060 Ti Gaming OC 8GB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2955,7 +2955,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Thiết kế nhỏ gọn 2 quạt, công nghệ 0dB tĩnh lặng, hiệu suất tiết kiệm điện.",
     "description": "<p>Lựa chọn quốc dân cho các dàn máy tính gaming nhỏ gọn hoặc thùng máy Micro-ATX.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80",
+    "thumbnailUrl": "/images/products/vga-asus-dual-geforce-rtx-4060.png",
     "basePrice": 8490000,
     "isFeatured": false,
     "category": {
@@ -2985,7 +2985,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-64-1",
-        "imageUrl": "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80",
+        "imageUrl": "/images/products/nvidia.png",
         "altText": "VGA ASUS Dual GeForce RTX 4060 OC Edition 8GB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2999,7 +2999,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Kiến trúc RDNA 3 chiplet, 24GB GDDR6, đèn LED thạch anh xanh băng độc đáo.",
     "description": "<p>Sức mạnh rasterization hàng đầu cho trải nghiệm gaming 4K với dung lượng bộ nhớ VRAM khổng lồ.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80",
+    "thumbnailUrl": "/images/products/vga-powercolor-hellhound-radeon-rx-7900-xtx.png",
     "basePrice": 27990000,
     "isFeatured": false,
     "category": {
@@ -3029,7 +3029,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-65-1",
-        "imageUrl": "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80",
+        "imageUrl": "/images/products/amd.png",
         "altText": "VGA PowerColor Hellhound AMD Radeon RX 7900 XTX 24GB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3043,7 +3043,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Thiết kế đỉnh cao có thể tháo rời thanh trên, LED CAPELLIX rực rỡ, chip nhớ tuyển chọn.",
     "description": "<p>Dòng RAM cao cấp bậc nhất của Corsair với khả năng tản nhiệt bằng công nghệ DHX độc quyền.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1541029074-12826c71c4c9?w=600&q=80",
+    "thumbnailUrl": "/images/products/ram-corsair-dominator-titanium-rgb-32gb-ddr5.png",
     "basePrice": 4490000,
     "isFeatured": true,
     "category": {
@@ -3073,7 +3073,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-66-1",
-        "imageUrl": "https://images.unsplash.com/photo-1541029074-12826c71c4c9?w=600&q=80",
+        "imageUrl": "/images/products/corsair.png",
         "altText": "RAM Corsair Dominator Titanium RGB 32GB (2x16GB) DDR5 6000MHz chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3087,7 +3087,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Dải LED RGB 10 vùng dynamic, tối ưu cho bo mạch chủ Intel XMP 3.0 và AMD EXPO.",
     "description": "<p>Thanh RAM hiệu năng cao tương thích rộng rãi với hầu hết các tản nhiệt khí hiện nay.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1541029074-12826c71c4c9?w=600&q=80",
+    "thumbnailUrl": "/images/products/ram-corsair-vengeance-rgb-32gb-ddr5.png",
     "basePrice": 3290000,
     "isFeatured": false,
     "category": {
@@ -3117,7 +3117,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-67-1",
-        "imageUrl": "https://images.unsplash.com/photo-1541029074-12826c71c4c9?w=600&q=80",
+        "imageUrl": "/images/products/corsair.png",
         "altText": "RAM Corsair Vengeance RGB 32GB (2x16GB) DDR5 5600MHz chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3131,7 +3131,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Tản nhiệt nhôm cá tính, công nghệ đồng bộ hồng ngoại Kingston FURY Infrared Sync.",
     "description": "<p>Sự ổn định đáng tin cậy đã được kiểm tra 100% tốc độ thực tế tại nhà máy.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1541029074-12826c71c4c9?w=600&q=80",
+    "thumbnailUrl": "/images/products/ram-kingston-fury-beast-rgb-32gb-ddr5.png",
     "basePrice": 3190000,
     "isFeatured": false,
     "category": {
@@ -3161,7 +3161,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-68-1",
-        "imageUrl": "https://images.unsplash.com/photo-1541029074-12826c71c4c9?w=600&q=80",
+        "imageUrl": "/images/products/kingston.png",
         "altText": "RAM Kingston FURY Beast RGB 32GB (2x16GB) DDR5 5600MHz chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3175,7 +3175,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Tốc độ cực nhanh 6400MHz CL32, dung lượng khủng 64GB cho máy trạm Workstation.",
     "description": "<p>Tối đa hóa hiệu năng xử lý đa luồng, máy ảo và dựng hình 3D dung lượng lớn.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1541029074-12826c71c4c9?w=600&q=80",
+    "thumbnailUrl": "/images/products/ram-kingston-fury-renegade-64gb-ddr5.png",
     "basePrice": 6290000,
     "isFeatured": false,
     "category": {
@@ -3205,7 +3205,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-69-1",
-        "imageUrl": "https://images.unsplash.com/photo-1541029074-12826c71c4c9?w=600&q=80",
+        "imageUrl": "/images/products/kingston.png",
         "altText": "RAM Kingston FURY Renegade 64GB (2x32GB) DDR5 6400MHz chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3219,7 +3219,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Cấu hình thấp Low-profile phù hợp mọi case máy, tản nhiệt nhôm tinh khiết.",
     "description": "<p>Thanh RAM DDR4 quốc dân bền bỉ phục vụ nâng cấp máy tính văn phòng và dàn máy gaming tiết kiệm.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1541029074-12826c71c4c9?w=600&q=80",
+    "thumbnailUrl": "/images/products/ram-corsair-vengeance-lpx-16gb-ddr4.png",
     "basePrice": 1190000,
     "isFeatured": false,
     "category": {
@@ -3249,7 +3249,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-70-1",
-        "imageUrl": "https://images.unsplash.com/photo-1541029074-12826c71c4c9?w=600&q=80",
+        "imageUrl": "/images/products/corsair.png",
         "altText": "RAM Corsair Vengeance LPX 16GB (2x8GB) DDR4 3200MHz chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3263,7 +3263,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Tốc độ đọc tuần tự 7450 MB/s, ghi 6900 MB/s, kiểm soát nhiệt thông minh Dynamic Thermal Guard.",
     "description": "<p>Ổ cứng NVMe PCIe 4.0 đỉnh cao nhất hiện nay, tăng tốc load game tức thì và giải phóng toàn bộ tiềm năng của PC & PS5.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&q=80",
+    "thumbnailUrl": "/images/products/ssd-samsung-990-pro-2tb.png",
     "basePrice": 4890000,
     "isFeatured": true,
     "category": {
@@ -3293,7 +3293,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-71-1",
-        "imageUrl": "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&q=80",
+        "imageUrl": "/images/products/samsung.png",
         "altText": "Ổ cứng SSD Samsung 990 PRO M.2 NVMe PCIe 4.0 2TB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3307,7 +3307,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Tốc độ đọc 7450 MB/s, ghi 6900 MB/s, tuổi thọ bền bỉ 600 TBW.",
     "description": "<p>Lựa chọn hoàn hảo để cài đặt hệ điều hành và các ứng dụng đồ họa chuyên nghiệp.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&q=80",
+    "thumbnailUrl": "/images/products/ssd-samsung-990-pro-1tb.png",
     "basePrice": 2890000,
     "isFeatured": false,
     "category": {
@@ -3337,7 +3337,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-72-1",
-        "imageUrl": "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&q=80",
+        "imageUrl": "/images/products/samsung.png",
         "altText": "Ổ cứng SSD Samsung 990 PRO M.2 NVMe PCIe 4.0 1TB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3351,7 +3351,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Bộ điều khiển Phison E18, chip nhớ 3D TLC NAND, tốc độ đọc 7000 MB/s.",
     "description": "<p>Tấm tản nhiệt nhôm graphene mỏng nhẹ cho phép lắp đặt dễ dàng trên cả laptop và bo mạch chủ máy bàn.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&q=80",
+    "thumbnailUrl": "/images/products/ssd-kingston-kc3000-1tb.png",
     "basePrice": 2390000,
     "isFeatured": false,
     "category": {
@@ -3381,7 +3381,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-73-1",
-        "imageUrl": "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&q=80",
+        "imageUrl": "/images/products/kingston.png",
         "altText": "Ổ cứng SSD Kingston KC3000 M.2 NVMe PCIe 4.0 1TB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3395,7 +3395,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Tốc độ đọc 3500 MB/s, ghi 2100 MB/s, giá thành dễ tiếp cận.",
     "description": "<p>Giải pháp nâng cấp dung lượng lưu trữ tốc độ cao giá rẻ hàng đầu thị trường.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&q=80",
+    "thumbnailUrl": "/images/products/ssd-kingston-nv2-500gb.png",
     "basePrice": 1190000,
     "isFeatured": false,
     "category": {
@@ -3425,7 +3425,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-74-1",
-        "imageUrl": "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&q=80",
+        "imageUrl": "/images/products/kingston.png",
         "altText": "Ổ cứng SSD Kingston NV2 M.2 NVMe PCIe 4.0 500GB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3439,7 +3439,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Kỷ nguyên PCIe Gen 5 tốc độ khủng khiếp 12400 MB/s đọc, tản nhiệt nhôm cao cấp.",
     "description": "<p>Tốc độ đọc ghi nhanh gấp đôi chuẩn PCIe 4.0, thiết kế dành cho các dàn máy tính cao cấp thế hệ mới nhất.</p>",
     "specifications": "{}",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&q=80",
+    "thumbnailUrl": "/images/products/ssd-crucial-t700-2tb-pcie-5.png",
     "basePrice": 7990000,
     "isFeatured": false,
     "category": {
@@ -3469,7 +3469,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-75-1",
-        "imageUrl": "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&q=80",
+        "imageUrl": "/images/products/kingston.png",
         "altText": "Ổ cứng SSD Crucial T700 M.2 NVMe PCIe 5.0 2TB chính",
         "displayOrder": 1,
         "isPrimary": true
