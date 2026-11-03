@@ -853,7 +853,7 @@ function Mouse3D({
   });
 
   return (
-    <group position={[0, -0.15, 0]} scale={0.96} rotation={[0.42, -0.42, 0]}>
+    <group position={[0, -0.15, 0]} scale={0.96} rotation={[0.28, Math.PI * 0.78, 0]}>
       {/* ── BASE CHASSIS (Smooth aerodynamic tub resting flat) ── */}
       <group position={[0, 0, 0]}>
         {/* Main Baseplate Tub */}

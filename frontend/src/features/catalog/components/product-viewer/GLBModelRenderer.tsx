@@ -9,13 +9,18 @@ interface GLBModelRendererProps {
   onLoaded?: () => void;
 }
 
+// Configure local Draco decoder path so Draco-compressed GLB files load reliably in any environment
+if (typeof useGLTF.setDecoderPath === 'function') {
+  useGLTF.setDecoderPath('/draco/');
+}
+
 export const GLBModelRenderer: React.FC<GLBModelRendererProps> = ({
   url,
   variantColor,
   wireframe = false,
   onLoaded,
 }) => {
-  const gltf = useGLTF(url);
+  const gltf = useGLTF(url, '/draco/');
 
   // Deep-clone the scene so that runtime material/color changes don't corrupt cached assets
   const { clonedScene, normalizedScale } = useMemo(() => {
@@ -118,8 +123,23 @@ export const GLBModelRenderer: React.FC<GLBModelRendererProps> = ({
     });
   }, [clonedScene, variantColor, wireframe]);
 
+  const initialRotation = useMemo((): [number, number, number] => {
+    const u = (url || '').toLowerCase();
+    if (u.includes('mouse')) {
+      // Rotate 3/4 front view towards camera so split clicks, wheel, and thumb wing are immediately visible
+      return [0.28, Math.PI * 0.78, 0];
+    }
+    if (u.includes('headphones')) {
+      return [0.12, -0.4, 0];
+    }
+    if (u.includes('macbook')) {
+      return [0.15, -0.35, 0];
+    }
+    return [0, 0, 0];
+  }, [url]);
+
   return (
-    <Center position={[0, -0.1, 0]}>
+    <Center position={[0, -0.1, 0]} rotation={initialRotation}>
       <primitive object={clonedScene} scale={normalizedScale} />
     </Center>
   );

@@ -15,141 +15,169 @@ import * as THREE from 'three';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 
 const scene = new THREE.Scene();
-scene.name = 'GamingMouseScene';
+scene.name = 'RazerBasiliskScene';
 
 // ── PBR MATERIALS ──
-// Body/Housing material takes variant color in viewer
+// Body / Shell takes the variant color dynamically in the viewer
 const bodyMat = new THREE.MeshStandardMaterial({
   name: 'Body',
-  color: 0x1e293b,
-  roughness: 0.32,
-  metalness: 0.35
+  color: 0x18181b, // Matte Raven Black
+  roughness: 0.28,
+  metalness: 0.22,
 });
 
-const darkMat = new THREE.MeshStandardMaterial({
+const chassisMat = new THREE.MeshStandardMaterial({
   name: 'Chassis',
-  color: 0x0f172a,
+  color: 0x09090b,
   roughness: 0.75,
-  metalness: 0.2
+  metalness: 0.15,
 });
 
 const rubberMat = new THREE.MeshStandardMaterial({
   name: 'RubberGrip',
-  color: 0x090d16,
+  color: 0x050507,
   roughness: 0.95,
-  metalness: 0.05
+  metalness: 0.05,
 });
 
 const ptfeMat = new THREE.MeshStandardMaterial({
   name: 'PTFE_Feet',
   color: 0xffffff,
-  roughness: 0.12,
-  metalness: 0.05
+  roughness: 0.1,
+  metalness: 0.05,
 });
 
 const metalMat = new THREE.MeshStandardMaterial({
-  name: 'Metal',
-  color: 0xcbd5e1,
-  roughness: 0.2,
-  metalness: 0.95
-});
-
-const rgbMat = new THREE.MeshStandardMaterial({
-  name: 'RGB_LED',
-  color: 0x10b981,
-  emissive: 0x10b981,
-  emissiveIntensity: 2.0,
-  roughness: 0.2
-});
-
-const wheelLedMat = new THREE.MeshStandardMaterial({
-  name: 'Wheel_LED',
-  color: 0x06b6d4,
-  emissive: 0x06b6d4,
-  emissiveIntensity: 1.8,
-  roughness: 0.2
-});
-
-const laserMat = new THREE.MeshStandardMaterial({
-  name: 'Laser_Sensor',
-  color: 0xef4444,
-  emissive: 0xef4444,
-  emissiveIntensity: 2.5
+  name: 'MetalAccent',
+  color: 0xc4cbd4,
+  roughness: 0.18,
+  metalness: 0.95,
 });
 
 const glossButtonMat = new THREE.MeshStandardMaterial({
-  name: 'GlossButtons',
-  color: 0x090d16,
-  roughness: 0.18,
-  metalness: 0.85
+  name: 'GlossButton',
+  color: 0x0d0d12,
+  roughness: 0.15,
+  metalness: 0.85,
 });
 
-// Root Mouse Group (resting flat on table, centered)
+const chromaRgbMat = new THREE.MeshStandardMaterial({
+  name: 'Chroma_LED',
+  color: 0x00ff73, // Razer Chroma Signature Acid Green
+  emissive: 0x00ff73,
+  emissiveIntensity: 2.8,
+  roughness: 0.2,
+});
+
+const wheelRgbMat = new THREE.MeshStandardMaterial({
+  name: 'Wheel_Chroma_LED',
+  color: 0x00ff73,
+  emissive: 0x00ff73,
+  emissiveIntensity: 2.5,
+  roughness: 0.2,
+});
+
+const sensorLaserMat = new THREE.MeshStandardMaterial({
+  name: 'Laser_Sensor',
+  color: 0xff2222,
+  emissive: 0xff2222,
+  emissiveIntensity: 3.0,
+});
+
 const mouseGroup = new THREE.Group();
-mouseGroup.name = 'GamingMouse';
+mouseGroup.name = 'GamingMouse_RazerBasilisk';
 scene.add(mouseGroup);
 
-// ── 1. BASEPLATE & CHASSIS TUB ──
+// ─────────────────────────────────────────────────────────────────────────────
+// 1. BASEPLATE & CHASSIS UNDERSIDE (Resting flat at y = 0)
+// ─────────────────────────────────────────────────────────────────────────────
 const baseGroup = new THREE.Group();
-baseGroup.name = 'Baseplate';
+baseGroup.name = 'BaseChassis';
 mouseGroup.add(baseGroup);
 
-const basePlate = new THREE.Mesh(
-  new THREE.CylinderGeometry(0.64, 0.68, 0.08, 36),
-  darkMat
-);
-basePlate.position.set(0, 0.04, 0);
-basePlate.name = 'ChassisTub';
-baseGroup.add(basePlate);
+// Main bottom tub plate
+const baseShape = new THREE.Shape();
+baseShape.moveTo(-0.55, 0.95);
+baseShape.lineTo(0.55, 0.95);
+baseShape.quadraticCurveTo(0.68, 0.4, 0.65, -0.2);
+baseShape.quadraticCurveTo(0.62, -0.7, 0.45, -1.15);
+baseShape.lineTo(-0.45, -1.15);
+baseShape.quadraticCurveTo(-0.62, -0.7, -0.72, -0.1);
+baseShape.quadraticCurveTo(-0.85, 0.35, -0.78, 0.7);
+baseShape.lineTo(-0.55, 0.95);
 
-const frontPlate = new THREE.Mesh(
-  new THREE.CylinderGeometry(0.58, 0.62, 0.08, 36),
-  darkMat
-);
-frontPlate.position.set(0, 0.04, -0.58);
-baseGroup.add(frontPlate);
+const basePlateGeom = new THREE.ExtrudeGeometry(baseShape, {
+  depth: 0.07,
+  bevelEnabled: true,
+  bevelSegments: 4,
+  steps: 1,
+  bevelSize: 0.03,
+  bevelThickness: 0.02,
+});
+basePlateGeom.rotateX(-Math.PI / 2);
+const basePlateMesh = new THREE.Mesh(basePlateGeom, chassisMat);
+basePlateMesh.position.set(0, 0.02, 0);
+basePlateMesh.name = 'ChassisTub';
+baseGroup.add(basePlateMesh);
 
-const rearPlate = new THREE.Mesh(
-  new THREE.CylinderGeometry(0.60, 0.64, 0.08, 36),
-  darkMat
-);
-rearPlate.position.set(0, 0.04, 0.58);
-baseGroup.add(rearPlate);
-
-// ── 2. VIRGIN-GRADE 100% PURE WHITE PTFE GLIDE SKATES ──
+// ─────────────────────────────────────────────────────────────────────────────
+// 2. 100% PURE VIRGIN-GRADE PTFE SKATES (Thick rounded glide pads)
+// ─────────────────────────────────────────────────────────────────────────────
 // Front Smile Skate
-const frontSkate = new THREE.Mesh(
-  new THREE.RingGeometry(0.26, 0.45, 32, 1, 0, Math.PI),
-  ptfeMat
-);
-frontSkate.position.set(0, 0.005, -1.02);
-frontSkate.rotation.set(-Math.PI / 2, 0, 0);
-frontSkate.name = 'PTFE_Front';
-baseGroup.add(frontSkate);
+const frontSkateShape = new THREE.Shape();
+frontSkateShape.moveTo(-0.44, 0.05);
+frontSkateShape.quadraticCurveTo(0, 0.2, 0.44, 0.05);
+frontSkateShape.lineTo(0.40, -0.12);
+frontSkateShape.quadraticCurveTo(0, 0.02, -0.40, -0.12);
+frontSkateShape.closePath();
 
-// Rear Crescent Skate
-const rearSkate = new THREE.Mesh(
-  new THREE.RingGeometry(0.32, 0.52, 32, 1, 0, Math.PI),
-  ptfeMat
-);
-rearSkate.position.set(0, 0.005, 1.02);
-rearSkate.rotation.set(-Math.PI / 2, 0, Math.PI);
-rearSkate.name = 'PTFE_Rear';
-baseGroup.add(rearSkate);
+const frontSkateGeom = new THREE.ExtrudeGeometry(frontSkateShape, {
+  depth: 0.015,
+  bevelEnabled: true,
+  bevelSegments: 3,
+  bevelSize: 0.012,
+  bevelThickness: 0.008,
+});
+frontSkateGeom.rotateX(-Math.PI / 2);
+const frontSkateMesh = new THREE.Mesh(frontSkateGeom, ptfeMat);
+frontSkateMesh.position.set(0, 0.005, -0.98);
+frontSkateMesh.name = 'PTFE_Front';
+baseGroup.add(frontSkateMesh);
+
+// Rear Wide Crescent Horseshoe Skate
+const rearSkateShape = new THREE.Shape();
+rearSkateShape.moveTo(-0.48, 0.15);
+rearSkateShape.quadraticCurveTo(0, 0.28, 0.48, 0.15);
+rearSkateShape.lineTo(0.50, -0.14);
+rearSkateShape.quadraticCurveTo(0, -0.02, -0.50, -0.14);
+rearSkateShape.closePath();
+
+const rearSkateGeom = new THREE.ExtrudeGeometry(rearSkateShape, {
+  depth: 0.015,
+  bevelEnabled: true,
+  bevelSegments: 3,
+  bevelSize: 0.012,
+  bevelThickness: 0.008,
+});
+rearSkateGeom.rotateX(-Math.PI / 2);
+const rearSkateMesh = new THREE.Mesh(rearSkateGeom, ptfeMat);
+rearSkateMesh.position.set(0, 0.005, 0.95);
+rearSkateMesh.name = 'PTFE_Rear';
+baseGroup.add(rearSkateMesh);
 
 // Thumb Wing Skate
 const thumbSkate = new THREE.Mesh(
-  new THREE.CapsuleGeometry(0.065, 0.38, 8, 16),
+  new THREE.CapsuleGeometry(0.065, 0.42, 8, 16),
   ptfeMat
 );
-thumbSkate.position.set(-0.80, 0.005, 0.14);
+thumbSkate.position.set(-0.76, 0.005, 0.15);
 thumbSkate.rotation.set(-Math.PI / 2, 0, 0);
 thumbSkate.name = 'PTFE_Thumb';
 baseGroup.add(thumbSkate);
 
-// Optical Sensor Ring
+// Focus Pro 30K Optical Sensor Aperture & Enclosing Ring
 const sensorRing = new THREE.Mesh(
-  new THREE.RingGeometry(0.10, 0.18, 28),
+  new THREE.RingGeometry(0.11, 0.19, 28),
   ptfeMat
 );
 sensorRing.position.set(0, 0.005, 0.02);
@@ -157,216 +185,364 @@ sensorRing.rotation.set(-Math.PI / 2, 0, 0);
 sensorRing.name = 'PTFE_SensorRing';
 baseGroup.add(sensorRing);
 
-// Glowing Laser Sensor Aperture
-const laserAperture = new THREE.Mesh(
+const sensorAperture = new THREE.Mesh(
   new THREE.CircleGeometry(0.065, 20),
-  laserMat
+  sensorLaserMat
 );
-laserAperture.position.set(0, 0.01, 0.02);
-laserAperture.rotation.set(-Math.PI / 2, 0, 0);
-laserAperture.name = 'FocusPro_Laser';
-baseGroup.add(laserAperture);
+sensorAperture.position.set(0, 0.008, 0.02);
+sensorAperture.rotation.set(-Math.PI / 2, 0, 0);
+sensorAperture.name = 'SensorLaser';
+baseGroup.add(sensorAperture);
 
-// Profile switch & power toggle on bottom
+// Profile switch & 2.4GHz / BLE toggle switch on bottom
 const profileBtn = new THREE.Mesh(
-  new THREE.CylinderGeometry(0.045, 0.045, 0.02, 16),
+  new THREE.CylinderGeometry(0.045, 0.045, 0.025, 16),
   metalMat
 );
 profileBtn.position.set(0.28, 0.015, 0.22);
 baseGroup.add(profileBtn);
 
-// ── 3. FLARED THUMB REST WING & RUBBER GRIP RIBS ──
-const thumbWingGroup = new THREE.Group();
-thumbWingGroup.position.set(-0.80, 0.04, 0.14);
-thumbWingGroup.rotation.set(0, 0, -0.07);
-baseGroup.add(thumbWingGroup);
-
-const thumbWingMesh = new THREE.Mesh(
-  new THREE.SphereGeometry(1, 28, 20, 0, Math.PI * 2, 0, Math.PI * 0.5),
-  darkMat
-);
-thumbWingMesh.scale.set(0.48, 0.09, 1.22);
-thumbWingMesh.name = 'ThumbRestWing';
-thumbWingGroup.add(thumbWingMesh);
-
-// Textured rubber grip ridges
-[-0.28, 0, 0.28].forEach((z, idx) => {
-  const gripRib = new THREE.Mesh(
-    new THREE.CapsuleGeometry(0.016, 0.32, 8, 16),
-    rubberMat
-  );
-  gripRib.position.set(0.02, 0.055, z);
-  gripRib.rotation.set(0, 0, Math.PI / 2);
-  thumbWingGroup.add(gripRib);
-});
-
-// Sniper DPI Clutch trigger paddle
-const sniperBtn = new THREE.Mesh(
-  new THREE.CapsuleGeometry(0.045, 0.18, 8, 16),
+// Magnetic Qi Wireless Charging Puck Circle
+const puckRing = new THREE.Mesh(
+  new THREE.RingGeometry(0.28, 0.30, 32),
   metalMat
 );
-sniperBtn.position.set(0.06, 0.085, -0.58);
-sniperBtn.rotation.set(0, 0, -0.12);
-sniperBtn.name = 'SniperClutch';
-thumbWingGroup.add(sniperBtn);
+puckRing.position.set(0, 0.005, 0.55);
+puckRing.rotation.set(-Math.PI / 2, 0, 0);
+baseGroup.add(puckRing);
 
-// ── 4. ERGONOMIC PALM ARCH (Sculpted Ellipsoid Dome) ──
+// ─────────────────────────────────────────────────────────────────────────────
+// 3. 13-ZONE RAZER CHROMA RGB UNDERGLOW PERIMETER LIGHT TUBE
+// ─────────────────────────────────────────────────────────────────────────────
+const underglowCurve = new THREE.CatmullRomCurve3([
+  new THREE.Vector3(-0.78, 0.06, 0.65),
+  new THREE.Vector3(-0.84, 0.06, 0.25),
+  new THREE.Vector3(-0.78, 0.06, -0.15),
+  new THREE.Vector3(-0.62, 0.06, -0.70),
+  new THREE.Vector3(-0.42, 0.06, -1.05),
+  new THREE.Vector3(0, 0.06, -1.12),
+  new THREE.Vector3(0.42, 0.06, -1.05),
+  new THREE.Vector3(0.60, 0.06, -0.68),
+  new THREE.Vector3(0.66, 0.06, -0.15),
+  new THREE.Vector3(0.68, 0.06, 0.35),
+  new THREE.Vector3(0.55, 0.06, 0.85),
+  new THREE.Vector3(0, 0.06, 1.05),
+  new THREE.Vector3(-0.55, 0.06, 0.85),
+]);
+const underglowGeom = new THREE.TubeGeometry(underglowCurve, 64, 0.022, 12, true);
+const underglowMesh = new THREE.Mesh(underglowGeom, chromaRgbMat);
+underglowMesh.name = 'Chroma_Underglow_Strip';
+mouseGroup.add(underglowMesh);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 4. FLARED ERGONOMIC THUMB REST WING & SNIPER CLUTCH
+// ─────────────────────────────────────────────────────────────────────────────
+const thumbWingGroup = new THREE.Group();
+thumbWingGroup.position.set(-0.74, 0.08, 0.12);
+thumbWingGroup.rotation.set(0, 0, -0.06);
+mouseGroup.add(thumbWingGroup);
+
+// Sculpted thumb shelf surface
+const thumbWingShape = new THREE.Shape();
+thumbWingShape.moveTo(0.18, -0.60);
+thumbWingShape.lineTo(-0.25, -0.25);
+thumbWingShape.quadraticCurveTo(-0.40, 0.20, -0.18, 0.65);
+thumbWingShape.lineTo(0.18, 0.55);
+thumbWingShape.closePath();
+
+const thumbWingGeom = new THREE.ExtrudeGeometry(thumbWingShape, {
+  depth: 0.10,
+  bevelEnabled: true,
+  bevelSegments: 4,
+  bevelSize: 0.04,
+  bevelThickness: 0.03,
+});
+thumbWingGeom.rotateX(-Math.PI / 2);
+const thumbWingPlatform = new THREE.Mesh(thumbWingGeom, chassisMat);
+thumbWingPlatform.name = 'ThumbRestPlatform';
+thumbWingGroup.add(thumbWingPlatform);
+
+// Rubber traction ribs on thumb rest
+[-0.26, -0.13, 0, 0.13, 0.26, 0.39].forEach((z) => {
+  const rib = new THREE.Mesh(
+    new THREE.BoxGeometry(0.24, 0.02, 0.035),
+    rubberMat
+  );
+  rib.position.set(-0.06, 0.085, z);
+  rib.rotation.set(0, -0.18, 0);
+  thumbWingGroup.add(rib);
+});
+
+// Signature Multi-Function Sniper DPI Clutch Lever Paddle
+const clutchGroup = new THREE.Group();
+clutchGroup.position.set(-0.05, 0.12, -0.55);
+clutchGroup.rotation.set(0, 0, -0.08);
+thumbWingGroup.add(clutchGroup);
+
+const clutchLever = new THREE.Mesh(
+  new THREE.BoxGeometry(0.08, 0.06, 0.22),
+  metalMat
+);
+clutchLever.name = 'Sniper_DPI_Clutch';
+clutchGroup.add(clutchLever);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 5. ERGONOMIC ASYMMETRICAL PALM ARCH (Aggressive Gamer Contours)
+// ─────────────────────────────────────────────────────────────────────────────
 const palmGroup = new THREE.Group();
-palmGroup.position.set(0, 0.24, 0.20);
-palmGroup.rotation.set(-0.14, 0, -0.06); // Ergonomic right-hand tilt
+palmGroup.position.set(0, 0.26, 0.22);
+palmGroup.rotation.set(-0.16, 0, -0.08); // Real right-handed slope
 mouseGroup.add(palmGroup);
 
-const palmMesh = new THREE.Mesh(
-  new THREE.SphereGeometry(1, 48, 36, 0, Math.PI * 2, 0, Math.PI * 0.56),
-  bodyMat
-);
-palmMesh.scale.set(0.78, 0.50, 1.28);
-palmMesh.name = 'PalmRest_Body';
+// Sculpted arched palm shell with sharp aggressive bevel
+const palmShape = new THREE.Shape();
+palmShape.moveTo(-0.52, -0.70);
+palmShape.lineTo(0.48, -0.70);
+palmShape.quadraticCurveTo(0.60, -0.10, 0.58, 0.40);
+palmShape.quadraticCurveTo(0.48, 0.88, 0.02, 0.95);
+palmShape.quadraticCurveTo(-0.48, 0.88, -0.58, 0.40);
+palmShape.quadraticCurveTo(-0.62, -0.10, -0.52, -0.70);
+
+const palmGeom = new THREE.ExtrudeGeometry(palmShape, {
+  depth: 0.32,
+  bevelEnabled: true,
+  bevelSegments: 8,
+  steps: 2,
+  bevelSize: 0.14,
+  bevelThickness: 0.18,
+});
+palmGeom.rotateX(-Math.PI / 2);
+const palmMesh = new THREE.Mesh(palmGeom, bodyMat);
+palmMesh.name = 'PalmShell_Body';
 palmGroup.add(palmMesh);
 
-// Illuminated Chroma Gaming Crest on Palm Rest
-const chromaLogo = new THREE.Mesh(
-  new THREE.CircleGeometry(0.16, 28),
-  rgbMat
-);
-chromaLogo.position.set(0, 0.58, 0.50);
-chromaLogo.rotation.set(-0.32, 0, 0);
-chromaLogo.name = 'Chroma_RGB_Logo';
-palmGroup.add(chromaLogo);
+// Illuminated Razer Chroma Snake Crest on Palm Rest
+const logoGroup = new THREE.Group();
+logoGroup.position.set(0, 0.54, 0.42);
+logoGroup.rotation.set(-0.35, 0, 0);
+palmGroup.add(logoGroup);
 
-// ── 5. SPLIT PRIMARY CLICK BUTTONS (Independent Left & Right Clicks) ──
+const logoBacking = new THREE.Mesh(
+  new THREE.CircleGeometry(0.18, 32),
+  chromaRgbMat
+);
+logoBacking.name = 'Chroma_Palm_Logo';
+logoGroup.add(logoBacking);
+
+// Stenciled emblem ring
+const logoRing = new THREE.Mesh(
+  new THREE.RingGeometry(0.16, 0.18, 32),
+  glossButtonMat
+);
+logoRing.position.set(0, 0, 0.005);
+logoGroup.add(logoRing);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 6. SHARP AGGRESSIVE SPLIT CLICK BUTTONS (Independent Left & Right Paddles)
+// ─────────────────────────────────────────────────────────────────────────────
 const clicksGroup = new THREE.Group();
 mouseGroup.add(clicksGroup);
 
-// Left Click Paddle (Ergonomic concave finger hollow)
-const leftClickGroup = new THREE.Group();
-leftClickGroup.position.set(-0.34, 0.25, -0.70);
-leftClickGroup.rotation.set(0.23, 0, 0.04);
-clicksGroup.add(leftClickGroup);
+// --- LEFT CLICK BUTTON (Ergonomic finger trough & pointed fang tip) ---
+const leftClickShape = new THREE.Shape();
+leftClickShape.moveTo(-0.06, 0.65); // Pivot at center
+leftClickShape.lineTo(-0.52, 0.55); // Outer rear
+leftClickShape.quadraticCurveTo(-0.56, 0.0, -0.52, -0.55); // Outer edge
+leftClickShape.lineTo(-0.38, -1.08); // Sharp pointed outer tip
+leftClickShape.lineTo(-0.08, -1.02); // Inner click tip
+leftClickShape.lineTo(-0.06, -0.20); // Inner cockpit cutout edge
+leftClickShape.closePath();
 
-const leftClickMesh = new THREE.Mesh(
-  new THREE.SphereGeometry(1, 32, 24, 0, Math.PI * 2, 0, Math.PI * 0.5),
-  bodyMat
+const leftClickGeom = new THREE.ExtrudeGeometry(leftClickShape, {
+  depth: 0.12,
+  bevelEnabled: true,
+  bevelSegments: 6,
+  steps: 2,
+  bevelSize: 0.06,
+  bevelThickness: 0.06,
+});
+leftClickGeom.rotateX(-Math.PI / 2);
+leftClickGeom.rotateZ(-0.02);
+
+const leftClickMesh = new THREE.Mesh(leftClickGeom, bodyMat);
+leftClickMesh.position.set(-0.02, 0.40, -0.15);
+leftClickMesh.rotation.set(0.18, 0, 0.03);
+leftClickMesh.name = 'LeftClickPaddle_Body';
+clicksGroup.add(leftClickMesh);
+
+// --- RIGHT CLICK BUTTON (Sloped downward with sharp pointed tip) ---
+const rightClickShape = new THREE.Shape();
+rightClickShape.moveTo(0.06, 0.65);
+rightClickShape.lineTo(0.50, 0.55);
+rightClickShape.quadraticCurveTo(0.54, 0.0, 0.48, -0.55);
+rightClickShape.lineTo(0.34, -1.06);
+rightClickShape.lineTo(0.08, -1.00);
+rightClickShape.lineTo(0.06, -0.20);
+rightClickShape.closePath();
+
+const rightClickGeom = new THREE.ExtrudeGeometry(rightClickShape, {
+  depth: 0.11,
+  bevelEnabled: true,
+  bevelSegments: 6,
+  steps: 2,
+  bevelSize: 0.06,
+  bevelThickness: 0.06,
+});
+rightClickGeom.rotateX(-Math.PI / 2);
+rightClickGeom.rotateZ(0.02);
+
+const rightClickMesh = new THREE.Mesh(rightClickGeom, bodyMat);
+rightClickMesh.position.set(0.02, 0.38, -0.15);
+rightClickMesh.rotation.set(0.20, 0, -0.05); // Noticeably lower on the right
+rightClickMesh.name = 'RightClickPaddle_Body';
+clicksGroup.add(rightClickMesh);
+
+// Central recessed separation channel floor
+const channelFloor = new THREE.Mesh(
+  new THREE.BoxGeometry(0.16, 0.12, 1.35),
+  chassisMat
 );
-leftClickMesh.scale.set(0.35, 0.17, 0.92);
-leftClickMesh.name = 'LeftClick_Button';
-leftClickGroup.add(leftClickMesh);
+channelFloor.position.set(0, 0.30, -0.65);
+clicksGroup.add(channelFloor);
 
-// Right Click Paddle (Ergonomic concave finger hollow)
-const rightClickGroup = new THREE.Group();
-rightClickGroup.position.set(0.34, 0.25, -0.70);
-rightClickGroup.rotation.set(0.23, 0, -0.04);
-clicksGroup.add(rightClickGroup);
-
-const rightClickMesh = new THREE.Mesh(
-  new THREE.SphereGeometry(1, 32, 24, 0, Math.PI * 2, 0, Math.PI * 0.5),
-  bodyMat
-);
-rightClickMesh.scale.set(0.35, 0.17, 0.92);
-rightClickMesh.name = 'RightClick_Button';
-rightClickGroup.add(rightClickMesh);
-
-// Center Recessed Trench Channel between clicks
-const centerTrench = new THREE.Mesh(
-  new THREE.BoxGeometry(0.14, 0.20, 1.02),
-  darkMat
-);
-centerTrench.position.set(0, 0.22, -0.68);
-centerTrench.name = 'CenterCanyon';
-clicksGroup.add(centerTrench);
-
-// ── 6. HYPERSCROLL TACTILE WHEEL & DPI BUTTONS ──
+// ─────────────────────────────────────────────────────────────────────────────
+// 7. HYPERSCROLL TILT WHEEL & COCKPIT CONTROLS
+// ─────────────────────────────────────────────────────────────────────────────
 const wheelGroup = new THREE.Group();
 wheelGroup.position.set(0, 0.46, -0.68);
 mouseGroup.add(wheelGroup);
 
-// Brushed Metal Core Hub
+// Wheel Hub Axle (Spoked metallic rim)
 const wheelHub = new THREE.Mesh(
-  new THREE.CylinderGeometry(0.16, 0.16, 0.085, 32),
+  new THREE.CylinderGeometry(0.165, 0.165, 0.09, 32),
   metalMat
 );
-wheelHub.rotation.set(0, 0, Math.PI / 2);
-wheelHub.name = 'WheelMetalHub';
+wheelHub.rotation.z = Math.PI / 2;
+wheelHub.name = 'WheelMetalRim';
 wheelGroup.add(wheelHub);
 
-// Knurled Rubber Outer Tire Tread
-const wheelTire = new THREE.Mesh(
-  new THREE.CylinderGeometry(0.17, 0.17, 0.048, 32),
-  rubberMat
-);
-wheelTire.rotation.set(0, 0, Math.PI / 2);
-wheelTire.name = 'WheelRubberTread';
+// Knurled Rubber Outer Tire with Chevron Ridges
+const tireGeom = new THREE.CylinderGeometry(0.176, 0.176, 0.055, 36);
+const wheelTire = new THREE.Mesh(tireGeom, rubberMat);
+wheelTire.rotation.z = Math.PI / 2;
+wheelTire.name = 'WheelRubberTire';
 wheelGroup.add(wheelTire);
 
-// Dual Translucent RGB Side Glow Rims
-[-0.040, 0.040].forEach((x, idx) => {
-  const ledRim = new THREE.Mesh(
-    new THREE.RingGeometry(0.118, 0.165, 28),
-    wheelLedMat
-  );
-  ledRim.position.set(x, 0, 0);
-  ledRim.rotation.set(0, Math.PI / 2, 0);
-  ledRim.name = 'Wheel_LED_Rim_' + (idx === 0 ? 'L' : 'R');
-  wheelGroup.add(ledRim);
-});
-
-// DPI Toggle Stage Buttons directly behind wheel
-const dpiGroup = new THREE.Group();
-dpiGroup.position.set(0, 0.44, -0.40);
-mouseGroup.add(dpiGroup);
-
-[-0.065, 0.065].forEach((z, idx) => {
-  const dpiBtn = new THREE.Mesh(
-    new THREE.BoxGeometry(0.085, 0.055, 0.095),
+// 20 knurled tactile traction ribs on tire surface
+for (let i = 0; i < 20; i++) {
+  const angle = (i / 20) * Math.PI * 2;
+  const rib = new THREE.Mesh(
+    new THREE.BoxGeometry(0.056, 0.008, 0.014),
     metalMat
   );
-  dpiBtn.position.set(0, 0, z);
-  dpiBtn.name = 'DPI_Button_' + (idx === 0 ? 'Up' : 'Down');
-  dpiGroup.add(dpiBtn);
+  rib.position.set(0, Math.cos(angle) * 0.176, Math.sin(angle) * 0.176);
+  rib.rotation.x = -angle;
+  wheelGroup.add(rib);
+}
+
+// Dual Translucent Chroma RGB Glow Rings on Wheel Flanks
+[-0.038, 0.038].forEach((x, i) => {
+  const glowRing = new THREE.Mesh(
+    new THREE.RingGeometry(0.125, 0.168, 28),
+    wheelRgbMat
+  );
+  glowRing.position.set(x, 0, 0);
+  glowRing.rotation.y = Math.PI / 2;
+  glowRing.name = `Wheel_Chroma_Ring_${i}`;
+  wheelGroup.add(glowRing);
 });
 
-// ── 7. SIDE THUMB BUTTONS (Mouse 4 & Mouse 5) ──
+// Wheel Cowl / Hood (Aggressive visor framing the scroll wheel)
+const wheelHood = new THREE.Mesh(
+  new THREE.BoxGeometry(0.14, 0.06, 0.22),
+  chassisMat
+);
+wheelHood.position.set(0, 0.44, -0.48);
+wheelHood.rotation.x = -0.15;
+mouseGroup.add(wheelHood);
+
+// Dual Faceted Tactile DPI Sensitivity Buttons
+[-0.045, 0.045].forEach((z, i) => {
+  const dpiBtn = new THREE.Mesh(
+    new THREE.BoxGeometry(0.08, 0.04, 0.075),
+    metalMat
+  );
+  dpiBtn.position.set(0, 0.45, -0.34 + z);
+  dpiBtn.rotation.x = -0.12;
+  dpiBtn.name = `DPI_Switch_${i + 1}`;
+  mouseGroup.add(dpiBtn);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 8. SIDE THUMB BUTTONS (Mouse 4 & Mouse 5) & FRONT INTAKE BUMPER
+// ─────────────────────────────────────────────────────────────────────────────
 const sideButtonsGroup = new THREE.Group();
-sideButtonsGroup.position.set(-0.66, 0.39, -0.02);
-sideButtonsGroup.rotation.set(0, 0.09, 0);
+sideButtonsGroup.position.set(-0.62, 0.40, -0.06);
+sideButtonsGroup.rotation.set(0, 0.08, -0.04);
 mouseGroup.add(sideButtonsGroup);
 
-const mouse4 = new THREE.Mesh(
-  new THREE.CapsuleGeometry(0.042, 0.22, 10, 16),
-  glossButtonMat
-);
-mouse4.position.set(0, 0, -0.16);
-mouse4.name = 'Button_Forward_M4';
-sideButtonsGroup.add(mouse4);
-
+// Mouse 5 (Forward Button)
 const mouse5 = new THREE.Mesh(
-  new THREE.CapsuleGeometry(0.042, 0.22, 10, 16),
+  new THREE.BoxGeometry(0.07, 0.09, 0.26),
   glossButtonMat
 );
-mouse5.position.set(0, 0, 0.17);
-mouse5.name = 'Button_Back_M5';
+mouse5.position.set(0, 0, -0.16);
+mouse5.name = 'Mouse5_Forward';
 sideButtonsGroup.add(mouse5);
 
-// ── 8. FRONT BUMPER & SPEEDFLEX USB-C PORT ──
-const frontPort = new THREE.Mesh(
-  new THREE.BoxGeometry(0.24, 0.075, 0.06),
-  darkMat
+// Mouse 4 (Back Button)
+const mouse4 = new THREE.Mesh(
+  new THREE.BoxGeometry(0.07, 0.09, 0.26),
+  glossButtonMat
 );
-frontPort.position.set(0, 0.12, -1.26);
-frontPort.name = 'Speedflex_Port';
-mouseGroup.add(frontPort);
+mouse4.position.set(0, 0, 0.14);
+mouse4.name = 'Mouse4_Back';
+sideButtonsGroup.add(mouse4);
 
-// ── EXPORT TO BINARY GLB ──
+// Front Air Intake Grille & Recessed USB-C Speedflex Port
+const frontIntakeGroup = new THREE.Group();
+frontIntakeGroup.position.set(0, 0.16, -1.22);
+mouseGroup.add(frontIntakeGroup);
+
+const intakeBumper = new THREE.Mesh(
+  new THREE.BoxGeometry(0.46, 0.12, 0.08),
+  chassisMat
+);
+frontIntakeGroup.add(intakeBumper);
+
+// Dual intake scoops
+[-0.14, 0.14].forEach((x) => {
+  const scoop = new THREE.Mesh(
+    new THREE.BoxGeometry(0.12, 0.05, 0.04),
+    glossButtonMat
+  );
+  scoop.position.set(x, 0, -0.02);
+  frontIntakeGroup.add(scoop);
+});
+
+// USB-C Reversible Port Hollow
+const usbcPort = new THREE.Mesh(
+  new THREE.BoxGeometry(0.10, 0.035, 0.04),
+  metalMat
+);
+usbcPort.position.set(0, 0, -0.025);
+frontIntakeGroup.add(usbcPort);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// EXPORT TO GLTF BINARY (.GLB)
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('Generating authentic Razer Basilisk V3 Pro 3D CAD model...');
+
 const exporter = new GLTFExporter();
 exporter.parse(
   scene,
-  (glb) => {
-    const outPath = path.resolve('public/models/gaming-mouse.glb');
-    fs.writeFileSync(outPath, Buffer.from(glb));
-    console.log('SUCCESS: Generated gaming-mouse.glb at', outPath, 'Size:', glb.byteLength, 'bytes');
+  (glbBuffer) => {
+    const outputPath = path.resolve('public/models/gaming-mouse.glb');
+    fs.writeFileSync(outputPath, Buffer.from(glbBuffer));
+    console.log(`[SUCCESS] Wrote gaming-mouse.glb to ${outputPath} (${(glbBuffer.byteLength / 1024).toFixed(1)} KB)`);
   },
   (err) => {
-    console.error('ERROR exporting GLB:', err);
+    console.error('GLTF Export failed:', err);
     process.exit(1);
   },
   { binary: true }
