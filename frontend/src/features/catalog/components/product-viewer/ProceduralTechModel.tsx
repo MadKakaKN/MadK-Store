@@ -827,45 +827,145 @@ function Keyboard3D({
 function Mouse3D({
   parsedColor,
   wireframe,
-  texture,
+  productName,
 }: {
   parsedColor: THREE.Color;
   wireframe: boolean;
-  texture: THREE.Texture | null;
+  productName?: string;
 }) {
+  const name = (productName || '').toLowerCase();
+  const isBasiliskOrG502 = name.includes('basilisk') || name.includes('g502') || name.includes('darkstar');
+  const rgbRef = useRef<THREE.Mesh>(null);
+  const wheelRgbRef = useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime();
+    if (rgbRef.current) {
+      const hue = (time * 0.3) % 1;
+      (rgbRef.current.material as THREE.MeshStandardMaterial).emissive.setHSL(hue, 1, 0.55);
+      (rgbRef.current.material as THREE.MeshStandardMaterial).color.setHSL(hue, 1, 0.5);
+    }
+    if (wheelRgbRef.current) {
+      const hue = (time * 0.3 + 0.25) % 1;
+      (wheelRgbRef.current.material as THREE.MeshStandardMaterial).emissive.setHSL(hue, 1, 0.6);
+    }
+  });
+
   return (
-    <group position={[0, 0, 0]} rotation={[0.4, -0.4, 0]}>
-      {/* Contoured Ergonomic Body */}
-      <mesh castShadow receiveShadow>
-        <capsuleGeometry args={[0.65, 1.4, 20, 24]} />
-        <meshStandardMaterial color={parsedColor} metalness={0.3} roughness={0.4} wireframe={wireframe} />
-      </mesh>
-
-      {/* Product Logo / Texture */}
-      {texture && (
-        <mesh position={[0, 0.1, 0.45]} rotation={[-Math.PI / 4, 0, 0]}>
-          <planeGeometry args={[0.9, 0.9]} />
-          <meshStandardMaterial map={texture} transparent opacity={0.9} roughness={0.3} />
+    <group position={[0, -0.15, 0]} scale={0.95} rotation={[0.4, -0.4, 0]}>
+      {/* ── BASE CHASSIS (Sitting flat) ── */}
+      <group position={[0, 0, 0]}>
+        {/* Main Underside Plate */}
+        <mesh position={[0, 0.04, 0]} receiveShadow>
+          <boxGeometry args={[1.35, 0.08, 2.4]} />
+          <meshStandardMaterial color="#0f172a" roughness={0.7} metalness={0.2} wireframe={wireframe} />
         </mesh>
-      )}
 
-      {/* Tactile Textured Scroll Wheel */}
-      <mesh position={[0, 0.5, 0.5]} rotation={[0, Math.PI / 2, 0]}>
-        <cylinderGeometry args={[0.14, 0.14, 0.09, 20]} />
-        <meshStandardMaterial color="#06b6d4" emissive="#06b6d4" emissiveIntensity={0.8} roughness={0.3} />
-      </mesh>
+        {/* Flared Thumb Rest Wing on Left Side (Basilisk / G502) */}
+        {isBasiliskOrG502 && (
+          <group position={[-0.85, 0.04, 0.1]}>
+            <mesh rotation={[0, 0, -0.05]} receiveShadow>
+              <boxGeometry args={[0.48, 0.06, 1.2]} />
+              <meshStandardMaterial color="#0f172a" roughness={0.8} />
+            </mesh>
+            <mesh position={[0, 0.04, 0]}>
+              <boxGeometry args={[0.42, 0.02, 1.1]} />
+              <meshStandardMaterial color="#020617" roughness={0.95} />
+            </mesh>
+          </group>
+        )}
 
-      {/* Side Thumb Buttons */}
-      <mesh position={[-0.45, 0.1, 0.2]}>
-        <boxGeometry args={[0.08, 0.35, 0.06]} />
-        <meshStandardMaterial color="#0f172a" roughness={0.5} />
-      </mesh>
+        {/* Pure White PTFE Glide Feet */}
+        <mesh position={[0, 0.005, -1.05]}>
+          <boxGeometry args={[1.1, 0.015, 0.22]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.2} />
+        </mesh>
+        <mesh position={[0, 0.005, 1.05]}>
+          <boxGeometry args={[1.15, 0.015, 0.24]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.2} />
+        </mesh>
+        <mesh position={[0, 0.005, 0.05]}>
+          <ringGeometry args={[0.1, 0.2, 20]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.2} />
+        </mesh>
+        <mesh position={[0, 0.01, 0.05]} rotation={[-Math.PI / 2, 0, 0]}>
+          <circleGeometry args={[0.08, 16]} />
+          <meshStandardMaterial color="#ef4444" emissive="#ef4444" emissiveIntensity={1.5} />
+        </mesh>
+      </group>
 
-      {/* Pure PTFE Skates on Underside */}
-      <mesh position={[0, 0.5, -0.4]}>
-        <boxGeometry args={[0.5, 0.2, 0.02]} />
-        <meshStandardMaterial color="#ffffff" roughness={0.2} />
-      </mesh>
+      {/* ── ERGONOMIC PALM ARCH & SHELL ── */}
+      <group position={[0, 0.1, 0]}>
+        {/* Rear Palm Hump */}
+        <mesh position={[0, 0.32, 0.35]} rotation={[-0.2, 0, 0]} castShadow>
+          <boxGeometry args={[1.32, 0.48, 1.25]} />
+          <meshStandardMaterial color={parsedColor} roughness={0.35} metalness={0.25} wireframe={wireframe} />
+        </mesh>
+
+        {/* Mid-body Waist Bridge */}
+        <mesh position={[0, 0.38, -0.2]} rotation={[0.15, 0, 0]} castShadow>
+          <boxGeometry args={[1.28, 0.44, 0.75]} />
+          <meshStandardMaterial color={parsedColor} roughness={0.35} metalness={0.25} wireframe={wireframe} />
+        </mesh>
+
+        {/* Illuminated Brand RGB Logo on Palm Rest */}
+        <mesh ref={rgbRef} position={[0, 0.58, 0.5]} rotation={[-0.28, 0, 0]}>
+          <circleGeometry args={[0.16, 24]} />
+          <meshStandardMaterial color="#10b981" emissive="#10b981" emissiveIntensity={1.8} />
+        </mesh>
+
+        {/* ── SPLIT PRIMARY CLICK BUTTONS (Separate Left & Right Triggers) ── */}
+        <mesh position={[-0.34, 0.32, -0.82]} rotation={[0.26, 0, 0.04]} castShadow>
+          <boxGeometry args={[0.56, 0.14, 0.95]} />
+          <meshStandardMaterial color={parsedColor} roughness={0.3} metalness={0.3} wireframe={wireframe} />
+        </mesh>
+        <mesh position={[0.34, 0.32, -0.82]} rotation={[0.26, 0, -0.04]} castShadow>
+          <boxGeometry args={[0.56, 0.14, 0.95]} />
+          <meshStandardMaterial color={parsedColor} roughness={0.3} metalness={0.3} wireframe={wireframe} />
+        </mesh>
+
+        {/* Center Trench dividing clicks */}
+        <mesh position={[0, 0.28, -0.75]}>
+          <boxGeometry args={[0.16, 0.2, 1.05]} />
+          <meshBasicMaterial color="#020617" />
+        </mesh>
+
+        {/* ── SCROLL WHEEL & DPI BUTTON ── */}
+        <group position={[0, 0.44, -0.72]}>
+          <mesh rotation={[0, 0, Math.PI / 2]}>
+            <cylinderGeometry args={[0.15, 0.15, 0.1, 24]} />
+            <meshStandardMaterial color="#0f172a" roughness={0.9} />
+          </mesh>
+          <mesh ref={wheelRgbRef} rotation={[0, 0, Math.PI / 2]}>
+            <cylinderGeometry args={[0.155, 0.155, 0.04, 24]} />
+            <meshStandardMaterial color="#06b6d4" emissive="#06b6d4" emissiveIntensity={1.6} />
+          </mesh>
+        </group>
+
+        {/* DPI Toggle Button */}
+        <mesh position={[0, 0.44, -0.42]}>
+          <boxGeometry args={[0.1, 0.06, 0.16]} />
+          <meshStandardMaterial color="#334155" metalness={0.8} roughness={0.3} />
+        </mesh>
+
+        {/* ── SIDE THUMB BUTTONS ── */}
+        <group position={[-0.66, 0.36, 0]}>
+          <mesh position={[0, 0, -0.15]} rotation={[0, 0.1, 0]}>
+            <boxGeometry args={[0.07, 0.12, 0.28]} />
+            <meshStandardMaterial color="#1e293b" metalness={0.8} roughness={0.2} />
+          </mesh>
+          <mesh position={[0, 0, 0.18]} rotation={[0, -0.1, 0]}>
+            <boxGeometry args={[0.07, 0.12, 0.28]} />
+            <meshStandardMaterial color="#1e293b" metalness={0.8} roughness={0.2} />
+          </mesh>
+        </group>
+
+        {/* Front USB-C Port */}
+        <mesh position={[0, 0.12, -1.22]}>
+          <boxGeometry args={[0.22, 0.06, 0.06]} />
+          <meshBasicMaterial color="#020617" />
+        </mesh>
+      </group>
     </group>
   );
 }
@@ -876,44 +976,141 @@ function Mouse3D({
 function HeadphoneOverEar3D({
   parsedColor,
   wireframe,
-  texture,
+  productName,
 }: {
   parsedColor: THREE.Color;
   wireframe: boolean;
-  texture: THREE.Texture | null;
+  productName?: string;
 }) {
+  const name = (productName || '').toLowerCase();
+  const isGamingHeadset = name.includes('virtuoso') || name.includes('blackshark') || name.includes('g pro') || name.includes('hs80');
+  const isAirPodsMax = name.includes('airpods max');
+  const isSonyXM5 = name.includes('wh-1000xm5') || name.includes('sony');
+  const isVirtuoso = name.includes('virtuoso');
+
   return (
-    <group position={[0, -0.1, 0]} rotation={[0.1, -0.35, 0]}>
-      {/* Padded Headband Arch */}
-      <mesh position={[0, 0.9, 0]}>
-        <torusGeometry args={[1.05, 0.1, 16, 40, Math.PI]} />
-        <meshStandardMaterial color="#1e293b" roughness={0.8} wireframe={wireframe} />
+    <group position={[0, -0.2, 0]} scale={0.92} rotation={[0.12, -0.38, 0]}>
+      {/* ── HEADBAND ARCH ── */}
+      {/* Padded Top Cushion */}
+      <mesh position={[0, 1.45, 0]}>
+        <torusGeometry args={[1.35, 0.14, 16, 32, Math.PI]} />
+        <meshStandardMaterial color="#1e293b" roughness={0.7} metalness={0.15} wireframe={wireframe} />
       </mesh>
-      {/* Left Earcup with Cushion */}
-      <group position={[-1.15, 0.6, 0]} rotation={[0, 0, 0.15]}>
-        <mesh castShadow>
-          <cylinderGeometry args={[0.42, 0.42, 0.32, 28]} />
-          <meshStandardMaterial color={parsedColor} metalness={0.85} roughness={0.25} wireframe={wireframe} />
-        </mesh>
-        {texture && (
-          <mesh position={[-0.17, 0, 0]} rotation={[0, -Math.PI / 2, 0]}>
-            <circleGeometry args={[0.38, 28]} />
-            <meshStandardMaterial map={texture} roughness={0.3} />
+      {/* Outer Metal / Reinforced Spine Band */}
+      <mesh position={[0, 1.48, 0]}>
+        <torusGeometry args={[1.42, 0.04, 12, 32, Math.PI]} />
+        <meshStandardMaterial color={isAirPodsMax ? '#e2e8f0' : parsedColor} metalness={0.9} roughness={0.2} />
+      </mesh>
+
+      {/* ── ADJUSTABLE SLIDER EXTENSION ARMS ── */}
+      {[-1.35, 1.35].map((x, i) => (
+        <group key={i} position={[x, 0.95, 0]}>
+          <mesh>
+            <cylinderGeometry args={[0.05, 0.05, 0.65, 16]} />
+            <meshStandardMaterial color="#94a3b8" metalness={0.95} roughness={0.15} />
           </mesh>
+          <mesh position={[0, -0.35, 0]}>
+            <boxGeometry args={[0.14, 0.12, 0.14]} />
+            <meshStandardMaterial color={isSonyXM5 ? '#eab308' : '#334155'} metalness={0.8} roughness={0.3} />
+          </mesh>
+        </group>
+      ))}
+
+      {/* ── SWIVEL FORK YOKES ── */}
+      {[-1.38, 1.38].map((x, i) => (
+        <group key={i} position={[x, 0.5, 0]} rotation={[0, 0, i === 0 ? 0.08 : -0.08]}>
+          <mesh position={[0, 0, 0]}>
+            <torusGeometry args={[0.48, 0.04, 12, 24, Math.PI]} />
+            <meshStandardMaterial color="#475569" metalness={0.9} roughness={0.2} />
+          </mesh>
+        </group>
+      ))}
+
+      {/* ── LEFT EARCUP ── */}
+      <group position={[-1.38, 0.28, 0]} rotation={[0, 0.12, 0.08]}>
+        {/* Outer Earcup Dome */}
+        <mesh castShadow>
+          <cylinderGeometry args={[0.55, 0.52, 0.28, 32]} />
+          <meshStandardMaterial color={parsedColor} metalness={0.8} roughness={0.25} wireframe={wireframe} />
+        </mesh>
+
+        {/* Outer Face Plate */}
+        <mesh position={[-0.15, 0, 0]} rotation={[0, -Math.PI / 2, 0]}>
+          <circleGeometry args={[0.48, 32]} />
+          <meshStandardMaterial
+            color={isVirtuoso ? '#0f172a' : parsedColor}
+            metalness={isVirtuoso ? 0.95 : 0.85}
+            roughness={isVirtuoso ? 0.15 : 0.3}
+          />
+        </mesh>
+        {isVirtuoso && (
+          <mesh position={[-0.155, 0, 0]} rotation={[0, -Math.PI / 2, 0]}>
+            <ringGeometry args={[0.2, 0.44, 24]} />
+            <meshStandardMaterial color="#94a3b8" metalness={0.95} roughness={0.2} wireframe />
+          </mesh>
+        )}
+
+        {/* Inner Memory Foam Ear Cushion (Facing Inward to Head) */}
+        <group position={[0.16, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
+          <mesh>
+            <torusGeometry args={[0.38, 0.14, 20, 32]} />
+            <meshStandardMaterial color="#0f172a" roughness={0.85} metalness={0.1} />
+          </mesh>
+          <mesh position={[0, 0, -0.05]}>
+            <circleGeometry args={[0.32, 24]} />
+            <meshStandardMaterial color="#020617" roughness={0.95} />
+          </mesh>
+        </group>
+
+        {/* Detachable Boom Mic for Gaming Headsets */}
+        {isGamingHeadset && (
+          <group position={[0.1, -0.4, 0.25]} rotation={[0.4, 0.6, -0.3]}>
+            <mesh position={[0, 0, 0.45]} rotation={[Math.PI / 2, 0, 0]}>
+              <cylinderGeometry args={[0.025, 0.025, 0.9, 16]} />
+              <meshStandardMaterial color="#334155" metalness={0.9} roughness={0.3} />
+            </mesh>
+            <mesh position={[0, 0, 0.95]} rotation={[Math.PI / 2, 0, 0]}>
+              <capsuleGeometry args={[0.07, 0.16, 12, 16]} />
+              <meshStandardMaterial color="#020617" roughness={0.95} />
+            </mesh>
+            <mesh position={[0, 0, 0.86]} rotation={[Math.PI / 2, 0, 0]}>
+              <torusGeometry args={[0.035, 0.01, 8, 16]} />
+              <meshStandardMaterial color="#ef4444" emissive="#ef4444" emissiveIntensity={1.5} />
+            </mesh>
+          </group>
         )}
       </group>
-      {/* Right Earcup with Cushion */}
-      <group position={[1.15, 0.6, 0]} rotation={[0, 0, -0.15]}>
+
+      {/* ── RIGHT EARCUP ── */}
+      <group position={[1.38, 0.28, 0]} rotation={[0, -0.12, -0.08]}>
         <mesh castShadow>
-          <cylinderGeometry args={[0.42, 0.42, 0.32, 28]} />
-          <meshStandardMaterial color={parsedColor} metalness={0.85} roughness={0.25} wireframe={wireframe} />
+          <cylinderGeometry args={[0.55, 0.52, 0.28, 32]} />
+          <meshStandardMaterial color={parsedColor} metalness={0.8} roughness={0.25} wireframe={wireframe} />
         </mesh>
-        {texture && (
-          <mesh position={[0.17, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
-            <circleGeometry args={[0.38, 28]} />
-            <meshStandardMaterial map={texture} roughness={0.3} />
+        <mesh position={[0.15, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
+          <circleGeometry args={[0.48, 32]} />
+          <meshStandardMaterial
+            color={isVirtuoso ? '#0f172a' : parsedColor}
+            metalness={isVirtuoso ? 0.95 : 0.85}
+            roughness={isVirtuoso ? 0.15 : 0.3}
+          />
+        </mesh>
+        {isVirtuoso && (
+          <mesh position={[0.155, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
+            <ringGeometry args={[0.2, 0.44, 24]} />
+            <meshStandardMaterial color="#94a3b8" metalness={0.95} roughness={0.2} wireframe />
           </mesh>
         )}
+        <group position={[-0.16, 0, 0]} rotation={[0, -Math.PI / 2, 0]}>
+          <mesh>
+            <torusGeometry args={[0.38, 0.14, 20, 32]} />
+            <meshStandardMaterial color="#0f172a" roughness={0.85} metalness={0.1} />
+          </mesh>
+          <mesh position={[0, 0, -0.05]}>
+            <circleGeometry args={[0.32, 24]} />
+            <meshStandardMaterial color="#020617" roughness={0.95} />
+          </mesh>
+        </group>
       </group>
     </group>
   );
@@ -921,27 +1118,80 @@ function HeadphoneOverEar3D({
 
 function HeadphoneTWS3D({
   parsedColor,
-  texture,
+  productName,
 }: {
   parsedColor: THREE.Color;
-  texture: THREE.Texture | null;
+  productName?: string;
 }) {
+  const name = (productName || '').toLowerCase();
+  const isAirPods = name.includes('airpods');
+
   return (
-    <group position={[0, 0, 0]} rotation={[0.3, -0.35, 0]}>
-      <mesh castShadow receiveShadow>
-        <boxGeometry args={[1.8, 1.4, 0.8]} />
-        <meshStandardMaterial color={parsedColor} roughness={0.3} metalness={0.2} />
-      </mesh>
-      {texture && (
-        <mesh position={[0, 0, 0.41]}>
-          <planeGeometry args={[1.6, 1.2]} />
-          <meshStandardMaterial map={texture} transparent roughness={0.3} />
+    <group position={[0, -0.1, 0]} scale={0.9} rotation={[0.25, -0.35, 0]}>
+      {/* ── CHARGING CASE ── */}
+      <group position={[0, -0.3, 0]}>
+        <mesh castShadow receiveShadow>
+          <boxGeometry args={[1.9, 1.25, 0.75]} />
+          <meshStandardMaterial color={isAirPods ? '#ffffff' : parsedColor} roughness={0.2} metalness={0.15} />
         </mesh>
-      )}
-      <mesh position={[0, 0, 0.42]}>
-        <circleGeometry args={[0.04, 16]} />
-        <meshStandardMaterial color="#22c55e" emissive="#22c55e" emissiveIntensity={1.2} />
-      </mesh>
+        <mesh position={[0, 0.72, 0]} castShadow>
+          <boxGeometry args={[1.9, 0.65, 0.75]} />
+          <meshStandardMaterial color={isAirPods ? '#ffffff' : parsedColor} roughness={0.2} metalness={0.15} />
+        </mesh>
+        <mesh position={[0, 0.39, 0.38]}>
+          <boxGeometry args={[1.82, 0.02, 0.01]} />
+          <meshBasicMaterial color="#334155" />
+        </mesh>
+        <mesh position={[0, 0.1, 0.385]}>
+          <circleGeometry args={[0.035, 16]} />
+          <meshStandardMaterial color="#22c55e" emissive="#22c55e" emissiveIntensity={1.5} />
+        </mesh>
+        <mesh position={[0, -0.63, 0]}>
+          <boxGeometry args={[0.22, 0.04, 0.08]} />
+          <meshBasicMaterial color="#020617" />
+        </mesh>
+      </group>
+
+      {/* ── PAIR OF WIRELESS EARBUDS ── */}
+      {/* Left Earbud */}
+      <group position={[-0.85, 0.85, 0.2]} rotation={[0.2, 0.4, -0.2]}>
+        <mesh castShadow>
+          <sphereGeometry args={[0.22, 20, 20]} />
+          <meshStandardMaterial color={isAirPods ? '#ffffff' : parsedColor} roughness={0.25} metalness={0.2} />
+        </mesh>
+        <mesh position={[-0.14, 0.05, 0.12]} rotation={[0, -Math.PI / 4, 0]}>
+          <coneGeometry args={[0.15, 0.18, 20]} />
+          <meshStandardMaterial color="#94a3b8" roughness={0.7} transparent opacity={0.85} />
+        </mesh>
+        <mesh position={[0, -0.28, 0]}>
+          <cylinderGeometry args={[0.05, 0.05, 0.45, 16]} />
+          <meshStandardMaterial color={isAirPods ? '#ffffff' : parsedColor} roughness={0.2} metalness={0.2} />
+        </mesh>
+        <mesh position={[0, -0.51, 0]}>
+          <cylinderGeometry args={[0.052, 0.052, 0.03, 16]} />
+          <meshStandardMaterial color="#cbd5e1" metalness={0.95} roughness={0.1} />
+        </mesh>
+      </group>
+
+      {/* Right Earbud */}
+      <group position={[0.85, 0.85, 0.2]} rotation={[0.2, -0.4, 0.2]}>
+        <mesh castShadow>
+          <sphereGeometry args={[0.22, 20, 20]} />
+          <meshStandardMaterial color={isAirPods ? '#ffffff' : parsedColor} roughness={0.25} metalness={0.2} />
+        </mesh>
+        <mesh position={[0.14, 0.05, 0.12]} rotation={[0, Math.PI / 4, 0]}>
+          <coneGeometry args={[0.15, 0.18, 20]} />
+          <meshStandardMaterial color="#94a3b8" roughness={0.7} transparent opacity={0.85} />
+        </mesh>
+        <mesh position={[0, -0.28, 0]}>
+          <cylinderGeometry args={[0.05, 0.05, 0.45, 16]} />
+          <meshStandardMaterial color={isAirPods ? '#ffffff' : parsedColor} roughness={0.2} metalness={0.2} />
+        </mesh>
+        <mesh position={[0, -0.51, 0]}>
+          <cylinderGeometry args={[0.052, 0.052, 0.03, 16]} />
+          <meshStandardMaterial color="#cbd5e1" metalness={0.95} roughness={0.1} />
+        </mesh>
+      </group>
     </group>
   );
 }
@@ -1168,12 +1418,12 @@ export const ProceduralTechModel: React.FC<ProceduralTechModelProps> = ({
         )}
         {productType === 'gpu' && <GPU3D wireframe={wireframe} texture={texture} />}
         {productType === 'headphone_overear' && (
-          <HeadphoneOverEar3D parsedColor={parsedColor} wireframe={wireframe} texture={texture} />
+          <HeadphoneOverEar3D parsedColor={parsedColor} wireframe={wireframe} productName={productName} />
         )}
         {productType === 'headphone_tws' && (
-          <HeadphoneTWS3D parsedColor={parsedColor} texture={texture} />
+          <HeadphoneTWS3D parsedColor={parsedColor} productName={productName} />
         )}
-        {productType === 'mouse' && <Mouse3D parsedColor={parsedColor} wireframe={wireframe} texture={texture} />}
+        {productType === 'mouse' && <Mouse3D parsedColor={parsedColor} wireframe={wireframe} productName={productName} />}
         {productType === 'keyboard' && (
           <Keyboard3D parsedColor={parsedColor} wireframe={wireframe} texture={texture} />
         )}
