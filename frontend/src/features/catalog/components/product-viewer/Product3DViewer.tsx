@@ -17,50 +17,24 @@ export interface Product3DViewerProps {
   onSwitchTo2D?: () => void;
 }
 
-export function resolveModel3DUrl(url?: string, productName?: string, categorySlug?: string): string {
-  const raw = (url || '').trim();
+export function resolveModel3DUrl(url?: string, productName?: string, _categorySlug?: string): string {
   const name = (productName || '').toLowerCase();
-  const cat = (categorySlug || '').toLowerCase();
+  const raw = (url || '').trim();
 
-  if (raw) {
-    if (raw.includes('iphone-15-pro-max.glb') || (raw.includes('models.madkstore.vn') && raw.includes('iphone'))) {
-      return '/models/iphone-15-pro-max.glb';
-    }
-    if (raw.includes('galaxy-s24-ultra.glb') || (raw.includes('models.madkstore.vn') && raw.includes('galaxy'))) {
-      return '/models/galaxy-s24-ultra.glb';
-    }
-    if (raw.includes('macbook-pro-16.glb') || (raw.includes('models.madkstore.vn') && raw.includes('macbook'))) {
-      return '/models/macbook-pro-16.glb';
-    }
-    if (raw.includes('smartwatch.glb') || raw.includes('watch.glb')) {
-      return '/models/smartwatch.glb';
-    }
-    // Handle mock domain replacement
-    if (raw.includes('models.madkstore.vn/')) {
-      const filename = raw.split('/').pop();
-      if (filename) return `/models/${filename}`;
-    }
-    // If it's a relative path or valid http(s) URL
-    if (raw.startsWith('/models/') || raw.startsWith('http://') || raw.startsWith('https://')) {
-      return raw;
-    }
-  }
-
-  // Smart product-based detection fallback
-  if (name.includes('iphone') || name.includes('15 pro max')) {
+  // ONLY return iPhone GLB if this product is explicitly iPhone 15 Pro or iPhone 15 Pro Max!
+  // NEVER return iPhone GLB for Samsung, Xiaomi, Oppo, etc.!
+  if (name.includes('iphone 15 pro max') || (raw.includes('iphone-15-pro-max.glb') && name.includes('iphone'))) {
     return '/models/iphone-15-pro-max.glb';
   }
-  if (name.includes('galaxy') || name.includes('s24')) {
-    return '/models/galaxy-s24-ultra.glb';
-  }
-  if (name.includes('macbook')) {
+
+  // ONLY return MacBook Pro 16 GLB if this product is explicitly MacBook Pro 16!
+  if (name.includes('macbook pro 16') || (raw.includes('macbook-pro-16.glb') && name.includes('macbook'))) {
     return '/models/macbook-pro-16.glb';
   }
-  if (name.includes('watch') || cat.includes('dong-ho')) {
-    return '/models/smartwatch.glb';
-  }
 
-  return raw;
+  // For Samsung and all other brands/products, use our dedicated tailored 3D procedural models
+  // to ensure each brand's unique hardware design, cameras, hinge, and textures are 100% authentic!
+  return '';
 }
 
 export const Product3DViewer: React.FC<Product3DViewerProps> = ({
@@ -148,7 +122,7 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
           </span>
 
           <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-300 text-[11px] font-mono">
-            {resolvedSource === 'custom_glb' ? 'Mô hình Thực tế (GLB)' : 'Mô hình 3D Chuẩn'}
+            {resolvedSource === 'custom_glb' ? 'Mô hình Thực tế (GLB)' : 'Mô hình 3D Chi tiết'}
           </span>
         </div>
 
@@ -157,14 +131,13 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
           <select
             value={activeModelOption}
             onChange={(e) => setActiveModelOption(e.target.value as any)}
-            className="text-[11px] font-semibold bg-slate-900/90 text-slate-300 border border-slate-700/80 rounded-xl px-2.5 py-1.5 outline-none focus:border-indigo-500 backdrop-blur-md cursor-pointer transition-colors"
+            className="text-[11px] font-semibold bg-slate-900/90 text-slate-300 border border-slate-700/80 rounded-xl px-2.5 py-1.5 outline-none focus:border-indigo-500 backdrop-blur-md cursor-pointer transition-colors max-w-[200px] truncate"
           >
-            <option value="product">Sản phẩm hiện tại ({productName.split(' ')[0]})</option>
-            <option value="sample_iphone">iPhone 15 Pro Max (GLB thực tế)</option>
-            <option value="sample_macbook">MacBook Pro 16" (GLB thực tế)</option>
-            <option value="sample_watch">Đồng hồ Chronograph (GLB thực tế)</option>
-            <option value="sample_gadget">Mô hình mẫu (GLB)</option>
-            <option value="sample_keyboard">Bàn phím cơ (3D Procedural)</option>
+            <option value="product">Sản phẩm: {productName}</option>
+            <option value="sample_iphone">iPhone 15 Pro Max (GLB)</option>
+            <option value="sample_macbook">MacBook Pro 16" (GLB)</option>
+            <option value="sample_watch">Đồng hồ Chronograph (GLB)</option>
+            <option value="sample_keyboard">Bàn phím cơ (3D)</option>
           </select>
 
           <button
