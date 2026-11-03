@@ -111,11 +111,21 @@ export const ProductDetailPage: React.FC = () => {
     specsObj = { 'Thông số': product.specifications || '' };
   }
 
-  // All product images
+  // All product images with strict brand placeholder sanitization
+  const brandPlaceholdersRegex = /\/(apple|samsung|asus|lenovo|acer|dell|keychron|razer|corsair|logitech|sony|intel|amd|nvidia|kingston)\.png$/i;
+  const verifiedPrimaryImg =
+    product.thumbnailUrl && !brandPlaceholdersRegex.test(product.thumbnailUrl) && !product.thumbnailUrl.includes('unsplash')
+      ? product.thumbnailUrl
+      : `/images/products/${product.slug}.png`;
+
+  const validGalleryImages = (product.images || []).filter(
+    (img) => img?.imageUrl && !brandPlaceholdersRegex.test(img.imageUrl) && !img.imageUrl.includes('unsplash')
+  );
+
   const allImages =
-    product.images && product.images.length > 0
-      ? product.images
-      : [{ id: 'default', imageUrl: product.thumbnailUrl || '', altText: product.name, displayOrder: 1, isPrimary: true }];
+    validGalleryImages.length > 0
+      ? validGalleryImages
+      : [{ id: 'primary-image', imageUrl: verifiedPrimaryImg, altText: product.name, displayOrder: 1, isPrimary: true }];
 
   const currentPrice = selectedVariant ? selectedVariant.salePrice : product.basePrice;
   const originalPrice = selectedVariant?.originalPrice;
@@ -295,19 +305,22 @@ export const ProductDetailPage: React.FC = () => {
 
                 <img
                   src={
-                    (allImages[selectedImageIndex]?.imageUrl && !allImages[selectedImageIndex]?.imageUrl.includes('unsplash'))
+                    allImages[selectedImageIndex]?.imageUrl &&
+                    !brandPlaceholdersRegex.test(allImages[selectedImageIndex]?.imageUrl || '') &&
+                    !allImages[selectedImageIndex]?.imageUrl.includes('unsplash')
                       ? allImages[selectedImageIndex].imageUrl
-                      : (product.thumbnailUrl && !product.thumbnailUrl.includes('unsplash'))
-                        ? product.thumbnailUrl
-                        : `/images/products/${product.slug}.png`
+                      : verifiedPrimaryImg
                   }
                   alt={product.name}
                   className="w-full h-full object-contain object-center hover:scale-105 transition-transform duration-500"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
-                    if (!target.dataset.fallback) {
-                      target.dataset.fallback = '1';
+                    if (!target.dataset.fallbackStep) {
+                      target.dataset.fallbackStep = '1';
                       target.src = `/images/products/${product.slug}.png`;
+                    } else if (target.dataset.fallbackStep === '1') {
+                      target.dataset.fallbackStep = '2';
+                      target.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="%23f8fafc"/><rect x="20" y="20" width="360" height="360" rx="24" fill="%23ffffff" stroke="%23cbd5e1" stroke-width="2"/><text x="50%25" y="48%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="bold" fill="%231e293b">${encodeURIComponent(product.name)}</text><text x="50%25" y="56%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="13" fill="%2364748b">MadK Store - Ch%C3%ADnh H%C3%A3ng</text></svg>`;
                     }
                   }}
                 />

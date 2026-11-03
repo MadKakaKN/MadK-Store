@@ -834,7 +834,7 @@ public static class DatabaseSeeder
             Desc = "Galaxy S24 Ultra mở ra kỷ nguyên mới với trí tuệ nhân tạo Galaxy AI, màn hình phẳng Dynamic AMOLED 2X 120Hz rực rỡ và kính chống chói Corning Gorilla Armor.",
             BasePrice = 31990000m,
             IsFeatured = true,
-            Model3DUrl = "/models/galaxy-s24-ultra.glb",
+            Model3DUrl = null,
             ImageUrl = "/images/products/dien-thoai-samsung-galaxy-s24-ultra.png",
             Specs = new() { { "os", "Android" }, { "screen_size", "6.8 inch" }, { "refresh_rate", "120Hz" }, { "ram", "12GB" }, { "storage", "256GB" }, { "network", "5G" } },
             Variants = new()

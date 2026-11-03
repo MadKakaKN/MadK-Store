@@ -10,6 +10,7 @@ export interface ProceduralTechModelProps {
   productName?: string;
   thumbnailUrl?: string;
   productSlug?: string;
+  foldState?: 'open' | 'flex' | 'closed';
 }
 
 /**
@@ -158,14 +159,16 @@ function SamsungGalaxyZFlip3D({
   parsedColor,
   wireframe,
   texture,
+  foldAngle = 1.05,
 }: {
   parsedColor: THREE.Color;
   wireframe: boolean;
   texture: THREE.Texture | null;
+  foldAngle?: number;
 }) {
   return (
-    <group position={[0, -0.1, 0]} rotation={[0.2, -0.35, 0]}>
-      {/* ── LOWER HALF (Base) ── */}
+    <group position={[0, -0.2, 0]} rotation={[0.2, -0.35, 0]}>
+      {/* ── LOWER HALF (Base with USB-C and Speaker) ── */}
       <group position={[0, -0.85, 0]}>
         {/* Armor Aluminum Bottom Frame */}
         <mesh castShadow receiveShadow>
@@ -187,6 +190,11 @@ function SamsungGalaxyZFlip3D({
           <planeGeometry args={[1.46, 1.5]} />
           <meshStandardMaterial color="#020617" roughness={0.1} metalness={0.2} />
         </mesh>
+        {/* USB-C Port & Speaker on bottom edge */}
+        <mesh position={[0, -0.79, 0]}>
+          <boxGeometry args={[0.22, 0.04, 0.06]} />
+          <meshBasicMaterial color="#0f172a" />
+        </mesh>
       </group>
 
       {/* ── CENTRAL ARMOR ALUMINUM HINGE SPINE ── */}
@@ -200,73 +208,74 @@ function SamsungGalaxyZFlip3D({
         <meshStandardMaterial color="#0f172a" roughness={0.8} />
       </mesh>
 
-      {/* ── UPPER HALF (Display + Outer Flex Window 3.4") ── */}
-      {/* Slightly angled at 15 degrees to show off clamshell flex design */}
-      <group position={[0, 0.85, 0]}>
-        {/* Armor Aluminum Upper Frame */}
-        <mesh castShadow receiveShadow>
-          <boxGeometry args={[1.54, 1.58, 0.14]} />
-          <meshStandardMaterial color={parsedColor} metalness={0.9} roughness={0.3} wireframe={wireframe} />
-        </mesh>
-
-        {/* ── OUTSIDE: THE ICONIC 3.4" FLEX WINDOW (FOLDER SHAPED) ── */}
-        <mesh position={[0, -0.05, -0.073]} rotation={[0, Math.PI, 0]}>
-          <planeGeometry args={[1.35, 1.25]} />
-          <meshStandardMaterial color="#000000" roughness={0.1} metalness={0.4} />
-        </mesh>
-        {/* Flex Window Active Widget Display */}
-        <mesh position={[0, -0.05, -0.074]} rotation={[0, Math.PI, 0]}>
-          <planeGeometry args={[1.28, 1.18]} />
-          <meshStandardMaterial
-            color="#0ea5e9"
-            emissive="#0ea5e9"
-            emissiveIntensity={0.35}
-            roughness={0.2}
-          />
-        </mesh>
-
-        {/* Dual Horizontal Floating Camera Rings on Outer Shell */}
-        <group position={[-0.26, 0.6, -0.082]} rotation={[0, Math.PI, 0]}>
-          {/* Main 12MP Wide Camera Ring */}
-          <mesh position={[-0.22, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
-            <cylinderGeometry args={[0.11, 0.11, 0.035, 20]} />
-            <meshStandardMaterial color="#0f172a" metalness={0.95} roughness={0.1} />
+      {/* ── UPPER HALF (Pivoting Hinge Section with Flex Window 3.4") ── */}
+      <group position={[0, 0, 0]} rotation={[foldAngle, 0, 0]}>
+        <group position={[0, 0.85, 0]}>
+          {/* Armor Aluminum Upper Frame */}
+          <mesh castShadow receiveShadow>
+            <boxGeometry args={[1.54, 1.58, 0.14]} />
+            <meshStandardMaterial color={parsedColor} metalness={0.9} roughness={0.3} wireframe={wireframe} />
           </mesh>
-          {/* Ultra-Wide 12MP Camera Ring */}
-          <mesh position={[0.08, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
-            <cylinderGeometry args={[0.11, 0.11, 0.035, 20]} />
-            <meshStandardMaterial color="#0f172a" metalness={0.95} roughness={0.1} />
+
+          {/* ── OUTSIDE: THE ICONIC 3.4" FLEX WINDOW (FOLDER SHAPED) ── */}
+          <mesh position={[0, -0.05, -0.073]} rotation={[0, Math.PI, 0]}>
+            <planeGeometry args={[1.35, 1.25]} />
+            <meshStandardMaterial color="#000000" roughness={0.1} metalness={0.4} />
           </mesh>
-          {/* LED Flash */}
-          <mesh position={[0.34, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
-            <circleGeometry args={[0.045, 16]} />
-            <meshStandardMaterial color="#fef08a" emissive="#fef08a" emissiveIntensity={0.8} />
+          {/* Flex Window Active Widget Display */}
+          <mesh position={[0, -0.05, -0.074]} rotation={[0, Math.PI, 0]}>
+            <planeGeometry args={[1.28, 1.18]} />
+            <meshStandardMaterial
+              color="#0ea5e9"
+              emissive="#0ea5e9"
+              emissiveIntensity={0.35}
+              roughness={0.2}
+            />
+          </mesh>
+
+          {/* Dual Horizontal Floating Camera Rings on Outer Shell */}
+          <group position={[-0.26, 0.6, -0.082]} rotation={[0, Math.PI, 0]}>
+            {/* Main 12MP Wide Camera Ring */}
+            <mesh position={[-0.22, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
+              <cylinderGeometry args={[0.11, 0.11, 0.035, 20]} />
+              <meshStandardMaterial color="#0f172a" metalness={0.95} roughness={0.1} />
+            </mesh>
+            {/* Ultra-Wide 12MP Camera Ring */}
+            <mesh position={[0.08, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
+              <cylinderGeometry args={[0.11, 0.11, 0.035, 20]} />
+              <meshStandardMaterial color="#0f172a" metalness={0.95} roughness={0.1} />
+            </mesh>
+            {/* LED Flash */}
+            <mesh position={[0.34, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
+              <circleGeometry args={[0.045, 16]} />
+              <meshStandardMaterial color="#fef08a" emissive="#fef08a" emissiveIntensity={0.8} />
+            </mesh>
+          </group>
+
+          {/* ── INSIDE: TOP HALF SCREEN WITH AUTHENTIC TEXTURE & CAMERA PUNCH HOLE ── */}
+          <mesh position={[0, 0, 0.072]}>
+            <planeGeometry args={[1.46, 1.5]} />
+            {texture ? (
+              <meshStandardMaterial
+                map={texture}
+                emissiveMap={texture}
+                emissive="#ffffff"
+                emissiveIntensity={0.22}
+                roughness={0.15}
+                metalness={0.1}
+                wireframe={wireframe}
+              />
+            ) : (
+              <meshStandardMaterial color={parsedColor} emissive={parsedColor} emissiveIntensity={0.25} />
+            )}
+          </mesh>
+
+          {/* Infinity-O Front Selfie Camera Punch-Hole */}
+          <mesh position={[0, 0.65, 0.074]}>
+            <circleGeometry args={[0.035, 16]} />
+            <meshBasicMaterial color="#000000" />
           </mesh>
         </group>
-
-        {/* ── INSIDE: TOP HALF SCREEN WITH AUTHENTIC TEXTURE & CAMERA PUNCH HOLE ── */}
-        <mesh position={[0, 0, 0.072]}>
-          <planeGeometry args={[1.46, 1.5]} />
-          {texture ? (
-            <meshStandardMaterial
-              map={texture}
-              emissiveMap={texture}
-              emissive="#ffffff"
-              emissiveIntensity={0.22}
-              roughness={0.15}
-              metalness={0.1}
-              wireframe={wireframe}
-            />
-          ) : (
-            <meshStandardMaterial color={parsedColor} emissive={parsedColor} emissiveIntensity={0.25} />
-          )}
-        </mesh>
-
-        {/* Infinity-O Front Selfie Camera Punch-Hole */}
-        <mesh position={[0, 0.65, 0.074]}>
-          <circleGeometry args={[0.035, 16]} />
-          <meshBasicMaterial color="#000000" />
-        </mesh>
       </group>
     </group>
   );
@@ -1097,6 +1106,7 @@ export const ProceduralTechModel: React.FC<ProceduralTechModelProps> = ({
   productName,
   thumbnailUrl,
   productSlug,
+  foldState = 'flex',
 }) => {
   const groupRef = useRef<THREE.Group>(null);
 
@@ -1124,7 +1134,12 @@ export const ProceduralTechModel: React.FC<ProceduralTechModelProps> = ({
     <Center position={[0, -0.2, 0]}>
       <group ref={groupRef}>
         {productType === 'samsung_flip' && (
-          <SamsungGalaxyZFlip3D parsedColor={parsedColor} wireframe={wireframe} texture={texture} />
+          <SamsungGalaxyZFlip3D
+            parsedColor={parsedColor}
+            wireframe={wireframe}
+            texture={texture}
+            foldAngle={foldState === 'closed' ? 2.92 : foldState === 'open' ? 0.0 : 1.15}
+          />
         )}
         {productType === 'samsung_fold' && (
           <SamsungGalaxyZFlip3D parsedColor={parsedColor} wireframe={wireframe} texture={texture} />

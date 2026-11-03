@@ -208,7 +208,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-1-1",
-        "imageUrl": "/images/products/apple.png",
+        "imageUrl": "/images/products/dien-thoai-iphone-15-pro-max.png",
         "altText": "iPhone 15 Pro Max chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -252,7 +252,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-2-1",
-        "imageUrl": "/images/products/apple.png",
+        "imageUrl": "/images/products/dien-thoai-iphone-15-pro.png",
         "altText": "iPhone 15 Pro chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -296,7 +296,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-3-1",
-        "imageUrl": "/images/products/apple.png",
+        "imageUrl": "/images/products/dien-thoai-iphone-15.png",
         "altText": "iPhone 15 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -340,7 +340,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-4-1",
-        "imageUrl": "/images/products/apple.png",
+        "imageUrl": "/images/products/dien-thoai-iphone-14.png",
         "altText": "iPhone 14 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -354,7 +354,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "shortDescription": "Galaxy AI quyền năng, bút S-Pen tích hợp, khung titan và camera 200MP zoom 100x.",
     "description": "<p>Galaxy S24 Ultra mở ra kỷ nguyên mới với trí tuệ nhân tạo Galaxy AI, màn hình phẳng Dynamic AMOLED 2X 120Hz rực rỡ và kính chống chói Corning Gorilla Armor.</p>",
     "specifications": "{}",
-    "model3DUrl": "https://models.madkstore.vn/galaxy-s24-ultra.glb",
+    "model3DUrl": "",
     "thumbnailUrl": "/images/products/dien-thoai-samsung-galaxy-s24-ultra.png",
     "basePrice": 31990000,
     "isFeatured": true,
@@ -385,7 +385,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-5-1",
-        "imageUrl": "/images/products/samsung.png",
+        "imageUrl": "/images/products/dien-thoai-samsung-galaxy-s24-ultra.png",
         "altText": "Samsung Galaxy S24 Ultra chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -429,7 +429,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-6-1",
-        "imageUrl": "/images/products/samsung.png",
+        "imageUrl": "/images/products/dien-thoai-samsung-galaxy-s24-plus.png",
         "altText": "Samsung Galaxy S24 Plus chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -473,7 +473,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-7-1",
-        "imageUrl": "/images/products/samsung.png",
+        "imageUrl": "/images/products/dien-thoai-samsung-galaxy-s24.png",
         "altText": "Samsung Galaxy S24 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -517,7 +517,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-8-1",
-        "imageUrl": "/images/products/samsung.png",
+        "imageUrl": "/images/products/dien-thoai-samsung-galaxy-z-fold5.png",
         "altText": "Samsung Galaxy Z Fold5 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -561,7 +561,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-9-1",
-        "imageUrl": "/images/products/samsung.png",
+        "imageUrl": "/images/products/dien-thoai-samsung-galaxy-z-flip5.png",
         "altText": "Samsung Galaxy Z Flip5 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -605,7 +605,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-10-1",
-        "imageUrl": "/images/products/samsung.png",
+        "imageUrl": "/images/products/dien-thoai-samsung-galaxy-a55-5g.png",
         "altText": "Samsung Galaxy A55 5G chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -649,7 +649,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-11-1",
-        "imageUrl": "/images/products/apple.png",
+        "imageUrl": "/images/products/may-tinh-bang-ipad-pro-m4-11-inch.png",
         "altText": "iPad Pro M4 11 inch chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -693,7 +693,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-12-1",
-        "imageUrl": "/images/products/apple.png",
+        "imageUrl": "/images/products/may-tinh-bang-ipad-pro-m4-13-inch.png",
         "altText": "iPad Pro M4 13 inch chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -737,7 +737,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-13-1",
-        "imageUrl": "/images/products/apple.png",
+        "imageUrl": "/images/products/may-tinh-bang-ipad-air-m2-11-inch.png",
         "altText": "iPad Air M2 11 inch chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -781,7 +781,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-14-1",
-        "imageUrl": "/images/products/apple.png",
+        "imageUrl": "/images/products/may-tinh-bang-ipad-gen-10-10-9-inch.png",
         "altText": "iPad Gen 10 10.9 inch chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -825,7 +825,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-15-1",
-        "imageUrl": "/images/products/samsung.png",
+        "imageUrl": "/images/products/may-tinh-bang-samsung-galaxy-tab-s9-ultra.png",
         "altText": "Samsung Galaxy Tab S9 Ultra chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -869,7 +869,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-16-1",
-        "imageUrl": "/images/products/asus.png",
+        "imageUrl": "/images/products/laptop-asus-rog-strix-scar-16.png",
         "altText": "ASUS ROG Strix SCAR 16 (2024) chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -913,7 +913,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-17-1",
-        "imageUrl": "/images/products/asus.png",
+        "imageUrl": "/images/products/laptop-asus-rog-zephyrus-g16.png",
         "altText": "ASUS ROG Zephyrus G16 OLED chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -957,7 +957,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-18-1",
-        "imageUrl": "/images/products/asus.png",
+        "imageUrl": "/images/products/laptop-asus-tuf-gaming-a15.png",
         "altText": "ASUS TUF Gaming A15 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1001,7 +1001,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-19-1",
-        "imageUrl": "/images/products/lenovo.png",
+        "imageUrl": "/images/products/laptop-lenovo-legion-pro-7i.png",
         "altText": "Lenovo Legion Pro 7i Gen 9 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1045,7 +1045,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-20-1",
-        "imageUrl": "/images/products/lenovo.png",
+        "imageUrl": "/images/products/laptop-lenovo-legion-5-pro.png",
         "altText": "Lenovo Legion 5 Pro chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1089,7 +1089,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-21-1",
-        "imageUrl": "/images/products/acer.png",
+        "imageUrl": "/images/products/laptop-acer-predator-helios-16.png",
         "altText": "Acer Predator Helios 16 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1133,7 +1133,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-22-1",
-        "imageUrl": "/images/products/acer.png",
+        "imageUrl": "/images/products/laptop-acer-nitro-v-15.png",
         "altText": "Acer Nitro V 15 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1177,7 +1177,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-23-1",
-        "imageUrl": "/images/products/dell.png",
+        "imageUrl": "/images/products/laptop-dell-alienware-m18-r2.png",
         "altText": "Dell Alienware m18 R2 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1222,7 +1222,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-24-1",
-        "imageUrl": "/images/products/apple.png",
+        "imageUrl": "/images/products/laptop-apple-macbook-pro-16-m3-max.png",
         "altText": "MacBook Pro 16 M3 Max chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1266,7 +1266,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-25-1",
-        "imageUrl": "/images/products/apple.png",
+        "imageUrl": "/images/products/laptop-apple-macbook-pro-14-m3.png",
         "altText": "MacBook Pro 14 M3 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1310,7 +1310,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-26-1",
-        "imageUrl": "/images/products/apple.png",
+        "imageUrl": "/images/products/laptop-apple-macbook-air-13-m3.png",
         "altText": "MacBook Air 13 M3 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1354,7 +1354,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-27-1",
-        "imageUrl": "/images/products/apple.png",
+        "imageUrl": "/images/products/laptop-apple-macbook-air-15-m3.png",
         "altText": "MacBook Air 15 M3 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1398,7 +1398,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-28-1",
-        "imageUrl": "/images/products/dell.png",
+        "imageUrl": "/images/products/laptop-dell-xps-13-plus-9320.png",
         "altText": "Dell XPS 13 Plus 9320 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1442,7 +1442,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-29-1",
-        "imageUrl": "/images/products/dell.png",
+        "imageUrl": "/images/products/laptop-dell-inspiron-14-5440.png",
         "altText": "Dell Inspiron 14 5440 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1486,7 +1486,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-30-1",
-        "imageUrl": "/images/products/lenovo.png",
+        "imageUrl": "/images/products/laptop-lenovo-thinkpad-x1-carbon-gen-12.png",
         "altText": "Lenovo ThinkPad X1 Carbon Gen 12 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1530,7 +1530,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-31-1",
-        "imageUrl": "/images/products/asus.png",
+        "imageUrl": "/images/products/laptop-asus-zenbook-14-oled.png",
         "altText": "ASUS Zenbook 14 OLED chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1575,7 +1575,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-32-1",
-        "imageUrl": "/images/products/keychron.png",
+        "imageUrl": "/images/products/ban-phim-co-keychron-q1-pro-wireless.png",
         "altText": "Bàn phím cơ Keychron Q1 Pro Wireless chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1619,7 +1619,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-33-1",
-        "imageUrl": "/images/products/keychron.png",
+        "imageUrl": "/images/products/ban-phim-co-keychron-v1-max.png",
         "altText": "Bàn phím cơ Keychron V1 Max chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1663,7 +1663,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-34-1",
-        "imageUrl": "/images/products/keychron.png",
+        "imageUrl": "/images/products/ban-phim-co-keychron-k2-pro.png",
         "altText": "Bàn phím cơ Keychron K2 Pro chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1707,7 +1707,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-35-1",
-        "imageUrl": "/images/products/keychron.png",
+        "imageUrl": "/images/products/ban-phim-co-keychron-k8-pro.png",
         "altText": "Bàn phím cơ Keychron K8 Pro chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1751,7 +1751,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-36-1",
-        "imageUrl": "/images/products/razer.png",
+        "imageUrl": "/images/products/ban-phim-co-razer-blackwidow-v4-pro.png",
         "altText": "Bàn phím cơ Razer BlackWidow V4 Pro chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1795,7 +1795,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-37-1",
-        "imageUrl": "/images/products/razer.png",
+        "imageUrl": "/images/products/ban-phim-co-razer-huntsman-v3-pro-tkl.png",
         "altText": "Bàn phím cơ Razer Huntsman V3 Pro TKL chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1839,7 +1839,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-38-1",
-        "imageUrl": "/images/products/corsair.png",
+        "imageUrl": "/images/products/ban-phim-co-corsair-k70-max-rgb.png",
         "altText": "Bàn phím cơ Corsair K70 MAX RGB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1883,7 +1883,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-39-1",
-        "imageUrl": "/images/products/corsair.png",
+        "imageUrl": "/images/products/ban-phim-co-corsair-k65-plus-wireless.png",
         "altText": "Bàn phím cơ Corsair K65 PLUS WIRELESS chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1927,7 +1927,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-40-1",
-        "imageUrl": "/images/products/logitech.png",
+        "imageUrl": "/images/products/chuot-gaming-logitech-g-pro-x-superlight-2.png",
         "altText": "Chuột gaming Logitech G Pro X Superlight 2 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -1971,7 +1971,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-41-1",
-        "imageUrl": "/images/products/logitech.png",
+        "imageUrl": "/images/products/chuot-gaming-logitech-g502-x-plus.png",
         "altText": "Chuột gaming Logitech G502 X PLUS chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2015,7 +2015,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-42-1",
-        "imageUrl": "/images/products/logitech.png",
+        "imageUrl": "/images/products/chuot-gaming-logitech-g502-hero.png",
         "altText": "Chuột gaming Logitech G502 HERO High Performance chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2059,7 +2059,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-43-1",
-        "imageUrl": "/images/products/razer.png",
+        "imageUrl": "/images/products/chuot-gaming-razer-deathadder-v3-pro.png",
         "altText": "Chuột gaming Razer DeathAdder V3 Pro chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2103,7 +2103,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-44-1",
-        "imageUrl": "/images/products/razer.png",
+        "imageUrl": "/images/products/chuot-gaming-razer-viper-v3-pro.png",
         "altText": "Chuột gaming Razer Viper V3 Pro chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2147,7 +2147,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-45-1",
-        "imageUrl": "/images/products/razer.png",
+        "imageUrl": "/images/products/chuot-gaming-razer-basilisk-v3-pro.png",
         "altText": "Chuột gaming Razer Basilisk V3 Pro chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2191,7 +2191,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-46-1",
-        "imageUrl": "/images/products/corsair.png",
+        "imageUrl": "/images/products/chuot-gaming-corsair-darkstar-wireless-mmo.png",
         "altText": "Chuột gaming Corsair Darkstar Wireless MMO chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2236,7 +2236,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-47-1",
-        "imageUrl": "/images/products/sony.png",
+        "imageUrl": "/images/products/tai-nghe-sony-wh-1000xm5-wireless.png",
         "altText": "Tai nghe chống ồn Sony WH-1000XM5 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2280,7 +2280,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-48-1",
-        "imageUrl": "/images/products/sony.png",
+        "imageUrl": "/images/products/tai-nghe-sony-wf-1000xm5-tws.png",
         "altText": "Tai nghe True Wireless Sony WF-1000XM5 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2324,7 +2324,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-49-1",
-        "imageUrl": "/images/products/apple.png",
+        "imageUrl": "/images/products/tai-nghe-apple-airpods-max.png",
         "altText": "Tai nghe Apple AirPods Max chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2368,7 +2368,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-50-1",
-        "imageUrl": "/images/products/apple.png",
+        "imageUrl": "/images/products/tai-nghe-apple-airpods-pro-2-usb-c.png",
         "altText": "Tai nghe Apple AirPods Pro 2 USB-C chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2412,7 +2412,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-51-1",
-        "imageUrl": "/images/products/logitech.png",
+        "imageUrl": "/images/products/tai-nghe-logitech-g-pro-x-2-lightspeed.png",
         "altText": "Tai nghe gaming Logitech G PRO X 2 LIGHTSPEED chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2456,7 +2456,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-52-1",
-        "imageUrl": "/images/products/razer.png",
+        "imageUrl": "/images/products/tai-nghe-razer-blackshark-v2-pro-2023.png",
         "altText": "Tai nghe gaming Razer BlackShark V2 Pro 2023 chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2500,7 +2500,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-53-1",
-        "imageUrl": "/images/products/corsair.png",
+        "imageUrl": "/images/products/tai-nghe-corsair-virtuoso-pro-open-back.png",
         "altText": "Tai nghe Corsair Virtuoso Pro Open Back chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2544,7 +2544,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-54-1",
-        "imageUrl": "/images/products/intel.png",
+        "imageUrl": "/images/products/cpu-intel-core-i9-14900k.png",
         "altText": "CPU Intel Core i9-14900K chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2588,7 +2588,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-55-1",
-        "imageUrl": "/images/products/intel.png",
+        "imageUrl": "/images/products/cpu-intel-core-i7-14700k.png",
         "altText": "CPU Intel Core i7-14700K chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2632,7 +2632,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-56-1",
-        "imageUrl": "/images/products/intel.png",
+        "imageUrl": "/images/products/cpu-intel-core-i5-14600k.png",
         "altText": "CPU Intel Core i5-14600K chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2676,7 +2676,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-57-1",
-        "imageUrl": "/images/products/amd.png",
+        "imageUrl": "/images/products/cpu-amd-ryzen-9-7950x3d.png",
         "altText": "CPU AMD Ryzen 9 7950X3D chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2720,7 +2720,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-58-1",
-        "imageUrl": "/images/products/amd.png",
+        "imageUrl": "/images/products/cpu-amd-ryzen-7-7800x3d.png",
         "altText": "CPU AMD Ryzen 7 7800X3D chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2764,7 +2764,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-59-1",
-        "imageUrl": "/images/products/amd.png",
+        "imageUrl": "/images/products/cpu-amd-ryzen-5-7600x.png",
         "altText": "CPU AMD Ryzen 5 7600X chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2809,7 +2809,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-60-1",
-        "imageUrl": "/images/products/asus.png",
+        "imageUrl": "/images/products/vga-asus-rog-strix-geforce-rtx-4090.png",
         "altText": "VGA ASUS ROG Strix GeForce RTX 4090 OC 24GB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2853,7 +2853,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-61-1",
-        "imageUrl": "/images/products/asus.png",
+        "imageUrl": "/images/products/vga-asus-tuf-gaming-geforce-rtx-4080-super.png",
         "altText": "VGA ASUS TUF Gaming GeForce RTX 4080 SUPER 16GB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2897,7 +2897,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-62-1",
-        "imageUrl": "/images/products/nvidia.png",
+        "imageUrl": "/images/products/vga-msi-geforce-rtx-4070-ti-super.png",
         "altText": "VGA MSI GeForce RTX 4070 Ti SUPER Gaming X Slim chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2941,7 +2941,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-63-1",
-        "imageUrl": "/images/products/nvidia.png",
+        "imageUrl": "/images/products/vga-gigabyte-geforce-rtx-4060-ti.png",
         "altText": "VGA Gigabyte GeForce RTX 4060 Ti Gaming OC 8GB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -2985,7 +2985,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-64-1",
-        "imageUrl": "/images/products/nvidia.png",
+        "imageUrl": "/images/products/vga-asus-dual-geforce-rtx-4060.png",
         "altText": "VGA ASUS Dual GeForce RTX 4060 OC Edition 8GB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3029,7 +3029,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-65-1",
-        "imageUrl": "/images/products/amd.png",
+        "imageUrl": "/images/products/vga-powercolor-hellhound-radeon-rx-7900-xtx.png",
         "altText": "VGA PowerColor Hellhound AMD Radeon RX 7900 XTX 24GB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3073,7 +3073,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-66-1",
-        "imageUrl": "/images/products/corsair.png",
+        "imageUrl": "/images/products/ram-corsair-dominator-titanium-rgb-32gb-ddr5.png",
         "altText": "RAM Corsair Dominator Titanium RGB 32GB (2x16GB) DDR5 6000MHz chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3117,7 +3117,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-67-1",
-        "imageUrl": "/images/products/corsair.png",
+        "imageUrl": "/images/products/ram-corsair-vengeance-rgb-32gb-ddr5.png",
         "altText": "RAM Corsair Vengeance RGB 32GB (2x16GB) DDR5 5600MHz chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3161,7 +3161,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-68-1",
-        "imageUrl": "/images/products/kingston.png",
+        "imageUrl": "/images/products/ram-kingston-fury-beast-rgb-32gb-ddr5.png",
         "altText": "RAM Kingston FURY Beast RGB 32GB (2x16GB) DDR5 5600MHz chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3205,7 +3205,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-69-1",
-        "imageUrl": "/images/products/kingston.png",
+        "imageUrl": "/images/products/ram-kingston-fury-renegade-64gb-ddr5.png",
         "altText": "RAM Kingston FURY Renegade 64GB (2x32GB) DDR5 6400MHz chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3249,7 +3249,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-70-1",
-        "imageUrl": "/images/products/corsair.png",
+        "imageUrl": "/images/products/ram-corsair-vengeance-lpx-16gb-ddr4.png",
         "altText": "RAM Corsair Vengeance LPX 16GB (2x8GB) DDR4 3200MHz chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3293,7 +3293,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-71-1",
-        "imageUrl": "/images/products/samsung.png",
+        "imageUrl": "/images/products/ssd-samsung-990-pro-2tb.png",
         "altText": "Ổ cứng SSD Samsung 990 PRO M.2 NVMe PCIe 4.0 2TB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3337,7 +3337,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-72-1",
-        "imageUrl": "/images/products/samsung.png",
+        "imageUrl": "/images/products/ssd-samsung-990-pro-1tb.png",
         "altText": "Ổ cứng SSD Samsung 990 PRO M.2 NVMe PCIe 4.0 1TB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3381,7 +3381,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-73-1",
-        "imageUrl": "/images/products/kingston.png",
+        "imageUrl": "/images/products/ssd-kingston-kc3000-1tb.png",
         "altText": "Ổ cứng SSD Kingston KC3000 M.2 NVMe PCIe 4.0 1TB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3425,7 +3425,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-74-1",
-        "imageUrl": "/images/products/kingston.png",
+        "imageUrl": "/images/products/ssd-kingston-nv2-500gb.png",
         "altText": "Ổ cứng SSD Kingston NV2 M.2 NVMe PCIe 4.0 500GB chính",
         "displayOrder": 1,
         "isPrimary": true
@@ -3469,7 +3469,7 @@ export const MOCK_PRODUCTS: ProductDetailDto[] = [
     "images": [
       {
         "id": "img-p-75-1",
-        "imageUrl": "/images/products/kingston.png",
+        "imageUrl": "/images/products/ssd-crucial-t700-2tb-pcie-5.png",
         "altText": "Ổ cứng SSD Crucial T700 M.2 NVMe PCIe 5.0 2TB chính",
         "displayOrder": 1,
         "isPrimary": true

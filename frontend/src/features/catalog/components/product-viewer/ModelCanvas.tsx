@@ -63,6 +63,7 @@ interface ModelCanvasProps {
   productName?: string;
   thumbnailUrl?: string;
   productSlug?: string;
+  foldState?: 'open' | 'flex' | 'closed';
 }
 
 export const ModelCanvas: React.FC<ModelCanvasProps> = ({
@@ -77,6 +78,7 @@ export const ModelCanvas: React.FC<ModelCanvasProps> = ({
   productName,
   thumbnailUrl,
   productSlug,
+  foldState,
 }) => {
   // If modelUrl is a relative path or sample path, use it.
   // If no modelUrl is specified, or if remote fails, CanvasErrorBoundary seamlessly renders ProceduralTechModel.
@@ -139,6 +141,7 @@ export const ModelCanvas: React.FC<ModelCanvasProps> = ({
                 productName={productName}
                 thumbnailUrl={thumbnailUrl}
                 productSlug={productSlug}
+                foldState={foldState}
               />
             }
           >
@@ -157,6 +160,7 @@ export const ModelCanvas: React.FC<ModelCanvasProps> = ({
             productName={productName}
             thumbnailUrl={thumbnailUrl}
             productSlug={productSlug}
+            foldState={foldState}
           />
         )}
       </Suspense>

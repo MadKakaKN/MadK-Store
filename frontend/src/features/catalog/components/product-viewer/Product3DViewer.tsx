@@ -52,40 +52,44 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
   const [autoRotate, setAutoRotate] = useState(true);
   const [wireframe, setWireframe] = useState(false);
   const [customColor, setCustomColor] = useState<string | null>(null);
-  const [activeModelOption, setActiveModelOption] = useState<
-    'product' | 'sample_iphone' | 'sample_macbook' | 'sample_watch' | 'sample_keyboard' | 'sample_gadget'
-  >('product');
   const [showGuideModal, setShowGuideModal] = useState(false);
+
+  // Detect brand and form factor
+  const brandName = useMemo(() => {
+    const n = (productName || '').toLowerCase();
+    if (n.includes('samsung') || n.includes('galaxy')) return 'Samsung Galaxy';
+    if (n.includes('iphone') || n.includes('apple') || n.includes('macbook')) return 'Apple';
+    if (n.includes('asus') || n.includes('rog')) return 'ASUS ROG';
+    if (n.includes('sony')) return 'Sony Audio';
+    if (n.includes('dell') || n.includes('alienware')) return 'Dell';
+    if (n.includes('lenovo') || n.includes('thinkpad')) return 'Lenovo ThinkPad';
+    if (n.includes('keychron')) return 'Keychron';
+    if (n.includes('razer')) return 'Razer';
+    if (n.includes('logitech')) return 'Logitech';
+    return '';
+  }, [productName]);
+
+  const isFoldable = useMemo(() => {
+    const n = (productName || '').toLowerCase();
+    return n.includes('flip') || n.includes('fold');
+  }, [productName]);
+
+  const [foldState, setFoldState] = useState<'open' | 'flex' | 'closed'>('flex');
 
   // Automatically sync with selected variant color, or allow user override
   const variantColorInfo = useMemo(() => extractVariantColor(selectedVariant), [selectedVariant]);
   const activeColor = customColor ?? variantColorInfo.hex;
 
-  // Determine actual model URL based on selection
+  // Determine actual model URL based on product
   const effectiveModelUrl = useMemo(() => {
-    switch (activeModelOption) {
-      case 'sample_iphone':
-        return '/models/iphone-15-pro-max.glb';
-      case 'sample_macbook':
-        return '/models/macbook-pro-16.glb';
-      case 'sample_watch':
-        return '/models/smartwatch.glb';
-      case 'sample_gadget':
-        return '/models/sample-gadget.glb';
-      case 'sample_keyboard':
-        return ''; // Trigger procedural high-detail keyboard
-      case 'product':
-      default:
-        return resolveModel3DUrl(model3DUrl, productName, categorySlug);
-    }
-  }, [activeModelOption, model3DUrl, productName, categorySlug]);
+    return resolveModel3DUrl(model3DUrl, productName, categorySlug);
+  }, [model3DUrl, productName, categorySlug]);
 
   const [resolvedSource, setResolvedSource] = useState<'custom_glb' | 'sample_glb' | 'procedural'>(
     effectiveModelUrl ? 'custom_glb' : 'procedural'
   );
 
-  // Pass category override if keyboard demo was selected
-  const effectiveCategorySlug = activeModelOption === 'sample_keyboard' ? 'ban-phim-co' : categorySlug;
+  const effectiveCategorySlug = categorySlug;
 
   // Reset camera view
   const handleResetCamera = () => {
@@ -122,23 +126,34 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
           </span>
 
           <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-300 text-[11px] font-mono">
-            {resolvedSource === 'custom_glb' ? 'Mô hình Thực tế (GLB)' : 'Mô hình 3D Chi tiết'}
+            {resolvedSource === 'custom_glb' ? 'Mô hình CAD GLB' : `Mô hình 3D Chuẩn Thiết Kế${brandName ? ` (${brandName})` : ''}`}
           </span>
         </div>
 
-        {/* Quick Sample Switcher & Guide Button */}
-        <div className="flex items-center gap-1.5">
-          <select
-            value={activeModelOption}
-            onChange={(e) => setActiveModelOption(e.target.value as any)}
-            className="text-[11px] font-semibold bg-slate-900/90 text-slate-300 border border-slate-700/80 rounded-xl px-2.5 py-1.5 outline-none focus:border-indigo-500 backdrop-blur-md cursor-pointer transition-colors max-w-[200px] truncate"
-          >
-            <option value="product">Sản phẩm: {productName}</option>
-            <option value="sample_iphone">iPhone 15 Pro Max (GLB)</option>
-            <option value="sample_macbook">MacBook Pro 16" (GLB)</option>
-            <option value="sample_watch">Đồng hồ Chronograph (GLB)</option>
-            <option value="sample_keyboard">Bàn phím cơ (3D)</option>
-          </select>
+        {/* Model Form Factor & Interactive Controls */}
+        <div className="flex items-center gap-2">
+          {isFoldable && (
+            <button
+              type="button"
+              onClick={() => setFoldState((s) => (s === 'flex' ? 'open' : s === 'open' ? 'closed' : 'flex'))}
+              title="Chuyển góc gập máy Z Flip (Mở phẳng 180° / Bán gập Flex Mode / Gập vỏ sò)"
+              className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold border border-indigo-400/50 shadow-lg flex items-center gap-1.5 backdrop-blur-md transition-all active:scale-95"
+            >
+              <span>📱</span>
+              <span>
+                {foldState === 'flex'
+                  ? 'Flex Mode 90°'
+                  : foldState === 'open'
+                  ? 'Mở phẳng 180°'
+                  : 'Gập vỏ sò'}
+              </span>
+            </button>
+          )}
+
+          <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-900/80 border border-slate-700/80 text-slate-300 text-xs font-medium backdrop-blur-md max-w-[200px] truncate">
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+            <span className="truncate">{productName}</span>
+          </div>
 
           <button
             type="button"
@@ -165,6 +180,7 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
           productName={productName}
           thumbnailUrl={thumbnailUrl}
           productSlug={productSlug}
+          foldState={isFoldable ? foldState : undefined}
         />
       </div>
 
