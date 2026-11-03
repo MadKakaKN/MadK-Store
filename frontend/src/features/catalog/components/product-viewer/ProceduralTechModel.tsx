@@ -104,17 +104,17 @@ export function detectProductType(
   }
 
   // Laptops
-  if (cat.includes('laptop') || name.includes('macbook') || name.includes('laptop') || name.includes('xps') || name.includes('thinkpad') || name.includes('scar') || name.includes('zephyrus') || name.includes('helios') || name.includes('legion') || name.includes('alienware')) {
+  if (cat.includes('laptop') || name.includes('macbook') || name.includes('laptop') || name.includes('xps') || name.includes('thinkpad') || name.includes('scar') || name.includes('zephyrus') || name.includes('helios') || name.includes('legion') || name.includes('alienware') || name.includes('zenbook') || name.includes('inspiron')) {
     return 'laptop';
   }
 
   // GPUs
-  if (cat.includes('vga') || cat.includes('card-man-hinh') || name.includes('rtx') || name.includes('geforce') || name.includes('radeon') || name.includes('vga')) {
+  if (cat.includes('vga') || cat.includes('card-man-hinh') || name.includes('rtx') || name.includes('geforce') || name.includes('radeon') || name.includes('vga') || name.includes('hellhound')) {
     return 'gpu';
   }
 
   // Audio / Headphones
-  if (cat.includes('tai-nghe') || name.includes('tai nghe') || name.includes('headphone') || name.includes('airpods') || name.includes('wf-1000') || name.includes('wh-1000') || name.includes('blackshark')) {
+  if (cat.includes('tai-nghe') || name.includes('tai nghe') || name.includes('headphone') || name.includes('airpods') || name.includes('wf-1000') || name.includes('wh-1000') || name.includes('blackshark') || name.includes('virtuoso')) {
     if (name.includes('wf-1000') || name.includes('airpods pro') || name.includes('tws') || name.includes('in-ear')) {
       return 'headphone_tws';
     }
@@ -122,12 +122,12 @@ export function detectProductType(
   }
 
   // Mice
-  if (cat.includes('chuot') || name.includes('chuột') || name.includes('mouse') || name.includes('superlight') || name.includes('deathadder') || name.includes('viper') || name.includes('g502')) {
+  if (cat.includes('chuot') || name.includes('chuột') || name.includes('mouse') || name.includes('superlight') || name.includes('deathadder') || name.includes('viper') || name.includes('g502') || name.includes('basilisk') || name.includes('darkstar')) {
     return 'mouse';
   }
 
   // Keyboards
-  if (cat.includes('ban-phim') || name.includes('bàn phím') || name.includes('keyboard') || name.includes('keychron') || name.includes('huntsman') || name.includes('k70')) {
+  if (cat.includes('ban-phim') || name.includes('bàn phím') || name.includes('keyboard') || name.includes('keychron') || name.includes('huntsman') || name.includes('blackwidow') || name.includes('k70') || name.includes('k65')) {
     return 'keyboard';
   }
 
@@ -140,12 +140,12 @@ export function detectProductType(
   }
 
   // RAM
-  if (cat.includes('ram') || name.includes('ram ') || name.includes('ddr5') || name.includes('ddr4') || name.includes('dominator') || name.includes('vengeance')) {
+  if (cat.includes('ram') || name.includes('ram ') || name.includes('ddr5') || name.includes('ddr4') || name.includes('dominator') || name.includes('vengeance') || name.includes('fury')) {
     return 'ram';
   }
 
   // SSD
-  if (cat.includes('ssd') || cat.includes('o-cung') || name.includes('ssd') || name.includes('ổ cứng') || name.includes('990 pro') || name.includes('nvme')) {
+  if (cat.includes('ssd') || cat.includes('o-cung') || name.includes('ssd') || name.includes('ổ cứng') || name.includes('990 pro') || name.includes('nvme') || name.includes('kc3000') || name.includes('t700')) {
     return 'ssd';
   }
 
@@ -153,7 +153,7 @@ export function detectProductType(
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 1. SAMSUNG GALAXY Z FLIP5 3D MODEL (Clamshell Foldable with Flex Window)
+// 1. SAMSUNG GALAXY Z FLIP5 (Clamshell Foldable with Flex Window 3.4")
 // ─────────────────────────────────────────────────────────────────────────────
 function SamsungGalaxyZFlip3D({
   parsedColor,
@@ -168,29 +168,24 @@ function SamsungGalaxyZFlip3D({
 }) {
   return (
     <group position={[0, -0.2, 0]} rotation={[0.2, -0.35, 0]}>
-      {/* ── LOWER HALF (Base with USB-C and Speaker) ── */}
+      {/* ── LOWER HALF (Base) ── */}
       <group position={[0, -0.85, 0]}>
-        {/* Armor Aluminum Bottom Frame */}
         <mesh castShadow receiveShadow>
           <boxGeometry args={[1.54, 1.58, 0.14]} />
           <meshStandardMaterial color={parsedColor} metalness={0.9} roughness={0.3} wireframe={wireframe} />
         </mesh>
-        {/* Back Matte Glass in Mint/Chosen Color */}
         <mesh position={[0, 0, -0.072]} rotation={[0, Math.PI, 0]}>
           <planeGeometry args={[1.48, 1.52]} />
           <meshStandardMaterial color={parsedColor} roughness={0.35} metalness={0.6} />
         </mesh>
-        {/* Embossed Samsung Logo */}
         <mesh position={[0, -0.4, -0.075]} rotation={[0, Math.PI, 0]}>
           <boxGeometry args={[0.6, 0.08, 0.005]} />
           <meshStandardMaterial color="#ffffff" metalness={0.95} roughness={0.2} />
         </mesh>
-        {/* Inside Main Lower Screen Portion */}
         <mesh position={[0, 0, 0.072]}>
           <planeGeometry args={[1.46, 1.5]} />
           <meshStandardMaterial color="#020617" roughness={0.1} metalness={0.2} />
         </mesh>
-        {/* USB-C Port & Speaker on bottom edge */}
         <mesh position={[0, -0.79, 0]}>
           <boxGeometry args={[0.22, 0.04, 0.06]} />
           <meshBasicMaterial color="#0f172a" />
@@ -202,7 +197,6 @@ function SamsungGalaxyZFlip3D({
         <cylinderGeometry args={[0.075, 0.075, 1.54, 24]} />
         <meshStandardMaterial color="#cbd5e1" metalness={0.95} roughness={0.2} />
       </mesh>
-      {/* Folding Crease Seam */}
       <mesh position={[0, 0, 0.072]}>
         <boxGeometry args={[1.48, 0.02, 0.005]} />
         <meshStandardMaterial color="#0f172a" roughness={0.8} />
@@ -211,66 +205,43 @@ function SamsungGalaxyZFlip3D({
       {/* ── UPPER HALF (Pivoting Hinge Section with Flex Window 3.4") ── */}
       <group position={[0, 0, 0]} rotation={[foldAngle, 0, 0]}>
         <group position={[0, 0.85, 0]}>
-          {/* Armor Aluminum Upper Frame */}
           <mesh castShadow receiveShadow>
             <boxGeometry args={[1.54, 1.58, 0.14]} />
             <meshStandardMaterial color={parsedColor} metalness={0.9} roughness={0.3} wireframe={wireframe} />
           </mesh>
-
-          {/* ── OUTSIDE: THE ICONIC 3.4" FLEX WINDOW (FOLDER SHAPED) ── */}
+          {/* Flex Window */}
           <mesh position={[0, -0.05, -0.073]} rotation={[0, Math.PI, 0]}>
             <planeGeometry args={[1.35, 1.25]} />
             <meshStandardMaterial color="#000000" roughness={0.1} metalness={0.4} />
           </mesh>
-          {/* Flex Window Active Widget Display */}
           <mesh position={[0, -0.05, -0.074]} rotation={[0, Math.PI, 0]}>
             <planeGeometry args={[1.28, 1.18]} />
-            <meshStandardMaterial
-              color="#0ea5e9"
-              emissive="#0ea5e9"
-              emissiveIntensity={0.35}
-              roughness={0.2}
-            />
+            <meshStandardMaterial color="#0ea5e9" emissive="#0ea5e9" emissiveIntensity={0.35} roughness={0.2} />
           </mesh>
-
-          {/* Dual Horizontal Floating Camera Rings on Outer Shell */}
+          {/* Dual Horizontal Floating Cameras */}
           <group position={[-0.26, 0.6, -0.082]} rotation={[0, Math.PI, 0]}>
-            {/* Main 12MP Wide Camera Ring */}
             <mesh position={[-0.22, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
               <cylinderGeometry args={[0.11, 0.11, 0.035, 20]} />
               <meshStandardMaterial color="#0f172a" metalness={0.95} roughness={0.1} />
             </mesh>
-            {/* Ultra-Wide 12MP Camera Ring */}
             <mesh position={[0.08, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
               <cylinderGeometry args={[0.11, 0.11, 0.035, 20]} />
               <meshStandardMaterial color="#0f172a" metalness={0.95} roughness={0.1} />
             </mesh>
-            {/* LED Flash */}
             <mesh position={[0.34, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
               <circleGeometry args={[0.045, 16]} />
               <meshStandardMaterial color="#fef08a" emissive="#fef08a" emissiveIntensity={0.8} />
             </mesh>
           </group>
-
-          {/* ── INSIDE: TOP HALF SCREEN WITH AUTHENTIC TEXTURE & CAMERA PUNCH HOLE ── */}
+          {/* Inside Display */}
           <mesh position={[0, 0, 0.072]}>
             <planeGeometry args={[1.46, 1.5]} />
             {texture ? (
-              <meshStandardMaterial
-                map={texture}
-                emissiveMap={texture}
-                emissive="#ffffff"
-                emissiveIntensity={0.22}
-                roughness={0.15}
-                metalness={0.1}
-                wireframe={wireframe}
-              />
+              <meshStandardMaterial map={texture} emissiveMap={texture} emissive="#ffffff" emissiveIntensity={0.22} roughness={0.15} metalness={0.1} wireframe={wireframe} />
             ) : (
               <meshStandardMaterial color={parsedColor} emissive={parsedColor} emissiveIntensity={0.25} />
             )}
           </mesh>
-
-          {/* Infinity-O Front Selfie Camera Punch-Hole */}
           <mesh position={[0, 0.65, 0.074]}>
             <circleGeometry args={[0.035, 16]} />
             <meshBasicMaterial color="#000000" />
@@ -282,7 +253,76 @@ function SamsungGalaxyZFlip3D({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 2. SAMSUNG GALAXY S24 ULTRA 3D MODEL (Sharp 90° Corners, 4 Floating Camera Rings)
+// 2. SAMSUNG GALAXY Z FOLD5 (Book Foldable with 7.6" Main Screen)
+// ─────────────────────────────────────────────────────────────────────────────
+function SamsungGalaxyZFold3D({
+  parsedColor,
+  wireframe,
+  texture,
+  foldAngle = 0.5,
+}: {
+  parsedColor: THREE.Color;
+  wireframe: boolean;
+  texture: THREE.Texture | null;
+  foldAngle?: number;
+}) {
+  return (
+    <group position={[0, 0, 0]} rotation={[0.15, -0.3, 0]}>
+      {/* Right Wing (Base Half) */}
+      <group position={[0.9, 0, 0]}>
+        <mesh castShadow receiveShadow>
+          <boxGeometry args={[1.65, 3.2, 0.13]} />
+          <meshStandardMaterial color={parsedColor} metalness={0.9} roughness={0.3} wireframe={wireframe} />
+        </mesh>
+        <mesh position={[0, 0, 0.068]}>
+          <planeGeometry args={[1.56, 3.1]} />
+          <meshStandardMaterial color="#020617" roughness={0.1} metalness={0.2} />
+        </mesh>
+        {/* Cover Screen on Back of Right Wing */}
+        <mesh position={[0, 0, -0.068]} rotation={[0, Math.PI, 0]}>
+          <planeGeometry args={[1.56, 3.1]} />
+          {texture ? (
+            <meshStandardMaterial map={texture} emissiveMap={texture} emissive="#ffffff" emissiveIntensity={0.25} roughness={0.1} />
+          ) : (
+            <meshStandardMaterial color="#0f172a" roughness={0.2} />
+          )}
+        </mesh>
+      </group>
+
+      {/* Central Armor Aluminum Hinge Spine */}
+      <mesh position={[0, 0, -0.03]} rotation={[0, 0, 0]}>
+        <cylinderGeometry args={[0.07, 0.07, 3.2, 24]} />
+        <meshStandardMaterial color="#cbd5e1" metalness={0.95} roughness={0.2} />
+      </mesh>
+
+      {/* Left Wing (Pivoting Half) */}
+      <group position={[0, 0, 0]} rotation={[0, foldAngle, 0]}>
+        <group position={[-0.9, 0, 0]}>
+          <mesh castShadow receiveShadow>
+            <boxGeometry args={[1.65, 3.2, 0.13]} />
+            <meshStandardMaterial color={parsedColor} metalness={0.9} roughness={0.3} wireframe={wireframe} />
+          </mesh>
+          <mesh position={[0, 0, 0.068]}>
+            <planeGeometry args={[1.56, 3.1]} />
+            <meshStandardMaterial color="#020617" roughness={0.1} metalness={0.2} />
+          </mesh>
+          {/* Triple Vertical Camera Rings on Back of Left Wing */}
+          <group position={[0.4, 0.8, -0.075]} rotation={[0, Math.PI, 0]}>
+            {[0.36, 0, -0.36].map((y, idx) => (
+              <mesh key={idx} position={[0, y, 0]} rotation={[Math.PI / 2, 0, 0]}>
+                <cylinderGeometry args={[0.11, 0.11, 0.03, 20]} />
+                <meshStandardMaterial color="#334155" metalness={0.95} roughness={0.15} />
+              </mesh>
+            ))}
+          </group>
+        </group>
+      </group>
+    </group>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 3. SAMSUNG GALAXY S24 ULTRA (Sharp 90° Corners, 4 Floating Camera Rings, S-Pen)
 // ─────────────────────────────────────────────────────────────────────────────
 function SamsungGalaxyS24Ultra3D({
   parsedColor,
@@ -295,51 +335,42 @@ function SamsungGalaxyS24Ultra3D({
 }) {
   return (
     <group position={[0, 0, 0]} rotation={[0.15, -0.35, 0]}>
-      {/* Sharp Rectangular Titanium Perimeter Frame (No curved corners!) */}
+      {/* Sharp Rectangular Titanium Perimeter Frame */}
       <mesh castShadow receiveShadow>
         <boxGeometry args={[1.62, 3.26, 0.165]} />
         <meshStandardMaterial color={parsedColor} metalness={0.94} roughness={0.28} wireframe={wireframe} />
       </mesh>
 
-      {/* Completely Flat Front Display Frame */}
+      {/* Flat Front Display Frame */}
       <mesh position={[0, 0, 0.084]}>
         <planeGeometry args={[1.56, 3.2]} />
         <meshStandardMaterial color="#020617" roughness={0.06} metalness={0.3} wireframe={wireframe} />
       </mesh>
 
-      {/* Screen Display with Real S24 Ultra Wallpaper Texture */}
+      {/* Screen with Real Product Texture */}
       <mesh position={[0, 0, 0.085]}>
         <planeGeometry args={[1.52, 3.14]} />
         {texture ? (
-          <meshStandardMaterial
-            map={texture}
-            emissiveMap={texture}
-            emissive="#ffffff"
-            emissiveIntensity={0.25}
-            roughness={0.12}
-            metalness={0.08}
-            wireframe={wireframe}
-          />
+          <meshStandardMaterial map={texture} emissiveMap={texture} emissive="#ffffff" emissiveIntensity={0.25} roughness={0.12} metalness={0.08} wireframe={wireframe} />
         ) : (
           <meshStandardMaterial color={parsedColor} emissive={parsedColor} emissiveIntensity={0.3} />
         )}
       </mesh>
 
-      {/* Central Punch-Hole Selfie Camera (Samsung Infinity-O) */}
+      {/* Selfie Camera Punch-Hole */}
       <mesh position={[0, 1.45, 0.086]}>
         <circleGeometry args={[0.035, 16]} />
         <meshBasicMaterial color="#000000" />
       </mesh>
 
-      {/* Back Plate: Satin Matte Titanium Glass */}
+      {/* Satin Matte Titanium Glass Backplate */}
       <mesh position={[0, 0, -0.084]} rotation={[0, Math.PI, 0]}>
         <planeGeometry args={[1.56, 3.2]} />
         <meshStandardMaterial color={parsedColor} roughness={0.4} metalness={0.7} wireframe={wireframe} />
       </mesh>
 
-      {/* ── SAMSUNG SIGNATURE: 4 INDEPENDENT FLOATING CAMERA RINGS (NO ISLAND!) ── */}
+      {/* 4 Floating Camera Rings */}
       <group position={[-0.46, 0.85, -0.095]} rotation={[0, Math.PI, 0]}>
-        {/* Column 1: Main 3 Large Protruding Rings (200MP + 50MP 5x + 12MP Ultrawide) */}
         {[0.45, 0, -0.45].map((y, idx) => (
           <group key={idx} position={[0, y, 0]}>
             <mesh rotation={[Math.PI / 2, 0, 0]}>
@@ -348,37 +379,38 @@ function SamsungGalaxyS24Ultra3D({
             </mesh>
             <mesh position={[0, 0, 0.024]}>
               <circleGeometry args={[0.085, 20]} />
-              <meshStandardMaterial color="#090d16" metalness={0.98} roughness={0.05} />
+              <meshStandardMaterial color="#020617" roughness={0.05} metalness={0.98} />
             </mesh>
           </group>
         ))}
-
-        {/* Column 2: 10MP 3x Telephoto + Laser AF Sensor + Flash */}
+        {/* Column 2: 3x Telephoto + Laser AF + Flash */}
         <group position={[0.28, 0.22, 0]}>
           <mesh rotation={[Math.PI / 2, 0, 0]}>
-            <cylinderGeometry args={[0.095, 0.095, 0.038, 20]} />
+            <cylinderGeometry args={[0.09, 0.09, 0.035, 20]} />
             <meshStandardMaterial color="#334155" metalness={0.95} roughness={0.15} />
           </mesh>
         </group>
         <group position={[0.28, -0.22, 0]}>
-          <mesh rotation={[Math.PI / 2, 0, 0]}>
-            <cylinderGeometry args={[0.075, 0.075, 0.03, 16]} />
-            <meshStandardMaterial color="#0f172a" metalness={0.9} roughness={0.2} />
-          </mesh>
+          <circleGeometry args={[0.045, 16]} />
+          <meshStandardMaterial color="#fef08a" emissive="#fef08a" emissiveIntensity={0.85} />
         </group>
       </group>
 
-      {/* S-Pen Silo Push-Cap on Bottom Left */}
-      <mesh position={[-0.62, -1.63, 0]}>
-        <boxGeometry args={[0.14, 0.02, 0.07]} />
+      {/* Bottom Edge: S-Pen Silo Clicker Cap & USB-C */}
+      <mesh position={[-0.6, -1.63, 0]}>
+        <cylinderGeometry args={[0.05, 0.05, 0.02, 16]} />
         <meshStandardMaterial color="#475569" metalness={0.9} roughness={0.2} />
+      </mesh>
+      <mesh position={[0, -1.63, 0]}>
+        <boxGeometry args={[0.22, 0.02, 0.06]} />
+        <meshBasicMaterial color="#0f172a" />
       </mesh>
     </group>
   );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 3. SAMSUNG GALAXY STANDARD (S24 / S24+ / A55 5G - 3 Vertical Floating Rings)
+// 4. SAMSUNG GALAXY STANDARD (S24, S24+, A55 - Armor Aluminum with 3 Rings)
 // ─────────────────────────────────────────────────────────────────────────────
 function SamsungGalaxyStandard3D({
   parsedColor,
@@ -391,43 +423,23 @@ function SamsungGalaxyStandard3D({
 }) {
   return (
     <group position={[0, 0, 0]} rotation={[0.15, -0.35, 0]}>
-      {/* Armor Aluminum Frame with Soft Curved Corners */}
       <mesh castShadow receiveShadow>
         <boxGeometry args={[1.52, 3.12, 0.15]} />
-        <meshStandardMaterial color={parsedColor} metalness={0.88} roughness={0.3} wireframe={wireframe} />
+        <meshStandardMaterial color={parsedColor} metalness={0.9} roughness={0.3} wireframe={wireframe} />
       </mesh>
-
-      {/* Front Screen Display */}
       <mesh position={[0, 0, 0.077]}>
         <planeGeometry args={[1.44, 3.02]} />
         {texture ? (
-          <meshStandardMaterial
-            map={texture}
-            emissiveMap={texture}
-            emissive="#ffffff"
-            emissiveIntensity={0.22}
-            roughness={0.15}
-            metalness={0.1}
-            wireframe={wireframe}
-          />
+          <meshStandardMaterial map={texture} emissiveMap={texture} emissive="#ffffff" emissiveIntensity={0.25} roughness={0.12} metalness={0.08} wireframe={wireframe} />
         ) : (
-          <meshStandardMaterial color={parsedColor} emissive={parsedColor} emissiveIntensity={0.3} />
+          <meshStandardMaterial color={parsedColor} emissive={parsedColor} emissiveIntensity={0.25} />
         )}
       </mesh>
-
-      {/* Central Punch-Hole Camera */}
-      <mesh position={[0, 1.38, 0.078]}>
+      <mesh position={[0, 1.38, 0.079]}>
         <circleGeometry args={[0.035, 16]} />
         <meshBasicMaterial color="#000000" />
       </mesh>
-
-      {/* Back Glass Shell */}
-      <mesh position={[0, 0, -0.077]} rotation={[0, Math.PI, 0]}>
-        <planeGeometry args={[1.46, 3.04]} />
-        <meshStandardMaterial color={parsedColor} roughness={0.4} metalness={0.6} wireframe={wireframe} />
-      </mesh>
-
-      {/* ── 3 VERTICAL FLOATING CAMERA RINGS (SAMSUNG SIGNATURE MINIMALIST) ── */}
+      {/* 3 Vertical Floating Rings */}
       <group position={[-0.45, 0.85, -0.088]} rotation={[0, Math.PI, 0]}>
         {[0.38, 0, -0.38].map((y, idx) => (
           <group key={idx} position={[0, y, 0]}>
@@ -441,24 +453,13 @@ function SamsungGalaxyStandard3D({
             </mesh>
           </group>
         ))}
-        {/* Flash beside top camera */}
-        <mesh position={[0.22, 0.38, 0]} rotation={[Math.PI / 2, 0, 0]}>
-          <circleGeometry args={[0.04, 16]} />
-          <meshStandardMaterial color="#fef08a" emissive="#fef08a" emissiveIntensity={0.8} />
-        </mesh>
       </group>
-
-      {/* Samsung Wordmark near bottom */}
-      <mesh position={[0, -1.0, -0.079]} rotation={[0, Math.PI, 0]}>
-        <boxGeometry args={[0.5, 0.07, 0.005]} />
-        <meshStandardMaterial color="#ffffff" metalness={0.8} roughness={0.3} />
-      </mesh>
     </group>
   );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 4. APPLE IPHONE 3D MODEL (Dynamic Island Pill & Triple Camera Island)
+// 5. APPLE IPHONE (Titanium Contoured Frame, Dynamic Island & Triangle Lenses)
 // ─────────────────────────────────────────────────────────────────────────────
 function AppleIPhone3D({
   parsedColor,
@@ -471,66 +472,48 @@ function AppleIPhone3D({
 }) {
   return (
     <group position={[0, 0, 0]} rotation={[0.15, -0.35, 0]}>
-      {/* Contoured Titanium Perimeter Frame */}
       <mesh castShadow receiveShadow>
         <boxGeometry args={[1.52, 3.12, 0.16]} />
         <meshStandardMaterial color={parsedColor} metalness={0.92} roughness={0.25} wireframe={wireframe} />
       </mesh>
-
-      {/* Front Face with Real iOS Texture */}
       <mesh position={[0, 0, 0.082]}>
         <planeGeometry args={[1.44, 3.02]} />
         {texture ? (
-          <meshStandardMaterial
-            map={texture}
-            emissiveMap={texture}
-            emissive="#ffffff"
-            emissiveIntensity={0.22}
-            roughness={0.15}
-            metalness={0.1}
-            wireframe={wireframe}
-          />
+          <meshStandardMaterial map={texture} emissiveMap={texture} emissive="#ffffff" emissiveIntensity={0.22} roughness={0.15} metalness={0.1} wireframe={wireframe} />
         ) : (
           <meshStandardMaterial color="#020617" roughness={0.1} />
         )}
       </mesh>
-
       {/* Dynamic Island Pill Cutout */}
       <mesh position={[0, 1.25, 0.085]}>
-        <boxGeometry args={[0.38, 0.1, 0.005]} />
-        <meshStandardMaterial color="#000000" roughness={0.95} />
+        <capsuleGeometry args={[0.05, 0.16, 12, 16]} />
+        <meshBasicMaterial color="#000000" />
       </mesh>
-
-      {/* Back Plate with Square Frosted Camera Island */}
-      <mesh position={[0, 0, -0.082]} rotation={[0, Math.PI, 0]}>
-        <planeGeometry args={[1.46, 3.04]} />
-        <meshStandardMaterial color={parsedColor} roughness={0.4} metalness={0.65} wireframe={wireframe} />
-      </mesh>
-
-      {/* Elevated Triple Camera Plateau */}
-      <group position={[-0.35, 0.95, -0.095]} rotation={[0, Math.PI, 0]}>
-        <mesh castShadow>
-          <boxGeometry args={[0.62, 0.65, 0.04]} />
+      {/* Elevated Square Camera Plateau */}
+      <group position={[-0.38, 0.85, -0.09]} rotation={[0, Math.PI, 0]}>
+        <mesh>
+          <boxGeometry args={[0.62, 0.62, 0.035]} />
           <meshStandardMaterial color={parsedColor} roughness={0.25} metalness={0.8} />
         </mesh>
-        {/* Triple Lenses Triangle */}
-        {[-0.14, 0.14].map((x, idx) => (
-          <mesh key={idx} position={[x, idx === 0 ? 0.16 : 0, 0.03]} rotation={[Math.PI / 2, 0, 0]}>
-            <cylinderGeometry args={[0.11, 0.11, 0.035, 24]} />
-            <meshStandardMaterial color="#0f172a" metalness={0.95} roughness={0.1} />
-          </mesh>
+        {[
+          [-0.14, 0.14, 0.025],
+          [-0.14, -0.14, 0.025],
+          [0.14, 0, 0.025],
+        ].map(([x, y, z], idx) => (
+          <group key={idx} position={[x, y, z]}>
+            <mesh rotation={[Math.PI / 2, 0, 0]}>
+              <cylinderGeometry args={[0.09, 0.09, 0.03, 20]} />
+              <meshStandardMaterial color="#334155" metalness={0.95} roughness={0.1} />
+            </mesh>
+          </group>
         ))}
-        <mesh position={[-0.14, -0.16, 0.03]} rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[0.11, 0.11, 0.035, 24]} />
-          <meshStandardMaterial color="#0f172a" metalness={0.95} roughness={0.1} />
-        </mesh>
       </group>
     </group>
   );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 5. TABLET 3D MODELS (Samsung Galaxy Tab S9 Ultra vs Apple iPad Pro)
+// 6. TABLETS (Samsung Galaxy Tab S9 Ultra 14.6" vs Apple iPad Pro)
 // ─────────────────────────────────────────────────────────────────────────────
 function SamsungTablet3D({
   parsedColor,
@@ -541,40 +524,21 @@ function SamsungTablet3D({
   wireframe: boolean;
   texture: THREE.Texture | null;
 }) {
-  // Galaxy Tab S9 Ultra: 14.6" 16:10 format (3.54 x 2.22)
   return (
     <group position={[0, 0, 0]} rotation={[0.2, -0.3, 0]}>
-      {/* Aluminum Armor Unibody */}
       <mesh castShadow receiveShadow>
         <boxGeometry args={[3.54, 2.22, 0.085]} />
         <meshStandardMaterial color={parsedColor} metalness={0.92} roughness={0.25} wireframe={wireframe} />
       </mesh>
-
-      {/* Front Screen Display */}
       <mesh position={[0, 0, 0.045]}>
         <planeGeometry args={[3.42, 2.1]} />
         {texture ? (
-          <meshStandardMaterial
-            map={texture}
-            emissiveMap={texture}
-            emissive="#ffffff"
-            emissiveIntensity={0.25}
-            roughness={0.12}
-            metalness={0.08}
-            wireframe={wireframe}
-          />
+          <meshStandardMaterial map={texture} emissiveMap={texture} emissive="#ffffff" emissiveIntensity={0.25} roughness={0.12} metalness={0.08} wireframe={wireframe} />
         ) : (
           <meshStandardMaterial color={parsedColor} emissive={parsedColor} emissiveIntensity={0.3} />
         )}
       </mesh>
-
-      {/* Dual Landscape Front Selfie Cameras */}
-      <mesh position={[0, 1.06, 0.046]}>
-        <boxGeometry args={[0.1, 0.035, 0.005]} />
-        <meshBasicMaterial color="#000000" />
-      </mesh>
-
-      {/* Rear Plate: Dual Camera + S-Pen Magnetic Groove */}
+      {/* Rear: Dual Camera + S-Pen Magnetic Groove with S-Pen */}
       <group position={[-1.3, 0, -0.046]} rotation={[0, Math.PI, 0]}>
         <mesh position={[0, 0.65, 0.015]} rotation={[Math.PI / 2, 0, 0]}>
           <cylinderGeometry args={[0.08, 0.08, 0.03, 20]} />
@@ -584,10 +548,10 @@ function SamsungTablet3D({
           <cylinderGeometry args={[0.08, 0.08, 0.03, 20]} />
           <meshStandardMaterial color="#0f172a" metalness={0.95} roughness={0.1} />
         </mesh>
-        {/* S-Pen Magnetic Charging Groove */}
-        <mesh position={[0, -0.15, 0.005]}>
-          <boxGeometry args={[0.14, 0.95, 0.01]} />
-          <meshStandardMaterial color="#1e293b" metalness={0.8} roughness={0.4} />
+        {/* S-Pen Stylus docked magnetically */}
+        <mesh position={[0, -0.15, 0.01]}>
+          <cylinderGeometry args={[0.035, 0.035, 1.1, 16]} />
+          <meshStandardMaterial color="#1e293b" metalness={0.9} roughness={0.2} />
         </mesh>
       </group>
     </group>
@@ -603,7 +567,6 @@ function AppleIPad3D({
   wireframe: boolean;
   texture: THREE.Texture | null;
 }) {
-  // iPad Pro: 4:3 format (3.12 x 2.32)
   return (
     <group position={[0, 0, 0]} rotation={[0.2, -0.3, 0]}>
       <mesh castShadow receiveShadow>
@@ -613,20 +576,11 @@ function AppleIPad3D({
       <mesh position={[0, 0, 0.045]}>
         <planeGeometry args={[3.0, 2.2]} />
         {texture ? (
-          <meshStandardMaterial
-            map={texture}
-            emissiveMap={texture}
-            emissive="#ffffff"
-            emissiveIntensity={0.25}
-            roughness={0.12}
-            metalness={0.08}
-            wireframe={wireframe}
-          />
+          <meshStandardMaterial map={texture} emissiveMap={texture} emissive="#ffffff" emissiveIntensity={0.25} roughness={0.12} metalness={0.08} wireframe={wireframe} />
         ) : (
           <meshStandardMaterial color="#020617" roughness={0.1} />
         )}
       </mesh>
-      {/* Apple Square Camera Island with LiDAR */}
       <group position={[-1.1, 0.7, -0.046]} rotation={[0, Math.PI, 0]}>
         <mesh>
           <boxGeometry args={[0.42, 0.42, 0.02]} />
@@ -642,7 +596,7 @@ function AppleIPad3D({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 6. LAPTOP 3D MODEL (Tailored: ROG Strix vs MacBook vs ThinkPad vs XPS)
+// 7. LAPTOP 3D MODEL (ROG Strix / Legion / MacBook Pro / ThinkPad / XPS)
 // ─────────────────────────────────────────────────────────────────────────────
 function Laptop3D({
   parsedColor,
@@ -656,8 +610,9 @@ function Laptop3D({
   productName?: string;
 }) {
   const name = (productName || '').toLowerCase();
-  const isGaming = name.includes('rog') || name.includes('scar') || name.includes('legion') || name.includes('helios') || name.includes('nitro') || name.includes('tuf');
+  const isGaming = name.includes('rog') || name.includes('scar') || name.includes('legion') || name.includes('helios') || name.includes('nitro') || name.includes('tuf') || name.includes('alienware');
   const isThinkPad = name.includes('thinkpad');
+  const isMacBook = name.includes('macbook');
   const rgbBarRef = useRef<THREE.Mesh>(null);
 
   useFrame((state) => {
@@ -673,10 +628,10 @@ function Laptop3D({
       {/* Lower Base Chassis */}
       <mesh position={[0, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={[3.2, 0.14, 2.2]} />
-        <meshStandardMaterial color={parsedColor} metalness={0.85} roughness={0.25} wireframe={wireframe} />
+        <meshStandardMaterial color={isMacBook ? '#1e293b' : parsedColor} metalness={0.88} roughness={0.25} wireframe={wireframe} />
       </mesh>
 
-      {/* Dynamic RGB Lightbar along front lip (ROG Strix / Legion) */}
+      {/* Dynamic Front RGB Lightbar (Gaming Laptops) */}
       {isGaming && (
         <mesh ref={rgbBarRef} position={[0, -0.03, 1.11]}>
           <boxGeometry args={[2.8, 0.03, 0.02]} />
@@ -698,7 +653,7 @@ function Laptop3D({
         </mesh>
       )}
 
-      {/* Glass Precision Touchpad */}
+      {/* Precision Touchpad */}
       <mesh position={[0, 0.076, 0.62]} receiveShadow>
         <boxGeometry args={[1.05, 0.015, 0.65]} />
         <meshStandardMaterial color="#1e293b" metalness={0.4} roughness={0.2} />
@@ -708,22 +663,13 @@ function Laptop3D({
       <group position={[0, 0.08, -1.08]} rotation={[-0.28, 0, 0]}>
         <mesh position={[0, 1.05, 0]} castShadow>
           <boxGeometry args={[3.2, 2.1, 0.08]} />
-          <meshStandardMaterial color={parsedColor} metalness={0.9} roughness={0.2} wireframe={wireframe} />
+          <meshStandardMaterial color={isMacBook ? '#1e293b' : parsedColor} metalness={0.9} roughness={0.2} wireframe={wireframe} />
         </mesh>
-
-        {/* Screen Display with Real Product Screen / Photo */}
+        {/* Screen Display */}
         <mesh position={[0, 1.05, 0.048]}>
           <planeGeometry args={[3.04, 1.94]} />
           {texture ? (
-            <meshStandardMaterial
-              map={texture}
-              emissiveMap={texture}
-              emissive="#ffffff"
-              emissiveIntensity={0.25}
-              roughness={0.12}
-              metalness={0.08}
-              wireframe={wireframe}
-            />
+            <meshStandardMaterial map={texture} emissiveMap={texture} emissive="#ffffff" emissiveIntensity={0.25} roughness={0.12} metalness={0.08} wireframe={wireframe} />
           ) : (
             <meshStandardMaterial color="#0f172a" emissive="#0284c7" emissiveIntensity={0.35} />
           )}
@@ -734,7 +680,7 @@ function Laptop3D({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 7. GPU / GRAPHICS CARD 3D MODEL
+// 8. GPU / GRAPHICS CARD (3.5-Slot Shroud, Rotating Axial Fans, Heatsink)
 // ─────────────────────────────────────────────────────────────────────────────
 function GPU3D({
   wireframe,
@@ -762,6 +708,7 @@ function GPU3D({
 
   return (
     <group position={[0, 0, 0]} rotation={[0.2, -0.3, 0]}>
+      {/* 3.5-Slot Shroud Body */}
       <mesh castShadow receiveShadow>
         <boxGeometry args={[3.3, 1.45, 0.58]} />
         <meshStandardMaterial color="#0f172a" metalness={0.9} roughness={0.25} wireframe={wireframe} />
@@ -775,23 +722,42 @@ function GPU3D({
         </mesh>
       )}
 
-      {/* Triple Rotating Fans */}
+      {/* Triple High-Detail Rotating Axial Fans */}
       {[-1.0, 0, 1.0].map((x, i) => (
         <group key={i} position={[x, 0, 0.31]} ref={i === 0 ? fan1 : i === 1 ? fan2 : fan3}>
           <mesh rotation={[Math.PI / 2, 0, 0]}>
             <cylinderGeometry args={[0.38, 0.38, 0.03, 24]} />
             <meshStandardMaterial color="#1e293b" metalness={0.8} roughness={0.3} transparent opacity={0.65} />
           </mesh>
+          {/* Fan Center Hub */}
+          <mesh position={[0, 0, 0.02]} rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.12, 0.12, 0.02, 16]} />
+            <meshStandardMaterial color="#cbd5e1" metalness={0.95} roughness={0.1} />
+          </mesh>
         </group>
       ))}
 
-      {/* RGB Lightbar on top edge */}
+      {/* Dense Aluminum Heatsink Fins along sides */}
+      {[-0.65, 0.65].map((y, i) => (
+        <mesh key={i} position={[0, y, 0]}>
+          <boxGeometry args={[3.1, 0.08, 0.52]} />
+          <meshStandardMaterial color="#cbd5e1" metalness={0.95} roughness={0.3} />
+        </mesh>
+      ))}
+
+      {/* Top Edge Dynamic RGB Lightbar */}
       <mesh ref={rgbRef} position={[0, 0.74, 0.1]}>
         <boxGeometry args={[2.4, 0.04, 0.2]} />
         <meshStandardMaterial color="#ef4444" emissive="#ef4444" emissiveIntensity={2.2} />
       </mesh>
 
-      {/* PCIe Gold Teeth */}
+      {/* Rear Metal Backplate */}
+      <mesh position={[0, 0, -0.295]} rotation={[0, Math.PI, 0]}>
+        <planeGeometry args={[3.25, 1.4]} />
+        <meshStandardMaterial color="#1e293b" metalness={0.92} roughness={0.3} />
+      </mesh>
+
+      {/* Gold PCIe 4.0 Interface Connector */}
       <mesh position={[0, -0.75, -0.1]}>
         <boxGeometry args={[1.8, 0.06, 0.03]} />
         <meshStandardMaterial color="#f59e0b" metalness={0.98} roughness={0.1} />
@@ -801,7 +767,111 @@ function GPU3D({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 8. HEADPHONES (Sony WH-1000XM5 / AirPods Max) & TWS EARBUDS
+// 9. MECHANICAL KEYBOARD (6 Sculpted Rows, Rotary Knob, Dynamic RGB Backlight)
+// ─────────────────────────────────────────────────────────────────────────────
+function Keyboard3D({
+  parsedColor,
+  wireframe,
+  texture,
+}: {
+  parsedColor: THREE.Color;
+  wireframe: boolean;
+  texture: THREE.Texture | null;
+}) {
+  const rgbRef = useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    if (rgbRef.current) {
+      const hue = (state.clock.getElapsedTime() * 0.35) % 1;
+      (rgbRef.current.material as THREE.MeshStandardMaterial).emissive.setHSL(hue, 1, 0.6);
+      (rgbRef.current.material as THREE.MeshStandardMaterial).color.setHSL(hue, 1, 0.5);
+    }
+  });
+
+  return (
+    <group position={[0, 0, 0]} rotation={[0.25, -0.4, 0]}>
+      {/* CNC Aluminum Angled Case */}
+      <mesh castShadow receiveShadow>
+        <boxGeometry args={[3.0, 0.22, 1.45]} />
+        <meshStandardMaterial color={parsedColor} metalness={0.88} roughness={0.25} wireframe={wireframe} />
+      </mesh>
+
+      {/* Rotary Encoder Volume Knob (Top Right) */}
+      <group position={[1.25, 0.22, -0.48]}>
+        <mesh>
+          <cylinderGeometry args={[0.11, 0.11, 0.16, 24]} />
+          <meshStandardMaterial color="#e2e8f0" metalness={0.95} roughness={0.15} />
+        </mesh>
+      </group>
+
+      {/* Dynamic Per-Key RGB Underglow Bed */}
+      <mesh ref={rgbRef} position={[0, 0.12, 0]}>
+        <boxGeometry args={[2.7, 0.02, 1.25]} />
+        <meshStandardMaterial color="#06b6d4" emissive="#06b6d4" emissiveIntensity={1.8} />
+      </mesh>
+
+      {/* Keycaps Bed Mapped with Real Product Texture */}
+      {texture && (
+        <mesh position={[0, 0.16, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[2.75, 1.28]} />
+          <meshStandardMaterial map={texture} roughness={0.4} />
+        </mesh>
+      )}
+    </group>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 10. GAMING MOUSE (Ergonomic Shell, Split Clickers, PTFE Skates, Sensor)
+// ─────────────────────────────────────────────────────────────────────────────
+function Mouse3D({
+  parsedColor,
+  wireframe,
+  texture,
+}: {
+  parsedColor: THREE.Color;
+  wireframe: boolean;
+  texture: THREE.Texture | null;
+}) {
+  return (
+    <group position={[0, 0, 0]} rotation={[0.4, -0.4, 0]}>
+      {/* Contoured Ergonomic Body */}
+      <mesh castShadow receiveShadow>
+        <capsuleGeometry args={[0.65, 1.4, 20, 24]} />
+        <meshStandardMaterial color={parsedColor} metalness={0.3} roughness={0.4} wireframe={wireframe} />
+      </mesh>
+
+      {/* Product Logo / Texture */}
+      {texture && (
+        <mesh position={[0, 0.1, 0.45]} rotation={[-Math.PI / 4, 0, 0]}>
+          <planeGeometry args={[0.9, 0.9]} />
+          <meshStandardMaterial map={texture} transparent opacity={0.9} roughness={0.3} />
+        </mesh>
+      )}
+
+      {/* Tactile Textured Scroll Wheel */}
+      <mesh position={[0, 0.5, 0.5]} rotation={[0, Math.PI / 2, 0]}>
+        <cylinderGeometry args={[0.14, 0.14, 0.09, 20]} />
+        <meshStandardMaterial color="#06b6d4" emissive="#06b6d4" emissiveIntensity={0.8} roughness={0.3} />
+      </mesh>
+
+      {/* Side Thumb Buttons */}
+      <mesh position={[-0.45, 0.1, 0.2]}>
+        <boxGeometry args={[0.08, 0.35, 0.06]} />
+        <meshStandardMaterial color="#0f172a" roughness={0.5} />
+      </mesh>
+
+      {/* Pure PTFE Skates on Underside */}
+      <mesh position={[0, 0.5, -0.4]}>
+        <boxGeometry args={[0.5, 0.2, 0.02]} />
+        <meshStandardMaterial color="#ffffff" roughness={0.2} />
+      </mesh>
+    </group>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 11. HEADPHONES & EARBUDS (Sony WH-1000XM5, AirPods Max, WF-1000XM5)
 // ─────────────────────────────────────────────────────────────────────────────
 function HeadphoneOverEar3D({
   parsedColor,
@@ -819,7 +889,7 @@ function HeadphoneOverEar3D({
         <torusGeometry args={[1.05, 0.1, 16, 40, Math.PI]} />
         <meshStandardMaterial color="#1e293b" roughness={0.8} wireframe={wireframe} />
       </mesh>
-      {/* Left Earcup */}
+      {/* Left Earcup with Cushion */}
       <group position={[-1.15, 0.6, 0]} rotation={[0, 0, 0.15]}>
         <mesh castShadow>
           <cylinderGeometry args={[0.42, 0.42, 0.32, 28]} />
@@ -832,7 +902,7 @@ function HeadphoneOverEar3D({
           </mesh>
         )}
       </group>
-      {/* Right Earcup */}
+      {/* Right Earcup with Cushion */}
       <group position={[1.15, 0.6, 0]} rotation={[0, 0, -0.15]}>
         <mesh castShadow>
           <cylinderGeometry args={[0.42, 0.42, 0.32, 28]} />
@@ -858,19 +928,16 @@ function HeadphoneTWS3D({
 }) {
   return (
     <group position={[0, 0, 0]} rotation={[0.3, -0.35, 0]}>
-      {/* Pebble Charging Case */}
       <mesh castShadow receiveShadow>
         <boxGeometry args={[1.8, 1.4, 0.8]} />
         <meshStandardMaterial color={parsedColor} roughness={0.3} metalness={0.2} />
       </mesh>
-      {/* Cover Texture */}
       {texture && (
         <mesh position={[0, 0, 0.41]}>
           <planeGeometry args={[1.6, 1.2]} />
           <meshStandardMaterial map={texture} transparent roughness={0.3} />
         </mesh>
       )}
-      {/* Status LED */}
       <mesh position={[0, 0, 0.42]}>
         <circleGeometry args={[0.04, 16]} />
         <meshStandardMaterial color="#22c55e" emissive="#22c55e" emissiveIntensity={1.2} />
@@ -880,74 +947,7 @@ function HeadphoneTWS3D({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 9. GAMING MOUSE 3D MODEL
-// ─────────────────────────────────────────────────────────────────────────────
-function Mouse3D({
-  parsedColor,
-  wireframe,
-  texture,
-}: {
-  parsedColor: THREE.Color;
-  wireframe: boolean;
-  texture: THREE.Texture | null;
-}) {
-  return (
-    <group position={[0, 0, 0]} rotation={[0.4, -0.4, 0]}>
-      <mesh castShadow receiveShadow>
-        <capsuleGeometry args={[0.65, 1.4, 20, 24]} />
-        <meshStandardMaterial color={parsedColor} metalness={0.3} roughness={0.4} wireframe={wireframe} />
-      </mesh>
-      {texture && (
-        <mesh position={[0, 0.1, 0.45]} rotation={[-Math.PI / 4, 0, 0]}>
-          <planeGeometry args={[0.9, 0.9]} />
-          <meshStandardMaterial map={texture} transparent opacity={0.9} roughness={0.3} />
-        </mesh>
-      )}
-      {/* Scroll Wheel with RGB */}
-      <mesh position={[0, 0.5, 0.5]} rotation={[0, Math.PI / 2, 0]}>
-        <cylinderGeometry args={[0.14, 0.14, 0.09, 20]} />
-        <meshStandardMaterial color="#06b6d4" emissive="#06b6d4" emissiveIntensity={0.8} roughness={0.3} />
-      </mesh>
-    </group>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// 10. MECHANICAL KEYBOARD 3D MODEL
-// ─────────────────────────────────────────────────────────────────────────────
-function Keyboard3D({
-  parsedColor,
-  wireframe,
-  texture,
-}: {
-  parsedColor: THREE.Color;
-  wireframe: boolean;
-  texture: THREE.Texture | null;
-}) {
-  return (
-    <group position={[0, 0, 0]} rotation={[0.25, -0.4, 0]}>
-      <mesh castShadow receiveShadow>
-        <boxGeometry args={[3.0, 0.22, 1.45]} />
-        <meshStandardMaterial color={parsedColor} metalness={0.85} roughness={0.25} wireframe={wireframe} />
-      </mesh>
-      {/* Rotary Encoder Knob */}
-      <mesh position={[1.25, 0.22, -0.45]}>
-        <cylinderGeometry args={[0.11, 0.11, 0.15, 24]} />
-        <meshStandardMaterial color="#cbd5e1" metalness={0.95} roughness={0.2} />
-      </mesh>
-      {/* Keycaps Surface with Product Texture */}
-      {texture && (
-        <mesh position={[0, 0.15, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[2.7, 1.25]} />
-          <meshStandardMaterial map={texture} roughness={0.3} />
-        </mesh>
-      )}
-    </group>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// 11. CPU 3D MODELS (Intel LGA1700 vs AMD AM5)
+// 12. CPUS (Intel LGA1700 Rectangular vs AMD AM5 Octopus IHS)
 // ─────────────────────────────────────────────────────────────────────────────
 function CPUIntel3D({
   parsedColor,
@@ -958,14 +958,12 @@ function CPUIntel3D({
   wireframe: boolean;
   texture: THREE.Texture | null;
 }) {
-  // Intel LGA1700: Rectangular (1.85 x 2.25)
   return (
     <group position={[0, 0, 0]} rotation={[0.4, -0.35, 0]}>
       <mesh castShadow receiveShadow>
         <boxGeometry args={[1.85, 0.08, 2.25]} />
         <meshStandardMaterial color="#064e3b" roughness={0.3} metalness={0.4} wireframe={wireframe} />
       </mesh>
-      {/* Nickel IHS */}
       <mesh position={[0, 0.1, 0]} castShadow>
         <boxGeometry args={[1.45, 0.12, 1.75]} />
         <meshStandardMaterial color={parsedColor} metalness={0.92} roughness={0.2} wireframe={wireframe} />
@@ -989,14 +987,12 @@ function CPUAMD3D({
   wireframe: boolean;
   texture: THREE.Texture | null;
 }) {
-  // AMD AM5: Square (2.0 x 2.0)
   return (
     <group position={[0, 0, 0]} rotation={[0.4, -0.35, 0]}>
       <mesh castShadow receiveShadow>
         <boxGeometry args={[2.0, 0.08, 2.0]} />
         <meshStandardMaterial color="#064e3b" roughness={0.3} metalness={0.4} wireframe={wireframe} />
       </mesh>
-      {/* AM5 Octopus-Cutout IHS */}
       <mesh position={[0, 0.1, 0]} castShadow>
         <boxGeometry args={[1.55, 0.12, 1.55]} />
         <meshStandardMaterial color={parsedColor} metalness={0.92} roughness={0.2} wireframe={wireframe} />
@@ -1012,7 +1008,7 @@ function CPUAMD3D({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 12. RAM & SSD 3D MODELS
+// 13. RAM & M.2 NVME SSD (DDR5 Heat Spreader, Gold Contacts, Real PCB)
 // ─────────────────────────────────────────────────────────────────────────────
 function RAM3D({
   parsedColor,
@@ -1049,12 +1045,10 @@ function RAM3D({
           <meshStandardMaterial map={texture} transparent opacity={0.9} roughness={0.3} metalness={0.4} />
         </mesh>
       )}
-      {/* Top Diffused RGB Light Bar */}
       <mesh ref={rgbRef} position={[0, 0.65, 0]}>
         <boxGeometry args={[3.16, 0.16, 0.1]} />
         <meshStandardMaterial color="#38bdf8" emissive="#38bdf8" emissiveIntensity={2.0} transparent opacity={0.95} />
       </mesh>
-      {/* Gold Pins */}
       <mesh position={[0, -0.56, 0]}>
         <boxGeometry args={[2.9, 0.12, 0.045]} />
         <meshStandardMaterial color="#eab308" metalness={0.98} roughness={0.1} />
@@ -1078,7 +1072,6 @@ function SSD3D({
         <boxGeometry args={[2.8, 0.06, 0.9]} />
         <meshStandardMaterial color="#020617" roughness={0.5} wireframe={wireframe} />
       </mesh>
-      {/* Graphene Label with Real Product Branding */}
       <mesh position={[0.6, 0.082, 0]}>
         <boxGeometry args={[1.4, 0.01, 0.7]} />
         {texture ? (
@@ -1087,7 +1080,6 @@ function SSD3D({
           <meshStandardMaterial color={parsedColor} metalness={0.7} roughness={0.3} />
         )}
       </mesh>
-      {/* Gold Pins */}
       <mesh position={[-1.38, 0.01, 0]}>
         <boxGeometry args={[0.12, 0.05, 0.75]} />
         <meshStandardMaterial color="#eab308" metalness={0.98} roughness={0.1} />
@@ -1123,7 +1115,9 @@ export const ProceduralTechModel: React.FC<ProceduralTechModelProps> = ({
 
   // Compute effective texture URL
   const effectiveImageUrl = useMemo(() => {
-    if (thumbnailUrl && !thumbnailUrl.includes('unsplash')) return thumbnailUrl;
+    if (thumbnailUrl && !thumbnailUrl.includes('unsplash') && !thumbnailUrl.match(/\/(apple|samsung|asus|lenovo|acer|dell|keychron|razer|corsair|logitech|sony|intel|amd|nvidia|kingston)\.png$/i)) {
+      return thumbnailUrl;
+    }
     if (productSlug) return `/images/products/${productSlug}.png`;
     return undefined;
   }, [thumbnailUrl, productSlug]);
@@ -1142,7 +1136,12 @@ export const ProceduralTechModel: React.FC<ProceduralTechModelProps> = ({
           />
         )}
         {productType === 'samsung_fold' && (
-          <SamsungGalaxyZFlip3D parsedColor={parsedColor} wireframe={wireframe} texture={texture} />
+          <SamsungGalaxyZFold3D
+            parsedColor={parsedColor}
+            wireframe={wireframe}
+            texture={texture}
+            foldAngle={foldState === 'closed' ? 2.7 : foldState === 'open' ? 0.0 : 0.6}
+          />
         )}
         {productType === 'samsung_s24_ultra' && (
           <SamsungGalaxyS24Ultra3D parsedColor={parsedColor} wireframe={wireframe} texture={texture} />
