@@ -5,15 +5,14 @@ import { getVisibleAdminNavItems } from '../../navigation/adminNavItems';
 import Badge from '../common/Badge';
 
 export interface AdminSidebarProps {
-  isCollapsed: boolean;
-  onToggleCollapse: () => void;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
   isMobileOpen: boolean;
   onCloseMobile: () => void;
 }
 
 export const AdminSidebar: React.FC<AdminSidebarProps> = ({
-  isCollapsed,
-  onToggleCollapse,
+  isCollapsed = false,
   isMobileOpen,
   onCloseMobile,
 }) => {
@@ -62,15 +61,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           )}
         </Link>
 
-        {/* Desktop Collapse Toggle */}
-        <button
-          type="button"
-          onClick={onToggleCollapse}
-          className="hidden lg:flex w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 items-center justify-center text-xs transition-colors"
-          title={isCollapsed ? 'Mở rộng sidebar' : 'Thu gọn sidebar'}
-        >
-          {isCollapsed ? '▶' : '◀'}
-        </button>
+
 
         {/* Mobile Close Button */}
         <button

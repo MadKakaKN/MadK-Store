@@ -1,37 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import AdminSidebar from './AdminSidebar';
 import AdminHeader from './AdminHeader';
 
 export const AdminLayout: React.FC = () => {
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
-    try {
-      return localStorage.getItem('madk_admin_sidebar_collapsed') === 'true';
-    } catch {
-      return false;
-    }
-  });
-
   const [isMobileOpen, setIsMobileOpen] = useState<boolean>(false);
 
-  const handleToggleCollapse = () => {
-    setIsCollapsed((prev) => {
-      const next = !prev;
-      try {
-        localStorage.setItem('madk_admin_sidebar_collapsed', String(next));
-      } catch {
-        // Ignore localStorage error
-      }
-      return next;
-    });
-  };
+  // Dọn dẹp trạng thái thu nhỏ cũ nếu có trong localStorage
+  useEffect(() => {
+    try {
+      localStorage.removeItem('madk_admin_sidebar_collapsed');
+    } catch {
+      // Ignore
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-100/70 flex text-slate-800">
-      {/* Sidebar */}
+      {/* Sidebar - Cố định toàn phần, không thu nhỏ */}
       <AdminSidebar
-        isCollapsed={isCollapsed}
-        onToggleCollapse={handleToggleCollapse}
+        isCollapsed={false}
         isMobileOpen={isMobileOpen}
         onCloseMobile={() => setIsMobileOpen(false)}
       />
