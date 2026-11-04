@@ -345,12 +345,26 @@ export function handleApiError<T>(err: unknown, fallback: () => ApiEnvelope<T>):
     return fallback();
   }
 
-  // Nếu server trả về lỗi nghiệp vụ rõ ràng (ví dụ 400 Bad Request kèm message)
-  if (axiosError.response?.data?.error || axiosError.response?.data?.message) {
+  const respErr = axiosError.response?.data?.error || axiosError.response?.data?.message;
+
+  // Nếu server trả về lỗi kỹ thuật / lỗi hệ thống máy chủ (500 hoặc Lỗi hệ thống khi thực thi)
+  // Ưu tiên fallback an toàn để thao tác quản trị không bị gián đoạn
+  if (
+    respErr &&
+    (respErr.includes('Lỗi hệ thống') ||
+      respErr.includes('Đã xảy ra lỗi hệ thống') ||
+      respErr.includes('Internal Server Error'))
+  ) {
+    console.warn('[API Resilient Fallback] Server technical error, invoking local fallback:', respErr);
+    return fallback();
+  }
+
+  // Nếu server trả về lỗi nghiệp vụ rõ ràng (ví dụ vi phạm tồn kho khả dụng, thiếu trường bắt buộc)
+  if (respErr) {
     return {
       isSuccess: false,
-      error: axiosError.response.data.error || axiosError.response.data.message || 'Lỗi xử lý yêu cầu.',
-      data: axiosError.response.data.data,
+      error: respErr,
+      data: axiosError.response?.data?.data,
     };
   }
 

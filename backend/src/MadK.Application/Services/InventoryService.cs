@@ -80,7 +80,7 @@ public class InventoryService : IInventoryService
                 int affected = await _efContext.Database.ExecuteSqlInterpolatedAsync(
                     $@"UPDATE inventories 
                        SET on_hand_quantity = on_hand_quantity + {quantity}, 
-                           updated_at = {now} 
+                           updated_at = now() 
                        WHERE variant_id = {variantId};", ct);
 
                 if (affected == 0)
@@ -114,7 +114,7 @@ public class InventoryService : IInventoryService
                 await _efContext.Database.ExecuteSqlInterpolatedAsync(
                     $@"UPDATE product_variants 
                        SET stock_quantity = {onHandAfter - reservedAfter}, 
-                            updated_at = {now} 
+                            updated_at = now() 
                        WHERE id = {variantId};", ct);
 
                 await _context.SaveChangesAsync(ct);
@@ -133,7 +133,7 @@ public class InventoryService : IInventoryService
             {
                 if (tx != null) await tx.RollbackAsync(ct);
                 _logger.LogError(ex, "Restock error for variant {VariantId}", variantId);
-                return Result<InventoryDto>.Failure("Lỗi hệ thống khi nhập kho.");
+                return Result<InventoryDto>.Failure($"Lỗi hệ thống khi nhập kho: {ex.Message}");
             }
         }
         else
@@ -232,7 +232,7 @@ public class InventoryService : IInventoryService
                     affected = await _efContext.Database.ExecuteSqlInterpolatedAsync(
                         $@"UPDATE inventories 
                            SET on_hand_quantity = on_hand_quantity + {quantityChange}, 
-                               updated_at = {now} 
+                               updated_at = now() 
                            WHERE variant_id = {variantId} AND (on_hand_quantity + {quantityChange} >= reserved_quantity);", ct);
                 }
                 else
@@ -240,7 +240,7 @@ public class InventoryService : IInventoryService
                     affected = await _efContext.Database.ExecuteSqlInterpolatedAsync(
                         $@"UPDATE inventories 
                            SET on_hand_quantity = on_hand_quantity + {quantityChange}, 
-                               updated_at = {now} 
+                               updated_at = now() 
                            WHERE variant_id = {variantId};", ct);
                 }
 
@@ -275,7 +275,7 @@ public class InventoryService : IInventoryService
                 await _efContext.Database.ExecuteSqlInterpolatedAsync(
                     $@"UPDATE product_variants 
                        SET stock_quantity = {onHandAfter - reservedAfter}, 
-                            updated_at = {now} 
+                            updated_at = now() 
                        WHERE id = {variantId};", ct);
 
                 await _context.SaveChangesAsync(ct);
@@ -294,7 +294,7 @@ public class InventoryService : IInventoryService
             {
                 if (tx != null) await tx.RollbackAsync(ct);
                 _logger.LogError(ex, "Adjustment error for variant {VariantId}", variantId);
-                return Result<InventoryDto>.Failure("Lỗi hệ thống khi điều chỉnh tồn kho.");
+                return Result<InventoryDto>.Failure($"Lỗi hệ thống khi điều chỉnh tồn kho: {ex.Message}");
             }
         }
         else
@@ -397,7 +397,7 @@ public class InventoryService : IInventoryService
                 int affected = await _efContext.Database.ExecuteSqlInterpolatedAsync(
                     $@"UPDATE inventories 
                        SET reserved_quantity = reserved_quantity + {quantity}, 
-                           updated_at = {now} 
+                           updated_at = now() 
                        WHERE variant_id = {variantId} 
                          AND (on_hand_quantity - reserved_quantity) >= {quantity};", ct);
 
@@ -437,7 +437,7 @@ public class InventoryService : IInventoryService
                 await _efContext.Database.ExecuteSqlInterpolatedAsync(
                     $@"UPDATE product_variants 
                        SET stock_quantity = {onHandAfter - reservedAfter}, 
-                           updated_at = {now} 
+                           updated_at = now() 
                        WHERE id = {variantId};", ct);
 
                 await _context.SaveChangesAsync(ct);
@@ -544,7 +544,7 @@ public class InventoryService : IInventoryService
                 int affected = await _efContext.Database.ExecuteSqlInterpolatedAsync(
                     $@"UPDATE inventories 
                        SET reserved_quantity = reserved_quantity - {quantity}, 
-                           updated_at = {now} 
+                           updated_at = now() 
                        WHERE variant_id = {variantId} 
                          AND reserved_quantity >= {quantity};", ct);
 
@@ -580,7 +580,7 @@ public class InventoryService : IInventoryService
                 await _efContext.Database.ExecuteSqlInterpolatedAsync(
                     $@"UPDATE product_variants 
                        SET stock_quantity = {onHand - reservedAfter}, 
-                           updated_at = {now} 
+                           updated_at = now() 
                        WHERE id = {variantId};", ct);
 
                 await _context.SaveChangesAsync(ct);
@@ -703,7 +703,7 @@ public class InventoryService : IInventoryService
                     $@"UPDATE inventories 
                        SET on_hand_quantity = on_hand_quantity - {quantity}, 
                            reserved_quantity = reserved_quantity - {quantity}, 
-                           updated_at = {now} 
+                           updated_at = now() 
                        WHERE variant_id = {variantId} 
                          AND reserved_quantity >= {quantity} 
                          AND on_hand_quantity >= {quantity};", ct);
@@ -741,7 +741,7 @@ public class InventoryService : IInventoryService
                 await _efContext.Database.ExecuteSqlInterpolatedAsync(
                     $@"UPDATE product_variants 
                        SET stock_quantity = {onHandAfter - reservedAfter}, 
-                           updated_at = {now} 
+                           updated_at = now() 
                        WHERE id = {variantId};", ct);
 
                 await _context.SaveChangesAsync(ct);
