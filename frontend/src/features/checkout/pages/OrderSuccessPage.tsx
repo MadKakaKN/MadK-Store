@@ -57,6 +57,29 @@ export const OrderSuccessPage: React.FC = () => {
     }
   }, [queryOrderNumber, order]);
 
+  // Tự động kiểm tra trạng thái thanh toán VietQR mỗi 4 giây (Real-time auto-refresh)
+  useEffect(() => {
+    const orderNum = order?.orderNumber || queryOrderNumber;
+    if (!orderNum || order?.paymentStatus === 'Paid') return;
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await orderApi.getOrderByNumber(orderNum);
+        if (res.isSuccess && res.data) {
+          const updated = normalizeOrder(res.data);
+          if (updated.paymentStatus === 'Paid') {
+            setOrder(updated);
+            clearInterval(interval);
+          }
+        }
+      } catch {
+        // Bỏ qua lỗi kết nối tạm thời khi polling
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [order?.orderNumber, order?.paymentStatus, queryOrderNumber]);
+
   if (isLoading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
@@ -179,8 +202,30 @@ export const OrderSuccessPage: React.FC = () => {
         </div>
       )}
 
-      {/* 2.5. VietQR or MoMo Payment Action Card (If Online Payment) */}
-      {order && isOnlinePayment && (
+      {/* Thông báo thanh toán thành công nếu đã nhận tiền VietQR */}
+      {order && isOnlinePayment && order.paymentStatus === 'Paid' && (
+        <div className="bg-gradient-to-br from-emerald-950 via-slate-900 to-emerald-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-emerald-950/20 border border-emerald-500/40 space-y-3 animate-fade-in">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <span className="text-4xl">🎉</span>
+              <div>
+                <h2 className="text-lg sm:text-xl font-black text-white flex items-center gap-2">
+                  <span>Đã nhận thanh toán thành công!</span>
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                    ✓ Đã thanh toán
+                  </span>
+                </h2>
+                <p className="text-xs text-slate-300 mt-1">
+                  Hệ thống đã tự động đối soát và xác nhận thanh toán {order.totalAmount.toLocaleString('vi-VN')} đ cho đơn hàng #{order.orderNumber}. Đơn hàng đang được chuẩn bị đóng gói để giao đến bạn sớm nhất!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 2.5. VietQR or MoMo Payment Action Card (Chỉ hiện khi chưa thanh toán) */}
+      {order && isOnlinePayment && order.paymentStatus !== 'Paid' && (
         <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-slate-900/20 border border-slate-700/60 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-700/60">
             <div className="flex items-center gap-3">

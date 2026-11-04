@@ -103,6 +103,11 @@ public static class DependencyInjection
         });
         services.AddScoped<IVnpayService, MadK.Infrastructure.Services.VnpayService>();
 
+        // VietQR / SePAY Bank Transfer Webhook Service
+        services.Configure<MadK.Application.DTOs.Payment.BankTransferSettings>(
+            configuration.GetSection(MadK.Application.DTOs.Payment.BankTransferSettings.SectionName));
+        services.AddScoped<IBankTransferService, MadK.Infrastructure.Services.BankTransferService>();
+
         // Order Expiration & Stock Retention Worker
         services.AddScoped<IOrderExpirationService, MadK.Infrastructure.Services.OrderExpirationService>();
         services.AddHostedService<MadK.Infrastructure.Workers.OrderExpirationWorker>();
