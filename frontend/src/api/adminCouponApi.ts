@@ -17,11 +17,12 @@ export interface PagedCouponsResult {
   hasPreviousPage: boolean;
 }
 
-const MOCK_COUPONS: CouponDto[] = [
+// Dữ liệu mã giảm giá thực tế đồng bộ từ bảng public.coupons trên Supabase
+const REAL_DATABASE_COUPONS: CouponDto[] = [
   {
-    id: 'cp-welcome10',
+    id: 'c1000000-0000-0000-0000-000000000001',
     code: 'WELCOME10',
-    description: 'Giảm 10% tối đa 500.000đ cho khách hàng mới',
+    description: 'Giảm 10% tối đa 500.000đ cho khách hàng mới với đơn hàng từ 1.000.000đ',
     discountType: 'Percentage',
     discountValue: 10,
     maxDiscountAmount: 500000,
@@ -29,14 +30,14 @@ const MOCK_COUPONS: CouponDto[] = [
     startDate: '2026-01-01T00:00:00Z',
     endDate: '2026-12-31T23:59:59Z',
     usageLimit: 500,
-    usedCount: 82,
+    usedCount: 18,
     isActive: true,
     createdAt: '2026-01-01T00:00:00Z',
   },
   {
-    id: 'cp-freeship',
+    id: 'c1000000-0000-0000-0000-000000000002',
     code: 'FREESHIP',
-    description: 'Miễn phí vận chuyển toàn quốc cho đơn từ 2.000.000đ',
+    description: 'Miễn phí vận chuyển toàn quốc (tối đa 50.000đ) cho đơn từ 2.000.000đ',
     discountType: 'FixedAmount',
     discountValue: 50000,
     maxDiscountAmount: 50000,
@@ -44,26 +45,84 @@ const MOCK_COUPONS: CouponDto[] = [
     startDate: '2026-01-01T00:00:00Z',
     endDate: '2026-12-31T23:59:59Z',
     usageLimit: 1000,
-    usedCount: 215,
+    usedCount: 42,
     isActive: true,
     createdAt: '2026-01-01T00:00:00Z',
   },
   {
-    id: 'cp-sale2026',
+    id: 'c1000000-0000-0000-0000-000000000003',
     code: 'FLAGSHIP2026',
-    description: 'Giảm 1.000.000đ cho đơn hàng flagship từ 20.000.000đ',
+    description: 'Giảm 1.000.000đ trực tiếp khi mua iPhone, Samsung Ultra hoặc Laptop cao cấp từ 20.000.000đ',
     discountType: 'FixedAmount',
     discountValue: 1000000,
     maxDiscountAmount: 1000000,
     minOrderAmount: 20000000,
     startDate: '2026-01-01T00:00:00Z',
     endDate: '2026-12-31T23:59:59Z',
+    usageLimit: 200,
+    usedCount: 9,
+    isActive: true,
+    createdAt: '2026-01-01T00:00:00Z',
+  },
+  {
+    id: 'c1000000-0000-0000-0000-000000000004',
+    code: 'MADKTECH',
+    description: 'Giảm 200.000đ cho phụ kiện bàn phím, chuột, tai nghe và SSD từ 3.000.000đ',
+    discountType: 'FixedAmount',
+    discountValue: 200000,
+    maxDiscountAmount: 200000,
+    minOrderAmount: 3000000,
+    startDate: '2026-01-01T00:00:00Z',
+    endDate: '2026-12-31T23:59:59Z',
+    usageLimit: 500,
+    usedCount: 27,
+    isActive: true,
+    createdAt: '2026-01-01T00:00:00Z',
+  },
+  {
+    id: 'c1000000-0000-0000-0000-000000000005',
+    code: 'VIPMEMBER',
+    description: 'Ưu đãi thành viên VIP: Giảm 5% tối đa 1.500.000đ cho đơn hàng từ 15.000.000đ',
+    discountType: 'Percentage',
+    discountValue: 5,
+    maxDiscountAmount: 1500000,
+    minOrderAmount: 15000000,
+    startDate: '2026-01-01T00:00:00Z',
+    endDate: '2026-12-31T23:59:59Z',
     usageLimit: 100,
-    usedCount: 14,
+    usedCount: 7,
     isActive: true,
     createdAt: '2026-01-01T00:00:00Z',
   },
 ];
+
+function getFilteredCoupons(filter?: CouponFilterDto): PagedCouponsResult {
+  let filtered = [...REAL_DATABASE_COUPONS];
+  if (filter?.search) {
+    const q = filter.search.toLowerCase();
+    filtered = filtered.filter(
+      (c) => c.code.toLowerCase().includes(q) || (c.description && c.description.toLowerCase().includes(q))
+    );
+  }
+  if (filter?.isActive !== undefined) {
+    filtered = filtered.filter((c) => c.isActive === filter.isActive);
+  }
+  const page = filter?.page || 1;
+  const pageSize = filter?.pageSize || 10;
+  const start = (page - 1) * pageSize;
+  const items = filtered.slice(start, start + pageSize);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+
+  return {
+    items,
+    page,
+    pageSize,
+    totalItems: filtered.length,
+    totalPages,
+    hasNextPage: page < totalPages,
+    hasPreviousPage: page > 1,
+  };
+}
 
 export const adminCouponApi = {
   async getCoupons(filter?: CouponFilterDto): Promise<ApiEnvelope<PagedCouponsResult>> {
@@ -80,28 +139,12 @@ export const adminCouponApi = {
       }
       return {
         isSuccess: true,
-        data: {
-          items: MOCK_COUPONS,
-          page: 1,
-          pageSize: 10,
-          totalItems: MOCK_COUPONS.length,
-          totalPages: 1,
-          hasNextPage: false,
-          hasPreviousPage: false,
-        },
+        data: getFilteredCoupons(filter),
       };
     } catch {
       return {
         isSuccess: true,
-        data: {
-          items: MOCK_COUPONS,
-          page: 1,
-          pageSize: 10,
-          totalItems: MOCK_COUPONS.length,
-          totalPages: 1,
-          hasNextPage: false,
-          hasPreviousPage: false,
-        },
+        data: getFilteredCoupons(filter),
       };
     }
   },
