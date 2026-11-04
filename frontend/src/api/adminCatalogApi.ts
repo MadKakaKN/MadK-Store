@@ -1,5 +1,6 @@
 import apiClient from './apiClient';
 import { ApiEnvelope } from '../types/auth';
+import { MOCK_PRODUCTS, MOCK_CATEGORY_TREE, MOCK_BRANDS } from './mockData';
 
 export interface AdminCategoryListDto {
   id: string;
@@ -242,13 +243,116 @@ export interface FileUploadResultDto {
   contentType: string;
 }
 
+function getMockAdminCategories(): AdminCategoryListDto[] {
+  const result: AdminCategoryListDto[] = [];
+  function traverse(nodes: typeof MOCK_CATEGORY_TREE, parentId: string | null = null, parentName: string | null = null) {
+    for (const node of nodes) {
+      result.push({
+        id: node.id,
+        parentId,
+        parentName,
+        name: node.name,
+        slug: node.slug,
+        description: node.description || null,
+        iconUrl: node.iconUrl || null,
+        displayOrder: node.displayOrder,
+        isActive: true,
+        isDeleted: false,
+        productsCount: MOCK_PRODUCTS.filter((p) => p.category.id === node.id || p.category.slug === node.slug).length,
+        hasSchema: true,
+        createdAt: '2026-10-11T12:00:00Z',
+      });
+      if (node.children?.length) {
+        traverse(node.children, node.id, node.name);
+      }
+    }
+  }
+  traverse(MOCK_CATEGORY_TREE);
+  return result;
+}
+
+function getMockAdminBrands(): AdminBrandListDto[] {
+  return MOCK_BRANDS.map((b) => ({
+    id: b.id,
+    name: b.name,
+    slug: b.slug,
+    logoUrl: b.logoUrl || null,
+    description: b.description || null,
+    isActive: b.isActive,
+    isDeleted: false,
+    productsCount: MOCK_PRODUCTS.filter((p) => p.brand.id === b.id || p.brand.slug === b.slug).length,
+    createdAt: '2026-10-11T12:00:00Z',
+  }));
+}
+
+function getMockAdminProducts(filter: AdminProductQueryFilter = {}): PagedResult<AdminProductListDto> {
+  let items: AdminProductListDto[] = MOCK_PRODUCTS.map((p) => {
+    const salePrices = p.variants.map((v) => v.salePrice).filter((sp) => typeof sp === 'number');
+    const minPrice = salePrices.length > 0 ? Math.min(...salePrices) : p.basePrice;
+    const maxPrice = salePrices.length > 0 ? Math.max(...salePrices) : p.basePrice;
+
+    return {
+      id: p.id,
+      name: p.name,
+      slug: p.slug,
+      categoryName: p.category.name,
+      categoryId: p.category.id,
+      brandName: p.brand.name,
+      brandId: p.brand.id,
+      basePrice: p.basePrice,
+      minPrice,
+      maxPrice,
+      model3DUrl: p.model3DUrl || null,
+      thumbnailUrl: p.thumbnailUrl || null,
+      isFeatured: p.isFeatured,
+      isActive: true,
+      isDeleted: false,
+      variantsCount: p.variants.length,
+      totalStock: p.variants.reduce((sum, v) => sum + (v.stockQuantity || 20), 0),
+      createdAt: '2026-10-11T12:00:00Z',
+      updatedAt: null,
+    };
+  });
+
+  if (filter.search) {
+    const q = filter.search.toLowerCase().trim();
+    items = items.filter((p) => p.name.toLowerCase().includes(q) || p.slug.toLowerCase().includes(q));
+  }
+  if (filter.categoryId) {
+    items = items.filter((p) => p.categoryId === filter.categoryId);
+  }
+  if (filter.brandId) {
+    items = items.filter((p) => p.brandId === filter.brandId);
+  }
+
+  const page = filter.page || 1;
+  const pageSize = filter.pageSize || 10;
+  const totalItems = items.length;
+  const totalPages = Math.ceil(totalItems / pageSize);
+  const pagedItems = items.slice((page - 1) * pageSize, page * pageSize);
+
+  return {
+    items: pagedItems,
+    page,
+    pageSize,
+    totalItems,
+    totalPages,
+    hasNextPage: page < totalPages,
+    hasPreviousPage: page > 1,
+  };
+}
+
 export const adminCatalogApi = {
   // Categories
   async getCategories(includeDeleted = false): Promise<AdminCategoryListDto[]> {
-    const res = await apiClient.get<ApiEnvelope<AdminCategoryListDto[]>>('/admin/catalog/categories', {
-      params: { includeDeleted },
-    });
-    return res.data.data ?? [];
+    try {
+      const res = await apiClient.get<ApiEnvelope<AdminCategoryListDto[]>>('/admin/catalog/categories', {
+        params: { includeDeleted },
+      });
+      return res.data.data ?? getMockAdminCategories();
+    } catch {
+      return getMockAdminCategories();
+    }
   },
 
   async getCategoryById(id: string): Promise<AdminCategoryDetailDto> {
@@ -295,10 +399,14 @@ export const adminCatalogApi = {
 
   // Brands
   async getBrands(includeDeleted = false): Promise<AdminBrandListDto[]> {
-    const res = await apiClient.get<ApiEnvelope<AdminBrandListDto[]>>('/admin/catalog/brands', {
-      params: { includeDeleted },
-    });
-    return res.data.data ?? [];
+    try {
+      const res = await apiClient.get<ApiEnvelope<AdminBrandListDto[]>>('/admin/catalog/brands', {
+        params: { includeDeleted },
+      });
+      return res.data.data ?? getMockAdminBrands();
+    } catch {
+      return getMockAdminBrands();
+    }
   },
 
   async getBrandById(id: string): Promise<AdminBrandDetailDto> {
@@ -335,13 +443,17 @@ export const adminCatalogApi = {
 
   // Products
   async getProducts(filter: AdminProductQueryFilter = {}): Promise<PagedResult<AdminProductListDto>> {
-    const res = await apiClient.get<ApiEnvelope<PagedResult<AdminProductListDto>>>('/admin/catalog/products', {
-      params: filter,
-    });
-    if (!res.data.isSuccess || !res.data.data) {
-      throw new Error(res.data.error || 'Tải danh sách sản phẩm thất bại');
+    try {
+      const res = await apiClient.get<ApiEnvelope<PagedResult<AdminProductListDto>>>('/admin/catalog/products', {
+        params: filter,
+      });
+      if (res.data?.isSuccess && res.data.data) {
+        return res.data.data;
+      }
+      return getMockAdminProducts(filter);
+    } catch {
+      return getMockAdminProducts(filter);
     }
-    return res.data.data;
   },
 
   async getProductById(id: string): Promise<AdminProductDetailDto> {

@@ -21,9 +21,30 @@ import {
   UpdateSupplierDto,
   VariantInventoryItemDto,
 } from '../types/inventory';
+import { MOCK_PRODUCTS } from './mockData';
 
 // In-memory store for offline fallback operations
-let mockVariants: VariantInventoryItemDto[] = [];
+let mockVariants: VariantInventoryItemDto[] = MOCK_PRODUCTS.flatMap((p) =>
+  p.variants.map((v) => {
+    const onHand = v.stockQuantity || 25;
+    const reserved = Math.min(2, Math.floor(onHand * 0.1));
+    return {
+      variantId: v.id,
+      productId: p.id,
+      sku: v.sku,
+      productName: p.name,
+      variantName: v.name,
+      thumbnailUrl: p.thumbnailUrl || null,
+      onHandQuantity: onHand,
+      reservedQuantity: reserved,
+      availableQuantity: Math.max(0, onHand - reserved),
+      minStockThreshold: 5,
+      costPrice: v.costPrice || Math.round(v.salePrice * 0.75),
+      salePrice: v.salePrice,
+      updatedAt: '2026-11-01T12:00:00Z',
+    };
+  })
+);
 
 let mockSuppliers: SupplierDto[] = [];
 let mockMovements: StockMovementDto[] = [];
