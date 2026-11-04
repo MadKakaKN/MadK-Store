@@ -166,11 +166,11 @@ public static class DependencyInjection
 
         // Tối ưu Connection Pooling cho Supabase PostgreSQL (tránh lỗi 53300: remaining connection slots are reserved)
         builder.Pooling = true;
-        if (!builder.ContainsKey("Maximum Pool Size") && !builder.ContainsKey("MaxPoolSize"))
+        if (builder.MaxPoolSize > 15)
         {
             builder.MaxPoolSize = 15;
         }
-        if (!builder.ContainsKey("Minimum Pool Size") && !builder.ContainsKey("MinPoolSize"))
+        if (builder.MinPoolSize < 1)
         {
             builder.MinPoolSize = 1;
         }
