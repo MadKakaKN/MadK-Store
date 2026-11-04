@@ -13,10 +13,14 @@ namespace MadK.API.Controllers.Admin;
 public class AdminUsersController : ControllerBase
 {
     private readonly IAdminUserService _adminUserService;
+    private readonly Microsoft.Extensions.Caching.Memory.IMemoryCache _memoryCache;
 
-    public AdminUsersController(IAdminUserService adminUserService)
+    public AdminUsersController(
+        IAdminUserService adminUserService,
+        Microsoft.Extensions.Caching.Memory.IMemoryCache memoryCache)
     {
         _adminUserService = adminUserService;
+        _memoryCache = memoryCache;
     }
 
     /// <summary>
@@ -73,6 +77,9 @@ public class AdminUsersController : ControllerBase
         {
             return BadRequest(result);
         }
+
+        // Xóa cache trạng thái user ngay lập tức để thu hồi Token tức thì
+        _memoryCache.Remove($"user_active_status_{id}");
 
         return Ok(result);
     }

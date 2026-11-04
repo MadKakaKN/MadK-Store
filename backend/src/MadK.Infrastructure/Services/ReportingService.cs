@@ -60,15 +60,21 @@ public class ReportingService : IReportingService
                 })
                 .ToListAsync(ct);
 
-            var qualifyingOrderIds = orderSummaries
-                .Where(o => o.Status == OrderStatus.Completed || o.Status == OrderStatus.Shipping)
-                .Select(o => o.Id)
-                .ToHashSet();
-
-            // Truy vấn các item thuộc qualifying orders để tính giá vốn và lợi nhuận gộp
-            var itemsData = await _context.OrderItems
+            // Tối ưu: Truy vấn trực tiếp OrderItems qua SQL JOIN thay vì gom List IDs vào RAM rồi dùng IN (...)
+            var qualifyingItemsQuery = _context.OrderItems
                 .AsNoTracking()
-                .Where(i => qualifyingOrderIds.Contains(i.OrderId))
+                .Where(i => i.Order.Status == OrderStatus.Completed || i.Order.Status == OrderStatus.Shipping);
+
+            if (fromDate.HasValue)
+            {
+                qualifyingItemsQuery = qualifyingItemsQuery.Where(i => i.Order.CreatedAt >= fromDate.Value);
+            }
+            if (toDate.HasValue)
+            {
+                qualifyingItemsQuery = qualifyingItemsQuery.Where(i => i.Order.CreatedAt <= toDate.Value);
+            }
+
+            var itemsData = await qualifyingItemsQuery
                 .Select(i => new
                 {
                     i.OrderId,

@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Caching.Memory;
 using System.Text;
 using System.Text.Json;
 using System.Threading.RateLimiting;
@@ -32,6 +33,8 @@ var jwtKey = builder.Configuration["Jwt:Key"] ?? "MadK_Store_Super_Secret_Jwt_Si
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "MadKStore";
 var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "MadKStoreClient";
 
+builder.Services.AddMemoryCache();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -49,6 +52,51 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = jwtAudience,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
         ClockSkew = TimeSpan.Zero
+    };
+
+    // Kiểm tra trạng thái tài khoản thời gian thực (Thu hồi quyền tức thì khi tài khoản bị khóa / vô hiệu hóa)
+    options.Events = new JwtBearerEvents
+    {
+        OnTokenValidated = async context =>
+        {
+            var userIdClaim = context.Principal?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                ?? context.Principal?.FindFirst("sub")?.Value
+                ?? context.Principal?.FindFirst("id")?.Value;
+
+            if (Guid.TryParse(userIdClaim, out var userId))
+            {
+                var cache = context.HttpContext.RequestServices.GetRequiredService<IMemoryCache>();
+                string cacheKey = $"user_active_status_{userId}";
+
+                if (!cache.TryGetValue<UserSecurityState>(cacheKey, out var status) || status == null)
+                {
+                    var db = context.HttpContext.RequestServices.GetRequiredService<MadK.Infrastructure.Data.AppDbContext>();
+                    var user = await db.Users
+                        .AsNoTracking()
+                        .Where(u => u.Id == userId)
+                        .Select(u => new { u.IsActive, u.LockoutEnd })
+                        .FirstOrDefaultAsync();
+
+                    if (user == null)
+                    {
+                        context.Fail("Tài khoản người dùng không tồn tại hoặc đã bị xóa.");
+                        return;
+                    }
+
+                    status = new UserSecurityState(user.IsActive, user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTime.UtcNow);
+                    cache.Set(cacheKey, status, TimeSpan.FromSeconds(30));
+                }
+
+                if (!status.IsActive)
+                {
+                    context.Fail("Tài khoản này đã bị khóa hoặc vô hiệu hóa bởi Quản trị viên.");
+                }
+                else if (status.IsLockedOut)
+                {
+                    context.Fail("Tài khoản đang tạm thời bị khóa do nhập sai mật khẩu quá nhiều lần.");
+                }
+            }
+        }
     };
 });
 
@@ -347,3 +395,5 @@ app.MapHealthChecks("/health", new HealthCheckOptions
 app.Run();
 
 public partial class Program { }
+
+internal record UserSecurityState(bool IsActive, bool IsLockedOut);

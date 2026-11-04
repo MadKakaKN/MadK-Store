@@ -106,6 +106,7 @@ public static class DependencyInjection
         // Order Expiration & Stock Retention Worker
         services.AddScoped<IOrderExpirationService, MadK.Infrastructure.Services.OrderExpirationService>();
         services.AddHostedService<MadK.Infrastructure.Workers.OrderExpirationWorker>();
+        services.AddHostedService<MadK.Infrastructure.Workers.CartCleanupWorker>();
 
         // Returns & Refunds
         services.AddScoped<IReturnService, MadK.Infrastructure.Services.ReturnService>();
@@ -127,6 +128,8 @@ public static class DependencyInjection
         if (string.IsNullOrWhiteSpace(rawConn))
             return string.Empty;
 
+        Npgsql.NpgsqlConnectionStringBuilder builder;
+
         if (rawConn.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase) ||
             rawConn.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase))
         {
@@ -134,7 +137,7 @@ public static class DependencyInjection
             {
                 var uri = new Uri(rawConn);
                 var userInfo = uri.UserInfo.Split(':');
-                var builder = new Npgsql.NpgsqlConnectionStringBuilder
+                builder = new Npgsql.NpgsqlConnectionStringBuilder
                 {
                     Host = uri.Host,
                     Port = uri.Port > 0 ? uri.Port : 5432,
@@ -143,7 +146,17 @@ public static class DependencyInjection
                     Password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : "",
                     SslMode = Npgsql.SslMode.Require
                 };
-                return builder.ToString();
+            }
+            catch
+            {
+                return rawConn;
+            }
+        }
+        else
+        {
+            try
+            {
+                builder = new Npgsql.NpgsqlConnectionStringBuilder(rawConn);
             }
             catch
             {
@@ -151,7 +164,20 @@ public static class DependencyInjection
             }
         }
 
-        return rawConn;
+        // Tối ưu Connection Pooling cho Supabase PostgreSQL (tránh lỗi 53300: remaining connection slots are reserved)
+        builder.Pooling = true;
+        if (!builder.ContainsKey("Maximum Pool Size") && !builder.ContainsKey("MaxPoolSize"))
+        {
+            builder.MaxPoolSize = 15;
+        }
+        if (!builder.ContainsKey("Minimum Pool Size") && !builder.ContainsKey("MinPoolSize"))
+        {
+            builder.MinPoolSize = 1;
+        }
+        builder.ConnectionIdleLifetime = 30; // Giải phóng kết nối rỗi sau 30 giây
+        builder.Timeout = 15; // Timeout thiết lập kết nối 15 giây
+
+        return builder.ToString();
     }
 }
 
