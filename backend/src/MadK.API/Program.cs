@@ -135,6 +135,27 @@ builder.Services.AddRateLimiter(options =>
             }));
 });
 
+// ──── Output Caching (ASP.NET Core 8 High-Performance Caching) ────
+builder.Services.AddOutputCache(options =>
+{
+    // Caching 15 phút cho Danh mục & Thương hiệu
+    options.AddPolicy("CatalogMeta", b => b
+        .Expire(TimeSpan.FromMinutes(15))
+        .Tag("catalog_meta"));
+
+    // Caching 5 phút cho Danh sách sản phẩm (hỗ trợ phân trang, lọc, tìm kiếm)
+    options.AddPolicy("ProductList", b => b
+        .Expire(TimeSpan.FromMinutes(5))
+        .SetVaryByQuery(new[] { "search", "categorySlug", "categoryId", "brandSlug", "brandId", "minPrice", "maxPrice", "isFeatured", "sort", "page", "pageSize" })
+        .Tag("products"));
+
+    // Caching 15 phút cho Chi tiết sản phẩm
+    options.AddPolicy("ProductDetail", b => b
+        .Expire(TimeSpan.FromMinutes(15))
+        .SetVaryByRouteValue("slug")
+        .Tag("product_detail"));
+});
+
 // ──── Controllers & Routing & Compression ────
 builder.Services.AddResponseCompression(options => { options.EnableForHttps = true; });
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
@@ -275,6 +296,7 @@ app.UseSerilogRequestLogging();
 
 app.UseResponseCompression();
 app.UseCors("AllowFrontend");
+app.UseOutputCache();
 app.UseStaticFiles(new StaticFileOptions
 {
     OnPrepareResponse = ctx =>

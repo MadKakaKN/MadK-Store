@@ -1,0 +1,23 @@
+name: Render API Keep-Alive
+
+on:
+  schedule:
+    # Runs every 12 minutes to prevent Render free-tier instance from sleeping (spin-down after 15m)
+    - cron: '*/12 * * * *'
+  workflow_dispatch:
+
+jobs:
+  keep-alive:
+    name: Ping Backend Health Endpoint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping MadK Store Backend API
+        run: |
+          echo "Sending keep-alive ping to https://madk-api.onrender.com/api/v1/ping..."
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 https://madk-api.onrender.com/api/v1/ping || echo "FAILED")
+          echo "Response HTTP Status: $RESPONSE"
+          if [ "$RESPONSE" == "200" ]; then
+            echo "Backend is alive and responsive."
+          else
+            echo "Backend returned status: $RESPONSE (might be waking up or warming up)."
+          fi

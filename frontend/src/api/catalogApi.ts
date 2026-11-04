@@ -9,6 +9,7 @@ import {
   PagedResult,
   ProductQueryParams,
   Result,
+  SearchSuggestionsDto,
 } from '../types/catalog';
 import {
   MOCK_CATEGORY_TREE,
@@ -148,6 +149,27 @@ export const catalogApi = {
     } catch (error) {
       console.warn(`[Catalog API] Failed to fetch product '${slug}', using mock fallback:`, error);
       return getMockProductBySlug(slug);
+    }
+  },
+
+  /**
+   * Gợi ý tìm kiếm nhanh (Typo-tolerant suggestions: products, categories, brands)
+   */
+  async getSuggestions(query: string, limit: number = 6): Promise<SearchSuggestionsDto | null> {
+    if (!query || query.trim().length === 0) {
+      return null;
+    }
+    try {
+      const response = await apiClient.get<Result<SearchSuggestionsDto>>('/products/suggestions', {
+        params: { q: query.trim(), limit },
+      });
+      if (response.data?.isSuccess && response.data.data) {
+        return response.data.data;
+      }
+      return null;
+    } catch (error) {
+      console.warn(`[Catalog API] Failed to fetch suggestions for '${query}':`, error);
+      return null;
     }
   },
 };

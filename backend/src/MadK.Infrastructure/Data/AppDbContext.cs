@@ -86,6 +86,10 @@ public class AppDbContext : DbContext, IAppDbContext
         {
             modelBuilder.Entity<Product>().Ignore(p => p.SearchVector);
         }
+        else
+        {
+            modelBuilder.HasPostgresExtension("pg_trgm");
+        }
     }
 
     /// <summary>

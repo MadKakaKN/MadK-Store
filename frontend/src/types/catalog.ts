@@ -169,3 +169,33 @@ export interface ProductQueryParams {
   page?: number;
   pageSize?: number;
 }
+
+export interface ProductSuggestionDto {
+  id: string;
+  name: string;
+  slug: string;
+  thumbnailUrl?: string;
+  basePrice: number;
+  brandName?: string;
+  categoryName?: string;
+}
+
+export interface CategorySuggestionDto {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+export interface BrandSuggestionDto {
+  id: string;
+  name: string;
+  slug: string;
+  logoUrl?: string;
+}
+
+export interface SearchSuggestionsDto {
+  products: ProductSuggestionDto[];
+  categories: CategorySuggestionDto[];
+  brands: BrandSuggestionDto[];
+  query: string;
+}

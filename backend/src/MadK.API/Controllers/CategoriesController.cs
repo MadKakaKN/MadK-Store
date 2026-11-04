@@ -2,6 +2,7 @@ using MadK.Application.Common;
 using MadK.Application.DTOs.Catalog;
 using MadK.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace MadK.API.Controllers;
 
@@ -20,6 +21,7 @@ public class CategoriesController : ControllerBase
     /// Lấy cây danh mục sản phẩm (phân cấp cha-con).
     /// </summary>
     [HttpGet]
+    [OutputCache(PolicyName = "CatalogMeta")]
     [ProducesResponseType(typeof(Result<IReadOnlyList<CategoryTreeDto>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCategoryTree(CancellationToken ct)
     {
@@ -31,6 +33,7 @@ public class CategoriesController : ControllerBase
     /// Lấy chi tiết danh mục theo slug kèm JSON Schema thông số kỹ thuật.
     /// </summary>
     [HttpGet("{slug}")]
+    [OutputCache(PolicyName = "CatalogMeta")]
     [ProducesResponseType(typeof(Result<CategoryDetailDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result<CategoryDetailDto>), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCategoryBySlug(string slug, CancellationToken ct)
@@ -48,6 +51,7 @@ public class CategoriesController : ControllerBase
     /// Lấy bộ lọc khả dụng sinh động theo danh mục (thương hiệu, khoảng giá, thông số kỹ thuật).
     /// </summary>
     [HttpGet("{slug}/filters")]
+    [OutputCache(PolicyName = "CatalogMeta")]
     [ProducesResponseType(typeof(Result<CategoryFiltersDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result<CategoryFiltersDto>), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCategoryFilters(string slug, CancellationToken ct)

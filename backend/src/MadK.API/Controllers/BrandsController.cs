@@ -2,6 +2,7 @@ using MadK.Application.Common;
 using MadK.Application.DTOs.Catalog;
 using MadK.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace MadK.API.Controllers;
 
@@ -22,6 +23,7 @@ public class BrandsController : ControllerBase
     /// <param name="isActive">Lọc theo trạng thái hoạt động (mặc định: true)</param>
     /// <param name="ct">CancellationToken</param>
     [HttpGet]
+    [OutputCache(PolicyName = "CatalogMeta")]
     [ProducesResponseType(typeof(Result<IReadOnlyList<BrandDto>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetBrands([FromQuery] bool isActive = true, CancellationToken ct = default)
     {

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.OutputCaching;
 using System.Security.Claims;
 using MadK.Application.Common;
 using MadK.Application.DTOs.Admin;
@@ -16,13 +17,16 @@ public class AdminCatalogController : ControllerBase
 {
     private readonly IAdminCatalogService _catalogService;
     private readonly IStorageService _storageService;
+    private readonly IOutputCacheStore _cacheStore;
 
     public AdminCatalogController(
         IAdminCatalogService catalogService,
-        IStorageService storageService)
+        IStorageService storageService,
+        IOutputCacheStore cacheStore)
     {
         _catalogService = catalogService;
         _storageService = storageService;
+        _cacheStore = cacheStore;
     }
 
     #region Categories
@@ -40,7 +44,8 @@ public class AdminCatalogController : ControllerBase
     public async Task<IActionResult> GetCategoryById(Guid id, CancellationToken ct = default)
     {
         var result = await _catalogService.GetCategoryByIdAsync(id, ct);
-        if (!result.IsSuccess) return NotFound(result);
+        if (!result.IsSuccess) return BadRequest(result);
+        await EvictCatalogCacheAsync(ct);
         return Ok(result);
     }
 
@@ -152,7 +157,8 @@ public class AdminCatalogController : ControllerBase
     public async Task<IActionResult> GetBrandById(Guid id, CancellationToken ct = default)
     {
         var result = await _catalogService.GetBrandByIdAsync(id, ct);
-        if (!result.IsSuccess) return NotFound(result);
+        if (!result.IsSuccess) return BadRequest(result);
+        await EvictCatalogCacheAsync(ct);
         return Ok(result);
     }
 
@@ -239,7 +245,8 @@ public class AdminCatalogController : ControllerBase
     public async Task<IActionResult> GetProductById(Guid id, CancellationToken ct = default)
     {
         var result = await _catalogService.GetProductByIdAsync(id, ct);
-        if (!result.IsSuccess) return NotFound(result);
+        if (!result.IsSuccess) return BadRequest(result);
+        await EvictCatalogCacheAsync(ct);
         return Ok(result);
     }
 
@@ -300,7 +307,8 @@ public class AdminCatalogController : ControllerBase
             GetUserAgent(),
             ct);
 
-        if (!result.IsSuccess) return NotFound(result);
+        if (!result.IsSuccess) return BadRequest(result);
+        await EvictCatalogCacheAsync(ct);
         return Ok(result);
     }
 
@@ -318,7 +326,8 @@ public class AdminCatalogController : ControllerBase
             GetUserAgent(),
             ct);
 
-        if (!result.IsSuccess) return NotFound(result);
+        if (!result.IsSuccess) return BadRequest(result);
+        await EvictCatalogCacheAsync(ct);
         return Ok(result);
     }
 
@@ -336,7 +345,8 @@ public class AdminCatalogController : ControllerBase
             GetUserAgent(),
             ct);
 
-        if (!result.IsSuccess) return NotFound(result);
+        if (!result.IsSuccess) return BadRequest(result);
+        await EvictCatalogCacheAsync(ct);
         return Ok(result);
     }
     #endregion
@@ -508,6 +518,20 @@ public class AdminCatalogController : ControllerBase
         return Ok(result);
     }
     #endregion
+
+    private async Task EvictCatalogCacheAsync(CancellationToken ct)
+    {
+        try
+        {
+            await _cacheStore.EvictByTagAsync("catalog_meta", ct);
+            await _cacheStore.EvictByTagAsync("products", ct);
+            await _cacheStore.EvictByTagAsync("product_detail", ct);
+        }
+        catch
+        {
+            // Ignore cache eviction failure
+        }
+    }
 
     #region Helper Claims
     private Guid GetCurrentUserId()

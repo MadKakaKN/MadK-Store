@@ -352,6 +352,46 @@ public class CatalogService : ICatalogService
         // Total count
         var totalItems = await query.CountAsync(ct);
 
+        // Tự động kích hoạt tìm kiếm mờ (Fuzzy / Trigram Similarity) nếu từ khóa gõ sai chính tả và không có kết quả chính xác
+        if (totalItems == 0 && !string.IsNullOrWhiteSpace(queryParams.Search))
+        {
+            var rawSearch = queryParams.Search.Trim().ToLower();
+            var unaccented = StringUtils.RemoveVietnameseTones(queryParams.Search);
+            bool isRelational = ((DbContext)_context).Database.IsRelational();
+
+            if (isRelational)
+            {
+                var fuzzyQuery = _context.Products.Where(p => p.IsActive).AsNoTracking();
+
+                if (!string.IsNullOrWhiteSpace(queryParams.CategorySlug))
+                {
+                    fuzzyQuery = fuzzyQuery.Where(p => p.Category.Slug == queryParams.CategorySlug);
+                }
+                else if (queryParams.CategoryId.HasValue)
+                {
+                    fuzzyQuery = fuzzyQuery.Where(p => p.CategoryId == queryParams.CategoryId.Value);
+                }
+
+                if (queryParams.MinPrice.HasValue) fuzzyQuery = fuzzyQuery.Where(p => p.BasePrice >= queryParams.MinPrice.Value);
+                if (queryParams.MaxPrice.HasValue) fuzzyQuery = fuzzyQuery.Where(p => p.BasePrice <= queryParams.MaxPrice.Value);
+
+                fuzzyQuery = fuzzyQuery.Where(p =>
+                    EF.Functions.TrigramsSimilarity(p.Name, rawSearch) > 0.22 ||
+                    EF.Functions.TrigramsSimilarity(p.Name, unaccented) > 0.22 ||
+                    EF.Functions.TrigramsSimilarity(p.Brand.Name, rawSearch) > 0.35 ||
+                    EF.Functions.TrigramsSimilarity(p.Category.Name, unaccented) > 0.35);
+
+                int fuzzyCount = await fuzzyQuery.CountAsync(ct);
+                if (fuzzyCount > 0)
+                {
+                    query = fuzzyQuery
+                        .OrderByDescending(p => EF.Functions.TrigramsSimilarity(p.Name, rawSearch))
+                        .ThenByDescending(p => p.IsFeatured);
+                    totalItems = fuzzyCount;
+                }
+            }
+        }
+
         // Paged items projection (Direct projection eliminates N+1 queries completely)
         var items = await query
             .Skip((queryParams.Page - 1) * queryParams.PageSize)
@@ -472,5 +512,92 @@ public class CatalogService : ICatalogService
         };
 
         return Result<ProductDetailDto>.Success(dto);
+    }
+
+    public async Task<Result<SearchSuggestionsDto>> GetSearchSuggestionsAsync(string query, int limit = 6, CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            return Result<SearchSuggestionsDto>.Success(new SearchSuggestionsDto(
+                Array.Empty<ProductSuggestionDto>(),
+                Array.Empty<CategorySuggestionDto>(),
+                Array.Empty<BrandSuggestionDto>(),
+                string.Empty));
+        }
+
+        var raw = query.Trim().ToLower();
+        var unaccented = StringUtils.RemoveVietnameseTones(query);
+        var slugTerm = unaccented.Replace(' ', '-');
+        bool isRelational = ((DbContext)_context).Database.IsRelational();
+
+        // 1. Gợi ý sản phẩm phù hợp (chính xác + mờ)
+        var prodQuery = _context.Products
+            .Where(p => p.IsActive)
+            .Include(p => p.Category)
+            .Include(p => p.Brand)
+            .AsNoTracking();
+
+        List<ProductSuggestionDto> products;
+        if (isRelational)
+        {
+            products = await prodQuery
+                .Where(p =>
+                    EF.Functions.Like(p.Name.ToLower(), $"%{raw}%") ||
+                    EF.Functions.Like(p.Name.ToLower(), $"%{unaccented}%") ||
+                    EF.Functions.Like(p.Slug.ToLower(), $"%{slugTerm}%") ||
+                    EF.Functions.TrigramsSimilarity(p.Name, raw) > 0.22 ||
+                    EF.Functions.TrigramsSimilarity(p.Name, unaccented) > 0.22)
+                .OrderByDescending(p => EF.Functions.Like(p.Name.ToLower(), $"%{raw}%"))
+                .ThenByDescending(p => EF.Functions.TrigramsSimilarity(p.Name, raw))
+                .Take(limit)
+                .Select(p => new ProductSuggestionDto(
+                    p.Id,
+                    p.Name,
+                    p.Slug,
+                    p.ThumbnailUrl,
+                    p.BasePrice,
+                    p.Brand.Name,
+                    p.Category.Name))
+                .ToListAsync(ct);
+        }
+        else
+        {
+            products = await prodQuery
+                .Where(p => p.Name.ToLower().Contains(raw) || p.Name.ToLower().Contains(unaccented))
+                .Take(limit)
+                .Select(p => new ProductSuggestionDto(
+                    p.Id,
+                    p.Name,
+                    p.Slug,
+                    p.ThumbnailUrl,
+                    p.BasePrice,
+                    p.Brand.Name,
+                    p.Category.Name))
+                .ToListAsync(ct);
+        }
+
+        // 2. Gợi ý danh mục liên quan
+        var catQuery = _context.Categories.Where(c => c.IsActive).AsNoTracking();
+        var categories = await catQuery
+            .Where(c =>
+                c.Name.ToLower().Contains(raw) ||
+                c.Name.ToLower().Contains(unaccented) ||
+                c.Slug.Contains(slugTerm))
+            .Take(3)
+            .Select(c => new CategorySuggestionDto(c.Id, c.Name, c.Slug))
+            .ToListAsync(ct);
+
+        // 3. Gợi ý thương hiệu liên quan
+        var brandQuery = _context.Brands.Where(b => b.IsActive).AsNoTracking();
+        var brands = await brandQuery
+            .Where(b =>
+                b.Name.ToLower().Contains(raw) ||
+                b.Name.ToLower().Contains(unaccented) ||
+                b.Slug.Contains(slugTerm))
+            .Take(3)
+            .Select(b => new BrandSuggestionDto(b.Id, b.Name, b.Slug, b.LogoUrl))
+            .ToListAsync(ct);
+
+        return Result<SearchSuggestionsDto>.Success(new SearchSuggestionsDto(products, categories, brands, query));
     }
 }

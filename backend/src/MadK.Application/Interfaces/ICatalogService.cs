@@ -11,4 +11,5 @@ public interface ICatalogService
     Task<Result<IReadOnlyList<BrandDto>>> GetBrandsAsync(bool activeOnly = true, CancellationToken ct = default);
     Task<Result<PagedResult<ProductListDto>>> GetProductsAsync(ProductQueryParams queryParams, CancellationToken ct = default);
     Task<Result<ProductDetailDto>> GetProductBySlugAsync(string slug, CancellationToken ct = default);
+    Task<Result<SearchSuggestionsDto>> GetSearchSuggestionsAsync(string query, int limit = 6, CancellationToken ct = default);
 }
