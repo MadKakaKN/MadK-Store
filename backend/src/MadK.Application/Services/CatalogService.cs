@@ -266,13 +266,50 @@ public class CatalogService : ICatalogService
             query = query.Where(p => p.IsFeatured == queryParams.IsFeatured.Value);
         }
 
-        // Full-Text Search
+        // Full-Text & Multi-Field Search (Diacritic-insensitive, Slug, Category & Brand aware)
         if (!string.IsNullOrWhiteSpace(queryParams.Search))
         {
-            var search = queryParams.Search.Trim().ToLower();
-            query = query.Where(p =>
-                EF.Functions.Like(p.Name.ToLower(), $"%{search}%") ||
-                (p.Description != null && EF.Functions.Like(p.Description.ToLower(), $"%{search}%")));
+            var rawSearch = queryParams.Search.Trim().ToLower();
+            var unaccented = StringUtils.RemoveVietnameseTones(queryParams.Search);
+            var slugTerm = unaccented.Replace(' ', '-');
+            var tokens = unaccented.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            var rawTokens = rawSearch.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            if (tokens.Length <= 1)
+            {
+                query = query.Where(p =>
+                    EF.Functions.Like(p.Name.ToLower(), $"%{rawSearch}%") ||
+                    EF.Functions.Like(p.Name.ToLower(), $"%{unaccented}%") ||
+                    EF.Functions.Like(p.Slug.ToLower(), $"%{slugTerm}%") ||
+                    EF.Functions.Like(p.Category.Name.ToLower(), $"%{rawSearch}%") ||
+                    EF.Functions.Like(p.Category.Name.ToLower(), $"%{unaccented}%") ||
+                    EF.Functions.Like(p.Category.Slug.ToLower(), $"%{slugTerm}%") ||
+                    EF.Functions.Like(p.Brand.Name.ToLower(), $"%{rawSearch}%") ||
+                    EF.Functions.Like(p.Brand.Name.ToLower(), $"%{unaccented}%") ||
+                    EF.Functions.Like(p.Brand.Slug.ToLower(), $"%{slugTerm}%"));
+            }
+            else
+            {
+                // Multi-token search (e.g. "dien thoai", "dien thoai samsung", "chuot logitech", "ban phim co")
+                // All tokens must match across the product's attributes (Name, Slug, Category, Brand)
+                for (int i = 0; i < tokens.Length; i++)
+                {
+                    var uToken = tokens[i];
+                    var rToken = i < rawTokens.Length ? rawTokens[i] : uToken;
+                    if (uToken.Length < 2 && rToken.Length < 2) continue;
+
+                    query = query.Where(p =>
+                        EF.Functions.Like(p.Name.ToLower(), $"%{rToken}%") ||
+                        EF.Functions.Like(p.Name.ToLower(), $"%{uToken}%") ||
+                        EF.Functions.Like(p.Slug.ToLower(), $"%{uToken}%") ||
+                        EF.Functions.Like(p.Category.Name.ToLower(), $"%{rToken}%") ||
+                        EF.Functions.Like(p.Category.Name.ToLower(), $"%{uToken}%") ||
+                        EF.Functions.Like(p.Category.Slug.ToLower(), $"%{uToken}%") ||
+                        EF.Functions.Like(p.Brand.Name.ToLower(), $"%{rToken}%") ||
+                        EF.Functions.Like(p.Brand.Name.ToLower(), $"%{uToken}%") ||
+                        EF.Functions.Like(p.Brand.Slug.ToLower(), $"%{uToken}%"));
+                }
+            }
         }
 
         // JSONB specs filter
@@ -290,13 +327,27 @@ public class CatalogService : ICatalogService
         }
 
         // Sorting
-        query = queryParams.Sort?.ToLowerInvariant() switch
+        if (!string.IsNullOrWhiteSpace(queryParams.Search) && string.IsNullOrWhiteSpace(queryParams.Sort))
         {
-            "price_asc" => query.OrderBy(p => p.BasePrice),
-            "price_desc" => query.OrderByDescending(p => p.BasePrice),
-            "oldest" => query.OrderBy(p => p.CreatedAt),
-            _ => query.OrderByDescending(p => p.CreatedAt) // default newest
-        };
+            var rawSearch = queryParams.Search.Trim().ToLower();
+            var unaccented = StringUtils.RemoveVietnameseTones(queryParams.Search);
+            var slugTerm = unaccented.Replace(' ', '-');
+
+            query = query
+                .OrderByDescending(p => EF.Functions.Like(p.Name.ToLower(), $"%{rawSearch}%") || EF.Functions.Like(p.Slug.ToLower(), $"%{slugTerm}%"))
+                .ThenByDescending(p => p.IsFeatured)
+                .ThenByDescending(p => p.CreatedAt);
+        }
+        else
+        {
+            query = queryParams.Sort?.ToLowerInvariant() switch
+            {
+                "price_asc" => query.OrderBy(p => p.BasePrice),
+                "price_desc" => query.OrderByDescending(p => p.BasePrice),
+                "oldest" => query.OrderBy(p => p.CreatedAt),
+                _ => query.OrderByDescending(p => p.CreatedAt) // default newest
+            };
+        }
 
         // Total count
         var totalItems = await query.CountAsync(ct);

@@ -184,7 +184,7 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
     setIsSearching(true);
     const timer = setTimeout(async () => {
       try {
-        const res = await catalogApi.getProducts({ search: q, pageSize: 6 });
+        const res = await catalogApi.getProducts({ search: q, pageSize: 15 });
         setLiveResults(res.items || []);
       } catch (err) {
         console.warn('Realtime search failed:', err);
@@ -420,61 +420,68 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
                   <span className="text-xs">Đang tìm kiếm trong kho dữ liệu...</span>
                 </div>
               ) : liveResults.length > 0 ? (
-                <div className="space-y-1">
-                  {liveResults.map((p) => {
-                    const price = p.minPrice || p.basePrice || 0;
-                    return (
-                      <button
-                        key={p.id}
-                        type="button"
-                        onClick={() => handleSelectProduct(p.slug)}
-                        className="w-full flex items-center gap-3 p-2 rounded-2xl hover:bg-slate-50 transition-colors text-left group"
-                      >
-                        <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 border border-slate-200/60">
-                          {p.thumbnailUrl || p.slug ? (
-                            <img
-                              src={p.thumbnailUrl || `/images/products/${p.slug}.png`}
-                              alt={p.name}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                if (!target.dataset.fallback) {
-                                  target.dataset.fallback = '1';
-                                  target.src = `/images/products/${p.slug}.png`;
-                                }
-                              }}
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-base">📦</div>
-                          )}
-                          {p.model3DUrl && (
-                            <span className="absolute bottom-0 right-0 px-1 py-0.2 rounded-tl bg-indigo-600 text-white text-[8px] font-bold">
-                              3D
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs sm:text-sm font-semibold text-slate-900 group-hover:text-brand-600 truncate transition-colors">
-                            {p.name}
-                          </div>
-                          <div className="flex items-center gap-2 text-[11px]">
-                            <span className="font-bold text-emerald-600">
-                              {price.toLocaleString('vi-VN')} đ
-                            </span>
-                            {p.categoryName && (
-                              <>
-                                <span className="text-slate-400">•</span>
-                                <span className="text-slate-500 truncate">{p.categoryName}</span>
-                              </>
+                <div>
+                  <div className="space-y-1 max-h-[60vh] overflow-y-auto pr-1">
+                    {liveResults.map((p) => {
+                      const price = p.minPrice || p.basePrice || 0;
+                      return (
+                        <button
+                          key={p.id}
+                          type="button"
+                          onClick={() => handleSelectProduct(p.slug)}
+                          className="w-full flex items-center gap-3 p-2 rounded-2xl hover:bg-slate-50 transition-colors text-left group"
+                        >
+                          <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 border border-slate-200/60">
+                            {p.thumbnailUrl || p.slug ? (
+                              <img
+                                src={p.thumbnailUrl || `/images/products/${p.slug}.png`}
+                                alt={p.name}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  if (!target.dataset.fallback) {
+                                    target.dataset.fallback = '1';
+                                    target.src = `/images/products/${p.slug}.png`;
+                                  }
+                                }}
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-base">📦</div>
+                            )}
+                            {p.model3DUrl && (
+                              <span className="absolute bottom-0 right-0 px-1 py-0.2 rounded-tl bg-indigo-600 text-white text-[8px] font-bold">
+                                3D
+                              </span>
                             )}
                           </div>
-                        </div>
-                        <span className="text-xs text-slate-400 group-hover:text-brand-600 transition-colors">
-                          →
-                        </span>
-                      </button>
-                    );
-                  })}
+                          <div className="flex-1 min-w-0">
+                            <div className="text-xs sm:text-sm font-semibold text-slate-900 group-hover:text-brand-600 truncate transition-colors">
+                              {p.name}
+                            </div>
+                            <div className="flex items-center gap-2 text-[11px] flex-wrap">
+                              <span className="font-bold text-emerald-600">
+                                {price.toLocaleString('vi-VN')} đ
+                              </span>
+                              {p.brandName && (
+                                <span className="px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 text-[10px] font-semibold border border-slate-200/60">
+                                  {p.brandName}
+                                </span>
+                              )}
+                              {p.categoryName && (
+                                <>
+                                  <span className="text-slate-300">•</span>
+                                  <span className="text-slate-500 truncate text-[11px]">{p.categoryName}</span>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                          <span className="text-xs text-slate-400 group-hover:text-brand-600 transition-colors">
+                            →
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
 
                   <button
                     type="button"

@@ -8,6 +8,7 @@ import {
   PagedResult,
   ProductQueryParams,
 } from '../types/catalog';
+import { removeVietnameseTones } from '../utils/textUtils';
 
 export const MOCK_CATEGORY_TREE: CategoryTreeDto[] = [
   {
@@ -3566,8 +3567,63 @@ export function getMockProducts(params: ProductQueryParams = {}): PagedResult<Pr
   }
 
   if (params.search) {
-    const q = params.search.toLowerCase().trim();
-    filtered = filtered.filter((p) => p.name.toLowerCase().includes(q));
+    const unaccentedQ = removeVietnameseTones(params.search);
+    if (unaccentedQ) {
+      const tokens = unaccentedQ.split(/\s+/).filter(Boolean);
+      const slugQuery = unaccentedQ.replace(/\s+/g, '-');
+
+      const scoredItems: Array<{ product: (typeof filtered)[0]; score: number }> = [];
+
+      for (const p of filtered) {
+        const nameNorm = removeVietnameseTones(p.name);
+        const slugNorm = removeVietnameseTones(p.slug.replace(/-/g, ' '));
+        const catNameNorm = removeVietnameseTones(p.categoryName || '');
+        const catSlugNorm = (p.categorySlug || '').replace(/-/g, ' ');
+        const brandNameNorm = removeVietnameseTones(p.brandName || '');
+        const brandSlugNorm = (p.brandSlug || '').replace(/-/g, ' ');
+
+        const searchableNorm = `${nameNorm} ${slugNorm} ${p.slug} ${catNameNorm} ${catSlugNorm} ${brandNameNorm} ${brandSlugNorm}`;
+
+        // Check if all tokens match across searchableNorm
+        const allTokensMatch = tokens.length > 0 && tokens.every((token) => searchableNorm.includes(token));
+        const phraseMatch =
+          nameNorm.includes(unaccentedQ) ||
+          p.slug.toLowerCase().includes(slugQuery) ||
+          catNameNorm.includes(unaccentedQ) ||
+          catSlugNorm.includes(unaccentedQ) ||
+          brandNameNorm.includes(unaccentedQ) ||
+          slugNorm.includes(unaccentedQ);
+
+        if (!allTokensMatch && !phraseMatch) {
+          continue;
+        }
+
+        let score = 0;
+        if (nameNorm === unaccentedQ) score += 1000;
+        else if (nameNorm.startsWith(unaccentedQ)) score += 600;
+        else if (nameNorm.includes(unaccentedQ)) score += 400;
+
+        if (brandNameNorm === unaccentedQ) score += 500;
+        else if (brandNameNorm.includes(unaccentedQ)) score += 300;
+
+        if (catNameNorm.includes(unaccentedQ) || catSlugNorm.includes(unaccentedQ)) score += 250;
+        if (p.slug.includes(slugQuery)) score += 200;
+
+        tokens.forEach((t) => {
+          if (nameNorm.includes(t)) score += 100;
+          if (brandNameNorm.includes(t)) score += 50;
+          if (catNameNorm.includes(t)) score += 40;
+          if (slugNorm.includes(t)) score += 30;
+        });
+
+        if (p.isFeatured) score += 10;
+
+        scoredItems.push({ product: p, score });
+      }
+
+      scoredItems.sort((a, b) => b.score - a.score);
+      filtered = scoredItems.map((s) => s.product);
+    }
   }
 
   if (params.specs && Object.keys(params.specs).length > 0) {
