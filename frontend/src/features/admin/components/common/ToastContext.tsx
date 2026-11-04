@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning';
 
@@ -22,6 +22,8 @@ interface ToastContextType {
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
+const MAX_VISIBLE_TOASTS = 3;
+
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
@@ -31,18 +33,33 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const showToast = useCallback(
     ({ type, title, message, duration = 4000 }: Omit<ToastMessage, 'id'>) => {
-      const id = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-      const newToast: ToastMessage = { id, type, title, message, duration };
+      setToasts((prev) => {
+        // Chống lặp thông báo trùng lặp (Deduplication)
+        const isDuplicate = prev.some(
+          (t) => t.type === type && t.message === message
+        );
+        if (isDuplicate) {
+          return prev;
+        }
 
-      setToasts((prev) => [...prev, newToast]);
+        const id = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+        const newToast: ToastMessage = { id, type, title, message, duration };
 
-      if (duration > 0) {
-        setTimeout(() => {
-          dismiss(id);
-        }, duration);
-      }
+        if (duration > 0) {
+          setTimeout(() => {
+            setToasts((current) => current.filter((t) => t.id !== id));
+          }, duration);
+        }
+
+        // Giới hạn tối đa 3 toast cùng lúc để không làm ngợp màn hình
+        const updated = [...prev, newToast];
+        if (updated.length > MAX_VISIBLE_TOASTS) {
+          return updated.slice(updated.length - MAX_VISIBLE_TOASTS);
+        }
+        return updated;
+      });
     },
-    [dismiss]
+    []
   );
 
   const success = useCallback(
@@ -65,8 +82,13 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     [showToast]
   );
 
+  const value = useMemo(
+    () => ({ toasts, showToast, success, error, info, warning, dismiss }),
+    [toasts, showToast, success, error, info, warning, dismiss]
+  );
+
   return (
-    <ToastContext.Provider value={{ toasts, showToast, success, error, info, warning, dismiss }}>
+    <ToastContext.Provider value={value}>
       {children}
       {/* Toast Render Container */}
       <div

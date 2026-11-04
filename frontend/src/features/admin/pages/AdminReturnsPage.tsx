@@ -72,7 +72,7 @@ export const AdminReturnsPage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [page, pageSize, selectedStatus, searchQuery, toast]);
+  }, [page, pageSize, selectedStatus, searchQuery]);
 
   useEffect(() => {
     fetchReturns();

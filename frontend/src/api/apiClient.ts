@@ -13,11 +13,11 @@ export const apiClient = axios.create({
   timeout: 45000, // 45s to accommodate Render free tier cold-start
 });
 
-// Interceptor nạp JWT Bearer token nếu đã đăng nhập (bỏ qua mock token khi kết nối backend thật)
+// Interceptor nạp JWT Bearer token nếu đã đăng nhập (bỏ qua mock/demo token khi kết nối backend thật)
 apiClient.interceptors.request.use(
   (config) => {
     const token = tokenStorage.getAccessToken();
-    if (token && !token.startsWith('mock_') && config.headers) {
+    if (token && !token.startsWith('mock_') && !token.startsWith('demo_') && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
@@ -63,10 +63,8 @@ apiClient.interceptors.response.use(
     }
 
     const refreshToken = tokenStorage.getRefreshToken();
-    // Nếu là mock token khi kết nối backend thật, dọn dẹp session mock cũ ngay lập tức
-    if (!refreshToken || refreshToken.startsWith('mock_')) {
-      tokenStorage.clear();
-      window.dispatchEvent(new CustomEvent('auth:expired'));
+    // Nếu là mock hoặc demo token, không gọi refresh lên server thật
+    if (!refreshToken || refreshToken.startsWith('mock_') || refreshToken.startsWith('demo_')) {
       return Promise.reject(error);
     }
 

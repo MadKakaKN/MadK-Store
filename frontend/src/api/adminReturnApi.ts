@@ -50,12 +50,24 @@ export const adminReturnApi = {
         params,
       });
       if (!res.data.isSuccess || !res.data.data) {
-        throw new Error(res.data.error || 'Không thể tải danh sách đổi trả');
+        return {
+          items: [],
+          page: Number(filter?.page) || 1,
+          pageSize: Number(filter?.pageSize) || 10,
+          totalItems: 0,
+          totalPages: 1,
+        };
       }
       const data = res.data.data;
       return { ...data, items: (data.items || []).map(normalizeReturnRequest) };
-    } catch (err) {
-      throw new Error(extractApiError(err, 'Không thể tải danh sách đổi trả'));
+    } catch {
+      return {
+        items: [],
+        page: Number(filter?.page) || 1,
+        pageSize: Number(filter?.pageSize) || 10,
+        totalItems: 0,
+        totalPages: 1,
+      };
     }
   },
 

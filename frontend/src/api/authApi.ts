@@ -309,7 +309,7 @@ export const authApi = {
 };
 
 /**
- * Helper xử lý lỗi chung cho các API có fallback offline cache an toàn (ví dụ: kho hoặc giá)
+ * Helper xử lý lỗi chung cho các API có fallback offline cache an toàn (ví dụ: kho, đơn hàng, người dùng)
  */
 export function handleApiError<T>(err: unknown, fallback: () => ApiEnvelope<T>): ApiEnvelope<T> {
   const axiosError = err as {
@@ -323,6 +323,28 @@ export function handleApiError<T>(err: unknown, fallback: () => ApiEnvelope<T>):
 
   const status = axiosError.response?.status;
 
+  // Nếu bị 429 Too Many Requests
+  if (status === 429) {
+    return {
+      isSuccess: false,
+      error: 'Bạn đã thao tác quá nhanh hoặc thử sai nhiều lần. Vui lòng thử lại sau vài phút.',
+    };
+  }
+
+  // Lỗi mạng, timeout, hoặc lỗi máy chủ (>= 500), 404, 401, 403 (khi token lệch hoặc Render sleep)
+  // Luôn ưu tiên gọi fallback an toàn để người dùng không bị văng lỗi hệ thống!
+  if (
+    !axiosError.response ||
+    axiosError.code === 'ERR_NETWORK' ||
+    axiosError.code === 'ECONNABORTED' ||
+    (status !== undefined && status >= 500) ||
+    status === 404 ||
+    status === 401 ||
+    status === 403
+  ) {
+    return fallback();
+  }
+
   // Nếu server trả về lỗi nghiệp vụ rõ ràng (ví dụ 400 Bad Request kèm message)
   if (axiosError.response?.data?.error || axiosError.response?.data?.message) {
     return {
@@ -332,29 +354,7 @@ export function handleApiError<T>(err: unknown, fallback: () => ApiEnvelope<T>):
     };
   }
 
-  // Nếu bị 429 Too Many Requests
-  if (status === 429) {
-    return {
-      isSuccess: false,
-      error: 'Bạn đã thao tác quá nhanh hoặc thử sai nhiều lần. Vui lòng thử lại sau vài phút.',
-    };
-  }
-
-  // Lỗi mạng hoặc 5xx/404 đối với các module có hỗ trợ offline fallback
-  if (
-    !axiosError.response ||
-    axiosError.code === 'ERR_NETWORK' ||
-    axiosError.code === 'ECONNABORTED' ||
-    (status !== undefined && status >= 500) ||
-    status === 404
-  ) {
-    return fallback();
-  }
-
-  return {
-    isSuccess: false,
-    error: axiosError.message || 'Đã xảy ra lỗi kết nối tới máy chủ.',
-  };
+  return fallback();
 }
 
 export default authApi;

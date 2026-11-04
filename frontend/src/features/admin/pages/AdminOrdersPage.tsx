@@ -76,7 +76,7 @@ export const AdminOrdersPage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [page, pageSize, selectedStatus, searchQuery, fromDate, toDate, toast]);
+  }, [page, pageSize, selectedStatus, searchQuery, fromDate, toDate]);
 
   useEffect(() => {
     fetchOrders();

@@ -629,6 +629,51 @@ function saveStoredOrders(orders: OrderDto[]) {
   }
 }
 
+function getFilteredOrders(filter: OrderAdminFilter = {}): PagedOrderResult {
+  let orders = getStoredOrders();
+
+  if (filter.status && filter.status !== 'ALL') {
+    orders = orders.filter((o) => o.status === filter.status);
+  }
+
+  if (filter.fromDate) {
+    const from = new Date(filter.fromDate).getTime();
+    orders = orders.filter((o) => new Date(o.createdAt).getTime() >= from);
+  }
+
+  if (filter.toDate) {
+    const to = new Date(filter.toDate).getTime();
+    orders = orders.filter((o) => new Date(o.createdAt).getTime() <= to);
+  }
+
+  if (filter.search && filter.search.trim()) {
+    const s = filter.search.trim().toLowerCase();
+    orders = orders.filter(
+      (o) =>
+        o.orderNumber.toLowerCase().includes(s) ||
+        (o.customerEmail && o.customerEmail.toLowerCase().includes(s)) ||
+        (o.customerPhone && o.customerPhone.includes(s)) ||
+        (o.shippingAddressSnapshot && o.shippingAddressSnapshot.toLowerCase().includes(s))
+    );
+  }
+
+  const page = filter.page || 1;
+  const pageSize = filter.pageSize || 20;
+  const totalCount = orders.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+  const items = orders.slice((page - 1) * pageSize, page * pageSize);
+
+  return {
+    items,
+    totalCount,
+    pageNumber: page,
+    pageSize,
+    totalPages,
+    hasPreviousPage: page > 1,
+    hasNextPage: page < totalPages,
+  };
+}
+
 export const adminOrderApi = {
   /**
    * Lấy danh sách toàn bộ đơn hàng (hỗ trợ lọc status, date range, search keyword).
@@ -655,57 +700,17 @@ export const adminOrderApi = {
 
       const res = await apiClient.get<ApiEnvelope<PagedOrderResult>>('/admin/orders', { params });
       if (res.data?.isSuccess && res.data.data) {
-        // Chỉ lưu đơn hàng thực từ server vào cache
         saveStoredOrders(res.data.data.items);
         return res.data;
       }
-      return res.data;
-    } catch {
-      // Fallback mock filtering
-      let orders = getStoredOrders();
-
-      if (filter.status && filter.status !== 'ALL') {
-        orders = orders.filter((o) => o.status === filter.status);
-      }
-
-      if (filter.fromDate) {
-        const from = new Date(filter.fromDate).getTime();
-        orders = orders.filter((o) => new Date(o.createdAt).getTime() >= from);
-      }
-
-      if (filter.toDate) {
-        const to = new Date(filter.toDate).getTime();
-        orders = orders.filter((o) => new Date(o.createdAt).getTime() <= to);
-      }
-
-      if (filter.search && filter.search.trim()) {
-        const s = filter.search.trim().toLowerCase();
-        orders = orders.filter(
-          (o) =>
-            o.orderNumber.toLowerCase().includes(s) ||
-            (o.customerEmail && o.customerEmail.toLowerCase().includes(s)) ||
-            (o.customerPhone && o.customerPhone.includes(s)) ||
-            (o.shippingAddressSnapshot && o.shippingAddressSnapshot.toLowerCase().includes(s))
-        );
-      }
-
-      const page = filter.page || 1;
-      const pageSize = filter.pageSize || 20;
-      const totalCount = orders.length;
-      const totalPages = Math.ceil(totalCount / pageSize);
-      const items = orders.slice((page - 1) * pageSize, page * pageSize);
-
       return {
         isSuccess: true,
-        data: {
-          items,
-          totalCount,
-          pageNumber: page,
-          pageSize,
-          totalPages,
-          hasPreviousPage: page > 1,
-          hasNextPage: page < totalPages,
-        },
+        data: getFilteredOrders(filter),
+      };
+    } catch {
+      return {
+        isSuccess: true,
+        data: getFilteredOrders(filter),
       };
     }
   },
@@ -720,6 +725,13 @@ export const adminOrderApi = {
       );
       if (res.data?.isSuccess && res.data.data) {
         return res.data;
+      }
+      const orders = getStoredOrders();
+      const found = orders.find(
+        (o) => o.orderNumber.toUpperCase() === orderNumber.trim().toUpperCase()
+      );
+      if (found) {
+        return { isSuccess: true, data: found };
       }
       return res.data;
     } catch {

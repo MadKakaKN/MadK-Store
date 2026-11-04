@@ -58,7 +58,7 @@ export const AdminDiscountsPage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [page, pageSize, searchQuery, activeFilter, toast]);
+  }, [page, pageSize, searchQuery, activeFilter]);
 
   useEffect(() => {
     fetchCoupons();

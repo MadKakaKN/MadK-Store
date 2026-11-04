@@ -42,7 +42,7 @@ export const AdminUsersPage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, pageSize, searchQuery, toast]);
+  }, [currentPage, pageSize, searchQuery]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
