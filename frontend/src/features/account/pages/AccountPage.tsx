@@ -4,15 +4,16 @@ import { useAuth } from '../../auth/context/AuthContext';
 import authApi from '../../../api/authApi';
 import { AddressList } from '../components/AddressList';
 import { OrderList } from '../components/orders/OrderList';
+import { WishlistList } from '../components/WishlistList';
 
 export const AccountPage: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const tabParam = searchParams.get('tab') as 'profile' | 'security' | 'addresses' | 'orders' | null;
-  const validTabs = ['profile', 'security', 'addresses', 'orders'];
-  const [activeTab, setActiveTabState] = useState<'profile' | 'security' | 'addresses' | 'orders'>(
+  const tabParam = searchParams.get('tab') as 'profile' | 'security' | 'addresses' | 'orders' | 'wishlist' | null;
+  const validTabs = ['profile', 'security', 'addresses', 'orders', 'wishlist'];
+  const [activeTab, setActiveTabState] = useState<'profile' | 'security' | 'addresses' | 'orders' | 'wishlist'>(
     tabParam && validTabs.includes(tabParam) ? tabParam : 'profile'
   );
 
@@ -22,7 +23,7 @@ export const AccountPage: React.FC = () => {
     }
   }, [tabParam]);
 
-  const setActiveTab = (tab: 'profile' | 'security' | 'addresses' | 'orders') => {
+  const setActiveTab = (tab: 'profile' | 'security' | 'addresses' | 'orders' | 'wishlist') => {
     setActiveTabState(tab);
     setSearchParams({ tab });
   };
@@ -170,7 +171,19 @@ export const AccountPage: React.FC = () => {
             >
               <span className="text-lg">📦</span>
               <span>Đơn hàng của tôi</span>
+            </button>
 
+            <button
+              type="button"
+              onClick={() => setActiveTab('wishlist')}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all ${
+                activeTab === 'wishlist'
+                  ? 'bg-brand-50 text-brand-700 shadow-xs'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+              }`}
+            >
+              <span className="text-lg">❤️</span>
+              <span>Sản phẩm yêu thích</span>
             </button>
           </div>
         </div>
@@ -325,6 +338,9 @@ export const AccountPage: React.FC = () => {
               <OrderList />
             </div>
           )}
+
+          {/* TAB 5: Wishlist */}
+          {activeTab === 'wishlist' && <WishlistList />}
         </div>
       </div>
     </div>

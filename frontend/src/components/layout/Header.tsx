@@ -4,11 +4,13 @@ import catalogApi from '../../api/catalogApi';
 import { CategoryTreeDto } from '../../types/catalog';
 import { useAuth } from '../../features/auth/context/AuthContext';
 import { useCart } from '../../features/cart/context/CartContext';
+import { useWishlist } from '../../features/wishlist/context/WishlistContext';
 import SearchBox from './SearchBox';
 
 export const Header: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const { itemCount } = useCart();
+  const { wishlistCount } = useWishlist();
   const [categories, setCategories] = useState<CategoryTreeDto[]>([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
@@ -180,6 +182,36 @@ export const Header: React.FC = () => {
               className="hidden md:inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-slate-700 hover:text-brand-600 rounded-xl hover:bg-slate-100 transition-colors"
             >
               Tất cả sản phẩm
+            </Link>
+
+            {/* Wishlist Icon */}
+            <Link
+              to="/account?tab=wishlist"
+              className="p-2.5 sm:px-3 sm:py-2 rounded-xl text-slate-700 hover:text-rose-600 hover:bg-rose-50 transition-colors relative flex items-center gap-1.5"
+              title="Danh sách yêu thích"
+            >
+              <div className="relative">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-5 h-5 sm:w-6 sm:h-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
+                </svg>
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1.5 -right-2 bg-rose-500 text-white font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center animate-fade-in">
+                    {wishlistCount > 99 ? '99+' : wishlistCount}
+                  </span>
+                )}
+              </div>
+              <span className="hidden xl:inline text-xs font-semibold">Yêu thích</span>
             </Link>
 
             <Link
@@ -404,6 +436,19 @@ export const Header: React.FC = () => {
 
           {/* User links */}
           <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-sm">
+            <Link
+              to="/account?tab=wishlist"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-slate-700 font-semibold flex items-center gap-1.5"
+            >
+              <span>❤️ Yêu thích</span>
+              {wishlistCount > 0 && (
+                <span className="px-1.5 py-0.5 rounded-full bg-rose-500 text-white font-bold text-[10px]">
+                  {wishlistCount}
+                </span>
+              )}
+            </Link>
+
             <Link
               to="/cart"
               onClick={() => setMobileMenuOpen(false)}

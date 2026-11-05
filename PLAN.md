@@ -79,17 +79,19 @@ Dưới đây là các hạng mục được chia nhỏ theo thứ tự ưu tiê
 
 ---
 
-#### 🟢 HẠNG MỤC 3: DANH SÁCH YÊU THÍCH (Wishlist Sync API)
+#### 🟢 HẠNG MỤC 3: DANH SÁCH YÊU THÍCH (Wishlist Sync API) (Đã hoàn thành ✅)
 > *Mục tiêu: Cho phép khách hàng lưu lại các món đồ muốn mua sau, tăng tỷ lệ quay lại của khách hàng.*
-- [ ] **3.1. Entity `WishlistItem` & Service backend**
-  - `WishlistItem` (UserId, ProductId, CreatedAt).
+- [x] **3.1. Entity `WishlistItem` & Service backend**
+  - `WishlistItem` (UserId, ProductId, CreatedAt) với chỉ mục và ràng buộc Unique chống trùng.
   - API `GET /api/v1/wishlist`: Lấy danh sách sản phẩm yêu thích của user.
+  - API `GET /api/v1/wishlist/ids`: Lấy danh sách ProductId nhanh để render trái tim.
   - API `POST /api/v1/wishlist/{productId}`: Thêm vào yêu thích.
   - API `DELETE /api/v1/wishlist/{productId}`: Bỏ yêu thích.
   - API `POST /api/v1/wishlist/sync`: Đồng bộ từ giỏ yêu thích vãng lai (LocalStorage) vào tài khoản khi khách đăng nhập.
-- [ ] **3.2. Giao diện Frontend**
-  - Nút Thả tim ❤️ trên thẻ sản phẩm `ProductCard.tsx` và trang chi tiết sản phẩm.
-  - Trang danh sách yêu thích `/account/wishlist`.
+- [x] **3.2. Giao diện Frontend**
+  - Nút Thả tim ❤️ trên thẻ sản phẩm `ProductCard.tsx` và trang chi tiết sản phẩm `ProductDetailPage.tsx`.
+  - Icon Yêu thích ❤️ hiển thị số lượng trên thanh Header (desktop & mobile).
+  - Tab "Sản phẩm yêu thích" trên trang tài khoản `/account?tab=wishlist` (`WishlistList.tsx`).
 
 ---
 

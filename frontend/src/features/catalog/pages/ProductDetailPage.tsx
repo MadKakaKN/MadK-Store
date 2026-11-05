@@ -12,6 +12,7 @@ import { useAuth } from '../../auth/context/AuthContext';
 import SEOHead, { buildProductSchema, buildBreadcrumbSchema } from '../../../components/common/SEOHead';
 import AuthRequiredModal from '../../../components/common/AuthRequiredModal';
 import ProductReviewsSection from '../components/ProductReviewsSection';
+import { useWishlist } from '../../wishlist/context/WishlistContext';
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -19,8 +20,10 @@ export const ProductDetailPage: React.FC = () => {
   const location = useLocation();
   const { addToCart } = useCart();
   const { isAuthenticated } = useAuth();
+  const { isInWishlist, toggleWishlist } = useWishlist();
 
   const [product, setProduct] = useState<ProductDetailDto | null>(null);
+  const isLiked = product ? isInWishlist(product.id) : false;
   const [selectedVariant, setSelectedVariant] = useState<ProductVariantDto | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -581,26 +584,52 @@ export const ProductDetailPage: React.FC = () => {
           )}
 
           {/* Action CTA Buttons (Desktop view) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">
+          <div className="flex items-center gap-3 pt-3">
             <button
               type="button"
               disabled={isOutOfStock || isAddingToCart}
               onClick={handleAddToCart}
-              className="w-full py-4 rounded-2xl bg-slate-900 hover:bg-slate-800 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2"
+              className="flex-1 py-4 rounded-2xl bg-slate-900 hover:bg-slate-800 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2"
             >
               <svg className={`w-5 h-5 ${isAddingToCart ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
-              <span>{isOutOfStock ? 'Tạm hết hàng' : isAddingToCart ? 'Đang thêm...' : 'Thêm vào giỏ hàng'}</span>
+              <span>{isOutOfStock ? 'Tạm hết hàng' : isAddingToCart ? 'Đang thêm...' : 'Thêm giỏ hàng'}</span>
             </button>
 
             <button
               type="button"
               disabled={isOutOfStock}
               onClick={handleBuyNow}
-              className="w-full py-4 rounded-2xl bg-brand-600 hover:bg-brand-500 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold text-sm transition-all shadow-lg shadow-brand-600/30"
+              className="flex-1 py-4 rounded-2xl bg-brand-600 hover:bg-brand-500 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold text-sm transition-all shadow-lg shadow-brand-600/30 text-center"
             >
-              {isOutOfStock ? 'Liên hệ khi có hàng' : 'Mua ngay'}
+              {isOutOfStock ? 'Liên hệ khi có' : 'Mua ngay'}
+            </button>
+
+            {/* Wishlist Heart Button */}
+            <button
+              type="button"
+              onClick={() => product && toggleWishlist(product.id)}
+              title={isLiked ? 'Bỏ yêu thích' : 'Thêm vào yêu thích'}
+              className={`p-4 rounded-2xl border transition-all flex items-center justify-center shrink-0 ${
+                isLiked
+                  ? 'bg-rose-50 text-rose-500 border-rose-300 shadow-sm'
+                  : 'bg-white hover:bg-slate-50 text-slate-400 hover:text-rose-500 border-slate-200'
+              }`}
+            >
+              <svg
+                className="w-5 h-5 transition-transform active:scale-75"
+                viewBox="0 0 24 24"
+                fill={isLiked ? 'currentColor' : 'none'}
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
             </button>
           </div>
 

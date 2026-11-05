@@ -3,6 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import AppRoutes from './routes/AppRoutes';
 import { AuthProvider } from './features/auth/context/AuthContext';
 import { CartProvider } from './features/cart/context/CartContext';
+import { WishlistProvider } from './features/wishlist/context/WishlistContext';
 import { ToastProvider } from './features/admin/components/common/ToastContext';
 import { GoogleOAuthCallback } from './features/auth/components/GoogleOAuthCallback';
 
@@ -12,9 +13,11 @@ export const App: React.FC = () => {
       <AuthProvider>
         <GoogleOAuthCallback />
         <CartProvider>
-          <ToastProvider>
-            <AppRoutes />
-          </ToastProvider>
+          <WishlistProvider>
+            <ToastProvider>
+              <AppRoutes />
+            </ToastProvider>
+          </WishlistProvider>
         </CartProvider>
       </AuthProvider>
     </BrowserRouter>
@@ -22,4 +25,3 @@ export const App: React.FC = () => {
 };
 
 export default App;
-

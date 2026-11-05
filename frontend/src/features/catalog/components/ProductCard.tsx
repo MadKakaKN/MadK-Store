@@ -2,12 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ProductListDto } from '../../../types/catalog';
 import { formatVND } from '../../../utils/format';
+import { useWishlist } from '../../wishlist/context/WishlistContext';
 
 interface ProductCardProps {
   product: ProductListDto;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const { isInWishlist, toggleWishlist } = useWishlist();
+  const isLiked = isInWishlist(product.id);
+
   const displayPrice =
     product.minPrice && product.maxPrice && product.minPrice !== product.maxPrice
       ? `${formatVND(product.minPrice)} - ${formatVND(product.maxPrice)}`
@@ -15,8 +19,38 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   return (
     <div className="group relative bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-brand-300 transition-all duration-300 flex flex-col overflow-hidden">
+      {/* Wishlist Heart Button */}
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleWishlist(product.id);
+        }}
+        title={isLiked ? 'Bỏ yêu thích' : 'Thêm vào yêu thích'}
+        className={`absolute top-3 right-3 z-20 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 shadow-sm backdrop-blur-md ${
+          isLiked
+            ? 'bg-rose-50 text-rose-500 scale-105 border border-rose-200'
+            : 'bg-white/80 text-slate-400 hover:text-rose-500 hover:scale-110 border border-slate-200'
+        }`}
+      >
+        <svg
+          className="w-4 h-4 transition-transform active:scale-75"
+          viewBox="0 0 24 24"
+          fill={isLiked ? 'currentColor' : 'none'}
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+          />
+        </svg>
+      </button>
+
       {/* Badges container */}
-      <div className="absolute top-3 left-3 right-3 z-10 flex items-center justify-between pointer-events-none">
+      <div className="absolute top-3 left-3 right-13 z-10 flex items-center justify-between pointer-events-none">
         {product.isFeatured && (
           <span className="px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider rounded-lg bg-amber-500 text-white shadow-sm">
             Nổi bật
