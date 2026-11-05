@@ -213,7 +213,7 @@ export const InventoryAuditModal: React.FC<InventoryAuditModalProps> = ({
                           min={0}
                           value={row.actualQuantity}
                           onChange={(e) => handleActualChange(idx, parseInt(e.target.value) || 0)}
-                          className="w-20 text-center font-bold text-xs py-1 rounded-lg border border-slate-300 focus:ring-1 focus:ring-brand-500 focus:border-brand-500"
+                          className="w-20 text-center font-bold text-xs py-1 rounded-lg border border-slate-300 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                         />
                       </td>
 
@@ -241,7 +241,7 @@ export const InventoryAuditModal: React.FC<InventoryAuditModalProps> = ({
                             diff !== 0 && !row.reason
                               ? 'border-amber-300 bg-amber-50/50'
                               : 'border-slate-200'
-                          } focus:ring-1 focus:ring-brand-500`}
+                          } focus:ring-1 focus:ring-blue-500`}
                         />
                       </td>
                     </tr>
@@ -270,7 +270,7 @@ export const InventoryAuditModal: React.FC<InventoryAuditModalProps> = ({
               type="button"
               onClick={handleCompleteAudit}
               disabled={isSubmitting}
-              className="px-4 py-2 text-xs font-semibold rounded-xl text-white bg-brand-600 hover:bg-brand-700 shadow-md shadow-brand-600/20 transition-all"
+              className="px-4 py-2 text-xs font-semibold rounded-xl text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-600/20 transition-all"
             >
               {isSubmitting ? 'Đang cân bằng kho...' : '✓ Chốt kiểm kê & Cân bằng kho'}
             </button>

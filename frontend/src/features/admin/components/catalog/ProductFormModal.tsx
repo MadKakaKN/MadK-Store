@@ -417,7 +417,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
               onClick={() => setActiveTab(tab.id as ModalTab)}
               className={`py-3.5 border-b-2 transition-colors ${
                 activeTab === tab.id
-                  ? 'border-brand-600 text-brand-700 font-bold'
+                  ? 'border-blue-600 text-blue-700 font-bold'
                   : 'border-transparent text-slate-500 hover:text-slate-900'
               }`}
             >
@@ -430,7 +430,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-6">
           {isLoading ? (
             <div className="py-16 text-center">
-              <div className="w-8 h-8 border-3 border-brand-600 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+              <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
               <p className="text-xs text-slate-500">Đang tải thông tin sản phẩm...</p>
             </div>
           ) : (
@@ -690,7 +690,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
                     <button
                       type="button"
                       onClick={handleAddVariant}
-                      className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-brand-50 text-brand-700 hover:bg-brand-100 transition-colors"
+                      className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
                     >
                       + Thêm biến thể
                     </button>

@@ -162,7 +162,7 @@ export const AdminDiscountsPage: React.FC = () => {
       title: 'Mã Voucher',
       render: (row) => (
         <div className="flex flex-col">
-          <span className="font-mono text-xs font-bold text-brand-700 bg-brand-50 border border-brand-200 px-2 py-0.5 rounded-md w-fit">
+          <span className="font-mono text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-md w-fit">
             {row.code}
           </span>
           {row.description && (
@@ -296,7 +296,7 @@ export const AdminDiscountsPage: React.FC = () => {
               setActiveFilter(val === 'all' ? undefined : val === 'active');
               setPage(1);
             }}
-            className="px-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-brand-500"
+            className="px-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-blue-500"
           >
             <option value="all">Tất cả trạng thái</option>
             <option value="active">Đang áp dụng</option>
@@ -323,7 +323,7 @@ export const AdminDiscountsPage: React.FC = () => {
               resetForm();
               setIsCreateModalOpen(true);
             }}
-            className="px-3.5 py-1.5 text-xs font-semibold bg-brand-600 hover:bg-brand-700 text-white rounded-lg shadow-xs transition-colors flex items-center gap-1.5"
+            className="px-3.5 py-1.5 text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-xs transition-colors flex items-center gap-1.5"
           >
             <span>+</span> Tạo mã mới
           </button>
@@ -359,7 +359,7 @@ export const AdminDiscountsPage: React.FC = () => {
                 <select
                   value={formDiscountType}
                   onChange={(e) => setFormDiscountType(e.target.value as CouponDiscountType)}
-                  className="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-brand-500"
+                  className="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-blue-500"
                 >
                   <option value="Percentage">Phần trăm (%)</option>
                   <option value="FixedAmount">Số tiền cố định (₫)</option>
@@ -446,7 +446,7 @@ export const AdminDiscountsPage: React.FC = () => {
                 id="formIsActiveCheck"
                 checked={formIsActive}
                 onChange={(e) => setFormIsActive(e.target.checked)}
-                className="w-4 h-4 rounded text-brand-600 focus:ring-brand-500"
+                className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500"
               />
               <label htmlFor="formIsActiveCheck" className="text-xs font-semibold text-slate-800 cursor-pointer">
                 Kích hoạt áp dụng mã ngay sau khi tạo

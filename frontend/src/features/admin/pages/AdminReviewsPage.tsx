@@ -159,7 +159,7 @@ export const AdminReviewsPage: React.FC = () => {
               setPage(1);
             }}
             placeholder="Tìm theo khách hàng, sản phẩm, nội dung..."
-            className="w-full pl-9 pr-3.5 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-brand-500 shadow-2xs"
+            className="w-full pl-9 pr-3.5 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-blue-500 shadow-2xs"
           />
           <svg
             className="w-4 h-4 text-slate-400 absolute left-3 top-2.5"
@@ -176,7 +176,7 @@ export const AdminReviewsPage: React.FC = () => {
       <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
         {loading ? (
           <div className="py-16 text-center text-slate-400 text-sm">
-            <div className="inline-block w-8 h-8 border-3 border-brand-500 border-t-transparent rounded-full animate-spin mb-3" />
+            <div className="inline-block w-8 h-8 border-3 border-blue-500 border-t-transparent rounded-full animate-spin mb-3" />
             <p>Đang tải dữ liệu đánh giá...</p>
           </div>
         ) : reviews.length === 0 ? (
@@ -221,7 +221,7 @@ export const AdminReviewsPage: React.FC = () => {
                             href={`/products/${rev.productSlug}`}
                             target="_blank"
                             rel="noreferrer"
-                            className="font-bold text-slate-900 hover:text-brand-600 truncate block transition-colors"
+                            className="font-bold text-slate-900 hover:text-blue-600 truncate block transition-colors"
                           >
                             {rev.productName}
                           </a>
@@ -302,7 +302,7 @@ export const AdminReviewsPage: React.FC = () => {
                     <td className="p-4 max-w-xs">
                       {rev.adminReply ? (
                         <div className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-700 line-clamp-2">
-                          <span className="font-bold text-brand-700 block">MadK:</span>
+                          <span className="font-bold text-blue-700 block">MadK:</span>
                           {rev.adminReply}
                         </div>
                       ) : (
@@ -345,7 +345,7 @@ export const AdminReviewsPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => handleOpenModeration(rev)}
-                          className="px-2.5 py-1.5 rounded-lg bg-brand-50 border border-brand-200 text-brand-700 hover:bg-brand-100 font-bold transition-colors"
+                          className="px-2.5 py-1.5 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 hover:bg-blue-100 font-bold transition-colors"
                         >
                           Phản hồi
                         </button>
@@ -490,7 +490,7 @@ export const AdminReviewsPage: React.FC = () => {
                   value={replyText}
                   onChange={(e) => setReplyText(e.target.value)}
                   placeholder="Nhập nội dung phản hồi, cảm ơn hoặc hỗ trợ khách hàng..."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-brand-500 resize-none leading-relaxed"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-blue-500 resize-none leading-relaxed"
                 />
               </div>
 
@@ -505,7 +505,7 @@ export const AdminReviewsPage: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-md shadow-brand-600/30 disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-md shadow-blue-600/30 disabled:opacity-50"
                 >
                   {isSaving ? 'Đang lưu...' : 'Lưu kiểm duyệt'}
                 </button>

@@ -237,7 +237,7 @@ export const CreatePurchaseOrderModal: React.FC<CreatePurchaseOrderModalProps> =
               <button
                 type="button"
                 onClick={handleAddItem}
-                className="px-2.5 py-1 text-xs font-bold bg-brand-50 text-brand-700 hover:bg-brand-100 rounded-lg transition-colors"
+                className="px-2.5 py-1 text-xs font-bold bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg transition-colors"
               >
                 + Thêm sản phẩm
               </button>
@@ -352,7 +352,7 @@ export const CreatePurchaseOrderModal: React.FC<CreatePurchaseOrderModalProps> =
             type="button"
             onClick={() => handleSubmit(true)}
             disabled={isSubmitting}
-            className="px-4 py-2 text-xs font-semibold rounded-xl text-white bg-brand-600 hover:bg-brand-700 shadow-md shadow-brand-600/20 transition-all"
+            className="px-4 py-2 text-xs font-semibold rounded-xl text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-600/20 transition-all"
           >
             {isSubmitting ? 'Đang xử lý...' : '✓ Nhập kho ngay (Tăng tồn)'}
           </button>

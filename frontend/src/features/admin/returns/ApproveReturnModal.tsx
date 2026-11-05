@@ -85,7 +85,7 @@ export const ApproveReturnModal: React.FC<ApproveReturnModalProps> = ({
               rows={3}
               maxLength={500}
               placeholder="Nhập hướng dẫn gửi hàng hoặc ghi chú nội bộ..."
-              className="w-full px-3.5 py-2.5 text-xs border border-slate-300 rounded-2xl focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none resize-none"
+              className="w-full px-3.5 py-2.5 text-xs border border-slate-300 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none resize-none"
             />
             <p className="text-[10px] text-slate-400 text-right mt-1">{salesNote.length}/500</p>
           </div>

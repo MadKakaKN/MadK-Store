@@ -49,8 +49,8 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
       icon: '!',
     },
     primary: {
-      btn: 'bg-brand-600 hover:bg-brand-700 text-white focus:ring-brand-500',
-      iconBg: 'bg-brand-100 text-brand-600',
+      btn: 'bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500',
+      iconBg: 'bg-blue-100 text-blue-600',
       icon: '✓',
     },
     info: {

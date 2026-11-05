@@ -322,7 +322,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                       type="button"
                       onClick={handleSaveAdminNote}
                       disabled={isSavingNote}
-                      className="text-[11px] font-semibold text-brand-600 hover:text-brand-800 disabled:opacity-50"
+                      className="text-[11px] font-semibold text-blue-600 hover:text-brand-800 disabled:opacity-50"
                     >
                       {isSavingNote ? 'Đang lưu...' : 'Lưu ghi chú'}
                     </button>
@@ -334,7 +334,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                   value={adminNote}
                   onChange={(e) => setAdminNote(e.target.value)}
                   placeholder={canManage ? 'Nhập ghi chú cho nhân viên khác hoặc kho...' : 'Không có ghi chú nội bộ'}
-                  className="w-full text-xs p-2 rounded-lg border border-slate-300 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 disabled:bg-slate-100 disabled:text-slate-500 transition-colors"
+                  className="w-full text-xs p-2 rounded-lg border border-slate-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:bg-slate-100 disabled:text-slate-500 transition-colors"
                 />
               </div>
             </div>
@@ -433,7 +433,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                 </div>
                 <div className="flex justify-between w-64 pt-2 border-t border-slate-200 text-sm font-bold text-slate-900">
                   <span>Tổng tiền thanh toán:</span>
-                  <span className="text-brand-600 text-base">{formatCurrency(order.totalAmount)}</span>
+                  <span className="text-blue-600 text-base">{formatCurrency(order.totalAmount)}</span>
                 </div>
               </div>
             </div>
@@ -449,7 +449,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                 <div className="space-y-3 relative before:absolute before:inset-0 before:left-3.5 before:w-0.5 before:bg-slate-200">
                   {order.statusHistory.map((h, idx) => (
                     <div key={h.id || idx} className="relative flex items-start gap-3.5 pl-1 text-xs">
-                      <div className="w-5 h-5 rounded-full bg-white border-2 border-brand-500 flex items-center justify-center shrink-0 z-10 text-[10px]">
+                      <div className="w-5 h-5 rounded-full bg-white border-2 border-blue-500 flex items-center justify-center shrink-0 z-10 text-[10px]">
                         ●
                       </div>
                       <div className="flex-1 bg-white p-2.5 rounded-lg border border-slate-200 shadow-2xs">
@@ -461,7 +461,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                                 <span className="text-slate-400">→</span>
                               </>
                             )}
-                            <span className="text-brand-600">{ORDER_STATUS_CONFIG[h.toStatus]?.label || h.toStatus}</span>
+                            <span className="text-blue-600">{ORDER_STATUS_CONFIG[h.toStatus]?.label || h.toStatus}</span>
                           </div>
                           <span className="text-[11px] text-slate-400">
                             {new Date(h.createdAt).toLocaleString('vi-VN')}
@@ -478,7 +478,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                           </div>
                         )}
                         {h.note && (
-                          <div className="text-[11px] text-brand-700 mt-1 bg-brand-50/50 p-1.5 rounded border border-brand-100">
+                          <div className="text-[11px] text-blue-700 mt-1 bg-blue-50/50 p-1.5 rounded border border-blue-100">
                             Ghi chú: {h.note}
                           </div>
                         )}
@@ -531,7 +531,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                   <button
                     type="button"
                     onClick={() => handleInitiateTransition('Processing')}
-                    className="px-3.5 py-2 text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-xs transition-colors flex items-center gap-1.5"
+                    className="px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-xs transition-colors flex items-center gap-1.5"
                   >
                     <span>📦</span> Chuyển đóng gói kho
                   </button>
@@ -632,7 +632,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
             <p className="text-xs text-slate-600">
               Bạn đang chuyển đơn <strong className="text-slate-900">{order.orderNumber}</strong> từ{' '}
               <span className="font-semibold text-slate-700">{ORDER_STATUS_CONFIG[order.status]?.label || order.status}</span> sang{' '}
-              <strong className="text-brand-600 font-bold">{ORDER_STATUS_CONFIG[targetStatus]?.label || targetStatus}</strong>.
+              <strong className="text-blue-600 font-bold">{ORDER_STATUS_CONFIG[targetStatus]?.label || targetStatus}</strong>.
             </p>
 
             {targetStatus === 'Cancelled' && (
@@ -663,7 +663,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                   value={transitionReason}
                   onChange={(e) => setTransitionReason(e.target.value)}
                   placeholder={targetStatus === 'Cancelled' ? 'Bắt buộc: Khách đổi ý, hết hàng...' : 'Ví dụ: Đã gọi điện xác nhận...'}
-                  className="w-full p-2 border border-slate-300 rounded-lg focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+                  className="w-full p-2 border border-slate-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
               </div>
 
@@ -676,7 +676,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                   value={transitionNote}
                   onChange={(e) => setTransitionNote(e.target.value)}
                   placeholder="Ghi chú nội bộ cho ca sau hoặc đơn vị vận chuyển..."
-                  className="w-full p-2 border border-slate-300 rounded-lg focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+                  className="w-full p-2 border border-slate-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
               </div>
             </div>
@@ -697,7 +697,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                 className={`px-4 py-2 text-xs font-semibold text-white rounded-xl shadow-xs transition-colors ${
                   targetStatus === 'Cancelled'
                     ? 'bg-rose-600 hover:bg-rose-700'
-                    : 'bg-brand-600 hover:bg-brand-700'
+                    : 'bg-blue-600 hover:bg-blue-700'
                 }`}
               >
                 {isSubmittingTransition ? 'Đang cập nhật...' : 'Xác nhận chuyển'}

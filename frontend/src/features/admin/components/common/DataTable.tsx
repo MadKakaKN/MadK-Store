@@ -134,7 +134,7 @@ export function DataTable<T>({
                     value={searchQuery}
                     onChange={(e) => onSearchChange?.(e.target.value)}
                     placeholder={searchPlaceholder}
-                    className="w-full pl-9 pr-8 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-colors"
+                    className="w-full pl-9 pr-8 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors"
                   />
                   {searchQuery && (
                     <button
@@ -180,7 +180,7 @@ export function DataTable<T>({
                     <div className={`inline-flex items-center gap-1.5 ${col.align === 'right' ? 'flex-row-reverse' : ''}`}>
                       <span>{col.title}</span>
                       {col.sortable && (
-                        <span className={`text-[10px] ${isSorted ? 'text-brand-600 font-bold' : 'text-slate-300'}`}>
+                        <span className={`text-[10px] ${isSorted ? 'text-blue-600 font-bold' : 'text-slate-300'}`}>
                           {isSorted ? (currentSortDir === 'asc' ? '▲' : '▼') : '⇅'}
                         </span>
                       )}
@@ -262,7 +262,7 @@ export function DataTable<T>({
                 <select
                   value={pageSize}
                   onChange={(e) => onPageSizeChange(Number(e.target.value))}
-                  className="bg-white border border-slate-300 rounded-md px-1.5 py-0.5 text-xs text-slate-700 focus:outline-hidden focus:ring-1 focus:ring-brand-500"
+                  className="bg-white border border-slate-300 rounded-md px-1.5 py-0.5 text-xs text-slate-700 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
                 >
                   {pageSizeOptions.map((opt) => (
                     <option key={opt} value={opt}>

@@ -153,7 +153,7 @@ export const CompleteRefundModal: React.FC<CompleteRefundModalProps> = ({
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="Nhập mã biên nhận kho, số GD ngân hàng hoặc ghi chú..."
-              className="w-full px-3.5 py-2 text-xs border border-slate-300 rounded-2xl focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none"
+              className="w-full px-3.5 py-2 text-xs border border-slate-300 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none"
               maxLength={300}
             />
           </div>
@@ -169,7 +169,7 @@ export const CompleteRefundModal: React.FC<CompleteRefundModalProps> = ({
               type="text"
               value={idempotencyKey}
               onChange={(e) => setIdempotencyKey(e.target.value)}
-              className="w-full px-3.5 py-1.5 text-xs font-mono text-slate-600 bg-slate-50 border border-slate-200 rounded-xl focus:border-brand-500 outline-none"
+              className="w-full px-3.5 py-1.5 text-xs font-mono text-slate-600 bg-slate-50 border border-slate-200 rounded-xl focus:border-blue-500 outline-none"
               placeholder="REFUND_xxx"
             />
           </div>

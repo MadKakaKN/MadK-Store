@@ -200,7 +200,7 @@ export const AdminCatalogPage: React.FC = () => {
             )}
           </div>
           <div>
-            <div className="font-semibold text-xs text-slate-900 hover:text-brand-600 transition-colors">
+            <div className="font-semibold text-xs text-slate-900 hover:text-blue-600 transition-colors">
               {row.name}
             </div>
             <div className="flex items-center gap-1.5 mt-0.5">
@@ -315,7 +315,7 @@ export const AdminCatalogPage: React.FC = () => {
                   setSelectedProductId(row.id);
                   setIsProductModalOpen(true);
                 }}
-                className="px-2.5 py-1 text-xs font-semibold bg-brand-50 text-brand-700 hover:bg-brand-100 rounded-md transition-colors"
+                className="px-2.5 py-1 text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-md transition-colors"
               >
                 Sửa
               </button>
@@ -345,7 +345,7 @@ export const AdminCatalogPage: React.FC = () => {
       title: 'Tên danh mục & Biểu tượng',
       render: (row) => (
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-brand-600 shrink-0 font-bold text-xs">
+          <div className="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-blue-600 shrink-0 font-bold text-xs">
             {row.name.charAt(0)}
           </div>
           <div>
@@ -416,7 +416,7 @@ export const AdminCatalogPage: React.FC = () => {
               setSelectedCategory(row);
               setIsCategoryModalOpen(true);
             }}
-            className="px-2 py-1 text-xs font-semibold rounded bg-brand-50 text-brand-700 hover:bg-brand-100 transition-colors"
+            className="px-2 py-1 text-xs font-semibold rounded bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
           >
             Sửa
           </button>
@@ -492,7 +492,7 @@ export const AdminCatalogPage: React.FC = () => {
               setSelectedBrand(row);
               setIsBrandModalOpen(true);
             }}
-            className="px-2.5 py-1 text-xs font-semibold rounded bg-brand-50 text-brand-700 hover:bg-brand-100 transition-colors"
+            className="px-2.5 py-1 text-xs font-semibold rounded bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
           >
             Sửa
           </button>
@@ -532,7 +532,7 @@ export const AdminCatalogPage: React.FC = () => {
                 setSelectedProductId(null);
                 setIsProductModalOpen(true);
               }}
-              className="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-lg shadow-xs flex items-center gap-1.5 transition-colors"
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg shadow-xs flex items-center gap-1.5 transition-colors"
             >
               <span>+</span> Thêm sản phẩm mới
             </button>
@@ -545,7 +545,7 @@ export const AdminCatalogPage: React.FC = () => {
                 setSelectedCategory(null);
                 setIsCategoryModalOpen(true);
               }}
-              className="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-lg shadow-xs flex items-center gap-1.5 transition-colors"
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg shadow-xs flex items-center gap-1.5 transition-colors"
             >
               <span>+</span> Thêm danh mục mới
             </button>
@@ -558,7 +558,7 @@ export const AdminCatalogPage: React.FC = () => {
                 setSelectedBrand(null);
                 setIsBrandModalOpen(true);
               }}
-              className="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-lg shadow-xs flex items-center gap-1.5 transition-colors"
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg shadow-xs flex items-center gap-1.5 transition-colors"
             >
               <span>+</span> Thêm thương hiệu mới
             </button>
@@ -573,7 +573,7 @@ export const AdminCatalogPage: React.FC = () => {
           onClick={() => setActiveTab('products')}
           className={`py-3 border-b-2 transition-colors flex items-center gap-2 ${
             activeTab === 'products'
-              ? 'border-brand-600 text-brand-700 font-bold'
+              ? 'border-blue-600 text-blue-700 font-bold'
               : 'border-transparent text-slate-500 hover:text-slate-900'
           }`}
         >
@@ -588,7 +588,7 @@ export const AdminCatalogPage: React.FC = () => {
           onClick={() => setActiveTab('categories')}
           className={`py-3 border-b-2 transition-colors flex items-center gap-2 ${
             activeTab === 'categories'
-              ? 'border-brand-600 text-brand-700 font-bold'
+              ? 'border-blue-600 text-blue-700 font-bold'
               : 'border-transparent text-slate-500 hover:text-slate-900'
           }`}
         >
@@ -603,7 +603,7 @@ export const AdminCatalogPage: React.FC = () => {
           onClick={() => setActiveTab('brands')}
           className={`py-3 border-b-2 transition-colors flex items-center gap-2 ${
             activeTab === 'brands'
-              ? 'border-brand-600 text-brand-700 font-bold'
+              ? 'border-blue-600 text-blue-700 font-bold'
               : 'border-transparent text-slate-500 hover:text-slate-900'
           }`}
         >
@@ -625,7 +625,7 @@ export const AdminCatalogPage: React.FC = () => {
                 placeholder="Tìm theo tên sản phẩm, SKU biến thể..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full text-xs px-3 py-2 rounded-lg border border-slate-200 focus:outline-hidden focus:border-brand-500"
+                className="w-full text-xs px-3 py-2 rounded-lg border border-slate-200 focus:outline-hidden focus:border-blue-500"
               />
             </div>
 

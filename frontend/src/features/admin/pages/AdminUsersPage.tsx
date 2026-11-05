@@ -190,7 +190,7 @@ export const AdminUsersPage: React.FC = () => {
           <button
             type="button"
             onClick={() => handleOpenRoleModal(row)}
-            className="px-2.5 py-1 text-xs font-semibold bg-brand-50 text-brand-700 hover:bg-brand-100 rounded-md transition-colors"
+            className="px-2.5 py-1 text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-md transition-colors"
           >
             Phân vai trò
           </button>
@@ -264,7 +264,7 @@ export const AdminUsersPage: React.FC = () => {
                     type="checkbox"
                     checked={selectedRoles.includes(r)}
                     onChange={() => handleToggleRoleSelection(r)}
-                    className="w-4 h-4 text-brand-600 rounded-sm border-slate-300 focus:ring-brand-500"
+                    className="w-4 h-4 text-blue-600 rounded-sm border-slate-300 focus:ring-blue-500"
                   />
                   <div>
                     <span className="text-xs font-bold text-slate-900">{r}</span>

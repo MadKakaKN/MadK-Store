@@ -229,7 +229,7 @@ export const CategorySchemaModal: React.FC<CategorySchemaModalProps> = ({
                   key={key}
                   type="button"
                   onClick={() => handleApplyPreset(key)}
-                  className="px-2.5 py-1 text-xs font-medium rounded-md bg-slate-100 hover:bg-brand-50 hover:text-brand-700 hover:border-brand-300 border border-slate-200 transition-colors"
+                  className="px-2.5 py-1 text-xs font-medium rounded-md bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 border border-slate-200 transition-colors"
                 >
                   {item.label}
                 </button>
@@ -256,7 +256,7 @@ export const CategorySchemaModal: React.FC<CategorySchemaModalProps> = ({
                 }
               }}
               className={`w-full font-mono text-xs p-3 rounded-lg border bg-slate-900 text-emerald-400 focus:outline-hidden focus:ring-2 ${
-                parseError ? 'border-rose-400 focus:ring-rose-400/20' : 'border-slate-800 focus:ring-brand-500/20'
+                parseError ? 'border-rose-400 focus:ring-rose-400/20' : 'border-slate-800 focus:ring-blue-500/20'
               }`}
               spellCheck={false}
             />

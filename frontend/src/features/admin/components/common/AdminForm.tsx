@@ -56,7 +56,7 @@ export const AdminInput = React.forwardRef<HTMLInputElement, AdminInputProps>(
         )}
         <input
           ref={ref}
-          className={`w-full px-3.5 py-2 text-sm bg-white rounded-lg border transition-colors outline-hidden focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 ${
+          className={`w-full px-3.5 py-2 text-sm bg-white rounded-lg border transition-colors outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${
             error
               ? 'border-rose-300 focus:border-rose-500 focus:ring-rose-500/20 text-rose-900'
               : 'border-slate-300 hover:border-slate-400 text-slate-900'
@@ -85,7 +85,7 @@ export const AdminSelect = React.forwardRef<HTMLSelectElement, AdminSelectProps>
     return (
       <select
         ref={ref}
-        className={`w-full px-3.5 py-2 text-sm bg-white rounded-lg border transition-colors outline-hidden focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 ${
+        className={`w-full px-3.5 py-2 text-sm bg-white rounded-lg border transition-colors outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${
           error
             ? 'border-rose-300 focus:border-rose-500 text-rose-900'
             : 'border-slate-300 hover:border-slate-400 text-slate-900'
@@ -116,7 +116,7 @@ export const AdminTextarea = React.forwardRef<HTMLTextAreaElement, AdminTextarea
       <textarea
         ref={ref}
         rows={rows}
-        className={`w-full px-3.5 py-2 text-sm bg-white rounded-lg border transition-colors outline-hidden focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 ${
+        className={`w-full px-3.5 py-2 text-sm bg-white rounded-lg border transition-colors outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${
           error
             ? 'border-rose-300 focus:border-rose-500 text-rose-900'
             : 'border-slate-300 hover:border-slate-400 text-slate-900'
@@ -164,8 +164,8 @@ export const AdminToggle: React.FC<AdminToggleProps> = ({
         aria-checked={checked}
         disabled={disabled}
         onClick={() => !disabled && onChange(!checked)}
-        className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 ${
-          checked ? 'bg-brand-600' : 'bg-slate-300'
+        className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+          checked ? 'bg-blue-600' : 'bg-slate-300'
         }`}
       >
         <span
@@ -205,7 +205,7 @@ export const AdminButton = React.forwardRef<HTMLButtonElement, AdminButtonProps>
     ref
   ) => {
     const variantStyles: Record<ButtonVariant, string> = {
-      primary: 'bg-brand-600 hover:bg-brand-700 text-white shadow-xs focus:ring-brand-500',
+      primary: 'bg-blue-600 hover:bg-blue-700 text-white shadow-xs focus:ring-blue-500',
       secondary: 'bg-slate-800 hover:bg-slate-900 text-white shadow-xs focus:ring-slate-700',
       danger: 'bg-rose-600 hover:bg-rose-700 text-white shadow-xs focus:ring-rose-500',
       outline: 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 focus:ring-slate-400',

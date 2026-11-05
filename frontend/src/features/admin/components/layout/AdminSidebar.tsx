@@ -47,7 +47,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
       {/* 1. Brand Logo Header */}
       <div className="h-16 flex items-center justify-between px-4 border-b border-slate-200 shrink-0">
         <Link to="/admin" className="flex items-center gap-2.5 overflow-hidden">
-          <div className="w-9 h-9 rounded-xl bg-brand-600 text-white flex items-center justify-center font-black text-lg shadow-xs shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-lg shadow-xs shrink-0">
             M
           </div>
           {!isCollapsed && (
@@ -85,7 +85,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                 isActive
-                  ? 'bg-brand-50 text-brand-700 font-semibold border-r-4 border-brand-600 shadow-xs'
+                  ? 'bg-blue-50 text-blue-700 font-semibold border-r-4 border-blue-600 shadow-xs'
                   : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
               } ${isCollapsed ? 'justify-center px-2' : ''}`
             }
@@ -95,7 +95,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
               <span className="truncate flex-1">{item.label}</span>
             )}
             {!isCollapsed && item.badge && (
-              <span className="px-1.5 py-0.5 text-[10px] font-bold bg-brand-100 text-brand-700 rounded-full">
+              <span className="px-1.5 py-0.5 text-[10px] font-bold bg-blue-100 text-blue-700 rounded-full">
                 {item.badge}
               </span>
             )}
@@ -121,7 +121,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
       <div className="p-3 border-t border-slate-200 bg-slate-50/70 shrink-0">
         <div className={`flex items-center gap-3 ${isCollapsed ? 'justify-center' : ''}`}>
           {/* Avatar / Initials */}
-          <div className="w-9 h-9 rounded-xl bg-brand-100 text-brand-800 flex items-center justify-center font-bold text-sm shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-blue-100 text-brand-800 flex items-center justify-center font-bold text-sm shrink-0">
             {user?.fullName ? user.fullName[0].toUpperCase() : 'U'}
           </div>
 

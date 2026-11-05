@@ -266,7 +266,7 @@ export const AdminInventoryPage: React.FC = () => {
             <div className="font-bold text-xs text-slate-900 truncate max-w-xs">{row.productName}</div>
             <div className="text-[11px] text-slate-500 truncate max-w-xs">{row.variantName}</div>
             <div className="flex items-center gap-1.5 mt-0.5">
-              <span className="font-mono text-[10px] font-semibold text-brand-700 bg-brand-50 px-1.5 py-0.2 rounded">
+              <span className="font-mono text-[10px] font-semibold text-blue-700 bg-blue-50 px-1.5 py-0.2 rounded">
                 {row.sku}
               </span>
               {row.categoryName && (
@@ -334,7 +334,7 @@ export const AdminInventoryPage: React.FC = () => {
           <button
             type="button"
             onClick={() => handleOpenRestock(row)}
-            className="px-2 py-1 text-xs font-semibold bg-brand-50 text-brand-700 hover:bg-brand-100 rounded-lg transition-colors"
+            className="px-2 py-1 text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg transition-colors"
             title="Nhập thêm hàng nhanh"
           >
             + Nhập kho
@@ -359,7 +359,7 @@ export const AdminInventoryPage: React.FC = () => {
     return (
       <div className="flex items-center justify-center p-12">
         <div className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 bg-white border border-slate-200 px-4 py-2.5 rounded-xl shadow-sm">
-          <span className="w-3.5 h-3.5 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
+          <span className="w-3.5 h-3.5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
           Đang tải dữ liệu kho hàng...
         </div>
       </div>
@@ -388,7 +388,7 @@ export const AdminInventoryPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsAuditModalOpen(true)}
-            className="px-3.5 py-2 text-xs font-bold rounded-xl text-brand-700 bg-brand-50 hover:bg-brand-100 border border-brand-200 transition-all flex items-center gap-1.5"
+            className="px-3.5 py-2 text-xs font-bold rounded-xl text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all flex items-center gap-1.5"
           >
             📋 Kiểm kê kho
           </button>
@@ -422,7 +422,7 @@ export const AdminInventoryPage: React.FC = () => {
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Tồn kho vật lý (OnHand)</span>
             <p className="text-2xl font-black text-slate-900 mt-0.5">{totalOnHand}</p>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center text-brand-700 font-bold">
+          <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-700 font-bold">
             🏢
           </div>
         </div>
@@ -485,7 +485,7 @@ export const AdminInventoryPage: React.FC = () => {
           onClick={() => setActiveTab('inventory')}
           className={`px-4 py-2.5 text-xs font-bold border-b-2 transition-all flex items-center gap-2 ${
             activeTab === 'inventory'
-              ? 'border-brand-600 text-brand-600'
+              ? 'border-blue-600 text-blue-600'
               : 'border-transparent text-slate-500 hover:text-slate-800'
           }`}
         >
@@ -496,7 +496,7 @@ export const AdminInventoryPage: React.FC = () => {
           onClick={() => setActiveTab('purchasing')}
           className={`px-4 py-2.5 text-xs font-bold border-b-2 transition-all flex items-center gap-2 ${
             activeTab === 'purchasing'
-              ? 'border-brand-600 text-brand-600'
+              ? 'border-blue-600 text-blue-600'
               : 'border-transparent text-slate-500 hover:text-slate-800'
           }`}
         >
@@ -507,7 +507,7 @@ export const AdminInventoryPage: React.FC = () => {
           onClick={() => setActiveTab('audit')}
           className={`px-4 py-2.5 text-xs font-bold border-b-2 transition-all flex items-center gap-2 ${
             activeTab === 'audit'
-              ? 'border-brand-600 text-brand-600'
+              ? 'border-blue-600 text-blue-600'
               : 'border-transparent text-slate-500 hover:text-slate-800'
           }`}
         >
@@ -518,7 +518,7 @@ export const AdminInventoryPage: React.FC = () => {
           onClick={() => setActiveTab('movements')}
           className={`px-4 py-2.5 text-xs font-bold border-b-2 transition-all flex items-center gap-2 ${
             activeTab === 'movements'
-              ? 'border-brand-600 text-brand-600'
+              ? 'border-blue-600 text-blue-600'
               : 'border-transparent text-slate-500 hover:text-slate-800'
           }`}
         >
@@ -606,7 +606,7 @@ export const AdminInventoryPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsPoModalOpen(true)}
-                className="px-3 py-1.5 text-xs font-bold rounded-xl text-white bg-brand-600 hover:bg-brand-700 shadow-sm transition-all"
+                className="px-3 py-1.5 text-xs font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-all"
               >
                 + Tạo phiếu nhập mới
               </button>
@@ -651,7 +651,7 @@ export const AdminInventoryPage: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => handleReceivePo(po.id, po.code)}
-                            className="px-2.5 py-1 text-xs font-bold bg-brand-600 hover:bg-brand-700 text-white rounded-lg transition-colors shadow-2xs"
+                            className="px-2.5 py-1 text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors shadow-2xs"
                           >
                             ✓ Nhận hàng
                           </button>
@@ -684,7 +684,7 @@ export const AdminInventoryPage: React.FC = () => {
               {suppliers.map((s) => (
                 <div key={s.id} className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-brand-700 bg-brand-50 px-2 py-0.5 rounded">
+                    <span className="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded">
                       {s.code}
                     </span>
                     <Badge variant={s.isActive ? 'success' : 'neutral'} size="sm">
@@ -718,7 +718,7 @@ export const AdminInventoryPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsAuditModalOpen(true)}
-              className="px-3.5 py-1.5 text-xs font-bold rounded-xl text-white bg-brand-600 hover:bg-brand-700 shadow-sm transition-all"
+              className="px-3.5 py-1.5 text-xs font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-all"
             >
               + Bắt đầu kiểm kê định kỳ
             </button>
@@ -775,7 +775,7 @@ export const AdminInventoryPage: React.FC = () => {
               <select
                 value={movementTypeFilter}
                 onChange={(e) => setMovementTypeFilter(e.target.value)}
-                className="text-xs font-semibold rounded-lg border border-slate-200 bg-white py-1 px-2.5 text-slate-700 focus:ring-1 focus:ring-brand-500"
+                className="text-xs font-semibold rounded-lg border border-slate-200 bg-white py-1 px-2.5 text-slate-700 focus:ring-1 focus:ring-blue-500"
               >
                 <option value="all">Tất cả biến động</option>
                 <option value={StockMovementType.Restock}>Nhập kho (Restock)</option>
@@ -960,7 +960,7 @@ export const AdminInventoryPage: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-sm"
+                  className="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm"
                 >
                   Lưu nhà cung cấp
                 </button>

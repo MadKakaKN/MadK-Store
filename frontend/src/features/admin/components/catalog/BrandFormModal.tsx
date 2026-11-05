@@ -153,7 +153,7 @@ export const BrandFormModal: React.FC<BrandFormModalProps> = ({
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="text-sm font-semibold text-slate-800">Logo thương hiệu</label>
-              <label className="cursor-pointer text-xs font-semibold text-brand-600 hover:text-brand-700">
+              <label className="cursor-pointer text-xs font-semibold text-blue-600 hover:text-blue-700">
                 <input
                   type="file"
                   accept=".jpg,.jpeg,.png,.webp"

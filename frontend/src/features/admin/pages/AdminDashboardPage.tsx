@@ -90,8 +90,8 @@ export const AdminDashboardPage: React.FC = () => {
               {activeRole} View
             </Badge>
             {loading && (
-              <span className="inline-flex items-center gap-1.5 text-xs text-brand-600 font-medium">
-                <svg className="animate-spin h-3.5 w-3.5 text-brand-600" fill="none" viewBox="0 0 24 24">
+              <span className="inline-flex items-center gap-1.5 text-xs text-blue-600 font-medium">
+                <svg className="animate-spin h-3.5 w-3.5 text-blue-600" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                 </svg>
@@ -112,7 +112,7 @@ export const AdminDashboardPage: React.FC = () => {
               onClick={() => setActiveRole('Admin')}
               className={`px-3 py-1.5 rounded-lg transition-all ${
                 activeRole === 'Admin'
-                  ? 'bg-white text-brand-700 shadow-xs font-bold'
+                  ? 'bg-white text-blue-700 shadow-xs font-bold'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
               title="Xem toàn bộ chỉ số doanh thu, kho và hệ thống"
@@ -146,10 +146,10 @@ export const AdminDashboardPage: React.FC = () => {
           <button
             onClick={() => loadData(activeRole)}
             disabled={loading}
-            className="p-2 text-slate-600 hover:text-brand-600 hover:bg-slate-50 border border-slate-200 rounded-xl transition-colors shadow-xs"
+            className="p-2 text-slate-600 hover:text-blue-600 hover:bg-slate-50 border border-slate-200 rounded-xl transition-colors shadow-xs"
             title="Làm mới số liệu"
           >
-            <svg className={`w-4 h-4 ${loading ? 'animate-spin text-brand-600' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className={`w-4 h-4 ${loading ? 'animate-spin text-blue-600' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
           </button>
@@ -218,11 +218,11 @@ export const AdminDashboardPage: React.FC = () => {
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Lợi nhuận gộp</p>
-                <h3 className="text-2xl font-black text-brand-600 mt-1">
+                <h3 className="text-2xl font-black text-blue-600 mt-1">
                   {revenue ? formatVND(revenue.grossProfit) : '0 đ'}
                 </h3>
               </div>
-              <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center text-lg">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg">
                 📈
               </div>
             </div>
@@ -385,7 +385,7 @@ export const AdminDashboardPage: React.FC = () => {
               <button
                 onClick={() => setTimeRange('7d')}
                 className={`px-3 py-1 rounded-lg transition-colors ${
-                  timeRange === '7d' ? 'bg-white text-brand-700 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900'
+                  timeRange === '7d' ? 'bg-white text-blue-700 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 7 ngày qua
@@ -393,7 +393,7 @@ export const AdminDashboardPage: React.FC = () => {
               <button
                 onClick={() => setTimeRange('30d')}
                 className={`px-3 py-1 rounded-lg transition-colors ${
-                  timeRange === '30d' ? 'bg-white text-brand-700 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900'
+                  timeRange === '30d' ? 'bg-white text-blue-700 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 30 ngày qua
@@ -401,7 +401,7 @@ export const AdminDashboardPage: React.FC = () => {
               <button
                 onClick={() => setTimeRange('all')}
                 className={`px-3 py-1 rounded-lg transition-colors ${
-                  timeRange === 'all' ? 'bg-white text-brand-700 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900'
+                  timeRange === 'all' ? 'bg-white text-blue-700 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 Tất cả
@@ -428,7 +428,7 @@ export const AdminDashboardPage: React.FC = () => {
                     >
                       {/* Tooltip on Hover */}
                       <div className="absolute bottom-full mb-2 hidden group-hover:flex flex-col z-20 bg-slate-900 text-white text-[11px] py-1.5 px-3 rounded-lg shadow-xl pointer-events-none whitespace-nowrap min-w-[150px]">
-                        <span className="font-bold text-brand-300">{stat.date}</span>
+                        <span className="font-bold text-blue-300">{stat.date}</span>
                         <div className="mt-1 flex justify-between gap-3 text-slate-300">
                           <span>Số đơn:</span>
                           <span className="font-semibold text-white">{stat.orderCount} đơn</span>
@@ -439,7 +439,7 @@ export const AdminDashboardPage: React.FC = () => {
                         </div>
                         <div className="flex justify-between gap-3 text-slate-300">
                           <span>Lợi nhuận gộp:</span>
-                          <span className="font-semibold text-brand-400">{formatVND(stat.grossProfit)}</span>
+                          <span className="font-semibold text-blue-400">{formatVND(stat.grossProfit)}</span>
                         </div>
                       </div>
 
@@ -448,10 +448,10 @@ export const AdminDashboardPage: React.FC = () => {
                         {/* Revenue Bar */}
                         <div
                           style={{ height: `${revHeight}%` }}
-                          className="w-full bg-gradient-to-t from-brand-600 to-brand-400 rounded-t-md group-hover:from-brand-700 group-hover:to-brand-500 transition-all shadow-xs relative"
+                          className="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-md group-hover:from-blue-700 group-hover:to-blue-500 transition-all shadow-xs relative"
                         >
                           {stat.orderCount > 0 && (
-                            <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-600 group-hover:text-brand-600">
+                            <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-600 group-hover:text-blue-600">
                               {stat.orderCount}
                             </span>
                           )}
@@ -478,7 +478,7 @@ export const AdminDashboardPage: React.FC = () => {
               <div className="mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between text-xs text-slate-500 gap-2">
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-1.5">
-                    <span className="w-3 h-3 rounded-sm bg-brand-500" />
+                    <span className="w-3 h-3 rounded-sm bg-blue-500" />
                     <span>Doanh thu (Cột chính)</span>
                   </div>
                   <div className="flex items-center gap-1.5">
@@ -511,7 +511,7 @@ export const AdminDashboardPage: React.FC = () => {
                 </div>
                 <Link
                   to="/admin/orders"
-                  className="text-xs font-semibold text-brand-600 hover:text-brand-700"
+                  className="text-xs font-semibold text-blue-600 hover:text-blue-700"
                 >
                   Xem đơn hàng →
                 </Link>
@@ -555,7 +555,7 @@ export const AdminDashboardPage: React.FC = () => {
                                   {p.productName}
                                 </p>
                                 <p className="text-[11px] text-slate-500 truncate">
-                                  {p.variantName} • <span className="font-mono text-brand-600">{p.sku}</span>
+                                  {p.variantName} • <span className="font-mono text-blue-600">{p.sku}</span>
                                 </p>
                               </div>
                             </div>
@@ -605,7 +605,7 @@ export const AdminDashboardPage: React.FC = () => {
                 </div>
                 <Link
                   to="/admin/inventory"
-                  className="text-xs font-semibold text-brand-600 hover:text-brand-700"
+                  className="text-xs font-semibold text-blue-600 hover:text-blue-700"
                 >
                   Quản lý kho hàng →
                 </Link>
@@ -650,7 +650,7 @@ export const AdminDashboardPage: React.FC = () => {
                                   {item.productName}
                                 </p>
                                 <p className="text-[11px] text-slate-500 truncate">
-                                  {item.variantName} • <span className="font-mono text-brand-600">{item.sku}</span>
+                                  {item.variantName} • <span className="font-mono text-blue-600">{item.sku}</span>
                                 </p>
                               </div>
                             </div>
@@ -697,7 +697,7 @@ export const AdminDashboardPage: React.FC = () => {
               <span>Được tính tự động: Tồn khả dụng = Thực tế - Giữ trước</span>
               <Link
                 to="/admin/inventory"
-                className="font-bold text-brand-600 hover:text-brand-700"
+                className="font-bold text-blue-600 hover:text-blue-700"
               >
                 + Tạo phiếu nhập hàng →
               </Link>
@@ -714,12 +714,12 @@ export const AdminDashboardPage: React.FC = () => {
         <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
           <Link
             to="/admin/orders"
-            className="p-4 rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50/40 transition-all text-center group flex flex-col items-center justify-center gap-1.5"
+            className="p-4 rounded-xl border border-slate-200 hover:border-blue-500 hover:bg-blue-50/40 transition-all text-center group flex flex-col items-center justify-center gap-1.5"
           >
-            <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
               📦
             </div>
-            <span className="text-xs font-bold text-slate-800 group-hover:text-brand-700">
+            <span className="text-xs font-bold text-slate-800 group-hover:text-blue-700">
               Quản lý đơn hàng
             </span>
             <span className="text-[10px] text-slate-400">Duyệt & xử lý giao vận</span>
@@ -727,12 +727,12 @@ export const AdminDashboardPage: React.FC = () => {
 
           <Link
             to="/admin/inventory"
-            className="p-4 rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50/40 transition-all text-center group flex flex-col items-center justify-center gap-1.5"
+            className="p-4 rounded-xl border border-slate-200 hover:border-blue-500 hover:bg-blue-50/40 transition-all text-center group flex flex-col items-center justify-center gap-1.5"
           >
             <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
               📥
             </div>
-            <span className="text-xs font-bold text-slate-800 group-hover:text-brand-700">
+            <span className="text-xs font-bold text-slate-800 group-hover:text-blue-700">
               Quản lý kho & NCC
             </span>
             <span className="text-[10px] text-slate-400">Phiếu nhập, kiểm kê kho</span>
@@ -740,12 +740,12 @@ export const AdminDashboardPage: React.FC = () => {
 
           <Link
             to="/admin/pricing"
-            className="p-4 rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50/40 transition-all text-center group flex flex-col items-center justify-center gap-1.5"
+            className="p-4 rounded-xl border border-slate-200 hover:border-blue-500 hover:bg-blue-50/40 transition-all text-center group flex flex-col items-center justify-center gap-1.5"
           >
             <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
               🏷️
             </div>
-            <span className="text-xs font-bold text-slate-800 group-hover:text-brand-700">
+            <span className="text-xs font-bold text-slate-800 group-hover:text-blue-700">
               Lịch biểu giá
             </span>
             <span className="text-[10px] text-slate-400">Flash sale & khuyến mãi</span>
@@ -753,12 +753,12 @@ export const AdminDashboardPage: React.FC = () => {
 
           <Link
             to="/admin/catalog"
-            className="p-4 rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50/40 transition-all text-center group flex flex-col items-center justify-center gap-1.5"
+            className="p-4 rounded-xl border border-slate-200 hover:border-blue-500 hover:bg-blue-50/40 transition-all text-center group flex flex-col items-center justify-center gap-1.5"
           >
             <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
               💻
             </div>
-            <span className="text-xs font-bold text-slate-800 group-hover:text-brand-700">
+            <span className="text-xs font-bold text-slate-800 group-hover:text-blue-700">
               Danh mục sản phẩm
             </span>
             <span className="text-[10px] text-slate-400">Biến thể, hình ảnh, 3D</span>

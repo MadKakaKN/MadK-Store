@@ -201,7 +201,7 @@ export const AdminOrdersPage: React.FC = () => {
           <button
             type="button"
             onClick={() => handleOpenDetail(row)}
-            className="text-left font-mono font-bold text-xs text-brand-600 hover:text-brand-800 bg-brand-50 hover:bg-brand-100 px-2 py-1 rounded-md transition-colors"
+            className="text-left font-mono font-bold text-xs text-blue-600 hover:text-brand-800 bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded-md transition-colors"
           >
             {row.orderNumber}
           </button>
@@ -358,7 +358,7 @@ export const AdminOrdersPage: React.FC = () => {
                     type="button"
                     disabled={isProcessingThis}
                     onClick={() => handleQuickTransition(row, 'Processing', 'Chuyển đóng gói kho')}
-                    className="px-2 py-1 text-xs font-semibold bg-brand-50 text-brand-700 hover:bg-brand-100 rounded-md transition-colors disabled:opacity-50"
+                    className="px-2 py-1 text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-md transition-colors disabled:opacity-50"
                   >
                     {isProcessingThis ? '...' : 'Đóng gói'}
                   </button>
@@ -500,7 +500,7 @@ export const AdminOrdersPage: React.FC = () => {
               }}
               className={`px-3 py-1.5 text-xs font-medium rounded-xl transition-all flex items-center gap-1.5 ${
                 isActive
-                  ? 'bg-brand-600 text-white font-semibold shadow-xs'
+                  ? 'bg-blue-600 text-white font-semibold shadow-xs'
                   : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
               }`}
             >
@@ -524,7 +524,7 @@ export const AdminOrdersPage: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Tìm mã đơn, tên khách, số ĐT, email..."
-              className="w-full pl-9 pr-3 py-2 text-xs border border-slate-300 rounded-xl focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+              className="w-full pl-9 pr-3 py-2 text-xs border border-slate-300 rounded-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
           </div>
 
@@ -538,7 +538,7 @@ export const AdminOrdersPage: React.FC = () => {
                 setFromDate(e.target.value);
                 setPage(1);
               }}
-              className="p-1.5 text-xs border border-slate-300 rounded-xl focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+              className="p-1.5 text-xs border border-slate-300 rounded-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
           </div>
 
@@ -552,7 +552,7 @@ export const AdminOrdersPage: React.FC = () => {
                 setToDate(e.target.value);
                 setPage(1);
               }}
-              className="p-1.5 text-xs border border-slate-300 rounded-xl focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+              className="p-1.5 text-xs border border-slate-300 rounded-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
           </div>
         </div>

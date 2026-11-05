@@ -71,7 +71,7 @@ export const AdminReportsPage: React.FC = () => {
             onClick={() => setActiveTab(tab.id)}
             className={`pb-3 text-xs font-semibold transition-colors border-b-2 ${
               activeTab === tab.id
-                ? 'border-brand-600 text-brand-700'
+                ? 'border-blue-600 text-blue-700'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
@@ -120,7 +120,7 @@ export const AdminReportsPage: React.FC = () => {
                   </div>
                   <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-brand-600 rounded-full"
+                      className="h-full bg-blue-600 rounded-full"
                       style={{ width: `${c.percent}%` }}
                     />
                   </div>

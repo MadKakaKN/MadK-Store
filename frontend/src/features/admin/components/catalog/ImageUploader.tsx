@@ -108,8 +108,8 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
         onClick={() => !disabled && !isUploading && fileInputRef.current?.click()}
         className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-colors ${
           dragOver
-            ? 'border-brand-500 bg-brand-50/50'
-            : 'border-slate-300 hover:border-brand-400 hover:bg-slate-50/60'
+            ? 'border-blue-500 bg-blue-50/50'
+            : 'border-slate-300 hover:border-blue-400 hover:bg-slate-50/60'
         } ${disabled || isUploading ? 'opacity-60 cursor-not-allowed' : ''}`}
       >
         <input
@@ -125,18 +125,18 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
         <div className="flex flex-col items-center justify-center space-y-2">
           {isUploading ? (
             <div className="flex flex-col items-center gap-2">
-              <div className="w-8 h-8 border-3 border-brand-600 border-t-transparent rounded-full animate-spin" />
-              <p className="text-sm font-medium text-brand-600">Đang nén, tối ưu hóa và tải ảnh lên server...</p>
+              <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
+              <p className="text-sm font-medium text-blue-600">Đang nén, tối ưu hóa và tải ảnh lên server...</p>
             </div>
           ) : (
             <>
-              <div className="w-12 h-12 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
               <div className="text-sm font-semibold text-slate-800">
-                Kéo thả ảnh vào đây hoặc <span className="text-brand-600 underline">duyệt từ máy tính</span>
+                Kéo thả ảnh vào đây hoặc <span className="text-blue-600 underline">duyệt từ máy tính</span>
               </div>
               <p className="text-xs text-slate-400">
                 Hỗ trợ JPG, PNG, WebP (Tối đa 5MB/ảnh). Ảnh được tự động resize và nén WebP chuẩn e-commerce.
@@ -153,7 +153,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
             <div
               key={idx}
               className={`group relative rounded-lg border bg-white overflow-hidden shadow-xs transition-all ${
-                img.isPrimary ? 'ring-2 ring-brand-500 border-brand-500' : 'border-slate-200'
+                img.isPrimary ? 'ring-2 ring-blue-500 border-blue-500' : 'border-slate-200'
               }`}
             >
               <div className="aspect-square bg-slate-100 relative overflow-hidden">
@@ -164,7 +164,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
                 />
 
                 {img.isPrimary && (
-                  <span className="absolute top-2 left-2 px-2 py-0.5 bg-brand-600 text-white text-[10px] font-bold rounded-md shadow-xs">
+                  <span className="absolute top-2 left-2 px-2 py-0.5 bg-blue-600 text-white text-[10px] font-bold rounded-md shadow-xs">
                     Ảnh đại diện
                   </span>
                 )}
@@ -188,14 +188,14 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
                   placeholder="Mô tả ảnh (Alt text)..."
                   value={img.altText || ''}
                   onChange={(e) => handleAltTextChange(idx, e.target.value)}
-                  className="w-full text-xs px-2 py-1 rounded-md border border-slate-200 focus:outline-hidden focus:border-brand-500"
+                  className="w-full text-xs px-2 py-1 rounded-md border border-slate-200 focus:outline-hidden focus:border-blue-500"
                 />
 
                 {!img.isPrimary && (
                   <button
                     type="button"
                     onClick={() => handleSetPrimary(idx)}
-                    className="w-full text-[11px] font-semibold text-brand-700 hover:bg-brand-50 py-1 rounded transition-colors"
+                    className="w-full text-[11px] font-semibold text-blue-700 hover:bg-blue-50 py-1 rounded transition-colors"
                   >
                     Đặt làm ảnh đại diện
                   </button>

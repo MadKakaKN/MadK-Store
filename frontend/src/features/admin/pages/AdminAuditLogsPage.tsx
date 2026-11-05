@@ -161,7 +161,7 @@ export const AdminAuditLogsPage: React.FC = () => {
         <button
           type="button"
           onClick={() => setActiveLog(row)}
-          className="px-2.5 py-1 text-xs font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100 rounded-md transition-colors"
+          className="px-2.5 py-1 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-md transition-colors"
         >
           Xem Diff
         </button>
@@ -198,7 +198,7 @@ export const AdminAuditLogsPage: React.FC = () => {
           <select
             value={selectedAction}
             onChange={(e) => setSelectedAction(e.target.value)}
-            className="text-xs border border-slate-300 rounded-lg px-2.5 py-2 bg-white text-slate-700 focus:outline-hidden focus:ring-1 focus:ring-brand-500"
+            className="text-xs border border-slate-300 rounded-lg px-2.5 py-2 bg-white text-slate-700 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
           >
             {actionFilterOptions.map((opt) => (
               <option key={opt.value} value={opt.value}>

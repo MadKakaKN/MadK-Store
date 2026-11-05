@@ -99,7 +99,7 @@ export const AdminReturnDetailModal: React.FC<AdminReturnDetailModalProps> = ({
         {/* Scrollable Content */}
         <div className="overflow-y-auto flex-1 pr-1 space-y-6 py-6 text-xs">
           {/* Action Toolbar for Sales/Admin */}
-          <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-50 to-brand-50/30 border border-slate-200 flex flex-wrap items-center justify-between gap-3">
+          <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-50 to-blue-50/30 border border-slate-200 flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="font-bold text-slate-900">Thao tác xử lý yêu cầu:</p>
               <p className="text-slate-500 text-[11px] mt-0.5">
@@ -208,7 +208,7 @@ export const AdminReturnDetailModal: React.FC<AdminReturnDetailModalProps> = ({
 
               <div className="pt-3 border-t border-slate-200 flex items-center justify-between mt-3">
                 <span className="text-slate-500">Số tiền hoàn:</span>
-                <span className="text-base font-black text-brand-600 font-mono">
+                <span className="text-base font-black text-blue-600 font-mono">
                   {formatVnd(returnRequest.refundAmount)}
                 </span>
               </div>

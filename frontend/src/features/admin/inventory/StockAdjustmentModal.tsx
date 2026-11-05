@@ -112,7 +112,7 @@ export const StockAdjustmentModal: React.FC<StockAdjustmentModalProps> = ({
         </div>
 
         {/* Product Context Banner */}
-        <div className="px-6 py-3 bg-brand-50/40 border-b border-brand-100/60 flex items-center gap-3">
+        <div className="px-6 py-3 bg-blue-50/40 border-b border-blue-100/60 flex items-center gap-3">
           {variant.thumbnailUrl && (
             <img
               src={variant.thumbnailUrl}
@@ -123,7 +123,7 @@ export const StockAdjustmentModal: React.FC<StockAdjustmentModalProps> = ({
           <div className="flex-1 min-w-0">
             <h4 className="text-xs font-bold text-slate-900 truncate">{variant.productName}</h4>
             <p className="text-xs text-slate-600 truncate">{variant.variantName}</p>
-            <span className="font-mono text-[11px] font-semibold text-brand-700 bg-brand-100/80 px-1.5 py-0.5 rounded">
+            <span className="font-mono text-[11px] font-semibold text-blue-700 bg-blue-100/80 px-1.5 py-0.5 rounded">
               SKU: {variant.sku}
             </span>
           </div>

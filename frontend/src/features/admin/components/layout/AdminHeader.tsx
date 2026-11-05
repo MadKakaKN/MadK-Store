@@ -123,7 +123,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onOpenMobileSidebar })
             aria-expanded={isUserMenuOpen}
             aria-haspopup="true"
           >
-            <div className="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center font-bold text-xs shadow-2xs">
+            <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-2xs">
               {user?.fullName ? user.fullName[0].toUpperCase() : 'U'}
             </div>
             <span className="hidden sm:inline text-xs font-semibold text-slate-700 max-w-[120px] truncate">

@@ -112,7 +112,7 @@ export const AdminReturnsPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setSelectedDetail(row)}
-            className="text-left font-mono font-bold text-xs text-brand-600 hover:text-brand-800 bg-brand-50 hover:bg-brand-100 px-2 py-0.5 rounded-md transition-colors"
+            className="text-left font-mono font-bold text-xs text-blue-600 hover:text-brand-800 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded-md transition-colors"
           >
             #{row.orderNumber}
           </button>
@@ -149,7 +149,7 @@ export const AdminReturnsPage: React.FC = () => {
             </p>
             <p className="text-[11px] text-slate-500">
               {first?.variantName} <span className="text-slate-400">×{first?.quantity}</span>
-              {count > 1 && <span className="ml-1 text-brand-600 font-semibold">+{count - 1} món</span>}
+              {count > 1 && <span className="ml-1 text-blue-600 font-semibold">+{count - 1} món</span>}
             </p>
           </div>
         );
@@ -292,7 +292,7 @@ export const AdminReturnsPage: React.FC = () => {
               }}
               className={`px-3 py-1.5 text-xs font-medium rounded-xl transition-all flex items-center gap-1.5 ${
                 isActive
-                  ? 'bg-brand-600 text-white font-semibold shadow-xs'
+                  ? 'bg-blue-600 text-white font-semibold shadow-xs'
                   : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
               }`}
             >
@@ -314,7 +314,7 @@ export const AdminReturnsPage: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Tìm theo mã đơn (MK-...), mã yêu cầu, tên khách, SĐT..."
-            className="w-full pl-9 pr-3 py-2 text-xs border border-slate-300 rounded-xl focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+            className="w-full pl-9 pr-3 py-2 text-xs border border-slate-300 rounded-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           />
         </div>
 
