@@ -150,6 +150,20 @@ public static class DependencyInjection
 
         // Shipping
         services.AddScoped<IShippingFeeService, MadK.Infrastructure.Services.StandardShippingFeeService>();
+        services.Configure<MadK.Application.DTOs.Shipping.GhnSettings>(opt =>
+        {
+            configuration.GetSection(MadK.Application.DTOs.Shipping.GhnSettings.SectionName).Bind(opt);
+            var envToken = configuration["GHN_API_TOKEN"];
+            if (!string.IsNullOrWhiteSpace(envToken)) opt.ApiToken = envToken;
+            var envShopId = configuration["GHN_SHOP_ID"];
+            if (!string.IsNullOrWhiteSpace(envShopId)) opt.ShopId = envShopId;
+            var envBaseUrl = configuration["GHN_BASE_URL"];
+            if (!string.IsNullOrWhiteSpace(envBaseUrl)) opt.BaseUrl = envBaseUrl;
+        });
+        services.AddHttpClient<IGhnShippingService, MadK.Infrastructure.Services.GhnShippingService>(client =>
+        {
+            client.Timeout = TimeSpan.FromSeconds(15);
+        });
 
         return services;
     }

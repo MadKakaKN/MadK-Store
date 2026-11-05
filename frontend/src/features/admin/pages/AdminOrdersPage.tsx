@@ -6,6 +6,7 @@ import {
   PAYMENT_STATUS_CONFIG,
 } from '../../../types/order';
 import { adminOrderApi, OrderAdminFilter } from '../../../api/adminOrderApi';
+import shippingApi from '../../../api/shippingApi';
 import { useAuth } from '../../auth/context/AuthContext';
 import { useToast } from '../components/common/ToastContext';
 import DataTable, { ColumnDef } from '../components/common/DataTable';
@@ -44,6 +45,24 @@ export const AdminOrdersPage: React.FC = () => {
 
   // Quick Action transition state
   const [quickProcessingNumber, setQuickProcessingNumber] = useState<string | null>(null);
+  const [shippingCreatingNumber, setShippingCreatingNumber] = useState<string | null>(null);
+
+  const handleCreateGhnShipping = async (orderNumber: string) => {
+    setShippingCreatingNumber(orderNumber);
+    try {
+      const res = await shippingApi.createAdminShippingOrder(orderNumber);
+      if (res.isSuccess && res.data) {
+        toast.success(`Đã tạo mã vận đơn GHN: ${res.data.trackingCode}`, 'Thành công');
+        fetchOrders();
+      } else {
+        toast.error(res.error || 'Không thể tạo vận đơn GHN', 'Lỗi');
+      }
+    } catch {
+      toast.error('Lỗi kết nối khi gọi bưu cục GHN', 'Lỗi');
+    } finally {
+      setShippingCreatingNumber(null);
+    }
+  };
   const [isExporting, setIsExporting] = useState(false);
 
   // Role permissions
@@ -178,13 +197,20 @@ export const AdminOrdersPage: React.FC = () => {
       title: 'Mã đơn hàng',
       width: '180px',
       render: (row) => (
-        <button
-          type="button"
-          onClick={() => handleOpenDetail(row)}
-          className="text-left font-mono font-bold text-xs text-brand-600 hover:text-brand-800 bg-brand-50 hover:bg-brand-100 px-2 py-1 rounded-md transition-colors"
-        >
-          {row.orderNumber}
-        </button>
+        <div className="flex flex-col items-start gap-1">
+          <button
+            type="button"
+            onClick={() => handleOpenDetail(row)}
+            className="text-left font-mono font-bold text-xs text-brand-600 hover:text-brand-800 bg-brand-50 hover:bg-brand-100 px-2 py-1 rounded-md transition-colors"
+          >
+            {row.orderNumber}
+          </button>
+          {row.trackingCode && (
+            <span className="inline-flex items-center gap-1 font-mono text-[10px] bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded border border-slate-200">
+              🚚 {row.trackingCode}
+            </span>
+          )}
+        </div>
       ),
     },
     {
@@ -358,6 +384,32 @@ export const AdminOrdersPage: React.FC = () => {
                   >
                     {isProcessingThis ? '...' : 'Hoàn tất'}
                   </button>
+                )}
+
+                {/* GHN Shipping Creation */}
+                {(row.status === 'Confirmed' || row.status === 'Processing') && !row.trackingCode && (
+                  <button
+                    type="button"
+                    disabled={shippingCreatingNumber === row.orderNumber}
+                    onClick={() => handleCreateGhnShipping(row.orderNumber)}
+                    className="px-2 py-1 text-xs font-semibold bg-amber-50 text-amber-800 hover:bg-amber-100 rounded-md transition-colors disabled:opacity-50 inline-flex items-center gap-1"
+                    title="Đẩy đơn sang Giao Hàng Nhanh (GHN)"
+                  >
+                    {shippingCreatingNumber === row.orderNumber ? '...' : '🚚 Tạo GHN'}
+                  </button>
+                )}
+
+                {/* GHN A5 Label Print */}
+                {row.shippingLabelUrl && (
+                  <a
+                    href={row.shippingLabelUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-2 py-1 text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 rounded-md transition-colors inline-flex items-center gap-1"
+                    title="In phiếu gửi hàng A5"
+                  >
+                    🖨️ In A5
+                  </a>
                 )}
               </>
             )}

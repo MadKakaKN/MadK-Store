@@ -82,6 +82,11 @@ export interface OrderDto {
   createdAt: string;
   updatedAt?: string | null;
   couponSnapshot?: string | null;
+  carrierName?: string | null;
+  trackingCode?: string | null;
+  shippingStatus?: string | null;
+  shippingLabelUrl?: string | null;
+  estimatedDeliveryDate?: string | null;
   items: OrderItemDto[];
   statusHistory: OrderStatusHistoryDto[];
 }

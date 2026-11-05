@@ -53,6 +53,12 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
 
         builder.Property(o => o.IdempotencyKey).HasColumnName("idempotency_key").HasMaxLength(150);
 
+        builder.Property(o => o.CarrierName).HasColumnName("carrier_name").HasMaxLength(50);
+        builder.Property(o => o.TrackingCode).HasColumnName("tracking_code").HasMaxLength(100);
+        builder.Property(o => o.ShippingStatus).HasColumnName("shipping_status").HasMaxLength(50);
+        builder.Property(o => o.ShippingLabelUrl).HasColumnName("shipping_label_url");
+        builder.Property(o => o.EstimatedDeliveryDate).HasColumnName("estimated_delivery_date");
+
         builder.Property(o => o.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
         builder.Property(o => o.UpdatedAt).HasColumnName("updated_at");
 

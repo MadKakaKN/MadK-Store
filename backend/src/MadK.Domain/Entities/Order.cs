@@ -68,6 +68,31 @@ public class Order : BaseEntity
     /// </summary>
     public string? IdempotencyKey { get; set; }
 
+    /// <summary>
+    /// Đơn vị vận chuyển (e.g. "GHN", "Giao Hàng Nhanh", "MadK Express").
+    /// </summary>
+    public string? CarrierName { get; set; }
+
+    /// <summary>
+    /// Mã vận đơn (AwbCode / Tracking Code) do bưu cục cấp.
+    /// </summary>
+    public string? TrackingCode { get; set; }
+
+    /// <summary>
+    /// Trạng thái giao vận (ready_to_pick, picking, delivering, delivered, delivery_fail, returned...).
+    /// </summary>
+    public string? ShippingStatus { get; set; }
+
+    /// <summary>
+    /// Đường dẫn in phiếu gửi hàng A5 / tem dán bưu cục.
+    /// </summary>
+    public string? ShippingLabelUrl { get; set; }
+
+    /// <summary>
+    /// Ngày giao hàng dự kiến.
+    /// </summary>
+    public DateTime? EstimatedDeliveryDate { get; set; }
+
     public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
     public ICollection<OrderStatusHistory> StatusHistories { get; set; } = new List<OrderStatusHistory>();
     public ICollection<Payment> Payments { get; set; } = new List<Payment>();

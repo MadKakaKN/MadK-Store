@@ -93,7 +93,12 @@ public record OrderDto(
     List<OrderStatusHistoryDto> StatusHistory,
     DateTime CreatedAt,
     DateTime? ExpiresAt = null,
-    string? CouponSnapshot = null
+    string? CouponSnapshot = null,
+    string? CarrierName = null,
+    string? TrackingCode = null,
+    string? ShippingStatus = null,
+    string? ShippingLabelUrl = null,
+    DateTime? EstimatedDeliveryDate = null
 );
 
 public record CancelOrderRequestDto(

@@ -1047,6 +1047,11 @@ public class MomoService : IMomoService
                 )).ToList(),
             order.CreatedAt,
             order.ExpiresAt,
-            order.CouponSnapshot
+            order.CouponSnapshot,
+            order.CarrierName,
+            order.TrackingCode,
+            order.ShippingStatus,
+            order.ShippingLabelUrl,
+            order.EstimatedDeliveryDate
         );
 }

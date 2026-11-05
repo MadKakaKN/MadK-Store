@@ -1289,7 +1289,12 @@ public class OrderService : IOrderService
                 )).ToList(),
             order.CreatedAt,
             order.ExpiresAt,
-            order.CouponSnapshot
+            order.CouponSnapshot,
+            order.CarrierName,
+            order.TrackingCode,
+            order.ShippingStatus,
+            order.ShippingLabelUrl,
+            order.EstimatedDeliveryDate
         );
 
     public async Task<Result<OrderDto>> UpdateOrderNoteAsync(

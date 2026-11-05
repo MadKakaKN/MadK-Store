@@ -9,6 +9,7 @@ import returnApi from '../../../../api/returnApi';
 import { OrderStatusBadge } from './OrderStatusBadge';
 import { OrderHistoryTimeline } from './OrderHistoryTimeline';
 import { ReturnRequestsPanel } from './ReturnRequestsPanel';
+import GhnTrackingModal from './GhnTrackingModal';
 
 interface OrderDetailModalProps {
   order: OrderDto | null;
@@ -35,6 +36,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
   const [returnsLoading, setReturnsLoading] = useState(false);
   const [returnsError, setReturnsError] = useState<string | null>(null);
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [showTrackingModal, setShowTrackingModal] = useState<boolean>(false);
 
   const handleCopy = (text: string, fieldName: string) => {
     navigator.clipboard.writeText(text);
@@ -274,9 +276,24 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-500">Vận chuyển:</span>
-                    <span className="font-semibold text-emerald-600">Giao hàng tiêu chuẩn (Miễn phí)</span>
+                    <span className="text-slate-500">Đơn vị vận chuyển:</span>
+                    <span className="font-bold text-orange-600 flex items-center gap-1">
+                      <span>🚚</span> {order.carrierName || 'Giao Hàng Nhanh (GHN)'}
+                    </span>
                   </div>
+                  {order.trackingCode && (
+                    <div className="flex items-center justify-between pt-1">
+                      <span className="text-slate-500">Mã vận đơn GHN:</span>
+                      <button
+                        type="button"
+                        onClick={() => setShowTrackingModal(true)}
+                        className="font-mono font-bold text-xs text-orange-600 bg-orange-50 hover:bg-orange-100 px-2 py-0.5 rounded-md border border-orange-200 transition-colors flex items-center gap-1"
+                      >
+                        <span>{order.trackingCode}</span>
+                        <span className="text-[10px] underline">Tra cứu ↗</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -572,6 +589,14 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
           </button>
         </div>
       </div>
+
+      {showTrackingModal && (
+        <GhnTrackingModal
+          orderNumber={order.orderNumber}
+          trackingCode={order.trackingCode}
+          onClose={() => setShowTrackingModal(false)}
+        />
+      )}
     </div>
   );
 };

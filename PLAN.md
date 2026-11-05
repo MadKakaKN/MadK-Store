@@ -109,15 +109,17 @@ Dưới đây là các hạng mục được chia nhỏ theo thứ tự ưu tiê
 
 ---
 
-#### 🟢 HẠNG MỤC 5: TÍCH HỢP TỰ ĐỘNG ĐƠN VỊ VẬN CHUYỂN (GHN API)
+#### 🟢 HẠNG MỤC 5: TÍCH HỢP TỰ ĐỘNG ĐƠN VỊ VẬN CHUYỂN (GHN API) (Đã hoàn thành ✅)
 > *Mục tiêu: Tính phí ship tự động chính xác theo địa chỉ và tạo mã bưu gửi sang bưu cục.*
-- [ ] **5.1. Dịch vụ Tích hợp API Giao Hàng Nhanh (`GhnShippingService`)**
-  - Tra cứu mã Tỉnh/Huyện/Xã chuẩn GHN theo sổ địa chỉ của MadK.
-  - Tính phí vận chuyển thực tế từ kho shop đến nhà khách.
-- [ ] **5.2. Tự động tạo mã vận đơn (AwbCode / Tracking Code)**
-  - Khi đơn hàng chuyển sang trạng thái `Processing`, tự động gọi API GHN tạo đơn giao hàng và in phiếu gửi hàng.
-- [ ] **5.3. Webhook cập nhật hành trình bưu phẩm**
-  - Nhận thông báo từ GHN khi shipper đã lấy hàng, đang giao, giao thành công, hoặc giao thất bại để cập nhật trạng thái đơn.
+- [x] **5.1. Dịch vụ Tích hợp API Giao Hàng Nhanh (`GhnShippingService`)**
+  - Tra cứu mã Tỉnh/Huyện/Xã chuẩn GHN theo sổ địa chỉ của MadK (`/api/v1/shipping/ghn/provinces`, `/districts`, `/wards`).
+  - Tính phí vận chuyển thực tế từ kho shop đến nhà khách với chính sách Freeship đơn hàng $\ge 1.000.000$đ.
+- [x] **5.2. Tự động tạo mã vận đơn (AwbCode / Tracking Code)**
+  - Quản trị viên/Kho tạo đơn vận chuyển GHN trên danh sách đơn hàng `AdminOrdersPage.tsx` hoặc `OrderDetailModal.tsx`.
+  - Sinh mã vận đơn GHN, lấy link in phiếu gửi hàng khổ A5.
+- [x] **5.3. Webhook cập nhật hành trình bưu phẩm & Tra cứu thời gian thực**
+  - Webhook `POST /api/v1/shipping/ghn/webhook` nhận biến động trạng thái từ GHN (`delivering` -> Đang giao, `delivered` -> Hoàn tất & thanh toán COD tự động).
+  - Modal tra cứu hành trình chi tiết thời gian thực `GhnTrackingModal.tsx` trên cả tài khoản khách hàng và quản trị viên.
 
 ---
 
