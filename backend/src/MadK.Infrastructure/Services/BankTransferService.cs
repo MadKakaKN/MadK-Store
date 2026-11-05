@@ -19,6 +19,7 @@ public class BankTransferService : IBankTransferService
 {
     private readonly IAppDbContext _context;
     private readonly IEmailSender? _emailSender;
+    private readonly ITelegramNotificationService? _telegramService;
     private readonly ILogger<BankTransferService> _logger;
     private readonly BankTransferSettings _settings;
 
@@ -32,11 +33,13 @@ public class BankTransferService : IBankTransferService
         IOptions<BankTransferSettings> options,
         IConfiguration configuration,
         ILogger<BankTransferService> logger,
-        IEmailSender? emailSender = null)
+        IEmailSender? emailSender = null,
+        ITelegramNotificationService? telegramService = null)
     {
         _context = context;
         _logger = logger;
         _emailSender = emailSender;
+        _telegramService = telegramService;
         _settings = options.Value ?? new BankTransferSettings();
 
         // Đọc cấu hình từ biến môi trường nếu có
@@ -217,6 +220,17 @@ public class BankTransferService : IBankTransferService
             {
                 _logger.LogWarning(ex, "Failed to send confirmation email for auto-paid order {OrderNumber}", orderNumber);
             }
+        }
+
+        // 9. Bắn thông báo Telegram Bot tới Ban Quản Trị (tiền về tài khoản)
+        if (_telegramService != null)
+        {
+            _ = _telegramService.SendPaymentReceivedAlertAsync(
+                orderNumber,
+                dto.TransferAmount,
+                dto.Gateway ?? _settings.BankName,
+                dto.ReferenceCode,
+                ct);
         }
 
         return new BankTransferWebhookResponseDto(true, "Tự động duyệt đơn hàng thành công.", orderNumber, dto.TransferAmount);

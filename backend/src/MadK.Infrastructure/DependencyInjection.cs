@@ -108,6 +108,10 @@ public static class DependencyInjection
             configuration.GetSection(MadK.Application.DTOs.Payment.BankTransferSettings.SectionName));
         services.AddScoped<IBankTransferService, MadK.Infrastructure.Services.BankTransferService>();
 
+        // Telegram Bot Notification Service
+        services.Configure<TelegramSettings>(configuration.GetSection(TelegramSettings.SectionName));
+        services.AddSingleton<ITelegramNotificationService, TelegramNotificationService>();
+
         // Order Expiration & Stock Retention Worker
         services.AddScoped<IOrderExpirationService, MadK.Infrastructure.Services.OrderExpirationService>();
         services.AddHostedService<MadK.Infrastructure.Workers.OrderExpirationWorker>();

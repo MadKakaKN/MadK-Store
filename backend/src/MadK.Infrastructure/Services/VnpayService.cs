@@ -30,6 +30,7 @@ public class VnpayService : IVnpayService
     private readonly ICouponService? _couponService;
     private readonly IShippingFeeService? _shippingFeeService;
     private readonly IEmailSender? _emailSender;
+    private readonly ITelegramNotificationService? _telegramService;
     private readonly VnpaySettings _settings;
     private readonly ILogger<VnpayService> _logger;
 
@@ -41,7 +42,8 @@ public class VnpayService : IVnpayService
         IPricingService? pricingService = null,
         ICouponService? couponService = null,
         IShippingFeeService? shippingFeeService = null,
-        IEmailSender? emailSender = null)
+        IEmailSender? emailSender = null,
+        ITelegramNotificationService? telegramService = null)
     {
         _context = context;
         _efContext = (DbContext)context;
@@ -52,6 +54,7 @@ public class VnpayService : IVnpayService
         _couponService = couponService;
         _shippingFeeService = shippingFeeService;
         _emailSender = emailSender;
+        _telegramService = telegramService;
     }
 
     /// <inheritdoc />
@@ -750,6 +753,17 @@ public class VnpayService : IVnpayService
                     {
                         _logger.LogError(emailEx, "Lỗi khi đưa email xác nhận thanh toán VNPay đơn {OrderNumber} vào hàng đợi", order.OrderNumber);
                     }
+                }
+
+                // Bắn thông báo Telegram Bot tới Ban Quản Trị (tiền về tài khoản qua VNPay)
+                if (_telegramService != null)
+                {
+                    _ = _telegramService.SendPaymentReceivedAlertAsync(
+                        order.OrderNumber,
+                        payment.Amount,
+                        "VNPay",
+                        transactionNo,
+                        ct);
                 }
 
                 return new VnpayIpnResponseDto("00", "Confirm Success");

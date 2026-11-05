@@ -14,13 +14,23 @@ public class InventoryService : IInventoryService
     private readonly IAppDbContext _context;
     private readonly DbContext _efContext;
     private readonly ILogger<InventoryService> _logger;
+    private readonly ITelegramNotificationService? _telegramService;
     private static readonly object _inMemoryLock = new();
 
     public InventoryService(IAppDbContext context, ILogger<InventoryService> logger)
+        : this(context, logger, null)
+    {
+    }
+
+    public InventoryService(
+        IAppDbContext context,
+        ILogger<InventoryService> logger,
+        ITelegramNotificationService? telegramService)
     {
         _context = context;
         _efContext = (DbContext)context;
         _logger = logger;
+        _telegramService = telegramService;
     }
 
     public async Task<Result<InventoryDto>> GetStockAsync(Guid variantId, CancellationToken ct = default)
@@ -445,6 +455,26 @@ public class InventoryService : IInventoryService
 
                 _logger.LogInformation("Reserved variant {VariantId}: +{Qty} reserved (Available left: {Avail})",
                     variantId, quantity, onHandAfter - reservedAfter);
+
+                int availableLeft = onHandAfter - reservedAfter;
+                if (_telegramService != null && availableLeft <= 3)
+                {
+                    try
+                    {
+                        var v = await _context.ProductVariants
+                            .Include(pv => pv.Product)
+                            .AsNoTracking()
+                            .FirstOrDefaultAsync(pv => pv.Id == variantId, ct);
+
+                        var pName = v?.Product?.Name ?? "Sản phẩm";
+                        var sku = v?.Sku ?? variantId.ToString();
+                        _ = _telegramService.SendLowStockAlertAsync(pName, sku, availableLeft, ct);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Failed to dispatch low stock alert for variant {VariantId}", variantId);
+                    }
+                }
 
                 return Result<InventoryDto>.Success(MapToDto(updated), "Giữ hàng thành công.");
             }

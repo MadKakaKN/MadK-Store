@@ -11,14 +11,6 @@ import {
   Result,
   SearchSuggestionsDto,
 } from '../types/catalog';
-import {
-  MOCK_CATEGORY_TREE,
-  MOCK_BRANDS,
-  getMockProducts,
-  getMockProductBySlug,
-  getMockCategoryBySlug,
-  getMockCategoryFilters,
-} from './mockData';
 
 /**
  * Builds URLSearchParams correctly supporting nested specs: specs[ram]=16GB
@@ -51,7 +43,7 @@ function buildProductQueryParams(params: ProductQueryParams = {}): URLSearchPara
 
 export const catalogApi = {
   /**
-   * Lấy cây danh mục phân cấp (cha - con)
+   * Lấy cây danh mục phân cấp (cha - con) từ cơ sở dữ liệu
    */
   async getCategoryTree(): Promise<CategoryTreeDto[]> {
     try {
@@ -59,15 +51,15 @@ export const catalogApi = {
       if (response.data?.isSuccess && Array.isArray(response.data.data)) {
         return response.data.data;
       }
-      return MOCK_CATEGORY_TREE;
+      return [];
     } catch (error) {
-      console.warn('[Catalog API] Failed to fetch category tree, using mock fallback:', error);
-      return MOCK_CATEGORY_TREE;
+      console.warn('[Catalog API] Failed to fetch category tree:', error);
+      return [];
     }
   },
 
   /**
-   * Lấy chi tiết danh mục theo slug
+   * Lấy chi tiết danh mục theo slug từ cơ sở dữ liệu
    */
   async getCategoryBySlug(slug: string): Promise<CategoryDetailDto | null> {
     try {
@@ -77,29 +69,37 @@ export const catalogApi = {
       }
       return null;
     } catch (error) {
-      console.warn(`[Catalog API] Failed to fetch category '${slug}', using mock fallback:`, error);
-      return getMockCategoryBySlug(slug);
+      console.warn(`[Catalog API] Failed to fetch category '${slug}':`, error);
+      return null;
     }
   },
 
   /**
-   * Lấy bộ lọc khả dụng của danh mục
+   * Lấy bộ lọc khả dụng của danh mục từ cơ sở dữ liệu
    */
   async getCategoryFilters(slug: string): Promise<CategoryFiltersDto> {
+    const defaultFilters: CategoryFiltersDto = {
+      categoryId: '',
+      categoryName: '',
+      categorySlug: slug,
+      brands: [],
+      priceRange: { minPrice: 0, maxPrice: 0 },
+      specFilters: [],
+    };
     try {
       const response = await apiClient.get<Result<CategoryFiltersDto>>(`/categories/${encodeURIComponent(slug)}/filters`);
       if (response.data?.isSuccess && response.data.data) {
         return response.data.data;
       }
-      return getMockCategoryFilters(slug);
+      return defaultFilters;
     } catch (error) {
-      console.warn(`[Catalog API] Failed to fetch filters for '${slug}', using mock fallback:`, error);
-      return getMockCategoryFilters(slug);
+      console.warn(`[Catalog API] Failed to fetch filters for '${slug}':`, error);
+      return defaultFilters;
     }
   },
 
   /**
-   * Lấy danh sách thương hiệu
+   * Lấy danh sách thương hiệu từ cơ sở dữ liệu
    */
   async getBrands(isActive: boolean = true): Promise<BrandDto[]> {
     try {
@@ -109,15 +109,15 @@ export const catalogApi = {
       if (response.data?.isSuccess && Array.isArray(response.data.data)) {
         return response.data.data;
       }
-      return MOCK_BRANDS;
+      return [];
     } catch (error) {
-      console.warn('[Catalog API] Failed to fetch brands, using mock fallback:', error);
-      return MOCK_BRANDS;
+      console.warn('[Catalog API] Failed to fetch brands:', error);
+      return [];
     }
   },
 
   /**
-   * Danh sách sản phẩm kèm lọc, sắp xếp, tìm kiếm và phân trang
+   * Danh sách sản phẩm kèm lọc, sắp xếp, tìm kiếm và phân trang từ cơ sở dữ liệu
    */
   async getProducts(params: ProductQueryParams = {}): Promise<PagedResult<ProductListDto>> {
     try {
@@ -131,13 +131,13 @@ export const catalogApi = {
       }
       return { items: [], page: 1, pageSize: params.pageSize || 20, totalItems: 0, totalPages: 0 };
     } catch (error) {
-      console.warn('[Catalog API] Failed to fetch products, using mock fallback:', error);
-      return getMockProducts(params);
+      console.warn('[Catalog API] Failed to fetch products:', error);
+      return { items: [], page: 1, pageSize: params.pageSize || 20, totalItems: 0, totalPages: 0 };
     }
   },
 
   /**
-   * Chi tiết sản phẩm theo slug
+   * Chi tiết sản phẩm theo slug từ cơ sở dữ liệu
    */
   async getProductBySlug(slug: string): Promise<ProductDetailDto | null> {
     try {
@@ -147,8 +147,8 @@ export const catalogApi = {
       }
       return null;
     } catch (error) {
-      console.warn(`[Catalog API] Failed to fetch product '${slug}', using mock fallback:`, error);
-      return getMockProductBySlug(slug);
+      console.warn(`[Catalog API] Failed to fetch product '${slug}':`, error);
+      return null;
     }
   },
 

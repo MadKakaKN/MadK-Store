@@ -22,6 +22,7 @@ public class OrderService : IOrderService
     private readonly ICouponService? _couponService;
     private readonly IShippingFeeService? _shippingFeeService;
     private readonly IEmailSender? _emailSender;
+    private readonly ITelegramNotificationService? _telegramNotificationService;
     private readonly ILogger<OrderService> _logger;
 
     public OrderService(
@@ -60,6 +61,19 @@ public class OrderService : IOrderService
         IShippingFeeService? shippingFeeService,
         IEmailSender? emailSender,
         ILogger<OrderService> logger)
+        : this(context, inventoryService, pricingService, couponService, shippingFeeService, emailSender, null, logger)
+    {
+    }
+
+    public OrderService(
+        IAppDbContext context,
+        IInventoryService inventoryService,
+        IPricingService? pricingService,
+        ICouponService? couponService,
+        IShippingFeeService? shippingFeeService,
+        IEmailSender? emailSender,
+        ITelegramNotificationService? telegramNotificationService,
+        ILogger<OrderService> logger)
     {
         _context = context;
         _efContext = (DbContext)context;
@@ -68,6 +82,7 @@ public class OrderService : IOrderService
         _couponService = couponService;
         _shippingFeeService = shippingFeeService;
         _emailSender = emailSender;
+        _telegramNotificationService = telegramNotificationService;
         _logger = logger;
     }
 
@@ -474,6 +489,12 @@ public class OrderService : IOrderService
                     {
                         _logger.LogError(emailEx, "Lỗi khi đưa email xác nhận đơn {OrderNumber} vào hàng đợi", orderNumber);
                     }
+                }
+
+                // Gửi thông báo Telegram Bot tới Quản trị viên (non-blocking)
+                if (_telegramNotificationService != null)
+                {
+                    _ = _telegramNotificationService.SendNewOrderAlertAsync(order, ct);
                 }
 
                 return Result<OrderDto>.Success(MapToDto(order), "Đặt hàng COD thành công.");

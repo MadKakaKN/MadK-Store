@@ -345,6 +345,13 @@ app.UseSerilogRequestLogging();
 app.UseResponseCompression();
 app.UseCors("AllowFrontend");
 app.UseOutputCache();
+// Đảm bảo thư mục wwwroot tĩnh tồn tại để phục vụ tải ảnh và model 3D trên môi trường Docker/Cloud
+var webRootPath = app.Environment.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+if (!Directory.Exists(webRootPath))
+{
+    Directory.CreateDirectory(webRootPath);
+}
+
 app.UseStaticFiles(new StaticFileOptions
 {
     OnPrepareResponse = ctx =>
