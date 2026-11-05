@@ -747,4 +747,18 @@ export const adminInventoryApi = {
       });
     }
   },
+
+  /**
+   * Xuất toàn bộ bảng kiểm kê tồn kho ra file Excel / CSV.
+   */
+  async exportInventoryCsv(search?: string): Promise<Blob> {
+    const params: Record<string, string> = {};
+    if (search && search.trim()) params.search = search.trim();
+
+    const res = await apiClient.get('/admin/inventory/export', {
+      params,
+      responseType: 'blob',
+    });
+    return res.data;
+  },
 };

@@ -31,6 +31,7 @@ export const AdminInventoryPage: React.FC = () => {
   const [audits, setAudits] = useState<InventoryAuditDto[]>([]);
   const [movements, setMovements] = useState<StockMovementDto[]>([]);
   const [alerts, setAlerts] = useState<LowStockAlertDto[]>([]);
+  const [isExporting, setIsExporting] = useState<boolean>(false);
 
   // Search & Filter state
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -80,6 +81,27 @@ export const AdminInventoryPage: React.FC = () => {
       toast.error('Lỗi khi tải dữ liệu kho hàng.', 'Lỗi');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleExportCsv = async () => {
+    try {
+      setIsExporting(true);
+      const blob = await adminInventoryApi.exportInventoryCsv(searchQuery || undefined);
+      const filename = `KiemKe_TonKho_${new Date().toISOString().slice(0, 10)}.csv`;
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      toast.success('Đã tải xuống bảng kiểm kê tồn kho thành công!', 'Xuất Excel');
+    } catch {
+      toast.error('Không thể xuất dữ liệu tồn kho.', 'Lỗi xuất file');
+    } finally {
+      setIsExporting(false);
     }
   };
 
@@ -369,6 +391,16 @@ export const AdminInventoryPage: React.FC = () => {
             className="px-3.5 py-2 text-xs font-bold rounded-xl text-brand-700 bg-brand-50 hover:bg-brand-100 border border-brand-200 transition-all flex items-center gap-1.5"
           >
             📋 Kiểm kê kho
+          </button>
+          <button
+            type="button"
+            disabled={isExporting}
+            onClick={handleExportCsv}
+            className="px-3.5 py-2 text-xs font-bold rounded-xl text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 shadow-2xs transition-all flex items-center gap-1.5 disabled:opacity-50"
+            title="Xuất bảng kiểm kê tồn kho ra file Excel / CSV"
+          >
+            <span>📥</span>
+            <span>{isExporting ? 'Đang xuất...' : 'Xuất Excel'}</span>
           </button>
         </div>
       </div>

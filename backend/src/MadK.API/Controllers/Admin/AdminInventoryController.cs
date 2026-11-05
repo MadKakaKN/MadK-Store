@@ -16,18 +16,40 @@ public class AdminInventoryController : ControllerBase
     private readonly IInventoryService _inventoryService;
     private readonly IAuditLogService _auditLogService;
     private readonly IAppDbContext _dbContext;
+    private readonly IExcelExportService _excelExportService;
 
     public AdminInventoryController(
         IInventoryService inventoryService,
         IAuditLogService auditLogService,
-        IAppDbContext dbContext)
+        IAppDbContext dbContext,
+        IExcelExportService excelExportService)
     {
         _inventoryService = inventoryService;
         _auditLogService = auditLogService;
         _dbContext = dbContext;
+        _excelExportService = excelExportService;
     }
 
     /// <summary>
+    /// <summary>
+    /// Xuất bảng kiểm kê tồn kho ra file Excel / CSV chuẩn UTF-8 (Quyền: inventory.view / Warehouse, Admin).
+    /// </summary>
+    [HttpGet("export")]
+    [Authorize(Policy = Permissions.InventoryView)]
+    [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
+    public async Task<IActionResult> ExportInventory(
+        [FromQuery] string? search = null,
+        CancellationToken ct = default)
+    {
+        var result = await _inventoryService.GetVariantInventoriesAsync(search, ct);
+        var items = result.Value ?? new List<VariantInventoryItemDto>();
+
+        var csvBytes = _excelExportService.ExportInventoryToCsv(items);
+        var fileName = $"KiemKe_TonKho_{DateTime.UtcNow.AddHours(7):yyyyMMdd_HHmm}.csv";
+
+        return File(csvBytes, "text/csv; charset=utf-8", fileName);
+    }
+
     /// Xem thông tin tồn kho và lịch sử biến động (Quyền: inventory.view / Warehouse, Admin).
     /// </summary>
     [HttpGet]

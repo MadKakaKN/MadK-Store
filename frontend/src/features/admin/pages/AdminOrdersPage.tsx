@@ -44,6 +44,7 @@ export const AdminOrdersPage: React.FC = () => {
 
   // Quick Action transition state
   const [quickProcessingNumber, setQuickProcessingNumber] = useState<string | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
 
   // Role permissions
   const userRoles = user?.roles || [];
@@ -130,6 +131,33 @@ export const AdminOrdersPage: React.FC = () => {
       toast.error('Có lỗi xảy ra khi đổi trạng thái đơn.', 'Lỗi');
     } finally {
       setQuickProcessingNumber(null);
+    }
+  };
+
+  const handleExportCsv = async () => {
+    try {
+      setIsExporting(true);
+      const filter: OrderAdminFilter = {
+        status: selectedStatus,
+        fromDate: fromDate || undefined,
+        toDate: toDate ? `${toDate}T23:59:59` : undefined,
+        search: searchQuery.trim() || undefined,
+      };
+      const blob = await adminOrderApi.exportOrdersCsv(filter);
+      const filename = `DanhSach_DonHang_${new Date().toISOString().slice(0, 10)}.csv`;
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      toast.success('Đã tải xuống danh sách đơn hàng thành công!', 'Xuất Excel');
+    } catch {
+      toast.error('Không thể xuất danh sách đơn hàng.', 'Lỗi xuất file');
+    } finally {
+      setIsExporting(false);
     }
   };
 
@@ -384,13 +412,26 @@ export const AdminOrdersPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Warehouse specialized quick action notice */}
-        {isWarehouse && !canManage && (
-          <div className="flex items-center gap-2 bg-purple-50 text-purple-900 border border-purple-200 px-3 py-1.5 rounded-xl text-xs">
-            <span>📦</span>
-            <span>Chế độ Kho: Đóng gói & bàn giao vận chuyển</span>
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          {/* Warehouse specialized quick action notice */}
+          {isWarehouse && !canManage && (
+            <div className="flex items-center gap-2 bg-purple-50 text-purple-900 border border-purple-200 px-3 py-1.5 rounded-xl text-xs">
+              <span>📦</span>
+              <span>Chế độ Kho: Đóng gói & bàn giao vận chuyển</span>
+            </div>
+          )}
+
+          <button
+            type="button"
+            disabled={isExporting}
+            onClick={handleExportCsv}
+            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 hover:text-slate-900 rounded-xl shadow-2xs transition-colors disabled:opacity-50"
+            title="Xuất danh sách đơn hàng ra file Excel / CSV"
+          >
+            <span>📥</span>
+            <span>{isExporting ? 'Đang xuất...' : 'Xuất Excel'}</span>
+          </button>
+        </div>
       </div>
 
       {/* Status Filter Tabs */}

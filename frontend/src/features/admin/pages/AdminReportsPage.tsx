@@ -1,10 +1,32 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../auth/context/AuthContext';
 import Badge from '../components/common/Badge';
+import apiClient from '../../../api/apiClient';
 
 export const AdminReportsPage: React.FC = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<'revenue' | 'inventory' | 'summary'>('revenue');
+  const [isExporting, setIsExporting] = useState(false);
+
+  const handleExportRevenue = async () => {
+    try {
+      setIsExporting(true);
+      const res = await apiClient.get('/admin/reports/revenue/export', { responseType: 'blob' });
+      const filename = `BaoCao_DoanhThu_${new Date().toISOString().slice(0, 10)}.csv`;
+      const url = window.URL.createObjectURL(res.data);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   const isAdmin = user?.roles?.includes('Admin');
   const isSales = user?.roles?.includes('Sales');
@@ -18,11 +40,25 @@ export const AdminReportsPage: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
-      <div>
-        <h1 className="text-xl font-bold text-slate-900">Báo cáo & Phân tích kinh doanh</h1>
-        <p className="text-xs text-slate-500 mt-0.5">
-          Dữ liệu thống kê doanh thu bán hàng, mức luân chuyển tồn kho và hiệu suất vận hành.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-xl font-bold text-slate-900">Báo cáo & Phân tích kinh doanh</h1>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Dữ liệu thống kê doanh thu bán hàng, mức luân chuyển tồn kho và hiệu suất vận hành.
+          </p>
+        </div>
+        {activeTab === 'revenue' && (
+          <button
+            type="button"
+            disabled={isExporting}
+            onClick={handleExportRevenue}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 hover:text-slate-900 rounded-xl shadow-2xs transition-colors disabled:opacity-50"
+            title="Xuất báo cáo doanh thu ra file Excel / CSV"
+          >
+            <span>📥</span>
+            <span>{isExporting ? 'Đang xuất...' : 'Xuất Excel Doanh Thu'}</span>
+          </button>
+        )}
       </div>
 
       {/* Tabs */}

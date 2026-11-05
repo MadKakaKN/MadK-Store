@@ -87,6 +87,7 @@ public static class DependencyInjection
         services.AddScoped<IAdminCatalogService, MadK.Infrastructure.Services.AdminCatalogService>();
         services.AddScoped<IPricingService, MadK.Infrastructure.Services.PricingService>();
         services.AddScoped<IReportingService, MadK.Infrastructure.Services.ReportingService>();
+        services.AddSingleton<IExcelExportService, MadK.Infrastructure.Services.ExcelExportService>();
 
         // VNPay Payment Gateway
         services.Configure<MadK.Application.DTOs.Payment.VnpaySettings>(opt =>

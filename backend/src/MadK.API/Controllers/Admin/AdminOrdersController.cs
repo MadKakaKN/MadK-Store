@@ -15,11 +15,16 @@ public class AdminOrdersController : ControllerBase
 {
     private readonly IOrderService _orderService;
     private readonly IAuditLogService _auditLogService;
+    private readonly IExcelExportService _excelExportService;
 
-    public AdminOrdersController(IOrderService orderService, IAuditLogService auditLogService)
+    public AdminOrdersController(
+        IOrderService orderService,
+        IAuditLogService auditLogService,
+        IExcelExportService excelExportService)
     {
         _orderService = orderService;
         _auditLogService = auditLogService;
+        _excelExportService = excelExportService;
     }
 
     /// <summary>
@@ -42,6 +47,29 @@ public class AdminOrdersController : ControllerBase
     }
 
     /// <summary>
+    /// <summary>
+    /// Xuất danh sách đơn hàng ra file Excel / CSV chuẩn UTF-8 (Quyền: order.view / Warehouse, Sales, Admin).
+    /// </summary>
+    [HttpGet("export")]
+    [Authorize(Policy = Permissions.OrderView)]
+    [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
+    public async Task<IActionResult> ExportOrders(
+        [FromQuery] OrderStatus? status = null,
+        [FromQuery] DateTime? fromDate = null,
+        [FromQuery] DateTime? toDate = null,
+        [FromQuery] string? search = null,
+        CancellationToken ct = default)
+    {
+        // Lấy tối đa 1000 đơn hàng phù hợp với bộ lọc để xuất file
+        var result = await _orderService.GetAllOrdersAsync(1, 1000, status, fromDate, toDate, search, ct);
+        var orders = result.Value?.Items ?? new List<OrderDto>();
+
+        var csvBytes = _excelExportService.ExportOrdersToCsv(orders);
+        var fileName = $"DanhSach_DonHang_{DateTime.UtcNow.AddHours(7):yyyyMMdd_HHmm}.csv";
+
+        return File(csvBytes, "text/csv; charset=utf-8", fileName);
+    }
+
     /// Tra cứu thông tin chi tiết đơn hàng (Quyền: order.view / Warehouse, Sales, Admin).
     /// </summary>
     [HttpGet("{orderNumber}")]

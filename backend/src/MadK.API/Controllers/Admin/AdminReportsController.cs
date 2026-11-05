@@ -14,11 +14,16 @@ public class AdminReportsController : ControllerBase
 {
     private readonly IReportingService _reportingService;
     private readonly IAppDbContext _dbContext;
+    private readonly IExcelExportService _excelExportService;
 
-    public AdminReportsController(IReportingService reportingService, IAppDbContext dbContext)
+    public AdminReportsController(
+        IReportingService reportingService,
+        IAppDbContext dbContext,
+        IExcelExportService excelExportService)
     {
         _reportingService = reportingService;
         _dbContext = dbContext;
+        _excelExportService = excelExportService;
     }
 
     /// <summary>
@@ -41,6 +46,29 @@ public class AdminReportsController : ControllerBase
     }
 
     /// <summary>
+    /// <summary>
+    /// Xuất báo cáo doanh thu ra file Excel / CSV chuẩn UTF-8 (Quyền: report.revenue / Sales, Admin).
+    /// </summary>
+    [HttpGet("revenue/export")]
+    [Authorize(Policy = Permissions.ReportRevenue)]
+    [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
+    public async Task<IActionResult> ExportRevenueReport(
+        [FromQuery] DateTime? fromDate,
+        [FromQuery] DateTime? toDate,
+        CancellationToken ct)
+    {
+        var result = await _reportingService.GetRevenueReportAsync(fromDate, toDate, ct);
+        if (!result.IsSuccess || result.Data == null)
+        {
+            return BadRequest(result);
+        }
+
+        var csvBytes = _excelExportService.ExportRevenueReportToCsv(result.Data, fromDate, toDate);
+        var fileName = $"BaoCao_DoanhThu_{DateTime.UtcNow.AddHours(7):yyyyMMdd_HHmm}.csv";
+
+        return File(csvBytes, "text/csv; charset=utf-8", fileName);
+    }
+
     /// Báo cáo tồn kho và cảnh báo hết hàng (Quyền: report.inventory / Warehouse, Admin).
     /// </summary>
     [HttpGet("inventory")]

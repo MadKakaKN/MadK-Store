@@ -716,6 +716,23 @@ export const adminOrderApi = {
   },
 
   /**
+   * Xuất danh sách đơn hàng ra file Excel / CSV.
+   */
+  async exportOrdersCsv(filter: OrderAdminFilter = {}): Promise<Blob> {
+    const params: Record<string, string | number> = {};
+    if (filter.status && filter.status !== 'ALL') params.status = filter.status;
+    if (filter.fromDate) params.fromDate = filter.fromDate;
+    if (filter.toDate) params.toDate = filter.toDate;
+    if (filter.search && filter.search.trim()) params.search = filter.search.trim();
+
+    const res = await apiClient.get('/admin/orders/export', {
+      params,
+      responseType: 'blob',
+    });
+    return res.data;
+  },
+
+  /**
    * Lấy chi tiết đơn hàng theo mã đơn.
    */
   async getOrderDetail(orderNumber: string): Promise<ApiEnvelope<OrderDto>> {
