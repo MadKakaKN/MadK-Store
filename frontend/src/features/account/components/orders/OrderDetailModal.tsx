@@ -554,6 +554,19 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                 <span className="font-mono font-medium">-{formatVnd(order.discountAmount)}</span>
               </div>
             )}
+            {(order.loyaltyPointsUsed || 0) > 0 && (
+              <div className="flex items-center justify-between text-amber-700">
+                <span className="flex items-center gap-1.5">
+                  <span>🎁 Điểm thưởng:</span>
+                  <span className="text-[10px] font-mono bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-bold">
+                    -{order.loyaltyPointsUsed?.toLocaleString()} điểm
+                  </span>
+                </span>
+                <span className="font-mono font-medium">
+                  -{formatVnd(order.loyaltyDiscountAmount || order.loyaltyPointsUsed || 0)}
+                </span>
+              </div>
+            )}
             <div className="flex items-center justify-between text-slate-600">
               <span>Phí vận chuyển:</span>
               <span className="font-mono font-medium text-emerald-600">
@@ -566,6 +579,16 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                 {formatVnd(order.totalAmount)}
               </span>
             </div>
+            {(order.loyaltyPointsEarned || 0) > 0 && (
+              <div className="flex items-center justify-between text-[11px] text-amber-800 bg-amber-50/80 p-2 rounded-xl border border-amber-200/50">
+                <span className="flex items-center gap-1 font-semibold">
+                  <span>✨ Tích lũy từ đơn:</span>
+                </span>
+                <span className="font-mono font-bold text-amber-950">
+                  +{order.loyaltyPointsEarned?.toLocaleString()} điểm
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Audit Trail: Status History Timeline */}

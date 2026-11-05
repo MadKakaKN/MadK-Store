@@ -123,12 +123,16 @@ Dưới đây là các hạng mục được chia nhỏ theo thứ tự ưu tiê
 
 ---
 
-#### 🟢 HẠNG MỤC 6: CHƯƠNG TRÌNH KHÁCH HÀNG THÂN THIẾT & TÍCH ĐIỂM (Loyalty Program)
+#### 🟢 HẠNG MỤC 6: CHƯƠNG TRÌNH KHÁCH HÀNG THÂN THIẾT & TÍCH ĐIỂM (Loyalty Program) (Đã hoàn thành ✅)
 > *Mục tiêu: Giữ chân khách hàng và khuyến khích quay lại mua sắm.*
-- [ ] **6.1. Entity `LoyaltyPoint` & Lịch sử biến động điểm `PointTransaction`**
-  - Tích 1% - 3% giá trị đơn hàng thành điểm thưởng khi đơn hoàn tất.
-- [ ] **6.2. Sử dụng điểm lúc Checkout**
-  - Khách có thể chọn dùng điểm thưởng tích lũy (ví dụ 10.000 điểm = 10.000đ) để trừ trực tiếp vào hóa đơn thanh toán.
+- [x] **6.1. Entity `LoyaltyAccount`, `LoyaltyTransaction` & Dịch vụ `LoyaltyService`**
+  - Tích 1% - 5% giá trị đơn hàng thành điểm thưởng theo 4 hạng hội viên (Đồng 1%, Bạc 2%, Vàng 3%, Kim Cương 5%) khi đơn hoàn tất.
+  - Tự động hoàn điểm khi đơn hàng bị hủy hoặc hoàn trả, tự động thu hồi điểm đã tích.
+  - Hỗ trợ Admin tra cứu và điều chỉnh cộng/trừ điểm thủ công (`/api/v1/admin/loyalty/adjust`).
+- [x] **6.2. Sử dụng điểm lúc Checkout & Giao diện Khách hàng**
+  - Khách hàng có thể linh hoạt chọn sử dụng điểm thưởng tích lũy (1 điểm = 1đ, tối đa 50% tiền hàng) trừ trực tiếp vào hóa đơn trên `CheckoutPage.tsx`.
+  - Hiển thị chi tiết số điểm đã dùng và tích lũy được trên `OrderDetailModal.tsx`.
+  - Thẻ hội viên ảo sống động với thanh tiến trình thăng hạng và sổ lịch sử biến động điểm `LoyaltyRewardsTab.tsx` trên trang tài khoản `/account?tab=loyalty`.
 
 ---
 

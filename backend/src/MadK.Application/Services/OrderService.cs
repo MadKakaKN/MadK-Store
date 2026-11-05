@@ -23,13 +23,14 @@ public class OrderService : IOrderService
     private readonly IShippingFeeService? _shippingFeeService;
     private readonly IEmailSender? _emailSender;
     private readonly ITelegramNotificationService? _telegramNotificationService;
+    private readonly ILoyaltyService? _loyaltyService;
     private readonly ILogger<OrderService> _logger;
 
     public OrderService(
         IAppDbContext context,
         IInventoryService inventoryService,
         ILogger<OrderService> logger)
-        : this(context, inventoryService, null, null, null, null, logger)
+        : this(context, inventoryService, null, null, null, null, null, null, logger)
     {
     }
 
@@ -38,7 +39,7 @@ public class OrderService : IOrderService
         IInventoryService inventoryService,
         IPricingService? pricingService,
         ILogger<OrderService> logger)
-        : this(context, inventoryService, pricingService, null, null, null, logger)
+        : this(context, inventoryService, pricingService, null, null, null, null, null, logger)
     {
     }
 
@@ -49,7 +50,7 @@ public class OrderService : IOrderService
         ICouponService? couponService,
         IShippingFeeService? shippingFeeService,
         ILogger<OrderService> logger)
-        : this(context, inventoryService, pricingService, couponService, shippingFeeService, null, logger)
+        : this(context, inventoryService, pricingService, couponService, shippingFeeService, null, null, null, logger)
     {
     }
 
@@ -61,7 +62,7 @@ public class OrderService : IOrderService
         IShippingFeeService? shippingFeeService,
         IEmailSender? emailSender,
         ILogger<OrderService> logger)
-        : this(context, inventoryService, pricingService, couponService, shippingFeeService, emailSender, null, logger)
+        : this(context, inventoryService, pricingService, couponService, shippingFeeService, emailSender, null, null, logger)
     {
     }
 
@@ -74,6 +75,20 @@ public class OrderService : IOrderService
         IEmailSender? emailSender,
         ITelegramNotificationService? telegramNotificationService,
         ILogger<OrderService> logger)
+        : this(context, inventoryService, pricingService, couponService, shippingFeeService, emailSender, telegramNotificationService, null, logger)
+    {
+    }
+
+    public OrderService(
+        IAppDbContext context,
+        IInventoryService inventoryService,
+        IPricingService? pricingService,
+        ICouponService? couponService,
+        IShippingFeeService? shippingFeeService,
+        IEmailSender? emailSender,
+        ITelegramNotificationService? telegramNotificationService,
+        ILoyaltyService? loyaltyService,
+        ILogger<OrderService> logger)
     {
         _context = context;
         _efContext = (DbContext)context;
@@ -83,6 +98,7 @@ public class OrderService : IOrderService
         _shippingFeeService = shippingFeeService;
         _emailSender = emailSender;
         _telegramNotificationService = telegramNotificationService;
+        _loyaltyService = loyaltyService;
         _logger = logger;
     }
 
@@ -383,7 +399,31 @@ public class OrderService : IOrderService
                     });
                 }
 
-                decimal totalAmount = Math.Max(0m, subtotalAmount - discountAmount + shippingFee);
+                // Xử lý quy đổi điểm thưởng Loyalty (1 điểm = 1 VNĐ, tối đa 50% đơn)
+                int loyaltyPointsUsed = 0;
+                decimal loyaltyDiscountAmount = 0m;
+                if (request.PointsToRedeem > 0 && userId.HasValue && _loyaltyService != null)
+                {
+                    var tempOrder = new Order
+                    {
+                        Id = orderId,
+                        OrderNumber = orderNumber,
+                        SubtotalAmount = subtotalAmount
+                    };
+
+                    var loyaltyRes = await _loyaltyService.ValidateAndDeductPointsForOrderAsync(
+                        userId.Value, tempOrder, request.PointsToRedeem, ct);
+
+                    if (!loyaltyRes.Success)
+                    {
+                        throw new InvalidOperationException(loyaltyRes.Error ?? "Không thể áp dụng điểm thưởng.");
+                    }
+
+                    loyaltyPointsUsed = loyaltyRes.PointsUsed;
+                    loyaltyDiscountAmount = loyaltyRes.DiscountAmount;
+                }
+
+                decimal totalAmount = Math.Max(0m, subtotalAmount - discountAmount - loyaltyDiscountAmount) + shippingFee;
 
                 string initialReason = request.PaymentMethod switch
                 {
@@ -420,6 +460,8 @@ public class OrderService : IOrderService
                     ShippingFee = shippingFee,
                     CouponSnapshot = couponSnapshot,
                     TotalAmount = totalAmount,
+                    LoyaltyPointsUsed = loyaltyPointsUsed,
+                    LoyaltyDiscountAmount = loyaltyDiscountAmount,
                     ShippingAddressSnapshot = addressSnapshot,
                     CustomerNote = request.CustomerNote,
                     IdempotencyKey = string.IsNullOrWhiteSpace(request.IdempotencyKey) ? null : request.IdempotencyKey.Trim(),
@@ -913,6 +955,12 @@ public class OrderService : IOrderService
             order.CancelledAt = now;
             order.UpdatedAt = now;
 
+            // Hoàn lại điểm thưởng đã sử dụng / thu hồi điểm nếu có
+            if (_loyaltyService != null)
+            {
+                await _loyaltyService.RefundPointsForOrderAsync(order, request.Reason.Trim(), ct);
+            }
+
             var history = new OrderStatusHistory
             {
                 Id = Guid.NewGuid(),
@@ -1053,30 +1101,45 @@ public class OrderService : IOrderService
                     }
                 }
             }
-            else if (currentStatus == OrderStatus.Shipping && targetStatus == OrderStatus.Completed)
+            else if (targetStatus == OrderStatus.Completed)
             {
                 // Giao hàng thành công: Nếu là COD thì đánh dấu đã thanh toán
                 if (order.PaymentMethod == PaymentMethod.COD)
                 {
                     order.PaymentStatus = PaymentStatus.Paid;
                 }
-            }
-            else if (currentStatus == OrderStatus.ReturnRequested && targetStatus == OrderStatus.Returned)
-            {
-                // Đổi trả duyệt & kho nhận lại hàng: Nhập lại kho thực tế (+OnHand)
-                foreach (var item in order.Items)
+
+                // Tích điểm thưởng cho khách hàng
+                if (_loyaltyService != null)
                 {
-                    if (item.VariantId.HasValue && item.Quantity > 0)
+                    await _loyaltyService.AwardPointsForOrderAsync(order, ct);
+                }
+            }
+            else if (targetStatus == OrderStatus.Cancelled || targetStatus == OrderStatus.Returned)
+            {
+                if (currentStatus == OrderStatus.ReturnRequested && targetStatus == OrderStatus.Returned)
+                {
+                    // Đổi trả duyệt & kho nhận lại hàng: Nhập lại kho thực tế (+OnHand)
+                    foreach (var item in order.Items)
                     {
-                        await _inventoryService.RestockAsync(
-                            item.VariantId.Value,
-                            item.Quantity,
-                            $"Nhập lại kho do đổi trả đơn {order.OrderNumber}",
-                            ct);
+                        if (item.VariantId.HasValue && item.Quantity > 0)
+                        {
+                            await _inventoryService.RestockAsync(
+                                item.VariantId.Value,
+                                item.Quantity,
+                                $"Nhập lại kho do đổi trả đơn {order.OrderNumber}",
+                                ct);
+                        }
                     }
+
+                    order.PaymentStatus = PaymentStatus.Refunded;
                 }
 
-                order.PaymentStatus = PaymentStatus.Refunded;
+                // Hoàn lại điểm thưởng đã dùng hoặc thu hồi điểm
+                if (_loyaltyService != null)
+                {
+                    await _loyaltyService.RefundPointsForOrderAsync(order, request.Reason ?? targetStatus.ToString(), ct);
+                }
             }
 
             order.Status = targetStatus;
@@ -1294,7 +1357,10 @@ public class OrderService : IOrderService
             order.TrackingCode,
             order.ShippingStatus,
             order.ShippingLabelUrl,
-            order.EstimatedDeliveryDate
+            order.EstimatedDeliveryDate,
+            order.LoyaltyPointsUsed,
+            order.LoyaltyDiscountAmount,
+            order.LoyaltyPointsEarned
         );
 
     public async Task<Result<OrderDto>> UpdateOrderNoteAsync(

@@ -13,28 +13,37 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.HasKey(o => o.Id);
         builder.Property(o => o.Id).HasColumnName("id");
 
-        builder.Property(o => o.OrderNumber).HasColumnName("order_number").HasMaxLength(50).IsRequired();
+        builder.Property(o => o.OrderNumber)
+            .HasColumnName("order_number")
+            .HasMaxLength(50)
+            .IsRequired();
+
         builder.Property(o => o.UserId).HasColumnName("user_id");
 
-        builder.Property(o => o.CustomerEmail).HasColumnName("customer_email").HasMaxLength(150);
-        builder.Property(o => o.CustomerPhone).HasColumnName("customer_phone").HasMaxLength(30);
+        builder.Property(o => o.CustomerEmail)
+            .HasColumnName("customer_email")
+            .HasMaxLength(255);
+
+        builder.Property(o => o.CustomerPhone)
+            .HasColumnName("customer_phone")
+            .HasMaxLength(20);
 
         builder.Property(o => o.Status)
             .HasColumnName("status")
             .HasConversion<string>()
-            .HasMaxLength(30)
+            .HasMaxLength(50)
             .IsRequired();
 
         builder.Property(o => o.PaymentStatus)
             .HasColumnName("payment_status")
             .HasConversion<string>()
-            .HasMaxLength(30)
+            .HasMaxLength(50)
             .IsRequired();
 
         builder.Property(o => o.PaymentMethod)
             .HasColumnName("payment_method")
             .HasConversion<string>()
-            .HasMaxLength(30)
+            .HasMaxLength(50)
             .IsRequired();
 
         builder.Property(o => o.SubtotalAmount).HasColumnName("subtotal_amount").HasPrecision(15, 2).IsRequired();
@@ -58,6 +67,11 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(o => o.ShippingStatus).HasColumnName("shipping_status").HasMaxLength(50);
         builder.Property(o => o.ShippingLabelUrl).HasColumnName("shipping_label_url");
         builder.Property(o => o.EstimatedDeliveryDate).HasColumnName("estimated_delivery_date");
+
+        builder.Property(o => o.LoyaltyPointsUsed).HasColumnName("loyalty_points_used").HasDefaultValue(0);
+        builder.Property(o => o.LoyaltyDiscountAmount).HasColumnName("loyalty_discount_amount").HasPrecision(15, 2).HasDefaultValue(0);
+        builder.Property(o => o.LoyaltyPointsEarned).HasColumnName("loyalty_points_earned").HasDefaultValue(0);
+        builder.Property(o => o.LoyaltyPointsRefunded).HasColumnName("loyalty_points_refunded").HasDefaultValue(false);
 
         builder.Property(o => o.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
         builder.Property(o => o.UpdatedAt).HasColumnName("updated_at");

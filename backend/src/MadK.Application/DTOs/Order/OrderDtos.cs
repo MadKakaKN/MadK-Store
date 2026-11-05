@@ -29,7 +29,8 @@ public record CheckoutCodRequestDto(
     string? IdempotencyKey = null,
     string? CouponCode = null,
     string? CustomerEmail = null,
-    PaymentMethod PaymentMethod = PaymentMethod.COD
+    PaymentMethod PaymentMethod = PaymentMethod.COD,
+    int PointsToRedeem = 0
 );
 
 public record OrderItemDto(
@@ -98,7 +99,10 @@ public record OrderDto(
     string? TrackingCode = null,
     string? ShippingStatus = null,
     string? ShippingLabelUrl = null,
-    DateTime? EstimatedDeliveryDate = null
+    DateTime? EstimatedDeliveryDate = null,
+    int LoyaltyPointsUsed = 0,
+    decimal LoyaltyDiscountAmount = 0m,
+    int LoyaltyPointsEarned = 0
 );
 
 public record CancelOrderRequestDto(
@@ -114,4 +118,3 @@ public record UpdateOrderStatusRequestDto(
 public record UpdateOrderNoteRequestDto(
     string AdminNote
 );
-

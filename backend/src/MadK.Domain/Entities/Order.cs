@@ -39,7 +39,7 @@ public class Order : BaseEntity
     public decimal ShippingFee { get; set; } = 0m;
 
     /// <summary>
-    /// Tổng tiền khách phải thanh toán = SubtotalAmount - DiscountAmount + ShippingFee.
+    /// Tổng tiền khách phải thanh toán = SubtotalAmount - DiscountAmount - LoyaltyDiscountAmount + ShippingFee.
     /// </summary>
     public decimal TotalAmount { get; set; }
 
@@ -93,9 +93,28 @@ public class Order : BaseEntity
     /// </summary>
     public DateTime? EstimatedDeliveryDate { get; set; }
 
+    /// <summary>
+    /// Số điểm thưởng khách đã sử dụng cho đơn hàng (1 điểm = 1 VNĐ).
+    /// </summary>
+    public int LoyaltyPointsUsed { get; set; } = 0;
+
+    /// <summary>
+    /// Số tiền được giảm giá trực tiếp từ điểm thưởng.
+    /// </summary>
+    public decimal LoyaltyDiscountAmount { get; set; } = 0m;
+
+    /// <summary>
+    /// Số điểm thưởng khách được cộng từ đơn hàng này khi hoàn tất giao hàng.
+    /// </summary>
+    public int LoyaltyPointsEarned { get; set; } = 0;
+
+    /// <summary>
+    /// Đánh dấu điểm đã được hoàn lại hay chưa khi đơn bị hủy hoặc trả hàng.
+    /// </summary>
+    public bool LoyaltyPointsRefunded { get; set; } = false;
+
     public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
     public ICollection<OrderStatusHistory> StatusHistories { get; set; } = new List<OrderStatusHistory>();
     public ICollection<Payment> Payments { get; set; } = new List<Payment>();
     public ICollection<ReturnRequest> ReturnRequests { get; set; } = new List<ReturnRequest>();
 }
-

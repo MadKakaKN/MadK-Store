@@ -165,6 +165,11 @@ public static class DependencyInjection
             client.Timeout = TimeSpan.FromSeconds(15);
         });
 
+        // Loyalty & Rewards Program
+        services.Configure<MadK.Application.DTOs.Loyalty.LoyaltySettings>(
+            configuration.GetSection(MadK.Application.DTOs.Loyalty.LoyaltySettings.SectionName));
+        services.AddScoped<ILoyaltyService, MadK.Infrastructure.Services.LoyaltyService>();
+
         return services;
     }
 

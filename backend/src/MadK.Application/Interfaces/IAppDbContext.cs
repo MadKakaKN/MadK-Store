@@ -42,6 +42,8 @@ public interface IAppDbContext
     DbSet<Coupon> Coupons { get; }
     DbSet<ProductReview> ProductReviews { get; }
     DbSet<WishlistItem> WishlistItems { get; }
+    DbSet<LoyaltyAccount> LoyaltyAccounts { get; }
+    DbSet<LoyaltyTransaction> LoyaltyTransactions { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

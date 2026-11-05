@@ -6,6 +6,7 @@ import { addressApi } from '../../../api/addressApi';
 import orderApi from '../../../api/orderApi';
 import paymentApi from '../../../api/paymentApi';
 import { couponApi } from '../../../api/couponApi';
+import loyaltyApi, { LoyaltyAccountDto } from '../../../api/loyaltyApi';
 import { formatVND } from '../../../utils/format';
 import type { ProvinceDto, DistrictDto, WardDto, AddressDto } from '../../../types/address';
 import type { CheckoutCodRequestDto, ShippingAddressInputDto, PaymentMethod } from '../../../types/order';
@@ -67,6 +68,11 @@ export const CheckoutPage: React.FC = () => {
   const [estimatedDelivery, setEstimatedDelivery] = useState<string>('1 - 3 ngày làm việc');
   const [isFreeShipping, setIsFreeShipping] = useState<boolean>(false);
 
+  // Điểm thưởng khách hàng thân thiết (MadK Rewards)
+  const [loyaltyAccount, setLoyaltyAccount] = useState<LoyaltyAccountDto | null>(null);
+  const [isUsingPoints, setIsUsingPoints] = useState<boolean>(false);
+  const [pointsToRedeem, setPointsToRedeem] = useState<number>(0);
+
   // Trạng thái Submit & Error Handling
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -109,6 +115,17 @@ export const CheckoutPage: React.FC = () => {
       setIsUsingNewAddress(true);
     }
   }, [isAuthenticated, user]);
+
+  // Tải thông tin điểm thưởng thành viên (MadK Rewards)
+  useEffect(() => {
+    if (isAuthenticated) {
+      loyaltyApi.getAccount().then((res) => {
+        if (res.isSuccess && res.data) {
+          setLoyaltyAccount(res.data);
+        }
+      });
+    }
+  }, [isAuthenticated]);
 
   // 3. Cascading Dropdown: Tỉnh -> Huyện
   useEffect(() => {
@@ -250,7 +267,11 @@ export const CheckoutPage: React.FC = () => {
   };
 
   const discountAmount = appliedCoupon?.discountAmount || 0;
-  const finalTotal = Math.max(0, totalAmount - discountAmount + shippingFee);
+  const maxRedeemablePoints = loyaltyAccount
+    ? Math.min(loyaltyAccount.currentBalance, Math.floor(totalAmount * 0.5))
+    : 0;
+  const loyaltyDiscount = isUsingPoints ? Math.min(pointsToRedeem, maxRedeemablePoints) : 0;
+  const finalTotal = Math.max(0, totalAmount - discountAmount - loyaltyDiscount) + shippingFee;
 
   // Validate form địa chỉ trước khi submit
   const validateForm = (): boolean => {
@@ -349,6 +370,7 @@ export const CheckoutPage: React.FC = () => {
         idempotencyKey: idempotencyKeyRef.current,
         couponCode: appliedCoupon?.code || null,
         paymentMethod: paymentMethod,
+        pointsToRedeem: isUsingPoints ? Math.min(pointsToRedeem, maxRedeemablePoints) : 0,
       };
 
       if (paymentMethod === 'VNPay') {
@@ -1016,6 +1038,78 @@ export const CheckoutPage: React.FC = () => {
                 )}
               </div>
 
+              {/* MadK Rewards - Điểm thưởng khách hàng */}
+              {isAuthenticated && loyaltyAccount && loyaltyAccount.currentBalance > 0 && (
+                <div className="pt-4 border-t border-slate-100">
+                  <div className="bg-amber-50/80 border border-amber-200/80 rounded-2xl p-4 space-y-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="text-lg">🎁</span>
+                        <div className="min-w-0">
+                          <h4 className="text-xs font-bold text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
+                            <span>MadK Rewards</span>
+                            <span className="text-[10px] bg-amber-200/80 text-amber-800 px-1.5 py-0.2 rounded font-mono">
+                              {loyaltyAccount.tier}
+                            </span>
+                          </h4>
+                          <p className="text-[11px] text-amber-700 truncate">
+                            Khả dụng: <strong className="text-amber-950 font-bold">{loyaltyAccount.currentBalance.toLocaleString()}</strong> điểm ({formatVND(loyaltyAccount.pointsValueVnd)})
+                          </p>
+                        </div>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer flex-shrink-0">
+                        <input
+                          type="checkbox"
+                          checked={isUsingPoints}
+                          onChange={(e) => {
+                            const checked = e.target.checked;
+                            setIsUsingPoints(checked);
+                            setPointsToRedeem(checked ? maxRedeemablePoints : 0);
+                          }}
+                          className="sr-only peer"
+                        />
+                        <div className="w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-600"></div>
+                      </label>
+                    </div>
+
+                    {isUsingPoints && (
+                      <div className="pt-2 border-t border-amber-200/60 space-y-2">
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-amber-800 font-medium">Số điểm muốn dùng:</span>
+                          <button
+                            type="button"
+                            onClick={() => setPointsToRedeem(maxRedeemablePoints)}
+                            className="text-[11px] font-bold text-amber-700 hover:text-amber-900 underline"
+                          >
+                            Dùng tối đa ({maxRedeemablePoints.toLocaleString()} đ)
+                          </button>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="number"
+                            min={0}
+                            max={maxRedeemablePoints}
+                            step={1000}
+                            value={pointsToRedeem}
+                            onChange={(e) => {
+                              const val = parseInt(e.target.value) || 0;
+                              setPointsToRedeem(Math.min(maxRedeemablePoints, Math.max(0, val)));
+                            }}
+                            className="w-full text-xs font-semibold px-3 py-1.5 border border-amber-300 rounded-xl focus:ring-1 focus:ring-amber-500 focus:outline-none bg-white"
+                          />
+                          <span className="text-xs text-amber-900 font-bold whitespace-nowrap">
+                            - {formatVND(loyaltyDiscount)}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-amber-600">
+                          * 1 điểm = 1 VNĐ. Tối đa 50% giá trị tiền hàng.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Financial Calculation Breakdown */}
               <div className="pt-4 border-t border-slate-100 space-y-2.5 text-xs text-slate-600">
                 <div className="flex items-center justify-between">
@@ -1048,6 +1142,15 @@ export const CheckoutPage: React.FC = () => {
                   </span>
                 </div>
 
+                {isUsingPoints && loyaltyDiscount > 0 && (
+                  <div className="flex items-center justify-between text-amber-700 font-semibold">
+                    <span>Điểm thưởng (MadK Rewards):</span>
+                    <span className="font-mono text-amber-800 font-bold">
+                      - {formatVND(loyaltyDiscount)}
+                    </span>
+                  </div>
+                )}
+
                 <div className="pt-3 border-t border-slate-200 flex items-center justify-between text-slate-900">
                   <div>
                     <span className="text-sm font-black block">Tổng thanh toán:</span>
@@ -1057,6 +1160,15 @@ export const CheckoutPage: React.FC = () => {
                     {formatVND(finalTotal)}
                   </span>
                 </div>
+
+                {isAuthenticated && (
+                  <div className="text-[11px] text-amber-800 bg-amber-50/90 p-2.5 rounded-xl border border-amber-200/60 flex items-center gap-1.5 font-medium">
+                    <span>✨</span>
+                    <span>
+                      Đơn hàng này sẽ tích lũy: <strong className="text-amber-950 font-bold">+{Math.floor(Math.max(0, totalAmount - discountAmount - loyaltyDiscount) * ((loyaltyAccount?.earnRatePercent || 1) / 100)).toLocaleString()} điểm</strong> (Hạng {loyaltyAccount?.tier || 'Đồng'})
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Validation / System Error Notice right at Submit button */}

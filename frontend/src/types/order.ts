@@ -87,6 +87,9 @@ export interface OrderDto {
   shippingStatus?: string | null;
   shippingLabelUrl?: string | null;
   estimatedDeliveryDate?: string | null;
+  loyaltyPointsUsed?: number;
+  loyaltyDiscountAmount?: number;
+  loyaltyPointsEarned?: number;
   items: OrderItemDto[];
   statusHistory: OrderStatusHistoryDto[];
 }
@@ -117,6 +120,7 @@ export interface CheckoutCodRequestDto {
   idempotencyKey?: string | null;
   couponCode?: string | null;
   paymentMethod?: PaymentMethod | null;
+  pointsToRedeem?: number;
 }
 
 export interface CancelOrderRequestDto {
