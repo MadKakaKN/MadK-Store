@@ -53,6 +53,14 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
     requiredPermissions: ['catalog.manage'],
   },
   {
+    id: 'reviews',
+    label: 'Đánh giá & Nhận xét',
+    path: '/admin/reviews',
+    icon: '⭐',
+    description: 'Kiểm duyệt nhận xét, phê duyệt hoặc trả lời khách hàng',
+    requiredPermissions: ['catalog.manage'],
+  },
+  {
     id: 'pricing',
     label: 'Giá & Khuyến mãi',
     path: '/admin/pricing',

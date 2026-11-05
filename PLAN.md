@@ -59,21 +59,23 @@ Dưới đây là các hạng mục được chia nhỏ theo thứ tự ưu tiê
 
 ---
 
-#### 🟢 HẠNG MỤC 2: HỆ THỐNG ĐÁNH GIÁ & XẾP HẠNG SAO SẢN PHẨM (Product Reviews & Ratings)
+#### 🟢 HẠNG MỤC 2: HỆ THỐNG ĐÁNH GIÁ & XẾP HẠNG SAO SẢN PHẨM (Product Reviews & Ratings) (Đã hoàn thành ✅)
 > *Mục tiêu: Tăng độ tin cậy và tỷ lệ chuyển đổi cho website bằng nhận xét thực tế từ người mua hàng.*
-- [ ] **2.1. Thiết kế thực thể `ProductReview` trong Domain Entity**
+- [x] **2.1. Thiết kế thực thể `ProductReview` trong Domain Entity**
   - Trường: `Id`, `ProductId`, `UserId`, `OrderId`, `Rating` (1-5 sao), `Title`, `Comment`, `ImagesJson`, `IsVerifiedPurchase` (đã mua hàng thực tế), `Status` (Pending/Approved/Rejected), `CreatedAt`.
   - Quy tắc chống đánh giá ảo: Chỉ người dùng đã có đơn hàng thành công chứa sản phẩm đó mới được đánh giá có tick xanh Verified.
-- [ ] **2.2. API Đánh giá cho Khách hàng**
+- [x] **2.2. API Đánh giá cho Khách hàng**
   - `GET /api/v1/products/{productId}/reviews`: Lấy danh sách đánh giá đã duyệt, phân trang, lọc theo số sao, tóm tắt tổng quan (% 5 sao, 4 sao, điểm trung bình).
   - `POST /api/v1/products/{productId}/reviews`: Khách hàng gửi đánh giá kèm chấm sao và nhận xét.
-- [ ] **2.3. API Kiểm duyệt Đánh giá cho Quản trị viên (Admin / Sales)**
+  - `POST /api/v1/products/reviews/{reviewId}/helpful`: Vote đánh giá hữu ích.
+- [x] **2.3. API Kiểm duyệt Đánh giá cho Quản trị viên (Admin / Sales)**
   - `GET /api/v1/admin/reviews`: Xem toàn bộ đánh giá mới cần duyệt.
-  - `PUT /api/v1/admin/reviews/{id}/status`: Duyệt (Approve) hoặc Ẩn/Từ chối (Reject) đánh giá rác/spam.
-- [ ] **2.4. Giao diện Đánh giá Frontend**
-  - Tab "Đánh giá & Nhận xét" trên trang chi tiết sản phẩm `ProductDetailPage.tsx`.
-  - Modal gửi đánh giá từ trang lịch sử đơn hàng của khách `AccountOrdersPage.tsx`.
-  - Trang quản lý đánh giá `AdminReviewsPage.tsx`.
+  - `PUT /api/v1/admin/reviews/{id}/status`: Duyệt (Approve) hoặc Ẩn/Từ chối (Reject) đánh giá rác/spam và gửi phản hồi chính thức từ cửa hàng.
+  - `DELETE /api/v1/admin/reviews/{id}`: Xóa mềm đánh giá rác.
+- [x] **2.4. Giao diện Đánh giá Frontend**
+  - Tab "Đánh giá & Nhận xét" trên trang chi tiết sản phẩm `ProductDetailPage.tsx` với biểu đồ sao, lọc số sao, danh sách nhận xét, badge Verified Buyer, xem ảnh phóng to.
+  - Modal gửi đánh giá từ trang lịch sử đơn hàng của khách `AccountOrdersPage.tsx` (`OrderCard.tsx`, `OrderDetailModal.tsx`).
+  - Trang quản lý đánh giá `AdminReviewsPage.tsx` tích hợp sidebar menu và bộ lọc trạng thái.
 
 ---
 

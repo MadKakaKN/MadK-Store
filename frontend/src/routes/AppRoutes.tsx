@@ -32,6 +32,7 @@ import AdminOrdersPage from '../features/admin/pages/AdminOrdersPage';
 import AdminReturnsPage from '../features/admin/pages/AdminReturnsPage';
 import AdminInventoryPage from '../features/admin/pages/AdminInventoryPage';
 import AdminCatalogPage from '../features/admin/pages/AdminCatalogPage';
+import AdminReviewsPage from '../features/admin/pages/AdminReviewsPage';
 import { AdminPricingPage } from '../features/admin/pricing/AdminPricingPage';
 import AdminDiscountsPage from '../features/admin/pages/AdminDiscountsPage';
 import AdminUsersPage from '../features/admin/pages/AdminUsersPage';
@@ -152,6 +153,14 @@ export const AppRoutes: React.FC = () => {
           element={
             <AdminRouteGuard requiredPermission="catalog.manage">
               <AdminCatalogPage />
+            </AdminRouteGuard>
+          }
+        />
+        <Route
+          path="reviews"
+          element={
+            <AdminRouteGuard requiredPermission="catalog.manage">
+              <AdminReviewsPage />
             </AdminRouteGuard>
           }
         />

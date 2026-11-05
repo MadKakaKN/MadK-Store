@@ -481,6 +481,15 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                             SKU: {sku}
                           </p>
                         )}
+                        {order.status === 'Completed' && item.productId && (
+                          <a
+                            href={`/products/${item.productId}?tab=reviews`}
+                            className="inline-flex items-center gap-1 mt-1.5 px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 text-[11px] font-bold border border-amber-200 transition-colors"
+                          >
+                            <span>⭐</span>
+                            <span>Đánh giá sản phẩm</span>
+                          </a>
+                        )}
                       </div>
                     </div>
 

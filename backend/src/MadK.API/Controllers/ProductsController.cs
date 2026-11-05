@@ -1,7 +1,10 @@
+using System.Security.Claims;
 using System.Text.RegularExpressions;
 using MadK.Application.Common;
 using MadK.Application.DTOs.Catalog;
+using MadK.Application.DTOs.Reviews;
 using MadK.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 
@@ -13,10 +16,14 @@ public class ProductsController : ControllerBase
 {
     private static readonly Regex SpecQueryRegex = new(@"^specs\[([^\]]+)\]$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
     private readonly ICatalogService _catalogService;
+    private readonly IProductReviewService _reviewService;
 
-    public ProductsController(ICatalogService catalogService)
+    public ProductsController(
+        ICatalogService catalogService,
+        IProductReviewService reviewService)
     {
         _catalogService = catalogService;
+        _reviewService = reviewService;
     }
 
     /// <summary>
@@ -82,6 +89,84 @@ public class ProductsController : ControllerBase
         if (!result.IsSuccess)
         {
             return NotFound(result);
+        }
+
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Lấy danh sách đánh giá đã duyệt của sản phẩm kèm tóm tắt phân bổ sao.
+    /// </summary>
+    [HttpGet("{id:guid}/reviews")]
+    [ProducesResponseType(typeof(Result<ProductReviewsPagedResultDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetProductReviews(
+        Guid id,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] int? rating = null,
+        CancellationToken ct = default)
+    {
+        var result = await _reviewService.GetProductReviewsAsync(id, page, pageSize, rating, ct);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Kiểm tra xem người dùng hiện tại có đủ điều kiện đánh giá sản phẩm không.
+    /// </summary>
+    [HttpGet("{id:guid}/reviews/can-review")]
+    [Authorize]
+    [ProducesResponseType(typeof(Result<CanReviewProductResultDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> CanReviewProduct(Guid id, CancellationToken ct = default)
+    {
+        var sub = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+        if (!Guid.TryParse(sub, out var userId))
+        {
+            return Unauthorized(Result.Failure("Vui lòng đăng nhập để kiểm tra điều kiện đánh giá."));
+        }
+
+        var result = await _reviewService.CanUserReviewProductAsync(userId, id, ct);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Khách hàng gửi đánh giá và xếp hạng sao cho sản phẩm.
+    /// </summary>
+    [HttpPost("{id:guid}/reviews")]
+    [Authorize]
+    [ProducesResponseType(typeof(Result<ProductReviewDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<ProductReviewDto>), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateProductReview(
+        Guid id,
+        [FromBody] CreateProductReviewDto dto,
+        CancellationToken ct = default)
+    {
+        var sub = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+        if (!Guid.TryParse(sub, out var userId))
+        {
+            return Unauthorized(Result.Failure("Vui lòng đăng nhập để gửi đánh giá."));
+        }
+
+        var result = await _reviewService.CreateReviewAsync(userId, id, dto, ct);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Người dùng bình chọn đánh giá là hữu ích.
+    /// </summary>
+    [HttpPost("reviews/{reviewId:guid}/helpful")]
+    [ProducesResponseType(typeof(Result<int>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<int>), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> VoteHelpful(Guid reviewId, CancellationToken ct = default)
+    {
+        var result = await _reviewService.VoteHelpfulAsync(reviewId, ct);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result);
         }
 
         return Ok(result);

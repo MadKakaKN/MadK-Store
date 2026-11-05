@@ -49,6 +49,7 @@ public class AppDbContext : DbContext, IAppDbContext
     public DbSet<ReturnRequest> ReturnRequests => Set<ReturnRequest>();
     public DbSet<ReturnRequestItem> ReturnRequestItems => Set<ReturnRequestItem>();
     public DbSet<Coupon> Coupons => Set<Coupon>();
+    public DbSet<ProductReview> ProductReviews => Set<ProductReview>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -58,7 +59,7 @@ public class AppDbContext : DbContext, IAppDbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
         // Soft-delete properties are only supported on entities with explicit mappings:
-        // (Category, Brand, Product, ProductVariant, PriceSchedule, Payment).
+        // (Category, Brand, Product, ProductVariant, PriceSchedule, Payment, ProductReview).
         // For other BaseEntity entities, ignore IsDeleted and DeletedAt so EF Core doesn't query nonexistent columns.
         var softDeleteTypes = new HashSet<Type>
         {
@@ -67,7 +68,8 @@ public class AppDbContext : DbContext, IAppDbContext
             typeof(Product),
             typeof(ProductVariant),
             typeof(PriceSchedule),
-            typeof(Payment)
+            typeof(Payment),
+            typeof(ProductReview)
         };
 
         foreach (var entityType in modelBuilder.Model.GetEntityTypes().ToList())

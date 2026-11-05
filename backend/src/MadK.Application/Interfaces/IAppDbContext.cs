@@ -40,6 +40,7 @@ public interface IAppDbContext
     DbSet<ReturnRequest> ReturnRequests { get; }
     DbSet<ReturnRequestItem> ReturnRequestItems { get; }
     DbSet<Coupon> Coupons { get; }
+    DbSet<ProductReview> ProductReviews { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

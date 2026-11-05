@@ -142,6 +142,16 @@ export const OrderCard: React.FC<OrderCardProps> = ({
             </button>
           )}
 
+          {order.status === 'Completed' && order.items.length > 0 && order.items[0]?.productId && (
+            <a
+              href={`/products/${order.items[0].productId}?tab=reviews`}
+              className="px-3.5 py-2 rounded-xl text-xs font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 transition-colors border border-amber-200 flex items-center gap-1"
+            >
+              <span>⭐</span>
+              <span>Đánh giá</span>
+            </a>
+          )}
+
           {isUnpaidOnline && (
             <button
               type="button"
