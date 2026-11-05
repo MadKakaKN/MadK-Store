@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '../../../auth/context/AuthContext';
 import { getVisibleAdminNavItems } from '../../navigation/adminNavItems';
 import Badge from '../common/Badge';
@@ -17,13 +17,12 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
   onCloseMobile,
 }) => {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
 
   const visibleItems = getVisibleAdminNavItems(user);
 
   const handleLogout = async () => {
     await logout();
-    navigate('/auth/login');
+    window.location.href = '/auth/login';
   };
 
   const primaryRole = user?.roles?.includes('Admin')

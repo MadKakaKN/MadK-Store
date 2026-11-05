@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useLocation, Link, useNavigate } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../../auth/context/AuthContext';
 import { ADMIN_NAV_ITEMS } from '../../navigation/adminNavItems';
 import Badge from '../common/Badge';
@@ -11,7 +11,6 @@ export interface AdminHeaderProps {
 export const AdminHeader: React.FC<AdminHeaderProps> = ({ onOpenMobileSidebar }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
-  const navigate = useNavigate();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
@@ -28,7 +27,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onOpenMobileSidebar })
 
   const handleLogout = async () => {
     await logout();
-    navigate('/auth/login');
+    window.location.href = '/auth/login';
   };
 
   // Determine current page title from current route

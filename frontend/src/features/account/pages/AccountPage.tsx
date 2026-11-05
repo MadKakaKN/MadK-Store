@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../auth/context/AuthContext';
 import authApi from '../../../api/authApi';
 import { AddressList } from '../components/AddressList';
@@ -9,7 +9,6 @@ import { LoyaltyRewardsTab } from '../components/LoyaltyRewardsTab';
 
 export const AccountPage: React.FC = () => {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   type TabKey = 'profile' | 'security' | 'addresses' | 'orders' | 'wishlist' | 'loyalty';
@@ -41,7 +40,7 @@ export const AccountPage: React.FC = () => {
 
   const handleLogout = async () => {
     await logout();
-    navigate('/', { replace: true });
+    window.location.href = '/';
   };
 
   const handleChangePassword = async (e: React.FormEvent) => {

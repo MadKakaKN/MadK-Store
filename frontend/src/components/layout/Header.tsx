@@ -307,9 +307,10 @@ export const Header: React.FC = () => {
                     <div className="pt-1 border-t border-slate-100">
                       <button
                         type="button"
-                        onClick={() => {
+                        onClick={async () => {
                           setUserMenuOpen(false);
-                          logout();
+                          await logout();
+                          window.location.href = '/';
                         }}
                         className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-xl transition-colors text-left"
                       >
@@ -473,9 +474,10 @@ export const Header: React.FC = () => {
                   </Link>
                   <button
                     type="button"
-                    onClick={() => {
+                    onClick={async () => {
                       setMobileMenuOpen(false);
-                      logout();
+                      await logout();
+                      window.location.href = '/';
                     }}
                     className="text-xs text-rose-600 font-semibold hover:underline"
                   >
