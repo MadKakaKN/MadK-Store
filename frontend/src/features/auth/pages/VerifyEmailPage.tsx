@@ -60,7 +60,7 @@ export const VerifyEmailPage: React.FC = () => {
     <div className="min-h-[80vh] flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-slate-50/50">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center px-4 sm:px-0">
         <Link to="/" className="inline-flex items-center gap-2 mb-4 group">
-          <span className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white flex items-center justify-center font-black text-2xl shadow-lg shadow-brand-600/30 group-hover:scale-105 transition-transform">
+          <span className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-black text-2xl shadow-lg shadow-blue-600/30 group-hover:scale-105 transition-transform">
             M
           </span>
         </Link>
@@ -72,7 +72,7 @@ export const VerifyEmailPage: React.FC = () => {
         <div className="bg-white py-10 px-6 sm:px-10 shadow-xl shadow-slate-200/50 rounded-3xl border border-slate-100 text-center">
           {status === 'verifying' && (
             <div className="py-6">
-              <div className="w-16 h-16 mx-auto rounded-3xl border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin"></div>
+              <div className="w-16 h-16 mx-auto rounded-3xl border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
               <h3 className="mt-6 text-lg font-bold text-slate-900">Đang xác thực...</h3>
               <p className="mt-2 text-sm text-slate-500">{message}</p>
             </div>
@@ -89,7 +89,7 @@ export const VerifyEmailPage: React.FC = () => {
               <div className="mt-6 flex flex-col gap-3">
                 <Link
                   to="/account"
-                  className="w-full py-3.5 px-4 rounded-2xl text-sm font-bold text-white bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 shadow-md shadow-brand-600/20 transition-all text-center"
+                  className="w-full py-3.5 px-4 rounded-2xl text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-md shadow-blue-600/20 transition-all text-center"
                 >
                   Vào trang cá nhân
                 </Link>
@@ -122,7 +122,7 @@ export const VerifyEmailPage: React.FC = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Địa chỉ Email"
-                      className="w-full px-4 py-2.5 rounded-2xl text-sm border border-slate-200 focus:outline-none focus:border-brand-500"
+                      className="w-full px-4 py-2.5 rounded-2xl text-sm border border-slate-200 focus:outline-none focus:border-blue-500"
                     />
                   </div>
                   <div>
@@ -131,12 +131,12 @@ export const VerifyEmailPage: React.FC = () => {
                       value={token}
                       onChange={(e) => setToken(e.target.value)}
                       placeholder="Mã token xác thực"
-                      className="w-full px-4 py-2.5 rounded-2xl text-sm border border-slate-200 focus:outline-none focus:border-brand-500"
+                      className="w-full px-4 py-2.5 rounded-2xl text-sm border border-slate-200 focus:outline-none focus:border-blue-500"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="w-full py-3 px-4 rounded-2xl text-sm font-bold text-white bg-brand-600 hover:bg-brand-500 transition-colors"
+                    className="w-full py-3 px-4 rounded-2xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 transition-colors"
                   >
                     Xác thực lại
                   </button>
@@ -156,7 +156,7 @@ export const VerifyEmailPage: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="vidu@madkstore.vn"
-                  className="mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border border-slate-200 focus:outline-none focus:border-brand-500"
+                  className="mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border border-slate-200 focus:outline-none focus:border-blue-500"
                   required
                 />
               </div>
@@ -170,14 +170,14 @@ export const VerifyEmailPage: React.FC = () => {
                   value={token}
                   onChange={(e) => setToken(e.target.value)}
                   placeholder="Nhập mã token từ email"
-                  className="mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border border-slate-200 focus:outline-none focus:border-brand-500"
+                  className="mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border border-slate-200 focus:outline-none focus:border-blue-500"
                   required
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3.5 px-4 rounded-2xl text-sm font-bold text-white bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 shadow-md shadow-brand-600/20 transition-all"
+                className="w-full py-3.5 px-4 rounded-2xl text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-md shadow-blue-600/20 transition-all"
               >
                 Kích hoạt tài khoản
               </button>

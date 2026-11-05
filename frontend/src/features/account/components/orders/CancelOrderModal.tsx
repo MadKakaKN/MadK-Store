@@ -113,7 +113,7 @@ export const CancelOrderModal: React.FC<CancelOrderModalProps> = ({
                 key={r}
                 className={`flex items-start gap-3 p-3 rounded-2xl border text-xs cursor-pointer transition-all ${
                   selectedReason === r
-                    ? 'bg-brand-50/60 border-brand-300 text-brand-900 font-semibold'
+                    ? 'bg-blue-50/60 border-blue-300 text-brand-900 font-semibold'
                     : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-700'
                 }`}
               >
@@ -123,7 +123,7 @@ export const CancelOrderModal: React.FC<CancelOrderModalProps> = ({
                   value={r}
                   checked={selectedReason === r}
                   onChange={() => setSelectedReason(r)}
-                  className="mt-0.5 text-brand-600 focus:ring-brand-500"
+                  className="mt-0.5 text-blue-600 focus:ring-blue-500"
                 />
                 <span>{r}</span>
               </label>
@@ -140,7 +140,7 @@ export const CancelOrderModal: React.FC<CancelOrderModalProps> = ({
                 onChange={(e) => setCustomReason(e.target.value)}
                 placeholder="Nhập lý do chi tiết của bạn..."
                 rows={3}
-                className="w-full px-4 py-2.5 rounded-2xl text-xs border border-slate-200 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
+                className="w-full px-4 py-2.5 rounded-2xl text-xs border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
                 required
               />
             </div>

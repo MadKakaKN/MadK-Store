@@ -162,7 +162,7 @@ export const ReturnRequestModal: React.FC<ReturnRequestModalProps> = ({
                   type="button"
                   id="return-toggle-all"
                   onClick={toggleAll}
-                  className="text-xs font-semibold text-brand-600 hover:text-brand-700 hover:underline"
+                  className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline"
                 >
                   {returnableItems.every((i) => selections[i.id]?.selected) ? 'Bỏ chọn tất cả' : 'Chọn tất cả'}
                 </button>

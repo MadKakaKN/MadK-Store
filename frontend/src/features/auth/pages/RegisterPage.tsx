@@ -105,7 +105,7 @@ export const RegisterPage: React.FC = () => {
             <div className="mt-6 flex flex-col sm:flex-row gap-3">
               <Link
                 to={`/auth/verify-email?email=${encodeURIComponent(email)}`}
-                className="flex-1 py-3 px-4 rounded-2xl text-xs sm:text-sm font-bold text-white bg-brand-600 hover:bg-brand-500 shadow-sm transition-colors text-center"
+                className="flex-1 py-3 px-4 rounded-2xl text-xs sm:text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 shadow-sm transition-colors text-center"
               >
                 Nhập mã xác thực
               </Link>
@@ -128,7 +128,7 @@ export const RegisterPage: React.FC = () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="text-center">
           <Link to="/" className="inline-flex items-center gap-2 mb-4 group">
-            <span className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white flex items-center justify-center font-black text-2xl shadow-lg shadow-brand-600/30 group-hover:scale-105 transition-transform">
+            <span className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-black text-2xl shadow-lg shadow-blue-600/30 group-hover:scale-105 transition-transform">
               M
             </span>
           </Link>
@@ -137,7 +137,7 @@ export const RegisterPage: React.FC = () => {
             Đã có tài khoản?{' '}
             <Link
               to={`/auth/login${explicitRedirect ? `?redirect=${encodeURIComponent(explicitRedirect)}` : ''}`}
-              className="font-bold text-brand-600 hover:text-brand-500 hover:underline"
+              className="font-bold text-blue-600 hover:text-blue-500 hover:underline"
             >
               Đăng nhập tại đây
             </Link>
@@ -178,7 +178,7 @@ export const RegisterPage: React.FC = () => {
                 className={`mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${
                   errors.fullName
                     ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500'
-                    : 'border-slate-200 bg-white hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10'
+                    : 'border-slate-200 bg-white hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
                 }`}
               />
               {errors.fullName && <p className="mt-1 text-xs text-rose-600 font-medium">{errors.fullName}</p>}
@@ -204,7 +204,7 @@ export const RegisterPage: React.FC = () => {
                   className={`mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${
                     errors.email
                       ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500'
-                      : 'border-slate-200 bg-white hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10'
+                      : 'border-slate-200 bg-white hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
                   }`}
                 />
                 {errors.email && <p className="mt-1 text-xs text-rose-600 font-medium">{errors.email}</p>}
@@ -228,7 +228,7 @@ export const RegisterPage: React.FC = () => {
                   className={`mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${
                     errors.phoneNumber
                       ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500'
-                      : 'border-slate-200 bg-white hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10'
+                      : 'border-slate-200 bg-white hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
                   }`}
                 />
                 {errors.phoneNumber && <p className="mt-1 text-xs text-rose-600 font-medium">{errors.phoneNumber}</p>}
@@ -256,7 +256,7 @@ export const RegisterPage: React.FC = () => {
                     className={`w-full pl-4 pr-10 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${
                       errors.password
                         ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500'
-                        : 'border-slate-200 bg-white hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10'
+                        : 'border-slate-200 bg-white hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
                     }`}
                   />
                   <button
@@ -288,7 +288,7 @@ export const RegisterPage: React.FC = () => {
                   className={`mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${
                     errors.confirmPassword
                       ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500'
-                      : 'border-slate-200 bg-white hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10'
+                      : 'border-slate-200 bg-white hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
                   }`}
                 />
                 {errors.confirmPassword && (
@@ -307,12 +307,12 @@ export const RegisterPage: React.FC = () => {
                     setAcceptTerms(e.target.checked);
                     if (errors.acceptTerms) setErrors((prev) => ({ ...prev, acceptTerms: '' }));
                   }}
-                  className="mt-0.5 h-4 w-4 text-brand-600 focus:ring-brand-500 border-slate-300 rounded"
+                  className="mt-0.5 h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300 rounded"
                 />
                 <span className="ml-2 text-xs text-slate-600">
                   Tôi đồng ý với{' '}
-                  <span className="text-brand-600 font-medium underline">Điều khoản dịch vụ</span> và{' '}
-                  <span className="text-brand-600 font-medium underline">Chính sách bảo mật</span> của MadK Store.
+                  <span className="text-blue-600 font-medium underline">Điều khoản dịch vụ</span> và{' '}
+                  <span className="text-blue-600 font-medium underline">Chính sách bảo mật</span> của MadK Store.
                 </span>
               </label>
               {errors.acceptTerms && <p className="mt-1 text-xs text-rose-600 font-medium">{errors.acceptTerms}</p>}
@@ -323,7 +323,7 @@ export const RegisterPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-2xl shadow-md shadow-brand-600/20 text-sm font-bold text-white bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 focus:outline-none focus:ring-4 focus:ring-brand-500/20 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-2xl shadow-md shadow-blue-600/20 text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
               >
                 {isSubmitting ? (
                   <span className="flex items-center gap-2">

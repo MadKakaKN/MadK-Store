@@ -104,7 +104,7 @@ export const ProductDetailPage: React.FC = () => {
         <div className="mt-8">
           <Link
             to="/categories"
-            className="inline-flex items-center px-6 py-3 rounded-2xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-sm shadow-md transition-colors"
+            className="inline-flex items-center px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-md transition-colors"
           >
             Quay lại danh mục sản phẩm
           </Link>
@@ -245,17 +245,17 @@ export const ProductDetailPage: React.FC = () => {
 
       {/* Breadcrumbs */}
       <nav className="flex items-center text-xs sm:text-sm text-slate-500 gap-2 truncate">
-        <Link to="/" className="hover:text-brand-600 transition-colors">
+        <Link to="/" className="hover:text-blue-600 transition-colors">
           Trang chủ
         </Link>
         <span>&rsaquo;</span>
-        <Link to="/categories" className="hover:text-brand-600 transition-colors">
+        <Link to="/categories" className="hover:text-blue-600 transition-colors">
           Danh mục
         </Link>
         <span>&rsaquo;</span>
         <Link
           to={`/categories/${product.category.slug}`}
-          className="hover:text-brand-600 transition-colors truncate"
+          className="hover:text-blue-600 transition-colors truncate"
         >
           {product.category.name}
         </Link>
@@ -278,7 +278,7 @@ export const ProductDetailPage: React.FC = () => {
                   : 'text-slate-500 hover:text-slate-900'
               }`}
             >
-              <svg className="w-4 h-4 text-brand-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
               <span>Ảnh thực tế (2D)</span>
@@ -348,7 +348,7 @@ export const ProductDetailPage: React.FC = () => {
                       onClick={() => setSelectedImageIndex(idx)}
                       className={`w-20 h-20 rounded-2xl border-2 overflow-hidden flex-shrink-0 transition-all ${
                         selectedImageIndex === idx
-                          ? 'border-brand-600 ring-2 ring-brand-500/20'
+                          ? 'border-blue-600 ring-2 ring-blue-500/20'
                           : 'border-slate-200 hover:border-slate-300'
                       }`}
                     >
@@ -398,7 +398,7 @@ export const ProductDetailPage: React.FC = () => {
         <div className="space-y-6">
           <div>
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
-              <span className="text-brand-600 font-bold">{product.brand.name}</span>
+              <span className="text-blue-600 font-bold">{product.brand.name}</span>
               <span>&bull;</span>
               <span>{product.category.name}</span>
               {selectedVariant && (
@@ -429,7 +429,7 @@ export const ProductDetailPage: React.FC = () => {
                   const tabElement = document.getElementById('product-tabs-section');
                   tabElement?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="text-xs font-semibold text-slate-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
+                className="text-xs font-semibold text-slate-500 hover:text-blue-600 underline underline-offset-2 transition-colors"
               >
                 Xem đánh giá & nhận xét
               </button>
@@ -443,9 +443,9 @@ export const ProductDetailPage: React.FC = () => {
           </div>
 
           {/* Dynamic Price Display */}
-          <div className="p-5 rounded-2xl bg-gradient-to-r from-brand-50/70 to-slate-50 border border-brand-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-5 rounded-2xl bg-gradient-to-r from-blue-50/70 to-slate-50 border border-blue-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-baseline gap-4">
-              <span className="text-3xl sm:text-4xl font-black text-brand-700">
+              <span className="text-3xl sm:text-4xl font-black text-blue-700">
                 {formatVND(currentPrice)}
               </span>
               {originalPrice && originalPrice > currentPrice && (
@@ -474,7 +474,7 @@ export const ProductDetailPage: React.FC = () => {
                   Chọn biến thể / phiên bản:
                 </span>
                 {selectedVariant && (
-                  <span className="text-xs text-brand-600 font-semibold">
+                  <span className="text-xs text-blue-600 font-semibold">
                     Đang chọn: {selectedVariant.name}
                   </span>
                 )}
@@ -493,7 +493,7 @@ export const ProductDetailPage: React.FC = () => {
                       onClick={() => setSelectedVariant(v)}
                       className={`p-3.5 rounded-2xl border text-left transition-all relative ${
                         isSelected
-                          ? 'border-brand-600 bg-brand-50/60 ring-2 ring-brand-500/20'
+                          ? 'border-blue-600 bg-blue-50/60 ring-2 ring-blue-500/20'
                           : 'border-slate-200 hover:border-slate-300 bg-white'
                       } ${vOutOfStock ? 'opacity-60' : ''}`}
                     >
@@ -511,7 +511,7 @@ export const ProductDetailPage: React.FC = () => {
                           </span>
                         )}
                       </div>
-                      <div className="text-xs font-extrabold text-brand-700 mt-1.5">
+                      <div className="text-xs font-extrabold text-blue-700 mt-1.5">
                         {formatVND(v.salePrice)}
                       </div>
                     </button>
@@ -576,7 +576,7 @@ export const ProductDetailPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowAuthModal(true)}
-                className="font-bold text-brand-700 hover:text-brand-800 underline whitespace-nowrap"
+                className="font-bold text-blue-700 hover:text-brand-800 underline whitespace-nowrap"
               >
                 Đăng nhập ngay
               </button>
@@ -601,7 +601,7 @@ export const ProductDetailPage: React.FC = () => {
               type="button"
               disabled={isOutOfStock}
               onClick={handleBuyNow}
-              className="flex-1 py-4 rounded-2xl bg-brand-600 hover:bg-brand-500 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold text-sm transition-all shadow-lg shadow-brand-600/30 text-center"
+              className="flex-1 py-4 rounded-2xl bg-blue-600 hover:bg-blue-500 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold text-sm transition-all shadow-lg shadow-blue-600/30 text-center"
             >
               {isOutOfStock ? 'Liên hệ khi có' : 'Mua ngay'}
             </button>
@@ -660,7 +660,7 @@ export const ProductDetailPage: React.FC = () => {
             onClick={() => setActiveTab('desc')}
             className={`px-6 py-4 text-sm font-bold transition-all border-b-2 whitespace-nowrap ${
               activeTab === 'desc'
-                ? 'border-brand-600 text-brand-600 bg-white'
+                ? 'border-blue-600 text-blue-600 bg-white'
                 : 'border-transparent text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -671,7 +671,7 @@ export const ProductDetailPage: React.FC = () => {
             onClick={() => setActiveTab('specs')}
             className={`px-6 py-4 text-sm font-bold transition-all border-b-2 whitespace-nowrap ${
               activeTab === 'specs'
-                ? 'border-brand-600 text-brand-600 bg-white'
+                ? 'border-blue-600 text-blue-600 bg-white'
                 : 'border-transparent text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -682,7 +682,7 @@ export const ProductDetailPage: React.FC = () => {
             onClick={() => setActiveTab('policy')}
             className={`px-6 py-4 text-sm font-bold transition-all border-b-2 whitespace-nowrap ${
               activeTab === 'policy'
-                ? 'border-brand-600 text-brand-600 bg-white'
+                ? 'border-blue-600 text-blue-600 bg-white'
                 : 'border-transparent text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -693,7 +693,7 @@ export const ProductDetailPage: React.FC = () => {
             onClick={() => setActiveTab('reviews')}
             className={`px-6 py-4 text-sm font-bold transition-all border-b-2 whitespace-nowrap flex items-center gap-1.5 ${
               activeTab === 'reviews'
-                ? 'border-brand-600 text-brand-600 bg-white'
+                ? 'border-blue-600 text-blue-600 bg-white'
                 : 'border-transparent text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -791,7 +791,7 @@ export const ProductDetailPage: React.FC = () => {
       <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 p-3 px-4 shadow-2xl flex items-center justify-between gap-3">
         <div>
           <span className="text-[10px] text-slate-400 block font-semibold">Giá sản phẩm</span>
-          <span className="text-base font-black text-brand-700">{formatVND(currentPrice)}</span>
+          <span className="text-base font-black text-blue-700">{formatVND(currentPrice)}</span>
         </div>
 
         <div className="flex items-center gap-2">
@@ -807,7 +807,7 @@ export const ProductDetailPage: React.FC = () => {
             type="button"
             disabled={isOutOfStock}
             onClick={handleBuyNow}
-            className="px-4 py-2.5 rounded-xl bg-brand-600 disabled:bg-slate-300 text-white font-bold text-xs shadow-md shadow-brand-600/30"
+            className="px-4 py-2.5 rounded-xl bg-blue-600 disabled:bg-slate-300 text-white font-bold text-xs shadow-md shadow-blue-600/30"
           >
             Mua ngay
           </button>

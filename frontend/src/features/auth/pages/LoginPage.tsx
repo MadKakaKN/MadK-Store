@@ -79,7 +79,7 @@ export const LoginPage: React.FC = () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="text-center">
           <Link to="/" className="inline-flex items-center gap-2 mb-4 group">
-            <span className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white flex items-center justify-center font-black text-2xl shadow-lg shadow-brand-600/30 group-hover:scale-105 transition-transform">
+            <span className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-black text-2xl shadow-lg shadow-blue-600/30 group-hover:scale-105 transition-transform">
               M
             </span>
           </Link>
@@ -88,7 +88,7 @@ export const LoginPage: React.FC = () => {
             Chưa có tài khoản?{' '}
             <Link
               to={`/auth/register${explicitRedirect ? `?redirect=${encodeURIComponent(explicitRedirect)}` : ''}`}
-              className="font-bold text-brand-600 hover:text-brand-500 hover:underline"
+              className="font-bold text-blue-600 hover:text-blue-500 hover:underline"
             >
               Đăng ký ngay
             </Link>
@@ -105,14 +105,14 @@ export const LoginPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => handleFillDemo('customer@madkstore.vn', 'CustomerPassword123!')}
-                className="text-xs font-medium px-2.5 py-1.5 bg-white hover:bg-brand-50 hover:text-brand-700 text-slate-700 rounded-lg border border-slate-200 shadow-2xs transition-colors"
+                className="text-xs font-medium px-2.5 py-1.5 bg-white hover:bg-blue-50 hover:text-blue-700 text-slate-700 rounded-lg border border-slate-200 shadow-2xs transition-colors"
               >
                 👤 Khách hàng
               </button>
               <button
                 type="button"
                 onClick={() => handleFillDemo('admin@madkstore.vn', 'AdminPassword123!')}
-                className="text-xs font-medium px-2.5 py-1.5 bg-white hover:bg-brand-50 hover:text-brand-700 text-slate-700 rounded-lg border border-slate-200 shadow-2xs transition-colors"
+                className="text-xs font-medium px-2.5 py-1.5 bg-white hover:bg-blue-50 hover:text-blue-700 text-slate-700 rounded-lg border border-slate-200 shadow-2xs transition-colors"
               >
                 🛡️ Quản trị viên
               </button>
@@ -150,7 +150,7 @@ export const LoginPage: React.FC = () => {
                   placeholder="vidu@madkstore.vn"
                   className={`w-full px-4 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${errors.email
                       ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10'
-                      : 'border-slate-200 bg-white hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10'
+                      : 'border-slate-200 bg-white hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
                     }`}
                 />
               </div>
@@ -165,7 +165,7 @@ export const LoginPage: React.FC = () => {
                 </label>
                 <Link
                   to="/auth/forgot-password"
-                  className="text-xs font-semibold text-brand-600 hover:text-brand-500 hover:underline"
+                  className="text-xs font-semibold text-blue-600 hover:text-blue-500 hover:underline"
                 >
                   Quên mật khẩu?
                 </Link>
@@ -184,7 +184,7 @@ export const LoginPage: React.FC = () => {
                   placeholder="Nhập mật khẩu"
                   className={`w-full pl-4 pr-11 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${errors.password
                       ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10'
-                      : 'border-slate-200 bg-white hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10'
+                      : 'border-slate-200 bg-white hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
                     }`}
                 />
                 <button
@@ -231,7 +231,7 @@ export const LoginPage: React.FC = () => {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="h-4 w-4 text-brand-600 focus:ring-brand-500 border-slate-300 rounded"
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300 rounded"
               />
               <label htmlFor="remember-me" className="ml-2 block text-xs font-medium text-slate-600">
                 Ghi nhớ phiên đăng nhập trên thiết bị này
@@ -243,7 +243,7 @@ export const LoginPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-2xl shadow-md shadow-brand-600/20 text-sm font-bold text-white bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 focus:outline-none focus:ring-4 focus:ring-brand-500/20 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-2xl shadow-md shadow-blue-600/20 text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
               >
                 {isSubmitting ? (
                   <span className="flex items-center gap-2">

@@ -60,26 +60,38 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-sm transition-all">
+    <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/85 border-b border-slate-200/70 shadow-2xs transition-all">
       {/* Top micro banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-slate-300 text-[11px] sm:text-xs py-1.5 px-4 text-center font-medium tracking-wide">
-        🚀 Miễn phí vận chuyển cho đơn hàng từ 1.000.000₫ &bull; Trải nghiệm mô hình 3D tương tác sống động
+      <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-blue-950 text-slate-300 text-[11px] sm:text-xs py-1.5 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2">
+        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-300 font-semibold text-[10px]">
+          <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
+          NEW TECH
+        </span>
+        <span className="truncate">
+          Miễn phí giao hàng GHN cho đơn từ 1.000.000₫ &bull; Trải nghiệm tương tác mô hình 3D xoay 360°
+        </span>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20 gap-2 sm:gap-6">
+        <div className="flex items-center justify-between h-16 sm:h-20 gap-3 sm:gap-6">
           {/* Brand Logo */}
           <div className="flex items-center gap-4 flex-shrink-0">
-            <Link to="/" className="flex items-center gap-2.5 group">
-              <span className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white flex items-center justify-center font-black text-xl shadow-md shadow-brand-600/30 group-hover:scale-105 transition-transform">
-                M
-              </span>
+            <Link to="/" className="flex items-center gap-3 group">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-blue-500 text-white flex items-center justify-center shadow-md shadow-blue-600/25 group-hover:scale-105 group-hover:shadow-blue-600/40 transition-all duration-300 relative overflow-hidden">
+                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <svg className="w-6 h-6 transform -rotate-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                  <line x1="12" y1="22.08" x2="12" y2="12" />
+                </svg>
+              </div>
               <div className="flex flex-col">
-                <span className="font-extrabold text-xl tracking-tight text-slate-900 leading-none">
-                  MadK<span className="text-brand-600">Store</span>
+                <span className="font-extrabold text-xl sm:text-2xl tracking-tight text-slate-900 leading-none">
+                  MadK<span className="text-gradient-sapphire font-black">Store</span>
                 </span>
-                <span className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase mt-0.5">
-                  Tech & 3D Catalog
+                <span className="text-[10px] font-semibold tracking-widest text-slate-400 uppercase mt-1 flex items-center gap-1">
+                  <span>3D TECH CATALOG</span>
+                  <span className="w-1 h-1 rounded-full bg-blue-500"></span>
                 </span>
               </div>
             </Link>
@@ -90,18 +102,18 @@ export const Header: React.FC = () => {
             <button
               type="button"
               onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
-              className={`px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all ${
+              className={`px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold flex items-center gap-2.5 transition-all duration-200 border ${
                 categoryDropdownOpen
-                  ? 'bg-brand-50 text-brand-700 ring-2 ring-brand-500/20'
-                  : 'bg-slate-100 hover:bg-slate-200/80 text-slate-700'
+                  ? 'bg-blue-50/80 text-blue-700 border-blue-200/80 shadow-xs'
+                  : 'bg-slate-50 hover:bg-slate-100/90 text-slate-700 border-slate-200/70 hover:border-slate-300'
               }`}
             >
-              <svg className="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" />
               </svg>
               <span>Danh mục</span>
               <svg
-                className={`w-3.5 h-3.5 transition-transform duration-200 ${categoryDropdownOpen ? 'rotate-180' : ''}`}
+                className={`w-3.5 h-3.5 transition-transform duration-200 ${categoryDropdownOpen ? 'rotate-180 text-blue-600' : 'text-slate-400'}`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -112,17 +124,18 @@ export const Header: React.FC = () => {
 
             {/* Dropdown mega menu */}
             {categoryDropdownOpen && (
-              <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 p-3 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                <div className="text-xs font-bold uppercase tracking-wider text-slate-400 px-3 py-1 mb-1">
-                  Khám phá danh mục
+              <div className="absolute top-full left-0 mt-2.5 w-80 backdrop-blur-2xl bg-white/95 rounded-3xl shadow-2xl shadow-slate-900/10 border border-slate-200/80 p-3 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-3 py-1.5 mb-1 flex items-center justify-between">
+                  <span>Khám phá công nghệ</span>
+                  <span className="text-[10px] text-blue-600 font-semibold lowercase">3D catalog</span>
                 </div>
                 <div className="space-y-1">
                   <Link
                     to="/categories"
                     onClick={() => setCategoryDropdownOpen(false)}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-brand-600 hover:bg-brand-50 transition-colors"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold text-blue-600 hover:bg-blue-50 transition-colors"
                   >
-                    <span>⚡</span>
+                    <span className="w-7 h-7 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xs">⚡</span>
                     <span>Tất cả sản phẩm</span>
                   </Link>
                   {categories.map((cat) => (
@@ -130,25 +143,25 @@ export const Header: React.FC = () => {
                       <Link
                         to={`/categories/${cat.slug}`}
                         onClick={() => setCategoryDropdownOpen(false)}
-                        className="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-brand-600 transition-colors"
+                        className="flex items-center justify-between px-3 py-2.5 rounded-2xl text-xs sm:text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors"
                       >
                         <div className="flex items-center gap-2.5 truncate">
                           {cat.iconUrl ? (
-                            <img src={cat.iconUrl} alt="" className="w-5 h-5 rounded object-cover" />
+                            <img src={cat.iconUrl} alt="" className="w-5 h-5 rounded-lg object-cover" />
                           ) : (
-                            <span>📦</span>
+                            <span className="w-5 h-5 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center text-xs">📦</span>
                           )}
                           <span className="truncate">{cat.name}</span>
                         </div>
                         {cat.children && cat.children.length > 0 && (
-                          <span className="text-xs text-slate-400">&rsaquo;</span>
+                          <span className="text-xs text-slate-400 group-hover/item:text-blue-600 transition-colors">&rsaquo;</span>
                         )}
                       </Link>
 
                       {/* Sub-categories tooltip/panel */}
                       {cat.children && cat.children.length > 0 && (
-                        <div className="hidden group-hover/item:block absolute left-full top-0 ml-1 w-64 bg-white rounded-2xl shadow-xl border border-slate-200 p-2 z-50">
-                          <div className="text-xs font-semibold text-slate-400 px-3 py-1">
+                        <div className="hidden group-hover/item:block absolute left-full top-0 ml-2 w-64 backdrop-blur-2xl bg-white/95 rounded-3xl shadow-xl shadow-slate-900/10 border border-slate-200/80 p-3 z-50">
+                          <div className="text-xs font-bold text-slate-400 px-3 py-1 mb-1">
                             {cat.name}
                           </div>
                           {cat.children.map((sub) => (
@@ -156,7 +169,7 @@ export const Header: React.FC = () => {
                               key={sub.id}
                               to={`/categories/${sub.slug}`}
                               onClick={() => setCategoryDropdownOpen(false)}
-                              className="block px-3 py-2 rounded-lg text-sm text-slate-600 hover:text-brand-600 hover:bg-brand-50"
+                              className="block px-3 py-2 rounded-xl text-xs sm:text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
                             >
                               {sub.name}
                             </Link>
@@ -175,25 +188,25 @@ export const Header: React.FC = () => {
             <SearchBox />
           </div>
 
-          {/* Action buttons (Cart, Auth) */}
-          <div className="flex items-center gap-1 sm:gap-3 flex-shrink-0">
+          {/* Action buttons (Wishlist, Cart, Auth) */}
+          <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
             <Link
               to="/categories"
-              className="hidden md:inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-slate-700 hover:text-brand-600 rounded-xl hover:bg-slate-100 transition-colors"
+              className="hidden xl:inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-slate-700 hover:text-blue-600 rounded-2xl hover:bg-slate-100 transition-colors"
             >
-              Tất cả sản phẩm
+              Khám phá
             </Link>
 
             {/* Wishlist Icon */}
             <Link
               to="/account?tab=wishlist"
-              className="p-2.5 sm:px-3 sm:py-2 rounded-xl text-slate-700 hover:text-rose-600 hover:bg-rose-50 transition-colors relative flex items-center gap-1.5"
+              className="p-2 sm:px-3 sm:py-2 rounded-2xl text-slate-700 hover:text-rose-600 hover:bg-rose-50 transition-colors relative flex items-center gap-1.5 border border-transparent hover:border-rose-100"
               title="Danh sách yêu thích"
             >
               <div className="relative">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 sm:w-6 sm:h-6"
+                  className="w-5 h-5 sm:w-5 sm:h-5 text-slate-700 hover:text-rose-600 transition-colors"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -206,7 +219,7 @@ export const Header: React.FC = () => {
                   />
                 </svg>
                 {wishlistCount > 0 && (
-                  <span className="absolute -top-1.5 -right-2 bg-rose-500 text-white font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center animate-fade-in">
+                  <span className="absolute -top-2 -right-2 bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
                     {wishlistCount > 99 ? '99+' : wishlistCount}
                   </span>
                 )}
@@ -214,27 +227,28 @@ export const Header: React.FC = () => {
               <span className="hidden xl:inline text-xs font-semibold">Yêu thích</span>
             </Link>
 
+            {/* Cart Icon */}
             <Link
               to="/cart"
-              className="p-2.5 sm:px-3 sm:py-2 rounded-xl text-slate-700 hover:text-brand-600 hover:bg-brand-50 transition-colors relative flex items-center gap-1.5"
+              className="p-2 sm:px-3 sm:py-2 rounded-2xl text-slate-700 hover:text-blue-600 hover:bg-blue-50 transition-colors relative flex items-center gap-1.5 border border-transparent hover:border-blue-100"
               title="Giỏ hàng"
             >
               <div className="relative">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 sm:w-6 sm:h-6"
+                  className="w-5 h-5 sm:w-5 sm:h-5 text-slate-700 hover:text-blue-600 transition-colors"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
+                  strokeWidth="2"
                 >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth="2"
                     d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
                   />
                 </svg>
-                <span className="absolute -top-1.5 -right-2 bg-rose-500 text-white font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center animate-fade-in">
+                <span className="absolute -top-2 -right-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
                   {itemCount > 99 ? '99+' : itemCount}
                 </span>
               </div>
@@ -245,9 +259,9 @@ export const Header: React.FC = () => {
             {isAuthenticated && user?.roles?.includes('Admin') && (
               <Link
                 to="/admin"
-                className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-sm shadow-purple-600/30 transition-all hover:scale-105"
+                className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold text-xs shadow-sm shadow-indigo-600/25 transition-all hover:scale-105"
               >
-                <span>🛡️ Admin Portal</span>
+                <span>🛡️ Admin</span>
               </Link>
             )}
 
@@ -257,9 +271,9 @@ export const Header: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center gap-2.5 px-3 py-1.5 rounded-2xl hover:bg-slate-100 transition-colors border border-slate-200/60"
+                  className="flex items-center gap-2.5 px-3 py-1.5 rounded-2xl hover:bg-slate-100/80 transition-colors border border-slate-200/70"
                 >
-                  <span className="w-8 h-8 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">
+                  <span className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-700 to-indigo-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">
                     {user.fullName ? user.fullName.charAt(0).toUpperCase() : 'U'}
                   </span>
                   <div className="hidden md:flex flex-col text-left">
@@ -267,11 +281,11 @@ export const Header: React.FC = () => {
                       {user.fullName}
                     </span>
                     <span className="text-[10px] text-slate-400 font-medium leading-tight">
-                      {user.roles?.[0] || 'Customer'}
+                      {user.roles?.[0] || 'Khách hàng'}
                     </span>
                   </div>
                   <svg
-                    className={`w-3.5 h-3.5 text-slate-400 transition-transform ${userMenuOpen ? 'rotate-180' : ''}`}
+                    className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${userMenuOpen ? 'rotate-180 text-blue-600' : ''}`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -281,7 +295,7 @@ export const Header: React.FC = () => {
                 </button>
 
                 {userMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-60 rounded-2xl bg-white shadow-xl shadow-slate-200/60 border border-slate-100 p-2 z-50 animate-fade-in">
+                  <div className="absolute right-0 mt-2.5 w-64 rounded-3xl backdrop-blur-2xl bg-white/95 shadow-2xl shadow-slate-900/10 border border-slate-200/80 p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                     <div className="px-3 py-2.5 border-b border-slate-100">
                       <p className="text-xs font-bold text-slate-900 truncate">{user.fullName}</p>
                       <p className="text-[11px] text-slate-500 truncate">{user.email}</p>
@@ -291,7 +305,7 @@ export const Header: React.FC = () => {
                         <Link
                           to="/admin"
                           onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors mb-1"
+                          className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-2xl transition-colors mb-1"
                         >
                           <span>🛡️ Quản trị hệ thống (Admin)</span>
                         </Link>
@@ -299,9 +313,23 @@ export const Header: React.FC = () => {
                       <Link
                         to="/account"
                         onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:text-brand-600 hover:bg-brand-50 rounded-xl transition-colors"
+                        className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-2xl transition-colors"
                       >
-                        <span>👤 Hồ sơ khách hàng</span>
+                        <span>👤 Hồ sơ & Tích điểm hội viên</span>
+                      </Link>
+                      <Link
+                        to="/account?tab=orders"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-2xl transition-colors"
+                      >
+                        <span>📦 Đơn hàng & Vận đơn GHN</span>
+                      </Link>
+                      <Link
+                        to="/account?tab=loyalty"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-amber-600 hover:bg-amber-50 rounded-2xl transition-colors"
+                      >
+                        <span>⭐ MadK Rewards</span>
                       </Link>
                     </div>
                     <div className="pt-1 border-t border-slate-100">
@@ -312,7 +340,7 @@ export const Header: React.FC = () => {
                           await logout();
                           window.location.href = '/';
                         }}
-                        className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-xl transition-colors text-left"
+                        className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-2xl transition-colors text-left"
                       >
                         <span>🚪 Đăng xuất</span>
                       </button>
@@ -323,7 +351,7 @@ export const Header: React.FC = () => {
             ) : (
               <Link
                 to="/auth/login"
-                className="hidden sm:inline-flex items-center justify-center px-4 py-2 text-xs sm:text-sm font-bold text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100/80 rounded-xl transition-colors"
+                className="hidden sm:inline-flex items-center justify-center px-4 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-blue-600 rounded-2xl transition-all shadow-xs hover:shadow-glow-sm hover:scale-102"
               >
                 Đăng nhập
               </Link>
@@ -333,7 +361,7 @@ export const Header: React.FC = () => {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 sm:hidden rounded-xl text-slate-700 hover:bg-slate-100 transition-colors"
+              className="p-2 sm:hidden rounded-2xl text-slate-700 hover:bg-slate-100 transition-colors"
               aria-label="Toggle mobile menu"
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -350,23 +378,23 @@ export const Header: React.FC = () => {
 
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
-        <div className="sm:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-8 space-y-4 max-h-[80vh] overflow-y-auto">
+        <div className="sm:hidden border-t border-slate-200/80 bg-white/95 backdrop-blur-2xl px-4 pt-3 pb-8 space-y-4 max-h-[80vh] overflow-y-auto">
           {/* Mobile search bar */}
           <SearchBox isMobile onNavigate={() => setMobileMenuOpen(false)} />
 
           {/* Quick links */}
-          <div className="grid grid-cols-2 gap-2 text-center text-sm font-semibold">
+          <div className="grid grid-cols-2 gap-2 text-center text-xs font-bold">
             <Link
               to="/"
               onClick={() => setMobileMenuOpen(false)}
-              className="p-2.5 rounded-xl bg-slate-100 text-slate-800"
+              className="p-3 rounded-2xl bg-slate-100 text-slate-800"
             >
               Trang chủ
             </Link>
             <Link
               to="/categories"
               onClick={() => setMobileMenuOpen(false)}
-              className="p-2.5 rounded-xl bg-brand-50 text-brand-700"
+              className="p-3 rounded-2xl bg-blue-50 text-blue-700 border border-blue-200/50"
             >
               Tất cả sản phẩm
             </Link>
@@ -374,7 +402,7 @@ export const Header: React.FC = () => {
 
           {/* Category Accordion */}
           <div>
-            <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+            <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
               Danh mục công nghệ
             </div>
             <div className="space-y-1">
@@ -383,15 +411,15 @@ export const Header: React.FC = () => {
                 const hasChildren = cat.children && cat.children.length > 0;
 
                 return (
-                  <div key={cat.id} className="border border-slate-100 rounded-xl overflow-hidden">
+                  <div key={cat.id} className="border border-slate-100 rounded-2xl overflow-hidden">
                     <div className="flex items-center justify-between p-2.5 bg-slate-50/50">
                       <Link
                         to={`/categories/${cat.slug}`}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="text-sm font-semibold text-slate-800 hover:text-brand-600 flex items-center gap-2 truncate"
+                        className="text-xs font-semibold text-slate-800 hover:text-blue-600 flex items-center gap-2 truncate"
                       >
                         {cat.iconUrl && (
-                          <img src={cat.iconUrl} alt="" className="w-5 h-5 rounded object-cover" />
+                          <img src={cat.iconUrl} alt="" className="w-4 h-4 rounded object-cover" />
                         )}
                         <span className="truncate">{cat.name}</span>
                       </Link>
@@ -422,7 +450,7 @@ export const Header: React.FC = () => {
                             key={sub.id}
                             to={`/categories/${sub.slug}`}
                             onClick={() => setMobileMenuOpen(false)}
-                            className="block text-xs font-medium text-slate-600 hover:text-brand-600 py-1 pl-4 border-l-2 border-brand-200"
+                            className="block text-xs font-medium text-slate-600 hover:text-blue-600 py-1 pl-4 border-l-2 border-blue-200"
                           >
                             {sub.name}
                           </Link>
@@ -436,7 +464,7 @@ export const Header: React.FC = () => {
           </div>
 
           {/* User links */}
-          <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-sm">
+          <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
             <Link
               to="/account?tab=wishlist"
               onClick={() => setMobileMenuOpen(false)}
@@ -457,7 +485,7 @@ export const Header: React.FC = () => {
             >
               <span>🛒 Giỏ hàng</span>
               {itemCount > 0 && (
-                <span className="px-1.5 py-0.5 rounded-full bg-rose-500 text-white font-bold text-[10px]">
+                <span className="px-1.5 py-0.5 rounded-full bg-blue-600 text-white font-bold text-[10px]">
                   {itemCount}
                 </span>
               )}
@@ -468,7 +496,7 @@ export const Header: React.FC = () => {
                   <Link
                     to="/account"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="text-brand-600 font-bold"
+                    className="text-blue-600 font-bold"
                   >
                     👤 {user.fullName}
                   </Link>
@@ -488,7 +516,7 @@ export const Header: React.FC = () => {
                   <Link
                     to="/admin"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="text-xs font-bold text-purple-700 bg-purple-50 px-3 py-2 rounded-xl flex items-center justify-center gap-1.5"
+                    className="text-xs font-bold text-purple-700 bg-purple-50 px-3 py-2 rounded-2xl flex items-center justify-center gap-1.5"
                   >
                     🛡️ Vào Trang Quản Trị Hệ Thống (Admin)
                   </Link>
@@ -498,7 +526,7 @@ export const Header: React.FC = () => {
               <Link
                 to="/auth/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-brand-600 font-bold"
+                className="text-blue-600 font-bold"
               >
                 Đăng nhập / Đăng ký &rarr;
               </Link>

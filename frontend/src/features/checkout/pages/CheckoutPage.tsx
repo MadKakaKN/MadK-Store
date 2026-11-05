@@ -478,7 +478,7 @@ export const CheckoutPage: React.FC = () => {
   if (hasPlacedOrderRef.current) {
     return (
       <div className="py-20 px-4 max-w-xl mx-auto text-center space-y-4 animate-fade-in">
-        <div className="w-12 h-12 border-4 border-brand-600 border-t-transparent rounded-full animate-spin mx-auto" />
+        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto" />
         <h2 className="text-xl font-bold text-slate-800">Đang chuẩn bị mã thanh toán...</h2>
         <p className="text-xs text-slate-500">Đơn hàng đã được tạo thành công. Đang chuyển đến màn hình quét mã QR...</p>
       </div>
@@ -500,7 +500,7 @@ export const CheckoutPage: React.FC = () => {
         </div>
         <Link
           to="/categories"
-          className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-sm shadow-md shadow-brand-600/20 transition-all"
+          className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-md shadow-blue-600/20 transition-all"
         >
           <span>Khám phá sản phẩm ngay</span>
           <span>&rarr;</span>
@@ -513,11 +513,11 @@ export const CheckoutPage: React.FC = () => {
     <div className="py-6 sm:py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8 animate-fade-in">
       {/* Breadcrumbs */}
       <nav className="flex items-center text-xs sm:text-sm text-slate-500 gap-2">
-        <Link to="/" className="hover:text-brand-600 transition-colors">
+        <Link to="/" className="hover:text-blue-600 transition-colors">
           Trang chủ
         </Link>
         <span>&rsaquo;</span>
-        <Link to="/cart" className="hover:text-brand-600 transition-colors">
+        <Link to="/cart" className="hover:text-blue-600 transition-colors">
           Giỏ hàng
         </Link>
         <span>&rsaquo;</span>
@@ -575,7 +575,7 @@ export const CheckoutPage: React.FC = () => {
             <div id="shipping-address-section" className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-5">
               <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                 <div className="flex items-center gap-3">
-                  <span className="w-8 h-8 rounded-xl bg-brand-50 text-brand-700 font-black text-sm flex items-center justify-center">
+                  <span className="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 font-black text-sm flex items-center justify-center">
                     1
                   </span>
                   <h2 className="text-base sm:text-lg font-extrabold text-slate-900">
@@ -587,7 +587,7 @@ export const CheckoutPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setIsUsingNewAddress(!isUsingNewAddress)}
-                    className="text-xs font-bold text-brand-600 hover:text-brand-700 transition-colors"
+                    className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors"
                   >
                     {isUsingNewAddress ? '← Chọn từ sổ địa chỉ' : '+ Giao tới địa chỉ khác'}
                   </button>
@@ -608,7 +608,7 @@ export const CheckoutPage: React.FC = () => {
                           key={addr.id}
                           className={`p-4 rounded-2xl border text-xs cursor-pointer transition-all flex items-start gap-3.5 ${
                             isSelected
-                              ? 'bg-brand-50/50 border-brand-500 ring-2 ring-brand-500/20'
+                              ? 'bg-blue-50/50 border-blue-500 ring-2 ring-blue-500/20'
                               : 'bg-white border-slate-200 hover:border-slate-300'
                           }`}
                         >
@@ -618,7 +618,7 @@ export const CheckoutPage: React.FC = () => {
                             value={addr.id}
                             checked={isSelected}
                             onChange={() => setSelectedAddressId(addr.id)}
-                            className="mt-1 text-brand-600 focus:ring-brand-500"
+                            className="mt-1 text-blue-600 focus:ring-blue-500"
                           />
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
@@ -651,7 +651,7 @@ export const CheckoutPage: React.FC = () => {
                   {!isAuthenticated && (
                     <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-center justify-between">
                       <span>Bạn đã có tài khoản?</span>
-                      <Link to="/auth/login" className="font-bold text-brand-600 hover:underline">
+                      <Link to="/auth/login" className="font-bold text-blue-600 hover:underline">
                         Đăng nhập để dùng sổ địa chỉ &rarr;
                       </Link>
                     </div>
@@ -667,7 +667,7 @@ export const CheckoutPage: React.FC = () => {
                         value={recipientName}
                         onChange={(e) => setRecipientName(e.target.value)}
                         placeholder="Ví dụ: Nguyễn Văn A"
-                        className="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm border border-slate-200 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
+                        className="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
                       />
                       {formErrors.recipientName && (
                         <p className="mt-1 text-xs text-rose-500">{formErrors.recipientName}</p>
@@ -683,7 +683,7 @@ export const CheckoutPage: React.FC = () => {
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         placeholder="Ví dụ: 0912345678"
-                        className="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm border border-slate-200 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
+                        className="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
                       />
                       {formErrors.phoneNumber && (
                         <p className="mt-1 text-xs text-rose-500">{formErrors.phoneNumber}</p>
@@ -700,7 +700,7 @@ export const CheckoutPage: React.FC = () => {
                       value={recipientEmail}
                       onChange={(e) => setRecipientEmail(e.target.value)}
                       placeholder="email@example.com (không bắt buộc)"
-                      className="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm border border-slate-200 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
+                      className="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
                     />
                   </div>
 
@@ -713,7 +713,7 @@ export const CheckoutPage: React.FC = () => {
                       <select
                         value={provinceCode}
                         onChange={(e) => setProvinceCode(e.target.value)}
-                        className="w-full px-3 py-3 rounded-2xl text-xs border border-slate-200 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 bg-white"
+                        className="w-full px-3 py-3 rounded-2xl text-xs border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 bg-white"
                       >
                         <option value="">-- Chọn Tỉnh/Thành --</option>
                         {provinces.map((p) => (
@@ -735,7 +735,7 @@ export const CheckoutPage: React.FC = () => {
                         value={districtCode}
                         onChange={(e) => setDistrictCode(e.target.value)}
                         disabled={!provinceCode || districts.length === 0}
-                        className="w-full px-3 py-3 rounded-2xl text-xs border border-slate-200 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 bg-white disabled:bg-slate-50 disabled:text-slate-400"
+                        className="w-full px-3 py-3 rounded-2xl text-xs border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 bg-white disabled:bg-slate-50 disabled:text-slate-400"
                       >
                         <option value="">-- Chọn Quận/Huyện --</option>
                         {districts.map((d) => (
@@ -757,7 +757,7 @@ export const CheckoutPage: React.FC = () => {
                         value={wardCode}
                         onChange={(e) => handleWardChange(e.target.value)}
                         disabled={!districtCode || wards.length === 0}
-                        className="w-full px-3 py-3 rounded-2xl text-xs border border-slate-200 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 bg-white disabled:bg-slate-50 disabled:text-slate-400"
+                        className="w-full px-3 py-3 rounded-2xl text-xs border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 bg-white disabled:bg-slate-50 disabled:text-slate-400"
                       >
                         <option value="">-- Chọn Phường/Xã --</option>
                         {wards.map((w) => (
@@ -781,7 +781,7 @@ export const CheckoutPage: React.FC = () => {
                       value={detailedAddress}
                       onChange={(e) => setDetailedAddress(e.target.value)}
                       placeholder="Ví dụ: Tầng 4, Tòa Keangnam, đường Phạm Hùng"
-                      className="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm border border-slate-200 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
+                      className="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
                     />
                     {formErrors.detailedAddress && (
                       <p className="mt-1 text-xs text-rose-500">{formErrors.detailedAddress}</p>
@@ -794,7 +794,7 @@ export const CheckoutPage: React.FC = () => {
             {/* Step 2: Payment Method */}
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-4">
               <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
-                <span className="w-8 h-8 rounded-xl bg-brand-50 text-brand-700 font-black text-sm flex items-center justify-center">
+                <span className="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 font-black text-sm flex items-center justify-center">
                   2
                 </span>
                 <h2 className="text-base sm:text-lg font-extrabold text-slate-900">
@@ -871,7 +871,7 @@ export const CheckoutPage: React.FC = () => {
                 <label
                   className={`p-4 sm:p-5 rounded-2xl border-2 cursor-pointer flex items-start gap-4 transition-all ${
                     paymentMethod === 'COD'
-                      ? 'border-brand-500 bg-brand-50/40 ring-2 ring-brand-500/10'
+                      ? 'border-blue-500 bg-blue-50/40 ring-2 ring-blue-500/10'
                       : 'border-slate-200 bg-white hover:border-slate-300'
                   }`}
                 >
@@ -881,7 +881,7 @@ export const CheckoutPage: React.FC = () => {
                     value="COD"
                     checked={paymentMethod === 'COD'}
                     onChange={() => setPaymentMethod('COD')}
-                    className="mt-1 text-brand-600 focus:ring-brand-500"
+                    className="mt-1 text-blue-600 focus:ring-blue-500"
                   />
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
@@ -905,7 +905,7 @@ export const CheckoutPage: React.FC = () => {
             {/* Step 3: Customer Note */}
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-3">
               <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-                <span className="w-8 h-8 rounded-xl bg-brand-50 text-brand-700 font-black text-sm flex items-center justify-center">
+                <span className="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 font-black text-sm flex items-center justify-center">
                   3
                 </span>
                 <h2 className="text-base sm:text-lg font-extrabold text-slate-900">
@@ -917,7 +917,7 @@ export const CheckoutPage: React.FC = () => {
                 onChange={(e) => setCustomerNote(e.target.value)}
                 placeholder="Ghi chú thêm về thời gian giao hàng, hướng dẫn người giao hàng..."
                 rows={2}
-                className="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm border border-slate-200 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
+                className="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
               />
             </div>
           </div>
@@ -931,7 +931,7 @@ export const CheckoutPage: React.FC = () => {
                 </h2>
                 <Link
                   to="/cart"
-                  className="text-xs font-bold text-brand-600 hover:text-brand-700 transition-colors"
+                  className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors"
                 >
                   Sửa giỏ hàng
                 </Link>
@@ -1014,13 +1014,13 @@ export const CheckoutPage: React.FC = () => {
                           if (couponError) setCouponError(null);
                         }}
                         placeholder="Nhập mã (VD: MADK2026, WELCOME50K)"
-                        className="flex-1 px-3.5 py-2.5 rounded-2xl text-xs uppercase font-mono tracking-wider border border-slate-200 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
+                        className="flex-1 px-3.5 py-2.5 rounded-2xl text-xs uppercase font-mono tracking-wider border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
                       />
                       <button
                         type="button"
                         onClick={() => handleApplyCoupon()}
                         disabled={isValidatingCoupon || !couponInput.trim()}
-                        className="px-4 py-2.5 rounded-2xl bg-slate-900 hover:bg-brand-600 disabled:opacity-40 text-white font-bold text-xs transition-colors flex items-center gap-1.5 flex-shrink-0"
+                        className="px-4 py-2.5 rounded-2xl bg-slate-900 hover:bg-blue-600 disabled:opacity-40 text-white font-bold text-xs transition-colors flex items-center gap-1.5 flex-shrink-0"
                       >
                         {isValidatingCoupon ? (
                           <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -1156,7 +1156,7 @@ export const CheckoutPage: React.FC = () => {
                     <span className="text-sm font-black block">Tổng thanh toán:</span>
                     <span className="text-[11px] text-slate-400 font-normal">Đã gồm VAT & Phí vận chuyển</span>
                   </div>
-                  <span className="text-xl sm:text-2xl font-black text-brand-600 font-mono">
+                  <span className="text-xl sm:text-2xl font-black text-blue-600 font-mono">
                     {formatVND(finalTotal)}
                   </span>
                 </div>
@@ -1186,7 +1186,7 @@ export const CheckoutPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting || items.length === 0}
-                className="w-full py-4 rounded-2xl bg-brand-600 hover:bg-brand-500 disabled:opacity-50 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-brand-600/30 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2"
+                className="w-full py-4 rounded-2xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-blue-600/30 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   <>

@@ -134,7 +134,7 @@ export const OrderList: React.FC = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold transition-all ${
                   isActive
-                    ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20'
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
                     : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                 }`}
               >
@@ -154,7 +154,7 @@ export const OrderList: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Tìm theo mã đơn (MK-...), tên sản phẩm, SKU..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-2xl text-xs border border-slate-200 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 bg-white"
+            className="w-full pl-10 pr-4 py-2.5 rounded-2xl text-xs border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 bg-white"
           />
           <span className="absolute left-3.5 top-2.5 text-slate-400 text-sm">🔍</span>
           {searchQuery && (
@@ -176,7 +176,7 @@ export const OrderList: React.FC = () => {
           <button
             type="button"
             onClick={fetchOrders}
-            className="ml-2 text-brand-600 hover:text-brand-700 hover:underline flex items-center gap-1"
+            className="ml-2 text-blue-600 hover:text-blue-700 hover:underline flex items-center gap-1"
             title="Làm mới danh sách"
           >
             <span>🔄</span> Làm mới
@@ -223,7 +223,7 @@ export const OrderList: React.FC = () => {
           <button
             type="button"
             onClick={fetchOrders}
-            className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-500 transition-colors"
+            className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 transition-colors"
           >
             Thử lại
           </button>
@@ -249,7 +249,7 @@ export const OrderList: React.FC = () => {
           {!searchQuery && (
             <a
               href="/catalog"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-500 shadow-md shadow-brand-600/20 transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 shadow-md shadow-blue-600/20 transition-all"
             >
               <span>🛒</span>
               <span>Khám phá sản phẩm ngay</span>

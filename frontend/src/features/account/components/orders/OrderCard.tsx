@@ -115,7 +115,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
           <span className="text-xs text-slate-500">
             Tổng cộng ({totalQuantity} món):
           </span>
-          <p className="text-base font-black text-brand-600 font-mono mt-0.5">
+          <p className="text-base font-black text-blue-600 font-mono mt-0.5">
             {formatVnd(order.totalAmount)}
           </p>
         </div>

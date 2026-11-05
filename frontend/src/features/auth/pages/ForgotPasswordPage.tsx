@@ -38,7 +38,7 @@ export const ForgotPasswordPage: React.FC = () => {
     <div className="min-h-[80vh] flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-slate-50/50">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center px-4 sm:px-0">
         <Link to="/" className="inline-flex items-center gap-2 mb-4 group">
-          <span className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white flex items-center justify-center font-black text-2xl shadow-lg shadow-brand-600/30 group-hover:scale-105 transition-transform">
+          <span className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-black text-2xl shadow-lg shadow-blue-600/30 group-hover:scale-105 transition-transform">
             M
           </span>
         </Link>
@@ -52,7 +52,7 @@ export const ForgotPasswordPage: React.FC = () => {
         <div className="bg-white py-8 px-6 sm:px-10 shadow-xl shadow-slate-200/50 rounded-3xl border border-slate-100">
           {submittedMessage ? (
             <div className="text-center py-4">
-              <div className="w-16 h-16 mx-auto rounded-3xl bg-brand-50 text-brand-600 flex items-center justify-center text-3xl mb-4">
+              <div className="w-16 h-16 mx-auto rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center text-3xl mb-4">
                 📬
               </div>
               <h3 className="text-xl font-extrabold text-slate-900">Kiểm tra hộp thư của bạn</h3>
@@ -65,7 +65,7 @@ export const ForgotPasswordPage: React.FC = () => {
               <div className="mt-6 flex flex-col gap-3">
                 <Link
                   to={`/auth/reset-password?email=${encodeURIComponent(email)}`}
-                  className="py-3.5 px-4 rounded-2xl text-sm font-bold text-white bg-brand-600 hover:bg-brand-500 shadow-sm transition-colors text-center"
+                  className="py-3.5 px-4 rounded-2xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 shadow-sm transition-colors text-center"
                 >
                   Tôi đã có mã đặt lại mật khẩu &rarr;
                 </Link>
@@ -97,7 +97,7 @@ export const ForgotPasswordPage: React.FC = () => {
                   className={`mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${
                     emailError
                       ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500'
-                      : 'border-slate-200 bg-white hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10'
+                      : 'border-slate-200 bg-white hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
                   }`}
                 />
                 {emailError && <p className="mt-1.5 text-xs text-rose-600 font-medium">{emailError}</p>}
@@ -106,7 +106,7 @@ export const ForgotPasswordPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-2xl shadow-md shadow-brand-600/20 text-sm font-bold text-white bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 focus:outline-none focus:ring-4 focus:ring-brand-500/20 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-2xl shadow-md shadow-blue-600/20 text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
               >
                 {isSubmitting ? (
                   <span className="flex items-center gap-2">

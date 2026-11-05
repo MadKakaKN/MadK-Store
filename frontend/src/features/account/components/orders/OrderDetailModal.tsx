@@ -511,7 +511,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                     </div>
 
                     <div className="text-right flex-shrink-0">
-                      <p className="text-xs font-black text-brand-600">
+                      <p className="text-xs font-black text-blue-600">
                         {formatVnd(unitPrice)}
                       </p>
                       <p className="text-[11px] text-slate-500 mt-0.5">
@@ -575,7 +575,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
             </div>
             <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-sm font-black text-slate-900">
               <span>Tổng thanh toán:</span>
-              <span className="text-brand-600 text-base font-black font-mono">
+              <span className="text-blue-600 text-base font-black font-mono">
                 {formatVnd(order.totalAmount)}
               </span>
             </div>

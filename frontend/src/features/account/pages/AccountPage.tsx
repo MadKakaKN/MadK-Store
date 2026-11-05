@@ -85,7 +85,7 @@ export const AccountPage: React.FC = () => {
       {/* Top Profile Card */}
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="flex items-center gap-4 sm:gap-6">
-          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-gradient-to-tr from-brand-600 via-indigo-600 to-purple-600 text-white font-black text-2xl sm:text-3xl flex items-center justify-center shadow-md shadow-brand-600/30 flex-shrink-0">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 text-white font-black text-2xl sm:text-3xl flex items-center justify-center shadow-md shadow-blue-600/30 flex-shrink-0">
             {user?.fullName ? user.fullName.charAt(0).toUpperCase() : 'U'}
           </div>
           <div>
@@ -126,7 +126,7 @@ export const AccountPage: React.FC = () => {
               onClick={() => setActiveTab('profile')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all ${
                 activeTab === 'profile'
-                  ? 'bg-brand-50 text-brand-700 shadow-xs'
+                  ? 'bg-blue-50 text-blue-700 shadow-xs'
                   : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
               }`}
             >
@@ -139,7 +139,7 @@ export const AccountPage: React.FC = () => {
               onClick={() => setActiveTab('security')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all ${
                 activeTab === 'security'
-                  ? 'bg-brand-50 text-brand-700 shadow-xs'
+                  ? 'bg-blue-50 text-blue-700 shadow-xs'
                   : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
               }`}
             >
@@ -152,7 +152,7 @@ export const AccountPage: React.FC = () => {
               onClick={() => setActiveTab('addresses')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all ${
                 activeTab === 'addresses'
-                  ? 'bg-brand-50 text-brand-700 shadow-xs'
+                  ? 'bg-blue-50 text-blue-700 shadow-xs'
                   : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
               }`}
             >
@@ -166,7 +166,7 @@ export const AccountPage: React.FC = () => {
               onClick={() => setActiveTab('orders')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all ${
                 activeTab === 'orders'
-                  ? 'bg-brand-50 text-brand-700 shadow-xs'
+                  ? 'bg-blue-50 text-blue-700 shadow-xs'
                   : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
               }`}
             >
@@ -179,7 +179,7 @@ export const AccountPage: React.FC = () => {
               onClick={() => setActiveTab('wishlist')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all ${
                 activeTab === 'wishlist'
-                  ? 'bg-brand-50 text-brand-700 shadow-xs'
+                  ? 'bg-blue-50 text-blue-700 shadow-xs'
                   : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
               }`}
             >
@@ -272,7 +272,7 @@ export const AccountPage: React.FC = () => {
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
                     placeholder="Nhập mật khẩu hiện tại"
-                    className="mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border border-slate-200 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
+                    className="mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
                     required
                   />
                 </div>
@@ -286,7 +286,7 @@ export const AccountPage: React.FC = () => {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="Tối thiểu 6 ký tự"
-                    className="mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border border-slate-200 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
+                    className="mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
                     required
                   />
                 </div>
@@ -300,7 +300,7 @@ export const AccountPage: React.FC = () => {
                     value={confirmNewPassword}
                     onChange={(e) => setConfirmNewPassword(e.target.value)}
                     placeholder="Nhập lại mật khẩu mới"
-                    className="mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border border-slate-200 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
+                    className="mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
                     required
                   />
                 </div>
@@ -311,7 +311,7 @@ export const AccountPage: React.FC = () => {
                     type="checkbox"
                     checked={showPassword}
                     onChange={(e) => setShowPassword(e.target.checked)}
-                    className="h-4 w-4 text-brand-600 focus:ring-brand-500 border-slate-300 rounded"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300 rounded"
                   />
                   <label htmlFor="show-pwd-toggle" className="ml-2 text-xs text-slate-600">
                     Hiển thị các ký tự mật khẩu
@@ -322,7 +322,7 @@ export const AccountPage: React.FC = () => {
                   <button
                     type="submit"
                     disabled={pwdSubmitting}
-                    className="px-6 py-3.5 rounded-2xl text-sm font-bold text-white bg-brand-600 hover:bg-brand-500 shadow-md shadow-brand-600/20 disabled:opacity-50 transition-all"
+                    className="px-6 py-3.5 rounded-2xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 shadow-md shadow-blue-600/20 disabled:opacity-50 transition-all"
                   >
                     {pwdSubmitting ? 'Đang cập nhật...' : 'Cập nhật mật khẩu'}
                   </button>

@@ -17,8 +17,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       ? `${formatVND(product.minPrice)} - ${formatVND(product.maxPrice)}`
       : formatVND(product.basePrice);
 
+  // Calculate approximate MadK reward points (1% base)
+  const estimatedPoints = Math.max(10, Math.floor((product.minPrice || product.basePrice) * 0.01));
+
   return (
-    <div className="group relative bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-brand-300 transition-all duration-300 flex flex-col overflow-hidden">
+    <div className="group relative bg-white rounded-3xl border border-slate-200/80 shadow-2xs hover:shadow-card-hover hover:border-blue-300/80 transition-all duration-300 flex flex-col overflow-hidden">
       {/* Wishlist Heart Button */}
       <button
         type="button"
@@ -28,10 +31,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           toggleWishlist(product.id);
         }}
         title={isLiked ? 'Bỏ yêu thích' : 'Thêm vào yêu thích'}
-        className={`absolute top-3 right-3 z-20 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 shadow-sm backdrop-blur-md ${
+        className={`absolute top-3.5 right-3.5 z-20 w-9 h-9 rounded-2xl flex items-center justify-center transition-all duration-200 backdrop-blur-md shadow-xs ${
           isLiked
             ? 'bg-rose-50 text-rose-500 scale-105 border border-rose-200'
-            : 'bg-white/80 text-slate-400 hover:text-rose-500 hover:scale-110 border border-slate-200'
+            : 'bg-white/80 text-slate-400 hover:text-rose-500 hover:scale-110 border border-slate-200/70 hover:bg-white'
         }`}
       >
         <svg
@@ -39,7 +42,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           viewBox="0 0 24 24"
           fill={isLiked ? 'currentColor' : 'none'}
           stroke="currentColor"
-          strokeWidth="2"
+          strokeWidth="2.2"
         >
           <path
             strokeLinecap="round"
@@ -50,16 +53,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       </button>
 
       {/* Badges container */}
-      <div className="absolute top-3 left-3 right-13 z-10 flex items-center justify-between pointer-events-none">
+      <div className="absolute top-3.5 left-3.5 right-14 z-10 flex items-center gap-1.5 pointer-events-none flex-wrap">
         {product.isFeatured && (
-          <span className="px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider rounded-lg bg-amber-500 text-white shadow-sm">
+          <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-xs">
             Nổi bật
           </span>
         )}
-        {product.model3DUrl ? (
-          <span className="ml-auto px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-indigo-600/90 text-white backdrop-blur-sm flex items-center gap-1 shadow-sm">
+        {product.model3DUrl && (
+          <span className="px-2.5 py-1 text-[10px] font-bold rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white backdrop-blur-sm flex items-center gap-1 shadow-xs">
             <svg
-              className="w-3.5 h-3.5"
+              className="w-3 h-3"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -69,15 +72,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
               <line x1="12" y1="22.08" x2="12" y2="12" />
             </svg>
-            3D Ready
+            3D 360°
           </span>
-        ) : null}
+        )}
       </div>
 
       {/* Image thumbnail */}
       <Link
         to={`/products/${product.slug}`}
-        className="block relative aspect-square bg-slate-50 overflow-hidden flex items-center justify-center p-3"
+        className="block relative aspect-square bg-gradient-to-b from-slate-50/60 to-slate-100/40 overflow-hidden flex items-center justify-center p-5"
       >
         <img
           src={
@@ -87,7 +90,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           }
           alt={product.name}
           loading="lazy"
-          className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-contain object-center group-hover:scale-108 transition-transform duration-500 ease-out"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             if (!target.dataset.fallback) {
@@ -96,18 +99,25 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             }
           }}
         />
+
+        {/* Quick View Hover Overlay */}
+        <div className="absolute inset-x-4 bottom-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 hidden sm:flex items-center justify-center">
+          <span className="w-full py-2 rounded-2xl bg-slate-900/90 hover:bg-blue-600 text-white text-xs font-bold backdrop-blur-md shadow-lg transition-colors text-center flex items-center justify-center gap-1.5">
+            <span>🔍 Xem tương tác</span>
+          </span>
+        </div>
       </Link>
 
       {/* Content */}
       <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
         <div>
-          <div className="flex items-center gap-2 text-xs text-slate-500 mb-1.5">
-            <span className="font-semibold text-brand-600 hover:underline">{product.brandName}</span>
+          <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+            <span className="text-blue-600 hover:underline">{product.brandName}</span>
             <span>&bull;</span>
             <span className="truncate">{product.categoryName}</span>
           </div>
 
-          <h3 className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-brand-600 transition-colors line-clamp-2 leading-snug">
+          <h3 className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2 leading-snug">
             <Link to={`/products/${product.slug}`}>{product.name}</Link>
           </h3>
 
@@ -116,19 +126,25 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               {product.shortDescription}
             </p>
           )}
+
+          {/* Loyalty points highlight badge */}
+          <div className="mt-2.5 flex items-center gap-1.5 text-[11px] font-semibold text-amber-700 bg-amber-50/80 px-2.5 py-1 rounded-xl w-fit border border-amber-200/50">
+            <span>⭐</span>
+            <span>+{estimatedPoints.toLocaleString('vi-VN')} điểm MadK</span>
+          </div>
         </div>
 
-        <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+        <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between">
           <div>
-            <span className="text-xs text-slate-400 block">Giá từ</span>
-            <span className="text-base sm:text-lg font-extrabold text-slate-900 text-brand-700">
+            <span className="text-[11px] font-semibold text-slate-400 uppercase block tracking-wider">Giá từ</span>
+            <span className="text-base sm:text-lg font-black text-slate-900 group-hover:text-blue-700 transition-colors">
               {displayPrice}
             </span>
           </div>
 
           <Link
             to={`/products/${product.slug}`}
-            className="p-2 sm:px-3 sm:py-2 rounded-xl bg-slate-100 hover:bg-brand-600 text-slate-700 hover:text-white text-xs font-semibold transition-all duration-200 flex items-center gap-1"
+            className="p-2 sm:px-3.5 sm:py-2 rounded-2xl bg-slate-100 hover:bg-blue-600 text-slate-700 hover:text-white text-xs font-bold transition-all duration-200 flex items-center gap-1 shadow-2xs hover:shadow-xs hover:scale-105"
             title="Xem chi tiết"
           >
             <span className="hidden sm:inline">Chi tiết</span>
@@ -138,7 +154,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
             </svg>
           </Link>
         </div>

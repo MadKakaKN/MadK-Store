@@ -262,7 +262,7 @@ export const ProductReviewsSection: React.FC<ProductReviewsSectionProps> = ({
               <button
                 type="button"
                 onClick={handleOpenWriteModal}
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-md shadow-brand-600/30 transition-all hover:-translate-y-0.5 active:translate-y-0"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-600/30 transition-all hover:-translate-y-0.5 active:translate-y-0"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
@@ -318,7 +318,7 @@ export const ProductReviewsSection: React.FC<ProductReviewsSectionProps> = ({
       {/* Reviews List */}
       {loading ? (
         <div className="py-12 text-center text-slate-400 text-sm">
-          <div className="inline-block w-8 h-8 border-3 border-brand-500 border-t-transparent rounded-full animate-spin mb-3" />
+          <div className="inline-block w-8 h-8 border-3 border-blue-500 border-t-transparent rounded-full animate-spin mb-3" />
           <p>Đang tải đánh giá...</p>
         </div>
       ) : error ? (
@@ -359,7 +359,7 @@ export const ProductReviewsSection: React.FC<ProductReviewsSectionProps> = ({
               {/* User row */}
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-sm flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-sm flex-shrink-0">
                     {review.userAvatar ? (
                       <img
                         src={review.userAvatar}
@@ -431,7 +431,7 @@ export const ProductReviewsSection: React.FC<ProductReviewsSectionProps> = ({
                         key={i}
                         type="button"
                         onClick={() => setZoomedImage(img)}
-                        className="w-16 h-16 rounded-xl border border-slate-200 overflow-hidden hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-brand-500"
+                        className="w-16 h-16 rounded-xl border border-slate-200 overflow-hidden hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-blue-500"
                       >
                         <img src={img} alt="Đánh giá" className="w-full h-full object-cover" />
                       </button>
@@ -442,8 +442,8 @@ export const ProductReviewsSection: React.FC<ProductReviewsSectionProps> = ({
                 {/* Admin Reply */}
                 {review.adminReply && (
                   <div className="mt-3 p-3.5 rounded-xl bg-slate-100 border border-slate-200 text-xs space-y-1">
-                    <div className="flex items-center gap-1.5 text-brand-700 font-bold">
-                      <svg className="w-3.5 h-3.5 text-brand-600" viewBox="0 0 20 20" fill="currentColor">
+                    <div className="flex items-center gap-1.5 text-blue-700 font-bold">
+                      <svg className="w-3.5 h-3.5 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
                         <path
                           fillRule="evenodd"
                           d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
@@ -619,7 +619,7 @@ export const ProductReviewsSection: React.FC<ProductReviewsSectionProps> = ({
                     onChange={(e) => setReviewTitle(e.target.value)}
                     placeholder="Tóm tắt trải nghiệm (e.g. Rất hài lòng, máy đẹp mượt)"
                     maxLength={150}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-blue-500"
                   />
                 </div>
 
@@ -634,7 +634,7 @@ export const ProductReviewsSection: React.FC<ProductReviewsSectionProps> = ({
                     value={reviewComment}
                     onChange={(e) => setReviewComment(e.target.value)}
                     placeholder="Hãy chia sẻ cảm nhận thực tế về chất lượng, thiết kế, thời gian giao hàng..."
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-500 resize-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-blue-500 resize-none"
                   />
                 </div>
 
@@ -649,7 +649,7 @@ export const ProductReviewsSection: React.FC<ProductReviewsSectionProps> = ({
                       value={imageUrlInput}
                       onChange={(e) => setImageUrlInput(e.target.value)}
                       placeholder="Nhập đường dẫn URL ảnh (https://...)"
-                      className="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-brand-500"
+                      className="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-blue-500"
                     />
                     <button
                       type="button"
@@ -690,7 +690,7 @@ export const ProductReviewsSection: React.FC<ProductReviewsSectionProps> = ({
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-md shadow-brand-600/30 disabled:opacity-50"
+                    className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-md shadow-blue-600/30 disabled:opacity-50"
                   >
                     {submitting ? 'Đang gửi...' : 'Gửi đánh giá'}
                   </button>

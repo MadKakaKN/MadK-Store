@@ -83,7 +83,7 @@ export const ResetPasswordPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => navigate('/auth/login', { replace: true })}
-                className="w-full py-3.5 px-4 rounded-2xl text-sm font-bold text-white bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 shadow-md shadow-brand-600/20 transition-all"
+                className="w-full py-3.5 px-4 rounded-2xl text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-md shadow-blue-600/20 transition-all"
               >
                 Đăng nhập ngay
               </button>
@@ -98,7 +98,7 @@ export const ResetPasswordPage: React.FC = () => {
     <div className="min-h-[80vh] flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-slate-50/50">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center px-4 sm:px-0">
         <Link to="/" className="inline-flex items-center gap-2 mb-4 group">
-          <span className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white flex items-center justify-center font-black text-2xl shadow-lg shadow-brand-600/30 group-hover:scale-105 transition-transform">
+          <span className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-black text-2xl shadow-lg shadow-blue-600/30 group-hover:scale-105 transition-transform">
             M
           </span>
         </Link>
@@ -136,7 +136,7 @@ export const ResetPasswordPage: React.FC = () => {
                 className={`mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${
                   errors.email
                     ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500'
-                    : 'border-slate-200 bg-white hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10'
+                    : 'border-slate-200 bg-white hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
                 }`}
               />
               {errors.email && <p className="mt-1 text-xs text-rose-600 font-medium">{errors.email}</p>}
@@ -159,7 +159,7 @@ export const ResetPasswordPage: React.FC = () => {
                 className={`mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${
                   errors.token
                     ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500'
-                    : 'border-slate-200 bg-white hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10'
+                    : 'border-slate-200 bg-white hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
                 }`}
               />
               {errors.token && <p className="mt-1 text-xs text-rose-600 font-medium">{errors.token}</p>}
@@ -183,7 +183,7 @@ export const ResetPasswordPage: React.FC = () => {
                   className={`w-full pl-4 pr-10 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${
                     errors.newPassword
                       ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500'
-                      : 'border-slate-200 bg-white hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10'
+                      : 'border-slate-200 bg-white hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
                   }`}
                 />
                 <button
@@ -214,7 +214,7 @@ export const ResetPasswordPage: React.FC = () => {
                 className={`mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${
                   errors.confirmPassword
                     ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500'
-                    : 'border-slate-200 bg-white hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10'
+                    : 'border-slate-200 bg-white hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
                 }`}
               />
               {errors.confirmPassword && (
@@ -226,7 +226,7 @@ export const ResetPasswordPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-2xl shadow-md shadow-brand-600/20 text-sm font-bold text-white bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 focus:outline-none focus:ring-4 focus:ring-brand-500/20 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-2xl shadow-md shadow-blue-600/20 text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
               >
                 {isSubmitting ? (
                   <span className="flex items-center gap-2">

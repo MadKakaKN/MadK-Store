@@ -79,7 +79,7 @@ export const CartPage: React.FC = () => {
     return (
       <div className="py-8 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
         <nav className="flex items-center text-xs sm:text-sm text-slate-500 mb-8 gap-2">
-          <Link to="/" className="hover:text-brand-600 transition-colors">
+          <Link to="/" className="hover:text-blue-600 transition-colors">
             Trang chủ
           </Link>
           <span>&rsaquo;</span>
@@ -103,7 +103,7 @@ export const CartPage: React.FC = () => {
           <div className="pt-2 flex flex-wrap justify-center gap-3">
             <Link
               to="/auth/login?redirect=/cart"
-              className="inline-flex items-center px-7 py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-sm sm:text-base shadow-lg shadow-brand-600/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex items-center px-7 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm sm:text-base shadow-lg shadow-blue-600/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               Đăng nhập ngay &rarr;
             </Link>
@@ -125,7 +125,7 @@ export const CartPage: React.FC = () => {
       <div className="py-8 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
         {/* Breadcrumbs */}
         <nav className="flex items-center text-xs sm:text-sm text-slate-500 mb-8 gap-2">
-          <Link to="/" className="hover:text-brand-600 transition-colors">
+          <Link to="/" className="hover:text-blue-600 transition-colors">
             Trang chủ
           </Link>
           <span>&rsaquo;</span>
@@ -134,7 +134,7 @@ export const CartPage: React.FC = () => {
 
         {/* Empty Cart Card */}
         <div className="bg-white rounded-3xl p-8 sm:p-14 border border-slate-200/80 shadow-sm text-center space-y-6">
-          <div className="w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-3xl bg-brand-50 text-brand-600 flex items-center justify-center shadow-inner">
+          <div className="w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center shadow-inner">
             <svg
               className="w-12 h-12 sm:w-14 sm:h-14"
               fill="none"
@@ -163,7 +163,7 @@ export const CartPage: React.FC = () => {
           <div className="pt-2 flex flex-wrap justify-center gap-3">
             <Link
               to="/categories"
-              className="inline-flex items-center px-7 py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-sm sm:text-base shadow-lg shadow-brand-600/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex items-center px-7 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm sm:text-base shadow-lg shadow-blue-600/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               Khám phá sản phẩm ngay &rarr;
             </Link>
@@ -219,7 +219,7 @@ export const CartPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <nav className="flex items-center text-xs sm:text-sm text-slate-500 gap-2 mb-2">
-            <Link to="/" className="hover:text-brand-600 transition-colors">
+            <Link to="/" className="hover:text-blue-600 transition-colors">
               Trang chủ
             </Link>
             <span>&rsaquo;</span>
@@ -227,7 +227,7 @@ export const CartPage: React.FC = () => {
           </nav>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 flex items-center gap-3">
             <span>Giỏ hàng của bạn</span>
-            <span className="text-xs sm:text-sm font-bold px-3 py-1 rounded-full bg-brand-50 text-brand-700 border border-brand-200">
+            <span className="text-xs sm:text-sm font-bold px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
               {itemCount} món đồ
             </span>
           </h1>
@@ -310,7 +310,7 @@ export const CartPage: React.FC = () => {
                   <div className="flex-1 min-w-0 space-y-1">
                     <Link
                       to={`/products/${item.productSlug}`}
-                      className="text-sm sm:text-base font-bold text-slate-900 hover:text-brand-600 transition-colors line-clamp-1"
+                      className="text-sm sm:text-base font-bold text-slate-900 hover:text-blue-600 transition-colors line-clamp-1"
                     >
                       {item.productName}
                     </Link>
@@ -349,7 +349,7 @@ export const CartPage: React.FC = () => {
 
                   {/* Price info */}
                   <div className="text-left sm:text-right">
-                    <div className="text-sm sm:text-base font-extrabold text-brand-700">
+                    <div className="text-sm sm:text-base font-extrabold text-blue-700">
                       {formatVND(item.price)}
                     </div>
                     {item.originalPrice > item.price && (
@@ -416,7 +416,7 @@ export const CartPage: React.FC = () => {
           <div className="flex items-center justify-between pt-2">
             <Link
               to="/categories"
-              className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-brand-600 hover:text-brand-700 transition-colors"
+              className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors"
             >
               &larr; Tiếp tục mua sắm các thiết bị khác
             </Link>
@@ -452,7 +452,7 @@ export const CartPage: React.FC = () => {
                   <span className="text-[11px] text-slate-400">Đã bao gồm thuế VAT</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-xl sm:text-2xl font-black text-brand-700 block">
+                  <span className="text-xl sm:text-2xl font-black text-blue-700 block">
                     {formatVND(totalAmount)}
                   </span>
                 </div>
@@ -463,7 +463,7 @@ export const CartPage: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate('/checkout')}
-              className="w-full py-4 rounded-2xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-sm sm:text-base shadow-lg shadow-brand-600/30 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2"
+              className="w-full py-4 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm sm:text-base shadow-lg shadow-blue-600/30 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2"
             >
               <span>Tiến hành đặt hàng</span>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

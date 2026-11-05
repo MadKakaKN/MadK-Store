@@ -223,7 +223,7 @@ export const LoyaltyRewardsTab: React.FC = () => {
             <span className="text-slate-700 flex items-center gap-1.5">
               <span>🚀</span>
               <span>
-                Thăng hạng tiếp theo: <strong className="text-brand-600 font-bold">Hạng {account.nextTier}</strong>
+                Thăng hạng tiếp theo: <strong className="text-blue-600 font-bold">Hạng {account.nextTier}</strong>
               </span>
             </span>
             <span className="text-slate-500 font-mono text-[11px]">
@@ -240,7 +240,7 @@ export const LoyaltyRewardsTab: React.FC = () => {
               const percent = Math.min(100, Math.max(0, Math.round((spent / totalTarget) * 100)));
               return (
                 <div
-                  className="bg-gradient-to-r from-amber-500 to-brand-600 h-2.5 rounded-full transition-all duration-500"
+                  className="bg-gradient-to-r from-amber-500 to-blue-600 h-2.5 rounded-full transition-all duration-500"
                   style={{ width: `${percent}%` }}
                 />
               );

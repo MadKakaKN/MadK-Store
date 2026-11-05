@@ -41,7 +41,7 @@ export const WishlistList: React.FC = () => {
   if (loading) {
     return (
       <div className="bg-white rounded-3xl p-8 border border-slate-200/90 shadow-sm text-center py-16 text-slate-400">
-        <div className="inline-block w-8 h-8 border-3 border-brand-500 border-t-transparent rounded-full animate-spin mb-3" />
+        <div className="inline-block w-8 h-8 border-3 border-blue-500 border-t-transparent rounded-full animate-spin mb-3" />
         <p className="text-sm font-medium">Đang tải danh sách yêu thích...</p>
       </div>
     );
@@ -76,7 +76,7 @@ export const WishlistList: React.FC = () => {
         </div>
         <Link
           to="/categories"
-          className="inline-block px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-md shadow-brand-600/30 transition-all"
+          className="inline-block px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-md shadow-blue-600/30 transition-all"
         >
           Khám phá sản phẩm ngay
         </Link>
@@ -101,7 +101,7 @@ export const WishlistList: React.FC = () => {
         {items.map((item) => (
           <div
             key={item.id}
-            className="group relative rounded-2xl border border-slate-200 hover:border-brand-300 p-4 transition-all hover:shadow-md flex flex-col justify-between bg-white"
+            className="group relative rounded-2xl border border-slate-200 hover:border-blue-300 p-4 transition-all hover:shadow-md flex flex-col justify-between bg-white"
           >
             {/* Delete button */}
             <button
@@ -127,25 +127,25 @@ export const WishlistList: React.FC = () => {
               </Link>
 
               {/* Brand & Category */}
-              <span className="text-[10px] font-bold text-brand-600 uppercase tracking-wider block mb-1">
+              <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider block mb-1">
                 {item.brandName} &bull; {item.categoryName}
               </span>
 
               {/* Title */}
-              <h4 className="text-xs font-bold text-slate-900 line-clamp-2 leading-snug group-hover:text-brand-600 transition-colors">
+              <h4 className="text-xs font-bold text-slate-900 line-clamp-2 leading-snug group-hover:text-blue-600 transition-colors">
                 <Link to={`/products/${item.productSlug}`}>{item.productName}</Link>
               </h4>
             </div>
 
             {/* Price & Action */}
             <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-              <span className="text-sm font-black text-brand-700">
+              <span className="text-sm font-black text-blue-700">
                 {formatVND(item.basePrice)}
               </span>
 
               <Link
                 to={`/products/${item.productSlug}`}
-                className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-brand-600 text-white text-[11px] font-bold transition-colors"
+                className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-blue-600 text-white text-[11px] font-bold transition-colors"
               >
                 Xem chi tiết
               </Link>

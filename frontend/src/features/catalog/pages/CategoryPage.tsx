@@ -218,13 +218,13 @@ export const CategoryPage: React.FC = () => {
 
       {/* Breadcrumbs */}
       <nav className="flex items-center text-xs sm:text-sm text-slate-500 mb-6 gap-2">
-        <Link to="/" className="hover:text-brand-600 transition-colors">
+        <Link to="/" className="hover:text-blue-600 transition-colors">
           Trang chủ
         </Link>
         <span>&rsaquo;</span>
         {slug ? (
           <>
-            <Link to="/categories" className="hover:text-brand-600 transition-colors">
+            <Link to="/categories" className="hover:text-blue-600 transition-colors">
               Danh mục
             </Link>
             <span>&rsaquo;</span>
@@ -251,7 +251,7 @@ export const CategoryPage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="px-3.5 py-1.5 rounded-xl bg-brand-50 text-brand-700 text-xs font-bold border border-brand-200/60">
+            <span className="px-3.5 py-1.5 rounded-xl bg-blue-50 text-blue-700 text-xs font-bold border border-blue-200/60">
               {pagedData.totalItems} sản phẩm
             </span>
             <button
@@ -264,7 +264,7 @@ export const CategoryPage: React.FC = () => {
               </svg>
               <span>Bộ lọc</span>
               {hasActiveFilters && (
-                <span className="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+                <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
               )}
             </button>
           </div>
@@ -300,7 +300,7 @@ export const CategoryPage: React.FC = () => {
                 <Link
                   to="/categories"
                   className={`block px-3 py-2 rounded-xl font-medium transition-colors ${
-                    !slug ? 'bg-brand-50 text-brand-700 font-bold' : 'text-slate-600 hover:bg-slate-50'
+                    !slug ? 'bg-blue-50 text-blue-700 font-bold' : 'text-slate-600 hover:bg-slate-50'
                   }`}
                 >
                   Tất cả sản phẩm
@@ -310,7 +310,7 @@ export const CategoryPage: React.FC = () => {
                     <Link
                       to={`/categories/${cat.slug}`}
                       className={`block px-3 py-2 rounded-xl font-medium transition-colors ${
-                        slug === cat.slug ? 'bg-brand-50 text-brand-700 font-bold' : 'text-slate-700 hover:bg-slate-50'
+                        slug === cat.slug ? 'bg-blue-50 text-blue-700 font-bold' : 'text-slate-700 hover:bg-slate-50'
                       }`}
                     >
                       {cat.name}
@@ -323,8 +323,8 @@ export const CategoryPage: React.FC = () => {
                             to={`/categories/${sub.slug}`}
                             className={`block px-2.5 py-1.5 rounded-lg text-xs transition-colors ${
                               slug === sub.slug
-                                ? 'bg-brand-50 text-brand-700 font-bold'
-                                : 'text-slate-500 hover:text-brand-600 hover:bg-slate-50'
+                                ? 'bg-blue-50 text-blue-700 font-bold'
+                                : 'text-slate-500 hover:text-blue-600 hover:bg-slate-50'
                             }`}
                           >
                             {sub.name}
@@ -355,8 +355,8 @@ export const CategoryPage: React.FC = () => {
                       onClick={() => handleBrandChange(b.slug)}
                       className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
                         isSelected
-                          ? 'bg-brand-600 border-brand-600 text-white shadow-sm'
-                          : 'bg-white border-slate-200 text-slate-700 hover:border-brand-300 hover:bg-slate-50'
+                          ? 'bg-blue-600 border-blue-600 text-white shadow-sm'
+                          : 'bg-white border-slate-200 text-slate-700 hover:border-blue-300 hover:bg-slate-50'
                       }`}
                     >
                       {b.name}
@@ -382,7 +382,7 @@ export const CategoryPage: React.FC = () => {
                       onClick={() => handlePricePreset(preset.min, preset.max)}
                       className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium transition-all ${
                         isSelected
-                          ? 'bg-brand-50 text-brand-700 font-bold ring-1 ring-brand-300'
+                          ? 'bg-blue-50 text-blue-700 font-bold ring-1 ring-blue-300'
                           : 'text-slate-600 hover:bg-slate-50'
                       }`}
                     >
@@ -401,14 +401,14 @@ export const CategoryPage: React.FC = () => {
                     placeholder="Tối thiểu"
                     value={customMinInput}
                     onChange={(e) => setCustomMinInput(e.target.value)}
-                    className="w-full text-xs p-2 rounded-xl border border-slate-200 focus:outline-none focus:border-brand-500"
+                    className="w-full text-xs p-2 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500"
                   />
                   <input
                     type="number"
                     placeholder="Tối đa"
                     value={customMaxInput}
                     onChange={(e) => setCustomMaxInput(e.target.value)}
-                    className="w-full text-xs p-2 rounded-xl border border-slate-200 focus:outline-none focus:border-brand-500"
+                    className="w-full text-xs p-2 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500"
                   />
                 </div>
                 <button
@@ -438,8 +438,8 @@ export const CategoryPage: React.FC = () => {
                             onClick={() => handleSpecChange(spec.key, opt)}
                             className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-all ${
                               isSelected
-                                ? 'bg-brand-600 border-brand-600 text-white shadow-sm'
-                                : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-brand-300'
+                                ? 'bg-blue-600 border-blue-600 text-white shadow-sm'
+                                : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-blue-300'
                             }`}
                           >
                             {opt}
@@ -466,7 +466,7 @@ export const CategoryPage: React.FC = () => {
                   onClick={() => updateQuery({ sort: 'newest' })}
                   className={`px-3 py-1.5 rounded-lg transition-all ${
                     selectedSort === 'newest'
-                      ? 'bg-white text-brand-700 shadow-sm font-bold'
+                      ? 'bg-white text-blue-700 shadow-sm font-bold'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -477,7 +477,7 @@ export const CategoryPage: React.FC = () => {
                   onClick={() => updateQuery({ sort: 'price_asc' })}
                   className={`px-3 py-1.5 rounded-lg transition-all ${
                     selectedSort === 'price_asc'
-                      ? 'bg-white text-brand-700 shadow-sm font-bold'
+                      ? 'bg-white text-blue-700 shadow-sm font-bold'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -488,7 +488,7 @@ export const CategoryPage: React.FC = () => {
                   onClick={() => updateQuery({ sort: 'price_desc' })}
                   className={`px-3 py-1.5 rounded-lg transition-all ${
                     selectedSort === 'price_desc'
-                      ? 'bg-white text-brand-700 shadow-sm font-bold'
+                      ? 'bg-white text-blue-700 shadow-sm font-bold'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -504,11 +504,11 @@ export const CategoryPage: React.FC = () => {
 
           {/* Active Filter Pills Bar */}
           {hasActiveFilters && (
-            <div className="flex flex-wrap items-center gap-2 p-3 bg-brand-50/50 rounded-2xl border border-brand-100">
+            <div className="flex flex-wrap items-center gap-2 p-3 bg-blue-50/50 rounded-2xl border border-blue-100">
               <span className="text-xs font-bold text-slate-600">Đang lọc:</span>
 
               {selectedBrand && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-white border border-brand-200 text-xs font-semibold text-brand-700 shadow-sm">
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-white border border-blue-200 text-xs font-semibold text-blue-700 shadow-sm">
                   <span>Hãng: {activeBrandName}</span>
                   <button
                     type="button"
@@ -521,7 +521,7 @@ export const CategoryPage: React.FC = () => {
               )}
 
               {(minPriceParam !== undefined || maxPriceParam !== undefined) && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-white border border-brand-200 text-xs font-semibold text-brand-700 shadow-sm">
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-white border border-blue-200 text-xs font-semibold text-blue-700 shadow-sm">
                   <span>
                     Giá:{' '}
                     {minPriceParam !== undefined && maxPriceParam !== undefined
@@ -543,7 +543,7 @@ export const CategoryPage: React.FC = () => {
               {Object.entries(selectedSpecs).map(([specKey, specVal]) => (
                 <span
                   key={specKey}
-                  className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-white border border-brand-200 text-xs font-semibold text-brand-700 shadow-sm"
+                  className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-white border border-blue-200 text-xs font-semibold text-blue-700 shadow-sm"
                 >
                   <span className="capitalize">{specKey}: {specVal}</span>
                   <button
@@ -584,7 +584,7 @@ export const CategoryPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={clearAllFilters}
-                  className="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold transition-colors"
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-colors"
                 >
                   Xóa tất cả bộ lọc
                 </button>
@@ -617,7 +617,7 @@ export const CategoryPage: React.FC = () => {
                   onClick={() => updateQuery({ page: pageNum.toString() })}
                   className={`w-9 h-9 rounded-xl text-xs font-bold transition-all ${
                     currentPage === pageNum
-                      ? 'bg-brand-600 text-white shadow-sm'
+                      ? 'bg-blue-600 text-white shadow-sm'
                       : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'
                   }`}
                 >
@@ -671,7 +671,7 @@ export const CategoryPage: React.FC = () => {
                       onClick={() => handleBrandChange(b.slug)}
                       className={`px-3 py-1.5 rounded-xl text-xs font-semibold border ${
                         selectedBrand === b.slug
-                          ? 'bg-brand-600 text-white border-brand-600'
+                          ? 'bg-blue-600 text-white border-blue-600'
                           : 'bg-slate-50 text-slate-700 border-slate-200'
                       }`}
                     >
@@ -692,7 +692,7 @@ export const CategoryPage: React.FC = () => {
                       onClick={() => handlePricePreset(p.min, p.max)}
                       className={`w-full text-left px-3 py-2 rounded-xl text-xs ${
                         minPriceParam === p.min && maxPriceParam === p.max
-                          ? 'bg-brand-50 text-brand-700 font-bold'
+                          ? 'bg-blue-50 text-blue-700 font-bold'
                           : 'text-slate-600'
                       }`}
                     >
@@ -716,7 +716,7 @@ export const CategoryPage: React.FC = () => {
                             onClick={() => handleSpecChange(spec.key, opt)}
                             className={`px-2.5 py-1 rounded-lg text-xs font-medium border ${
                               selectedSpecs[spec.key] === opt
-                                ? 'bg-brand-600 text-white border-brand-600'
+                                ? 'bg-blue-600 text-white border-blue-600'
                                 : 'bg-slate-50 text-slate-700 border-slate-200'
                             }`}
                           >
@@ -734,7 +734,7 @@ export const CategoryPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setMobileFilterOpen(false)}
-                className="w-full py-3 bg-brand-600 text-white rounded-xl text-sm font-bold shadow-md"
+                className="w-full py-3 bg-blue-600 text-white rounded-xl text-sm font-bold shadow-md"
               >
                 Áp dụng bộ lọc
               </button>

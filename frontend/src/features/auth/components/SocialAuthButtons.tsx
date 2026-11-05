@@ -213,7 +213,7 @@ export const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({
             className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-slate-200 rounded-2xl bg-white hover:bg-slate-50 hover:border-slate-300 shadow-xs text-sm font-semibold text-slate-700 transition-all focus:outline-none focus:ring-4 focus:ring-slate-100 group disabled:opacity-60 cursor-pointer"
           >
             {isVerifying && activeProvider === 'Google' ? (
-              <span className="w-5 h-5 border-2 border-brand-600 border-t-transparent rounded-full animate-spin flex-shrink-0" />
+              <span className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin flex-shrink-0" />
             ) : (
               <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
                 <path
@@ -273,7 +273,7 @@ export const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({
             className="w-full flex items-center justify-center gap-3 py-2.5 px-4 border border-slate-200 rounded-xl bg-white hover:bg-slate-50 text-xs font-bold text-slate-700 shadow-2xs transition-all disabled:opacity-60 cursor-pointer"
           >
             {isVerifying && activeProvider === 'Google' ? (
-              <span className="w-4 h-4 border-2 border-brand-600 border-t-transparent rounded-full animate-spin flex-shrink-0" />
+              <span className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin flex-shrink-0" />
             ) : (
               <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
                 <path

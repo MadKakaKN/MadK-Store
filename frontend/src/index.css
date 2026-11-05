@@ -8,6 +8,36 @@
     -webkit-tap-highlight-color: transparent;
   }
   body {
-    @apply bg-slate-50 text-slate-900 font-sans;
+    @apply bg-slate-50 text-slate-900 font-sans antialiased selection:bg-brand-500 selection:text-white;
+  }
+
+  /* Custom sleek scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-200 rounded-full hover:bg-slate-300 transition-colors;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply backdrop-blur-xl bg-white/80 border border-slate-200/70 shadow-sm;
+  }
+  .glass-card {
+    @apply backdrop-blur-md bg-white/90 border border-slate-200/80 shadow-card hover:shadow-card-hover transition-all duration-300;
+  }
+  .glass-card-subtle {
+    @apply bg-white border border-slate-100/90 shadow-2xs hover:shadow-card transition-all duration-200;
+  }
+  .text-gradient-sapphire {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-700 via-indigo-600 to-sky-500;
+  }
+  .text-gradient-dark {
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-slate-900 via-slate-800 to-slate-600;
   }
 }

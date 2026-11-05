@@ -54,7 +54,7 @@ export const OrderHistoryTimeline: React.FC<OrderHistoryTimelineProps> = ({ hist
                 isLatest
                   ? isCancelled
                     ? 'bg-rose-500 border-white text-white shadow-md shadow-rose-500/30 ring-2 ring-rose-200'
-                    : 'bg-brand-600 border-white text-white shadow-md shadow-brand-600/30 ring-2 ring-brand-200'
+                    : 'bg-blue-600 border-white text-white shadow-md shadow-blue-600/30 ring-2 ring-blue-200'
                   : 'bg-white border-slate-300 text-slate-500'
               }`}
             >
