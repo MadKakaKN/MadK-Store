@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useSearchParams, useParams, Link } from 'react-router-dom';
 import { OrderDto } from '../../../types/order';
 import orderApi, { normalizeOrder } from '../../../api/orderApi';
+import paymentApi from '../../../api/paymentApi';
 import { formatVND } from '../../../utils/format';
 import { OrderStatusBadge } from '../../account/components/orders/OrderStatusBadge';
 import LoadingSpinner from '../../../components/common/LoadingSpinner';
@@ -276,6 +277,17 @@ export const OrderSuccessPage: React.FC = () => {
               {isMoMo && (
                 <a
                   href="https://me.momo.vn/0901316434"
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    try {
+                      const res = await paymentApi.createMomoPayment(order.orderNumber);
+                      if (res.isSuccess && res.data?.payUrl) {
+                        window.location.href = res.data.payUrl;
+                        return;
+                      }
+                    } catch {}
+                    window.open('https://me.momo.vn/0901316434', '_blank');
+                  }}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-4 py-2 rounded-xl text-xs font-bold bg-pink-600 hover:bg-pink-500 text-white transition-colors flex items-center gap-2 shadow-md shadow-pink-600/30"

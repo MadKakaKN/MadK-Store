@@ -13,6 +13,7 @@ import CartPage from '../features/cart/pages/CartPage';
 import CheckoutPage from '../features/checkout/pages/CheckoutPage';
 import OrderSuccessPage from '../features/checkout/pages/OrderSuccessPage';
 import VnpayReturnPage from '../features/checkout/pages/VnpayReturnPage';
+import MomoReturnPage from '../features/checkout/pages/MomoReturnPage';
 import AccountPage from '../features/account/pages/AccountPage';
 import ProtectedRoute from '../features/auth/components/ProtectedRoute';
 import GuestRoute from '../features/auth/components/GuestRoute';
@@ -56,6 +57,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="checkout" element={<CheckoutPage />} />
         <Route path="checkout/success" element={<OrderSuccessPage />} />
         <Route path="checkout/vnpay-return" element={<VnpayReturnPage />} />
+        <Route path="checkout/momo-return" element={<MomoReturnPage />} />
         <Route path="order-success/:orderNumber" element={<OrderSuccessPage />} />
 
         {/* Customer Policy Routes (SEO & Crawlers) */}

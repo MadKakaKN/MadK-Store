@@ -271,3 +271,46 @@ export interface PaymentDto {
   paymentTime?: string | null;
 }
 
+export interface CheckoutMomoResponseDto {
+  order: OrderDto;
+  payUrl: string;
+  deeplink?: string | null;
+  qrCodeUrl?: string | null;
+  orderId: string;
+  expiresAt: string;
+}
+
+export interface MomoPaymentResponseDto {
+  orderNumber: string;
+  orderId: string;
+  requestId: string;
+  amount: number;
+  payUrl: string;
+  deeplink?: string | null;
+  qrCodeUrl?: string | null;
+  shortLink?: string | null;
+  expiresAt: string;
+  resultCode: number;
+  message: string;
+}
+
+export interface MomoCallbackResultDto {
+  isSuccess: boolean;
+  orderNumber: string;
+  amount: number;
+  transId?: string | null;
+  resultCode: number;
+  message: string;
+  status: PaymentStatus;
+  orderStatus: OrderStatus;
+}
+
+export interface SimulateMomoIpnRequestDto {
+  orderNumber: string;
+  resultCode?: number;
+  amount?: number;
+  transId?: number;
+  message?: string;
+  tamperSignature?: boolean;
+}
+

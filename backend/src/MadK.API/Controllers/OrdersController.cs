@@ -16,15 +16,18 @@ public class OrdersController : ControllerBase
 {
     private readonly IOrderService _orderService;
     private readonly IVnpayService _vnpayService;
+    private readonly IMomoService _momoService;
     private readonly ILogger<OrdersController> _logger;
 
     public OrdersController(
         IOrderService orderService,
         IVnpayService vnpayService,
+        IMomoService momoService,
         ILogger<OrdersController> logger)
     {
         _orderService = orderService;
         _vnpayService = vnpayService;
+        _momoService = momoService;
         _logger = logger;
     }
 
@@ -111,6 +114,39 @@ public class OrdersController : ControllerBase
     }
 
     /// <summary>
+    /// <summary>
+    /// Checkout và tạo đơn hàng thanh toán trực tuyến qua cổng Ví điện tử MoMo:
+    /// - Tạo Order ở trạng thái PendingPayment.
+    /// - Giữ kho tạm thời (15 phút).
+    /// - Gọi MoMo Gateway sinh PayUrl / Deeplink / QR Code.
+    /// </summary>
+    [HttpPost("checkout/momo")]
+    [ProducesResponseType(typeof(Result<MadK.Application.DTOs.Payment.CheckoutMomoResponseDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<MadK.Application.DTOs.Payment.CheckoutMomoResponseDto>), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CheckoutMomo(
+        [FromBody] CheckoutCodRequestDto request,
+        [FromHeader(Name = "Idempotency-Key")] string? headerIdempotencyKey,
+        [FromHeader(Name = "X-Anonymous-Id")] string? headerAnonymousId,
+        CancellationToken ct)
+    {
+        var (userId, anonymousId) = ResolveUserOrAnonymous(headerAnonymousId);
+
+        var effectiveIdempotencyKey = !string.IsNullOrWhiteSpace(headerIdempotencyKey)
+            ? headerIdempotencyKey.Trim()
+            : request.IdempotencyKey;
+
+        var effectiveRequest = request with { IdempotencyKey = effectiveIdempotencyKey, PaymentMethod = PaymentMethod.MoMo };
+        string clientIp = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "127.0.0.1";
+
+        var result = await _momoService.CheckoutMomoAsync(userId, anonymousId, effectiveRequest, clientIp, ct);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
+
     /// Kích hoạt quét và hủy các đơn hàng quá hạn thanh toán online.
     /// Giải phóng tồn kho đang giữ. Dùng cho background job, test, hoặc admin trigger.
     /// </summary>

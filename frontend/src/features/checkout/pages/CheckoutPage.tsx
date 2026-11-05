@@ -373,6 +373,42 @@ export const CheckoutPage: React.FC = () => {
         }
       }
 
+      if (paymentMethod === 'MoMo') {
+        const momoRes = await paymentApi.checkoutMomo(checkoutPayload);
+        if (momoRes.isSuccess && momoRes.data) {
+          await clearCart();
+          await refreshCart();
+          hasPlacedOrderRef.current = true;
+          try {
+            sessionStorage.setItem('last_created_order', JSON.stringify(momoRes.data.order));
+          } catch {
+            // ignore
+          }
+
+          if (momoRes.data.payUrl) {
+            window.location.href = momoRes.data.payUrl;
+            return;
+          } else {
+            navigate(`/checkout/success?orderNumber=${encodeURIComponent(momoRes.data.order.orderNumber)}`, {
+              replace: true,
+              state: { order: momoRes.data.order },
+            });
+            return;
+          }
+        } else {
+          const errorText = momoRes.error || 'Khởi tạo thanh toán Ví MoMo không thành công. Vui lòng kiểm tra lại.';
+          setErrorMessage(errorText);
+          if (
+            errorText.toLowerCase().includes('tồn kho') ||
+            errorText.toLowerCase().includes('hết hàng') ||
+            errorText.toLowerCase().includes('không đủ')
+          ) {
+            setIsStockError(true);
+          }
+          return;
+        }
+      }
+
       // Thanh toán COD / BankTransfer / MoMo
       const res = await orderApi.checkoutCod(checkoutPayload);
 
@@ -804,7 +840,7 @@ export const CheckoutPage: React.FC = () => {
                       </span>
                     </div>
                     <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
-                      Chuyển tiền nhanh qua App MoMo đến <strong>0901316434</strong> (<strong>NGUYEN HOANG KHANG</strong>). Mã QR MoMo sẽ hiển thị ngay khi bạn nhấn xác nhận đặt hàng.
+                      Cổng thanh toán Ví MoMo (App MoMo hoặc quét mã QR MoMo All-In-One). Chuyển hướng thanh toán an toàn, tự động duyệt đơn tức thì.
                     </p>
                   </div>
                 </label>

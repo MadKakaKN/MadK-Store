@@ -95,15 +95,17 @@ Dưới đây là các hạng mục được chia nhỏ theo thứ tự ưu tiê
 
 ---
 
-#### 🟢 HẠNG MỤC 4: HOÀN THIỆN CỔNG THANH TOÁN VÍ MOMO (MoMo QR Payment)
+#### 🟢 HẠNG MỤC 4: HOÀN THIỆN CỔNG THANH TOÁN VÍ MOMO (MoMo QR Payment) (Đã hoàn thành ✅)
 > *Mục tiêu: Bổ sung phương thức thanh toán ví điện tử MoMo bên cạnh VietQR và VNPay.*
-- [ ] **4.1. Tích hợp MoMo All-In-One (AIO) Gateway Service**
+- [x] **4.1. Tích hợp MoMo All-In-One (AIO) Gateway Service**
   - `IMomoService` & `MomoService`: Tạo payment link / QR code với chữ ký điện tử HMAC-SHA256 theo chuẩn tài liệu MoMo v2.
-- [ ] **4.2. API Tạo giao dịch MoMo (`POST /api/v1/payments/momo/create`)**
+- [x] **4.2. API Tạo giao dịch MoMo (`POST /api/v1/payments/momo/create`)**
   - Nhận yêu cầu thanh toán đơn hàng, trả về PayUrl / Deeplink mở ứng dụng MoMo trên điện thoại hoặc mã QR trên máy tính.
-- [ ] **4.3. API Xử lý Webhook IPN MoMo (`POST /api/v1/payments/momo/ipn`)**
+- [x] **4.3. API Xử lý Webhook IPN MoMo (`POST /api/v1/payments/momo/ipn`)**
   - Kiểm tra chữ ký HMAC-SHA256 từ máy chủ MoMo.
-  - Xử lý Idempotency, cập nhật đơn hàng thành `Paid`, commit trừ tồn kho an toàn.
+  - Xử lý Idempotency, cập nhật đơn hàng thành `Paid`, commit trừ tồn kho an toàn, gửi thông báo Telegram & email.
+- [x] **4.4. Trang kết quả & đối soát MoMo Return URL (`/checkout/momo-return`) & Frontend Checkout Integration**
+  - Xác thực chữ ký phản hồi MoMo, giao diện thanh toán mượt mà trên Desktop và Mobile.
 
 ---
 

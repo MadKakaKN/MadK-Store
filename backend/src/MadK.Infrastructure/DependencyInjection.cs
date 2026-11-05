@@ -106,6 +106,28 @@ public static class DependencyInjection
         });
         services.AddScoped<IVnpayService, MadK.Infrastructure.Services.VnpayService>();
 
+        // MoMo All-In-One Payment Gateway
+        services.Configure<MadK.Application.DTOs.Payment.MomoSettings>(opt =>
+        {
+            configuration.GetSection(MadK.Application.DTOs.Payment.MomoSettings.SectionName).Bind(opt);
+            var envPartner = configuration["MOMO_PARTNER_CODE"];
+            if (!string.IsNullOrWhiteSpace(envPartner)) opt.PartnerCode = envPartner;
+            var envAccess = configuration["MOMO_ACCESS_KEY"];
+            if (!string.IsNullOrWhiteSpace(envAccess)) opt.AccessKey = envAccess;
+            var envSecret = configuration["MOMO_SECRET_KEY"];
+            if (!string.IsNullOrWhiteSpace(envSecret)) opt.SecretKey = envSecret;
+            var envEndpoint = configuration["MOMO_ENDPOINT"];
+            if (!string.IsNullOrWhiteSpace(envEndpoint)) opt.Endpoint = envEndpoint;
+            var envReturn = configuration["MOMO_RETURN_URL"];
+            if (!string.IsNullOrWhiteSpace(envReturn)) opt.ReturnUrl = envReturn;
+            var envIpn = configuration["MOMO_IPN_URL"];
+            if (!string.IsNullOrWhiteSpace(envIpn)) opt.IpnUrl = envIpn;
+        });
+        services.AddHttpClient<IMomoService, MadK.Infrastructure.Services.MomoService>(client =>
+        {
+            client.Timeout = TimeSpan.FromSeconds(15);
+        });
+
         // VietQR / SePAY Bank Transfer Webhook Service
         services.Configure<MadK.Application.DTOs.Payment.BankTransferSettings>(
             configuration.GetSection(MadK.Application.DTOs.Payment.BankTransferSettings.SectionName));
