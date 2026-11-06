@@ -4,8 +4,10 @@ import { useAuth } from '../context/AuthContext';
 import { tokenStorage } from '../../../api/authApi';
 import { SocialAuthButtons } from '../components/SocialAuthButtons';
 
+const STAFF_ROLES = ['Admin', 'Sales', 'Warehouse'];
+
 export const LoginPage: React.FC = () => {
-  const { login } = useAuth();
+  const { login, logout } = useAuth();
   const [searchParams] = useSearchParams();
   const explicitRedirect = searchParams.get('redirect') || searchParams.get('returnUrl');
 
@@ -18,6 +20,7 @@ export const LoginPage: React.FC = () => {
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [serverError, setServerError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isStaffAttempt, setIsStaffAttempt] = useState(false);
 
   const validate = (): boolean => {
     const newErrors: { email?: string; password?: string } = {};
@@ -36,20 +39,34 @@ export const LoginPage: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = async () => {
     const currentUser = tokenStorage.getUser();
-    const isAdmin = currentUser?.roles?.includes('Admin');
-    const safeRedirect = explicitRedirect && !explicitRedirect.startsWith('/auth') ? explicitRedirect : '/';
+    const userRoles = currentUser?.roles || [];
+    const isStaff = userRoles.some((r) => STAFF_ROLES.includes(r));
 
-    const targetUrl = isAdmin && (!explicitRedirect || explicitRedirect === '/') ? '/admin' : safeRedirect;
+    if (isStaff) {
+      // Reject staff credentials on customer storefront portal
+      await logout();
+      setIsStaffAttempt(true);
+      setServerError(
+        'Đây là tài khoản cán bộ / nhân viên nội bộ (Admin, Sales hoặc Warehouse). Vì lý do an toàn bảo mật, cổng khách hàng không tiếp nhận tài khoản nội bộ.'
+      );
+      return;
+    }
+
+    const safeRedirect =
+      explicitRedirect && !explicitRedirect.startsWith('/auth') && !explicitRedirect.startsWith('/admin')
+        ? explicitRedirect
+        : '/';
 
     // Hard navigation guarantees fresh session & avoids React Router race conditions
-    window.location.href = targetUrl;
+    window.location.href = safeRedirect;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setServerError(null);
+    setIsStaffAttempt(false);
 
     if (!validate()) return;
 
@@ -61,7 +78,7 @@ export const LoginPage: React.FC = () => {
     setIsSubmitting(false);
 
     if (result.success) {
-      handleLoginSuccess();
+      await handleLoginSuccess();
     } else {
       setServerError(result.error || 'Đăng nhập không thành công.');
     }
@@ -100,21 +117,17 @@ export const LoginPage: React.FC = () => {
         <div className="bg-white py-8 px-6 sm:px-10 shadow-xl shadow-slate-200/50 rounded-3xl border border-slate-100">
           {/* Quick Demo Pill Helper */}
           <div className="mb-6 p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
-            <p className="text-xs font-semibold text-slate-500 mb-2">Tài khoản mẫu đã seed:</p>
+            <p className="text-xs font-semibold text-slate-500 mb-2">Tài khoản khách hàng mẫu:</p>
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
-                onClick={() => handleFillDemo('customer@madkstore.vn', 'CustomerPassword123!')}
+                onClick={() => {
+                  handleFillDemo('customer@madkstore.vn', 'CustomerPassword123!');
+                  setIsStaffAttempt(false);
+                }}
                 className="text-xs font-medium px-2.5 py-1.5 bg-white hover:bg-blue-50 hover:text-blue-700 text-slate-700 rounded-lg border border-slate-200 shadow-2xs transition-colors"
               >
-                👤 Khách hàng
-              </button>
-              <button
-                type="button"
-                onClick={() => handleFillDemo('admin@madkstore.vn', 'AdminPassword123!')}
-                className="text-xs font-medium px-2.5 py-1.5 bg-white hover:bg-blue-50 hover:text-blue-700 text-slate-700 rounded-lg border border-slate-200 shadow-2xs transition-colors"
-              >
-                🛡️ Quản trị viên
+                👤 Điền tài khoản Khách hàng
               </button>
             </div>
           </div>
@@ -124,8 +137,18 @@ export const LoginPage: React.FC = () => {
             <div className="mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-200/80 text-rose-800 text-sm flex items-start gap-3 animate-shake">
               <span className="text-lg leading-none mt-0.5">⚠️</span>
               <div className="flex-1">
-                <p className="font-semibold">Đăng nhập thất bại</p>
-                <p className="text-xs text-rose-700 mt-0.5">{serverError}</p>
+                <p className="font-semibold">{isStaffAttempt ? 'Khu vực dành riêng cho Khách hàng' : 'Đăng nhập thất bại'}</p>
+                <p className="text-xs text-rose-700 mt-0.5 leading-relaxed">{serverError}</p>
+                {isStaffAttempt && (
+                  <div className="mt-3">
+                    <Link
+                      to="/admin/login"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors"
+                    >
+                      Chuyển sang Cổng Quản Trị &rarr;
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           )}
