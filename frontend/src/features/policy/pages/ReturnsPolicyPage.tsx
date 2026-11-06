@@ -19,7 +19,7 @@ export const ReturnsPolicyPage: React.FC = () => {
       />
 
       <nav className="flex items-center gap-2 text-xs text-slate-500">
-        <Link to="/" className="hover:text-brand-600 transition-colors">
+        <Link to="/" className="hover:text-blue-600 transition-colors">
           Trang chủ
         </Link>
         <span>/</span>

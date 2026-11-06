@@ -39,7 +39,7 @@ export const NotFoundPage: React.FC = () => {
       <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-sm">
         <Link
           to="/"
-          className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-sm shadow-lg shadow-brand-600/25 transition-all hover:scale-[1.02] active:scale-[0.98] text-center"
+          className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-lg shadow-blue-600/25 transition-all hover:scale-[1.02] active:scale-[0.98] text-center"
         >
           Quay về trang chủ
         </Link>

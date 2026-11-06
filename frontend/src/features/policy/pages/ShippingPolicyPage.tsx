@@ -19,7 +19,7 @@ export const ShippingPolicyPage: React.FC = () => {
       />
 
       <nav className="flex items-center gap-2 text-xs text-slate-500">
-        <Link to="/" className="hover:text-brand-600 transition-colors">
+        <Link to="/" className="hover:text-blue-600 transition-colors">
           Trang chủ
         </Link>
         <span>/</span>
@@ -62,7 +62,7 @@ export const ShippingPolicyPage: React.FC = () => {
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
               <div className="flex items-center justify-between">
                 <h3 className="font-bold text-slate-900 text-sm">Giao Hỏa Tốc 2 Giờ (Nội thành)</h3>
-                <span className="px-2.5 py-0.5 rounded-full bg-brand-50 text-brand-700 text-xs font-bold border border-brand-200">
+                <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold border border-blue-200">
                   Từ 40.000đ
                 </span>
               </div>
