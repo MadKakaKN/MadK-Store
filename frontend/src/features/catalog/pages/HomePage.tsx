@@ -6,6 +6,7 @@ import ProductCard from '../components/ProductCard';
 import Hero3DShowcase from '../components/Hero3DShowcase';
 import LoadingSpinner from '../../../components/common/LoadingSpinner';
 import SEOHead, { buildOrganizationSchema, buildWebSiteSchema } from '../../../components/common/SEOHead';
+import { IconShield, IconTruck, IconStar, IconCube3D, IconLaptop } from '../../../components/common/Icons';
 
 export const HomePage: React.FC = () => {
   const [categories, setCategories] = useState<CategoryTreeDto[]>([]);
@@ -103,19 +104,19 @@ export const HomePage: React.FC = () => {
         {/* Feature badges row */}
         <div className="relative z-10 mt-10 pt-8 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm text-slate-300 font-semibold">
           <div className="flex items-center gap-2.5">
-            <span className="w-8 h-8 rounded-xl bg-blue-500/15 border border-blue-400/20 text-blue-400 flex items-center justify-center text-base">🛡️</span>
+            <span className="w-8 h-8 rounded-xl bg-blue-500/15 border border-blue-400/20 text-blue-400 flex items-center justify-center"><IconShield className="w-4 h-4" /></span>
             <span>100% Chính hãng</span>
           </div>
           <div className="flex items-center gap-2.5">
-            <span className="w-8 h-8 rounded-xl bg-blue-500/15 border border-blue-400/20 text-blue-400 flex items-center justify-center text-base">🚚</span>
+            <span className="w-8 h-8 rounded-xl bg-blue-500/15 border border-blue-400/20 text-blue-400 flex items-center justify-center"><IconTruck className="w-4 h-4" /></span>
             <span>Giao nhanh GHN</span>
           </div>
           <div className="flex items-center gap-2.5">
-            <span className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-400/20 text-amber-400 flex items-center justify-center text-base">⭐</span>
+            <span className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-400/20 text-amber-400 flex items-center justify-center"><IconStar className="w-4 h-4" /></span>
             <span>Tích điểm tới 5%</span>
           </div>
           <div className="flex items-center gap-2.5">
-            <span className="w-8 h-8 rounded-xl bg-indigo-500/15 border border-indigo-400/20 text-indigo-400 flex items-center justify-center text-base">🎮</span>
+            <span className="w-8 h-8 rounded-xl bg-indigo-500/15 border border-indigo-400/20 text-indigo-400 flex items-center justify-center"><IconCube3D className="w-4 h-4" /></span>
             <span>Mô hình 3D xoay 360°</span>
           </div>
         </div>
@@ -153,7 +154,7 @@ export const HomePage: React.FC = () => {
                   {cat.iconUrl ? (
                     <img src={cat.iconUrl} alt={cat.name} className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-2xl">💻</span>
+                    <IconLaptop className="w-7 h-7" />
                   )}
                 </div>
                 <h3 className="mt-4 font-bold text-slate-900 group-hover:text-blue-600 text-base sm:text-lg transition-colors">

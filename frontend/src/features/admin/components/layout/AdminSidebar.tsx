@@ -3,6 +3,21 @@ import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '../../../auth/context/AuthContext';
 import { getVisibleAdminNavItems } from '../../navigation/adminNavItems';
 import Badge from '../common/Badge';
+import {
+  IconBarChart,
+  IconPackage,
+  IconRotateCcw,
+  IconWarehouse,
+  IconTag,
+  IconStar,
+  IconMoney,
+  IconTicket,
+  IconUsers,
+  IconShield,
+  IconTrendingUp,
+  IconStore,
+  IconLogout,
+} from '../../../../components/common/Icons';
 
 export interface AdminSidebarProps {
   isCollapsed?: boolean;
@@ -10,6 +25,35 @@ export interface AdminSidebarProps {
   isMobileOpen: boolean;
   onCloseMobile: () => void;
 }
+
+const renderNavIcon = (id: string, className = 'w-4 h-4 shrink-0') => {
+  switch (id) {
+    case 'dashboard':
+      return <IconBarChart className={className} />;
+    case 'orders':
+      return <IconPackage className={className} />;
+    case 'returns':
+      return <IconRotateCcw className={className} />;
+    case 'inventory':
+      return <IconWarehouse className={className} />;
+    case 'catalog':
+      return <IconTag className={className} />;
+    case 'reviews':
+      return <IconStar className={className} />;
+    case 'pricing':
+      return <IconMoney className={className} />;
+    case 'discounts':
+      return <IconTicket className={className} />;
+    case 'users':
+      return <IconUsers className={className} />;
+    case 'audit-logs':
+      return <IconShield className={className} />;
+    case 'reports':
+      return <IconTrendingUp className={className} />;
+    default:
+      return <IconTag className={className} />;
+  }
+};
 
 export const AdminSidebar: React.FC<AdminSidebarProps> = ({
   isCollapsed = false,
@@ -59,22 +103,10 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
             </div>
           )}
         </Link>
-
-
-
-        {/* Mobile Close Button */}
-        <button
-          type="button"
-          onClick={onCloseMobile}
-          className="lg:hidden text-slate-400 hover:text-slate-600 p-1 text-lg"
-          aria-label="Đóng menu"
-        >
-          ✕
-        </button>
       </div>
 
-      {/* 2. Navigation Items List */}
-      <div className="flex-1 overflow-y-auto py-3 px-3 space-y-1">
+      {/* 2. Navigation Items */}
+      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
         {visibleItems.map((item) => (
           <NavLink
             key={item.id}
@@ -90,7 +122,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
               } ${isCollapsed ? 'justify-center px-2' : ''}`
             }
           >
-            <span className="text-base shrink-0">{item.icon}</span>
+            <span className="shrink-0">{renderNavIcon(item.id)}</span>
             {!isCollapsed && (
               <span className="truncate flex-1">{item.label}</span>
             )}
@@ -111,7 +143,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
               isCollapsed ? 'justify-center px-2' : ''
             }`}
           >
-            <span className="text-sm shrink-0">🏪</span>
+            <IconStore className="w-4 h-4 shrink-0 text-slate-500" />
             {!isCollapsed && <span className="truncate">Về trang bán hàng</span>}
           </Link>
         </div>
@@ -121,7 +153,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
       <div className="p-3 border-t border-slate-200 bg-slate-50/70 shrink-0">
         <div className={`flex items-center gap-3 ${isCollapsed ? 'justify-center' : ''}`}>
           {/* Avatar / Initials */}
-          <div className="w-9 h-9 rounded-xl bg-blue-100 text-brand-800 flex items-center justify-center font-bold text-sm shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold text-sm shrink-0">
             {user?.fullName ? user.fullName[0].toUpperCase() : 'U'}
           </div>
 
@@ -146,7 +178,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
               className="text-slate-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition-colors shrink-0"
               title="Đăng xuất"
             >
-              🚪
+              <IconLogout className="w-4 h-4" />
             </button>
           )}
         </div>

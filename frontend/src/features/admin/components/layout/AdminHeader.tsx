@@ -3,6 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../../auth/context/AuthContext';
 import { ADMIN_NAV_ITEMS } from '../../navigation/adminNavItems';
 import Badge from '../common/Badge';
+import { IconStore, IconUsers, IconLogout } from '../../../../components/common/Icons';
 
 export interface AdminHeaderProps {
   onOpenMobileSidebar: () => void;
@@ -90,7 +91,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onOpenMobileSidebar })
           className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
           title="Mở website bán hàng trong tab mới"
         >
-          <span>🏪</span>
+          <IconStore className="w-3.5 h-3.5 text-slate-500" />
           <span>Xem website</span>
           <span className="text-[10px] text-slate-400">↗</span>
         </Link>
@@ -151,14 +152,14 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onOpenMobileSidebar })
                   onClick={() => setIsUserMenuOpen(false)}
                   className="flex items-center gap-2 px-4 py-2 text-xs text-slate-700 hover:bg-slate-50 transition-colors"
                 >
-                  <span>👤</span> Thông tin tài khoản
+                  <IconUsers className="w-3.5 h-3.5 text-slate-400" /> Thông tin tài khoản
                 </Link>
                 <Link
                   to="/"
                   onClick={() => setIsUserMenuOpen(false)}
                   className="flex items-center gap-2 px-4 py-2 text-xs text-slate-700 hover:bg-slate-50 transition-colors"
                 >
-                  <span>🏪</span> Trang chủ mua sắm
+                  <IconStore className="w-3.5 h-3.5 text-slate-500" /> Trang chủ mua sắm
                 </Link>
               </div>
 
@@ -168,7 +169,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onOpenMobileSidebar })
                   onClick={handleLogout}
                   className="w-full text-left flex items-center gap-2 px-4 py-2 text-xs text-rose-600 hover:bg-rose-50 transition-colors font-medium"
                 >
-                  <span>🚪</span> Đăng xuất
+                  <IconLogout className="w-3.5 h-3.5 text-rose-500" /> Đăng xuất
                 </button>
               </div>
             </div>

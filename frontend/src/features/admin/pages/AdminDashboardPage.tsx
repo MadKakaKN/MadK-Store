@@ -5,6 +5,28 @@ import Badge, { BadgeVariant } from '../components/common/Badge';
 import { adminDashboardApi, DashboardSummary } from '../../../api/adminDashboardApi';
 import { adminOrderApi } from '../../../api/adminOrderApi';
 import { OrderDto, ORDER_STATUS_CONFIG } from '../../../types/order';
+import {
+  IconMoney,
+  IconPackage,
+  IconClock,
+  IconTarget,
+  IconDiamond,
+  IconTrendingUp,
+  IconTruck,
+  IconRotateCcw,
+  IconTicket,
+  IconShield,
+  IconBriefcase,
+  IconWarehouse,
+  IconCrown,
+  IconPhone,
+  IconFlame,
+  IconCreditCard,
+  IconTag,
+  IconCheck,
+  IconAlertTriangle,
+  IconGear,
+} from '../../../components/common/Icons';
 
 type TimeRange = '7d' | '30d' | 'all';
 
@@ -20,11 +42,11 @@ const ORDER_BADGE_MAP: Record<string, BadgeVariant> = {
   Returned: 'neutral',
 };
 
-const PAYMENT_STYLE_MAP: Record<string, { label: string; className: string; icon: string }> = {
-  MoMo: { label: 'MoMo', className: 'bg-pink-50 text-pink-700 border-pink-200', icon: '👛' },
-  VNPay: { label: 'VNPAY', className: 'bg-red-50 text-red-700 border-red-200', icon: '💳' },
-  COD: { label: 'COD', className: 'bg-amber-50 text-amber-700 border-amber-200', icon: '💵' },
-  BankTransfer: { label: 'Chuyển khoản', className: 'bg-blue-50 text-blue-700 border-blue-200', icon: '🏦' },
+const PAYMENT_STYLE_MAP: Record<string, { label: string; className: string; icon: React.ReactNode }> = {
+  MoMo: { label: 'MoMo', className: 'bg-pink-50 text-pink-700 border-pink-200', icon: <IconMoney className="w-3 h-3 text-pink-600" /> },
+  VNPay: { label: 'VNPAY', className: 'bg-red-50 text-red-700 border-red-200', icon: <IconCreditCard className="w-3 h-3 text-red-600" /> },
+  COD: { label: 'COD', className: 'bg-amber-50 text-amber-700 border-amber-200', icon: <IconMoney className="w-3 h-3 text-amber-600" /> },
+  BankTransfer: { label: 'Chuyển khoản', className: 'bg-blue-50 text-blue-700 border-blue-200', icon: <IconCreditCard className="w-3 h-3 text-blue-600" /> },
 };
 
 export const AdminDashboardPage: React.FC = () => {
@@ -161,13 +183,13 @@ export const AdminDashboardPage: React.FC = () => {
           <div>
             <div className="flex flex-wrap items-center gap-3">
               <span className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-blue-600/20">
-                {isSales ? '💼' : isWarehouse ? '🏭' : '🛡️'}
+                {isSales ? <IconBriefcase className="w-5 h-5 text-white" /> : isWarehouse ? <IconWarehouse className="w-5 h-5 text-white" /> : <IconShield className="w-5 h-5 text-white" />}
               </span>
               <div>
                 <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
                   <span>
                     {isSales
-                      ? `Xin chào, ${user?.fullName || 'Chuyên viên Sales'} 👋`
+                      ? `Xin chào, ${user?.fullName || 'Chuyên viên Sales'}`
                       : isWarehouse
                         ? `Trung tâm Điều hành Kho vận & Tồn kho`
                         : `Trung tâm Điều hành Toàn diện MadK`}
@@ -190,36 +212,39 @@ export const AdminDashboardPage: React.FC = () => {
               <span className="px-2.5 text-slate-500 text-[11px] hidden sm:inline">Phân hệ:</span>
               <button
                 onClick={() => setActiveRole('Sales')}
-                className={`px-3.5 py-1.5 rounded-xl transition-all ${
+                className={`px-3.5 py-1.5 rounded-xl transition-all flex items-center gap-1.5 ${
                   activeRole === 'Sales'
                     ? 'bg-white text-blue-700 shadow-xs font-bold ring-1 ring-slate-200/50'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
                 title="Giao diện kinh doanh dành riêng cho nhân viên Sales"
               >
-                💼 Sales
+                <IconBriefcase className="w-3.5 h-3.5" />
+                <span>Sales</span>
               </button>
               <button
                 onClick={() => setActiveRole('Admin')}
-                className={`px-3.5 py-1.5 rounded-xl transition-all ${
+                className={`px-3.5 py-1.5 rounded-xl transition-all flex items-center gap-1.5 ${
                   activeRole === 'Admin'
                     ? 'bg-white text-purple-700 shadow-xs font-bold ring-1 ring-slate-200/50'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
                 title="Giao diện toàn quyền cho quản trị viên"
               >
-                👑 Admin
+                <IconCrown className="w-3.5 h-3.5" />
+                <span>Admin</span>
               </button>
               <button
                 onClick={() => setActiveRole('Warehouse')}
-                className={`px-3.5 py-1.5 rounded-xl transition-all ${
+                className={`px-3.5 py-1.5 rounded-xl transition-all flex items-center gap-1.5 ${
                   activeRole === 'Warehouse'
                     ? 'bg-white text-amber-700 shadow-xs font-bold ring-1 ring-slate-200/50'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
                 title="Giao diện kho vận & quản lý tồn kho"
               >
-                🏭 Kho
+                <IconWarehouse className="w-3.5 h-3.5" />
+                <span>Kho</span>
               </button>
             </div>
 
@@ -254,7 +279,8 @@ export const AdminDashboardPage: React.FC = () => {
                 to="/admin/orders?status=Pending"
                 className="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold border border-amber-200/80 transition-colors inline-flex items-center gap-1.5 shadow-2xs"
               >
-                <span>📞 Đơn cần gọi:</span>
+                <IconPhone className="w-3.5 h-3.5 text-amber-700" />
+                <span>Đơn cần gọi:</span>
                 <span className="bg-amber-600 text-white px-1.5 py-0.2 rounded-full text-[10px]">
                   {urgentOrdersCount}
                 </span>
@@ -263,7 +289,8 @@ export const AdminDashboardPage: React.FC = () => {
                 to="/admin/returns"
                 className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-colors inline-flex items-center gap-1.5"
               >
-                <span>↩️ Đổi trả: {orderStatusCounts.returned}</span>
+                <IconRotateCcw className="w-3.5 h-3.5 text-slate-600" />
+                <span>Đổi trả: {orderStatusCounts.returned}</span>
               </Link>
             </div>
           </div>
@@ -274,7 +301,7 @@ export const AdminDashboardPage: React.FC = () => {
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-800 text-sm p-4 rounded-2xl flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span>⚠️</span>
+            <IconAlertTriangle className="w-5 h-5 text-red-600" />
             <span>{error}</span>
           </div>
           <button
@@ -300,8 +327,8 @@ export const AdminDashboardPage: React.FC = () => {
                   {revenue ? formatVND(revenue.totalRevenue) : '0 đ'}
                 </h3>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-white flex items-center justify-center text-xl shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform">
-                💰
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-white flex items-center justify-center shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+                <IconMoney className="w-6 h-6 text-white" />
               </div>
             </div>
             <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
@@ -320,8 +347,8 @@ export const AdminDashboardPage: React.FC = () => {
                   {inventory?.totalSkus || 0} SKU
                 </h3>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white flex items-center justify-center text-xl shadow-md shadow-blue-500/20">
-                🏷️
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white flex items-center justify-center shadow-md shadow-blue-500/20">
+                <IconTag className="w-6 h-6 text-white" />
               </div>
             </div>
             <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
@@ -346,8 +373,8 @@ export const AdminDashboardPage: React.FC = () => {
                   {urgentOrdersCount} đơn hàng
                 </h3>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-400 text-white flex items-center justify-center text-xl shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform">
-                ⏳
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-400 text-white flex items-center justify-center shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform">
+                <IconClock className="w-6 h-6 text-white" />
               </div>
             </div>
             <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs">
@@ -366,8 +393,8 @@ export const AdminDashboardPage: React.FC = () => {
                   {revenue ? formatVND(revenue.grossProfit) : '0 đ'}
                 </h3>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white flex items-center justify-center text-xl shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
-                📈
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white flex items-center justify-center shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
+                <IconTrendingUp className="w-6 h-6 text-white" />
               </div>
             </div>
             <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs">
@@ -386,8 +413,8 @@ export const AdminDashboardPage: React.FC = () => {
                   {inventory?.totalOnHand || 0} SP
                 </h3>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-blue-500 text-white flex items-center justify-center text-xl shadow-md shadow-indigo-500/20">
-                📦
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-blue-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20">
+                <IconPackage className="w-6 h-6 text-white" />
               </div>
             </div>
             <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
@@ -407,8 +434,8 @@ export const AdminDashboardPage: React.FC = () => {
                   {fulfillmentRate}%
                 </h3>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-500 text-white flex items-center justify-center text-xl shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform">
-                🎯
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform">
+                <IconTarget className="w-6 h-6 text-white" />
               </div>
             </div>
             <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
@@ -427,8 +454,8 @@ export const AdminDashboardPage: React.FC = () => {
                   {revenue?.totalOrders || 0} đơn
                 </h3>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-500 text-white flex items-center justify-center text-xl shadow-md shadow-purple-500/20 group-hover:scale-105 transition-transform">
-                🛒
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-500 text-white flex items-center justify-center shadow-md shadow-purple-500/20 group-hover:scale-105 transition-transform">
+                <IconPackage className="w-6 h-6 text-white" />
               </div>
             </div>
             <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
@@ -445,8 +472,8 @@ export const AdminDashboardPage: React.FC = () => {
                   {inventory?.availableStock || 0} SP
                 </h3>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-white flex items-center justify-center text-xl shadow-md shadow-emerald-500/20">
-                ✅
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-white flex items-center justify-center shadow-md shadow-emerald-500/20">
+                <IconCheck className="w-6 h-6 text-white" />
               </div>
             </div>
             <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
@@ -466,8 +493,8 @@ export const AdminDashboardPage: React.FC = () => {
                   {revenue ? formatVND(revenue.averageOrderValue) : '0 đ'}
                 </h3>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-yellow-400 text-white flex items-center justify-center text-xl shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform">
-                💎
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-yellow-400 text-white flex items-center justify-center shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform">
+                <IconDiamond className="w-6 h-6 text-white" />
               </div>
             </div>
             <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
@@ -484,8 +511,8 @@ export const AdminDashboardPage: React.FC = () => {
                   {inventory?.lowStockSkuCount || 0} SKU
                 </h3>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-500 to-red-400 text-white flex items-center justify-center text-xl shadow-md shadow-rose-500/20">
-                ⚠️
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-500 to-red-400 text-white flex items-center justify-center shadow-md shadow-rose-500/20">
+                <IconAlertTriangle className="w-6 h-6 text-white" />
               </div>
             </div>
             <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
@@ -502,7 +529,8 @@ export const AdminDashboardPage: React.FC = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 mb-5 gap-2">
             <div>
               <h3 className="text-base font-black text-slate-900 tracking-tight flex items-center gap-2">
-                <span>🔄 Phễu Trạng Thái Đơn Hàng (Sales Pipeline)</span>
+                <IconTarget className="w-5 h-5 text-blue-600" />
+                <span>Phễu Trạng Thái Đơn Hàng (Sales Pipeline)</span>
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">
                 Nhấp vào từng trạng thái để mở danh sách đơn hàng tương ứng
@@ -524,7 +552,7 @@ export const AdminDashboardPage: React.FC = () => {
             >
               <div className="flex items-center justify-between text-xs font-bold text-amber-800">
                 <span>Chờ xác nhận</span>
-                <span>⏳</span>
+                <IconClock className="w-4 h-4 text-amber-700" />
               </div>
               <div className="mt-3 flex items-baseline justify-between">
                 <span className="text-2xl sm:text-3xl font-black text-amber-900">{orderStatusCounts.pending}</span>
@@ -539,7 +567,7 @@ export const AdminDashboardPage: React.FC = () => {
             >
               <div className="flex items-center justify-between text-xs font-bold text-blue-800">
                 <span>Đang đóng gói</span>
-                <span>⚙️</span>
+                <IconGear className="w-4 h-4 text-blue-700" />
               </div>
               <div className="mt-3 flex items-baseline justify-between">
                 <span className="text-2xl sm:text-3xl font-black text-blue-900">{orderStatusCounts.processing}</span>
@@ -554,7 +582,7 @@ export const AdminDashboardPage: React.FC = () => {
             >
               <div className="flex items-center justify-between text-xs font-bold text-purple-800">
                 <span>Đang giao hàng</span>
-                <span>🚚</span>
+                <IconTruck className="w-4 h-4 text-purple-700" />
               </div>
               <div className="mt-3 flex items-baseline justify-between">
                 <span className="text-2xl sm:text-3xl font-black text-purple-900">{orderStatusCounts.shipping}</span>
@@ -569,7 +597,7 @@ export const AdminDashboardPage: React.FC = () => {
             >
               <div className="flex items-center justify-between text-xs font-bold text-emerald-800">
                 <span>Giao thành công</span>
-                <span>✅</span>
+                <IconCheck className="w-4 h-4 text-emerald-700" />
               </div>
               <div className="mt-3 flex items-baseline justify-between">
                 <span className="text-2xl sm:text-3xl font-black text-emerald-900">{orderStatusCounts.completed}</span>
@@ -584,7 +612,7 @@ export const AdminDashboardPage: React.FC = () => {
             >
               <div className="flex items-center justify-between text-xs font-bold text-orange-800">
                 <span>Đổi trả & Hoàn</span>
-                <span>↩️</span>
+                <IconRotateCcw className="w-4 h-4 text-orange-700" />
               </div>
               <div className="mt-3 flex items-baseline justify-between">
                 <span className="text-2xl sm:text-3xl font-black text-orange-900">{orderStatusCounts.returned}</span>
@@ -599,7 +627,7 @@ export const AdminDashboardPage: React.FC = () => {
             >
               <div className="flex items-center justify-between text-xs font-bold text-rose-800">
                 <span>Đơn đã hủy</span>
-                <span>❌</span>
+                <IconAlertTriangle className="w-4 h-4 text-rose-700" />
               </div>
               <div className="mt-3 flex items-baseline justify-between">
                 <span className="text-2xl sm:text-3xl font-black text-rose-900">{orderStatusCounts.cancelled}</span>
@@ -616,7 +644,7 @@ export const AdminDashboardPage: React.FC = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-slate-100 gap-4">
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-lg">📈</span>
+                <IconTrendingUp className="w-5 h-5 text-blue-600" />
                 <h3 className="text-base sm:text-lg font-black text-slate-900 tracking-tight">
                   Biểu Đồ Doanh Thu & Nhịp Độ Bán Hàng
                 </h3>
@@ -672,7 +700,6 @@ export const AdminDashboardPage: React.FC = () => {
 
                 <div className="h-72 flex items-end gap-2 sm:gap-4 pt-10 pb-2 px-3 overflow-x-auto relative z-10">
                   {filteredDailyStats.map((stat, idx) => {
-                    // Safe scaled bar height with visual minimum
                     const rawRev = (stat.revenue / maxDailyRevenue) * 100;
                     const revHeight = stat.revenue > 0 ? Math.max(14, Math.round(rawRev)) : 6;
                     const rawProfit = (stat.grossProfit / maxDailyRevenue) * 100;
@@ -750,7 +777,7 @@ export const AdminDashboardPage: React.FC = () => {
                   </div>
                 </div>
                 <span className="text-[11px] text-slate-400 italic">
-                  💡 Rê chuột vào từng cột để xem chi tiết doanh số & số lượng đơn chốt
+                  Rê chuột vào từng cột để xem chi tiết doanh số & số lượng đơn chốt
                 </span>
               </div>
             </div>
@@ -766,7 +793,7 @@ export const AdminDashboardPage: React.FC = () => {
             <div className="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-base">📦</span>
+                  <IconPackage className="w-5 h-5 text-blue-600" />
                   <h3 className="text-base font-black text-slate-900 tracking-tight">
                     Đơn hàng mới nhất cần xác nhận
                   </h3>
@@ -806,7 +833,7 @@ export const AdminDashboardPage: React.FC = () => {
                       const paymentConfig = PAYMENT_STYLE_MAP[o.paymentMethod] || {
                         label: o.paymentMethod,
                         className: 'bg-slate-100 text-slate-700 border-slate-200',
-                        icon: '💳',
+                        icon: <IconCreditCard className="w-3 h-3 text-slate-600" />,
                       };
 
                       return (
@@ -862,7 +889,7 @@ export const AdminDashboardPage: React.FC = () => {
             <div className="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-base">🔥</span>
+                  <IconFlame className="w-5 h-5 text-amber-500" />
                   <h3 className="text-base font-black text-slate-900 tracking-tight">Top sản phẩm bán chạy nhất</h3>
                 </div>
                 <p className="text-xs text-slate-500 mt-0.5">Xếp hạng theo số lượng bán và lợi nhuận</p>
@@ -952,8 +979,8 @@ export const AdminDashboardPage: React.FC = () => {
             to="/admin/orders"
             className="p-5 rounded-2xl border border-slate-200/80 hover:border-blue-500 hover:bg-blue-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
           >
-            <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-2xs">
-              📦
+            <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
+              <IconPackage className="w-6 h-6 text-blue-600" />
             </div>
             <span className="text-xs font-bold text-slate-800 group-hover:text-blue-700">
               Quản lý đơn hàng
@@ -965,8 +992,8 @@ export const AdminDashboardPage: React.FC = () => {
             to="/admin/returns"
             className="p-5 rounded-2xl border border-slate-200/80 hover:border-amber-500 hover:bg-amber-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
           >
-            <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-2xs">
-              ↩️
+            <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
+              <IconRotateCcw className="w-6 h-6 text-amber-600" />
             </div>
             <span className="text-xs font-bold text-slate-800 group-hover:text-amber-700">
               Đổi trả & Hoàn tiền
@@ -978,8 +1005,8 @@ export const AdminDashboardPage: React.FC = () => {
             to="/admin/discounts"
             className="p-5 rounded-2xl border border-slate-200/80 hover:border-purple-500 hover:bg-purple-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
           >
-            <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-2xs">
-              🎟️
+            <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
+              <IconTicket className="w-6 h-6 text-purple-600" />
             </div>
             <span className="text-xs font-bold text-slate-800 group-hover:text-purple-700">
               Mã giảm giá
@@ -991,8 +1018,8 @@ export const AdminDashboardPage: React.FC = () => {
             to="/admin/reports"
             className="p-5 rounded-2xl border border-slate-200/80 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
           >
-            <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-2xs">
-              📈
+            <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
+              <IconTrendingUp className="w-6 h-6 text-emerald-600" />
             </div>
             <span className="text-xs font-bold text-slate-800 group-hover:text-emerald-700">
               Báo cáo doanh số
