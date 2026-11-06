@@ -27,7 +27,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onOpenMobileSidebar })
 
   const handleLogout = async () => {
     await logout();
-    window.location.href = '/auth/login';
+    window.location.href = '/admin/login';
   };
 
   // Determine current page title from current route

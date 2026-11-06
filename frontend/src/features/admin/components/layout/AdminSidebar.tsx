@@ -22,7 +22,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
 
   const handleLogout = async () => {
     await logout();
-    window.location.href = '/auth/login';
+    window.location.href = '/admin/login';
   };
 
   const primaryRole = user?.roles?.includes('Admin')

@@ -263,6 +263,19 @@ export const LoginPage: React.FC = () => {
             onSuccess={handleLoginSuccess}
             onError={(err) => setServerError(err)}
           />
+
+          {/* Discreet Internal Staff Portal Entry */}
+          <div className="mt-6 pt-5 border-t border-slate-100 text-center">
+            <p className="text-xs text-slate-500">
+              Bạn là cán bộ, nhân viên cửa hàng?{' '}
+              <Link
+                to="/admin/login"
+                className="font-semibold text-blue-600 hover:text-blue-700 hover:underline inline-flex items-center gap-1 transition-colors"
+              >
+                Cổng quản trị nội bộ <span>→</span>
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>

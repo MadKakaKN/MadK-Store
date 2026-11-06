@@ -31,7 +31,7 @@ export const AdminRouteGuard: React.FC<AdminRouteGuardProps> = ({
   if (!isAuthenticated || !user) {
     return (
       <Navigate
-        to={`/auth/login?redirect=${encodeURIComponent(location.pathname + location.search)}`}
+        to={`/admin/login?redirect=${encodeURIComponent(location.pathname + location.search)}`}
         replace
       />
     );
@@ -62,10 +62,10 @@ export const AdminRouteGuard: React.FC<AdminRouteGuardProps> = ({
               Về trang mua hàng
             </Link>
             <Link
-              to="/auth/login"
+              to="/admin/login"
               className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-sm rounded-lg transition-colors"
             >
-              Đăng nhập tài khoản khác
+              Đăng nhập tài khoản nhân viên
             </Link>
           </div>
         </div>

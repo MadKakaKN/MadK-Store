@@ -39,6 +39,7 @@ import AdminDiscountsPage from '../features/admin/pages/AdminDiscountsPage';
 import AdminUsersPage from '../features/admin/pages/AdminUsersPage';
 import AdminAuditLogsPage from '../features/admin/pages/AdminAuditLogsPage';
 import AdminReportsPage from '../features/admin/pages/AdminReportsPage';
+import AdminLoginPage from '../features/admin/pages/AdminLoginPage';
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -115,6 +116,9 @@ export const AppRoutes: React.FC = () => {
         {/* Fallback 404 for Storefront with 3D Highlight */}
         <Route path="*" element={<NotFoundPage />} />
       </Route>
+
+      {/* ──── Dedicated Enterprise Admin Login Portal (Isolated from Storefront) ──── */}
+      <Route path="/admin/login" element={<AdminLoginPage />} />
 
       {/* ──── Dedicated Admin Feature Area with Layout & Route Guards ──── */}
       <Route
