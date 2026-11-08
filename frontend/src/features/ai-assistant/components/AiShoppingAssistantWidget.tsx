@@ -18,15 +18,30 @@ interface MessageItem {
   timestamp: string;
 }
 
-// Icon 3 ngôi sao AI lấp lánh khớp chuẩn với thiết kế hình ảnh của người dùng
-const AiSparkleIcon: React.FC<{ className?: string }> = ({ className = 'w-6 h-6' }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-    {/* Ngôi sao chính (lớn nhất ở giữa bên trái) */}
-    <path d="M10 2.5C10 6.642 6.642 10 2.5 10C6.642 10 10 13.358 10 17.5C10 13.358 13.358 10 17.5 10C13.358 10 10 6.642 10 2.5Z" />
-    {/* Ngôi sao phụ phía trên bên phải */}
-    <path d="M17.5 3C17.5 4.933 15.933 6.5 14 6.5C15.933 6.5 17.5 8.067 17.5 10C17.5 8.067 19.067 6.5 21 6.5C19.067 6.5 17.5 4.933 17.5 3Z" />
-    {/* Ngôi sao nhỏ phía dưới bên phải */}
-    <path d="M17.5 14C17.5 15.657 16.157 17 14.5 17C16.157 17 17.5 18.343 17.5 20C17.5 18.343 18.843 17 20.5 17C18.843 17 17.5 15.657 17.5 14Z" />
+// Icon Trợ lý Robot AI công nghệ cao cấp mới (Thay thế cho icon 3 ngôi sao cũ)
+const AiRobotIcon: React.FC<{ className?: string }> = ({ className = 'w-6 h-6' }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    {/* Ăng-ten phát tín hiệu */}
+    <path d="M12 2v4" />
+    <circle cx="12" cy="2" r="1.2" fill="currentColor" />
+    {/* Đầu robot bo góc công nghệ */}
+    <rect x="3" y="6" width="18" height="14" rx="4" fill="currentColor" fillOpacity="0.12" />
+    {/* 2 Mắt robot công nghệ */}
+    <circle cx="8.5" cy="12" r="1.8" fill="currentColor" />
+    <circle cx="15.5" cy="12" r="1.8" fill="currentColor" />
+    {/* Miệng cười thân thiện */}
+    <path d="M9 16c1 1.2 5 1.2 6 0" />
+    {/* Tai nghe 2 bên */}
+    <path d="M2 11v4" />
+    <path d="M22 11v4" />
   </svg>
 );
 
@@ -39,7 +54,7 @@ export const AiShoppingAssistantWidget: React.FC = () => {
         id: 'welcome',
         role: 'assistant',
         content:
-          'Xin chào! Tôi là **MadK Neural Assistant** 🤖\n\nTôi có thể giúp bạn phân tích thông số phần cứng, đối chiếu các mẫu Laptop, PC Đồ họa/Gaming, linh kiện máy tính, hoặc đề xuất thiết bị tối ưu theo mức ngân sách của bạn.\n\nBạn đang quan tâm đến sản phẩm hoặc phân khúc nào?',
+          'Xin chào! Tôi là **MadK AI Tech Assistant** 🤖\n\nTôi có thể giúp bạn phân tích thông số phần cứng, đối chiếu các mẫu Laptop, PC Đồ họa/Gaming, linh kiện máy tính, hoặc đề xuất thiết bị tối ưu theo mức ngân sách của bạn.\n\nBạn đang quan tâm đến sản phẩm hoặc phân khúc nào?',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       },
     ];
@@ -252,44 +267,44 @@ export const AiShoppingAssistantWidget: React.FC = () => {
 
   return (
     <>
-      {/* Nút bấm nổi kích hoạt Chatbot AI (Góc dưới bên phải) - Thiết kế tròn xanh sáng chuẩn ảnh 2 */}
+      {/* Nút bấm nổi kích hoạt Chatbot AI (Góc dưới bên phải) - ICON ROBOT AI MỚI */}
       <div className="fixed bottom-6 right-6 z-50">
         {!isOpen && (
           <button
             type="button"
             onClick={() => setIsOpen(true)}
-            className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-sky-400 text-white shadow-[0_8px_30px_rgba(37,99,235,0.45)] hover:shadow-[0_12px_45px_rgba(37,99,235,0.65)] hover:scale-110 active:scale-95 transition-all duration-300 border-2 border-white/60"
+            className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 text-white shadow-[0_8px_30px_rgba(37,99,235,0.45)] hover:shadow-[0_12px_45px_rgba(37,99,235,0.65)] hover:scale-110 active:scale-95 transition-all duration-300 border-2 border-white/80"
             title="Trò chuyện với Trợ lý AI MadK"
           >
-            {/* Vòng sáng pulse animation nhẹ nhàng */}
-            <span className="absolute -inset-1 rounded-full bg-sky-400 opacity-40 animate-ping pointer-events-none" />
+            {/* Vòng sáng pulse animation */}
+            <span className="absolute -inset-1 rounded-full bg-cyan-400 opacity-35 animate-ping pointer-events-none" />
 
-            {/* Icon 3 ngôi sao lấp lánh chuẩn theo ảnh mẫu */}
-            <div className="relative z-10 transition-transform group-hover:rotate-12 drop-shadow-sm">
-              <AiSparkleIcon className="w-7 h-7 text-white" />
+            {/* Icon Robot AI mới */}
+            <div className="relative z-10 transition-transform group-hover:scale-110 drop-shadow-sm">
+              <AiRobotIcon className="w-7 h-7 text-white" />
             </div>
 
             {/* Tooltip khi rê chuột */}
             <span className="absolute right-16 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-slate-900/90 text-white text-xs font-semibold whitespace-nowrap shadow-xl border border-slate-700/50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-              Tư vấn AI MadK ✨
+              Trợ lý Robot AI ✨
             </span>
           </button>
         )}
       </div>
 
-      {/* Cửa sổ Chatbot AI - GIAO DIỆN MÀU SÁNG (LIGHT THEME) HIỆN ĐẠI */}
+      {/* Cửa sổ Chatbot AI - GIAO DIỆN MÀU SÁNG (LIGHT THEME) */}
       {isOpen && (
         <div className="fixed bottom-6 right-4 sm:right-6 z-50 w-[94vw] sm:w-[440px] h-[640px] max-h-[86vh] bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-3xl shadow-[0_20px_60px_rgba(15,23,42,0.18)] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200 text-slate-800">
           
           {/* Top highlight bar */}
-          <div className="h-[3px] bg-gradient-to-r from-blue-600 via-sky-400 to-indigo-600 shrink-0" />
+          <div className="h-[3px] bg-gradient-to-r from-blue-600 via-cyan-400 to-indigo-600 shrink-0" />
 
-          {/* Header màu sáng */}
+          {/* Header màu sáng với Avatar Robot AI mới */}
           <div className="px-4 py-3 bg-gradient-to-r from-slate-50 via-white to-blue-50/40 border-b border-slate-200/80 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
-              {/* Avatar tròn xanh lấp lánh chuẩn ảnh mẫu */}
-              <div className="relative w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-sky-400 flex items-center justify-center text-white shadow-md shadow-blue-500/25 border border-white">
-                <AiSparkleIcon className="w-5 h-5 text-white" />
+              {/* Avatar tròn với Icon Robot AI mới */}
+              <div className="relative w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center text-white shadow-md shadow-blue-500/25 border border-white">
+                <AiRobotIcon className="w-5 h-5 text-white" />
                 {/* Trạng thái online */}
                 <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center">
                   <span className="w-1 h-1 rounded-full bg-white animate-ping" />
@@ -357,7 +372,7 @@ export const AiShoppingAssistantWidget: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick Categories Bar (Màu sáng) */}
+          {/* Quick Categories Bar */}
           <div className="px-3 py-2 bg-slate-50 border-b border-slate-200/70 flex items-center gap-1.5 overflow-x-auto scrollbar-none text-xs shrink-0">
             <button
               type="button"
@@ -389,7 +404,7 @@ export const AiShoppingAssistantWidget: React.FC = () => {
             </button>
           </div>
 
-          {/* Body tin nhắn (Màu sáng sạch sẽ, độ tương phản cao) */}
+          {/* Body tin nhắn */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/60">
             {messages.map((msg) => (
               <div
@@ -413,7 +428,7 @@ export const AiShoppingAssistantWidget: React.FC = () => {
                   </span>
                 </div>
 
-                {/* Thẻ sản phẩm tương tác cao cấp (Màu sáng) */}
+                {/* Thẻ sản phẩm tương tác cao cấp */}
                 {msg.recommendedProducts && msg.recommendedProducts.length > 0 && (
                   <div className="mt-3 w-full space-y-2">
                     <p className="text-[11px] font-bold uppercase tracking-wider text-blue-600 flex items-center gap-1.5">
@@ -525,7 +540,7 @@ export const AiShoppingAssistantWidget: React.FC = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Gợi ý câu hỏi nhanh (Prompt chips màu sáng) */}
+          {/* Gợi ý câu hỏi nhanh */}
           <div className="px-3 py-2 bg-white border-t border-slate-100 flex items-center gap-1.5 overflow-x-auto scrollbar-none shrink-0">
             {prompts.map((p, idx) => (
               <button
@@ -539,7 +554,7 @@ export const AiShoppingAssistantWidget: React.FC = () => {
             ))}
           </div>
 
-          {/* Ô nhập tin nhắn màu sáng */}
+          {/* Ô nhập tin nhắn */}
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -559,7 +574,7 @@ export const AiShoppingAssistantWidget: React.FC = () => {
               <button
                 type="submit"
                 disabled={!inputMessage.trim() || isLoading}
-                className="w-10 h-10 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 hover:from-blue-500 hover:to-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed text-white flex items-center justify-center shrink-0 shadow-md shadow-blue-500/20 active:scale-95 transition-all"
+                className="w-10 h-10 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:to-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed text-white flex items-center justify-center shrink-0 shadow-md shadow-blue-500/20 active:scale-95 transition-all"
                 title="Gửi tin nhắn"
               >
                 <svg className="w-4 h-4 -rotate-45 relative left-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
