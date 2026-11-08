@@ -21,6 +21,19 @@ public interface IOrderService
         CancellationToken ct = default);
 
     /// <summary>
+    /// Bán hàng trực tiếp tại quầy (Point of Sale - POS) cho nhân viên Sales và Admin.
+    /// - Kiểm tra tồn kho khả dụng và trừ kho tức thì.
+    /// - Tạo đơn hàng ở trạng thái Completed, PaymentStatus Paid.
+    /// - Áp dụng giảm giá voucher/coupon (nếu có) và tính tiền thối.
+    /// - Phát thông báo SignalR thời gian thực.
+    /// </summary>
+    Task<Result<OrderDto>> CheckoutPosAsync(
+        Guid? staffUserId,
+        string staffName,
+        PosCheckoutRequestDto request,
+        CancellationToken ct = default);
+
+    /// <summary>
     /// Ước tính tạm tính, phí vận chuyển theo vùng, giảm giá coupon và tổng thanh toán trước khi đặt hàng.
     /// </summary>
     Task<Result<MadK.Application.DTOs.Promotions.CheckoutEstimateResponseDto>> EstimateCheckoutAsync(

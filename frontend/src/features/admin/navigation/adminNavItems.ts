@@ -21,6 +21,14 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
     requiredRoles: ['Admin', 'Sales', 'Warehouse'],
   },
   {
+    id: 'pos',
+    label: 'Bán tại quầy (POS)',
+    path: '/admin/pos',
+    icon: 'receipt',
+    description: 'Quét mã vạch, thanh toán nhanh & in hóa đơn K80',
+    requiredRoles: ['Admin', 'Sales', 'SuperAdmin'],
+  },
+  {
     id: 'orders',
     label: 'Đơn hàng',
     path: '/admin/orders',

@@ -29,6 +29,7 @@ import PrivacyPolicyPage from '../features/policy/pages/PrivacyPolicyPage';
 import AdminLayout from '../features/admin/components/layout/AdminLayout';
 import AdminRouteGuard from '../features/admin/components/guards/AdminRouteGuard';
 import AdminDashboardPage from '../features/admin/pages/AdminDashboardPage';
+import AdminPosPage from '../features/admin/pages/AdminPosPage';
 import AdminOrdersPage from '../features/admin/pages/AdminOrdersPage';
 import AdminReturnsPage from '../features/admin/pages/AdminReturnsPage';
 import AdminInventoryPage from '../features/admin/pages/AdminInventoryPage';
@@ -130,6 +131,14 @@ export const AppRoutes: React.FC = () => {
         }
       >
         <Route index element={<AdminDashboardPage />} />
+        <Route
+          path="pos"
+          element={
+            <AdminRouteGuard>
+              <AdminPosPage />
+            </AdminRouteGuard>
+          }
+        />
         <Route
           path="orders"
           element={

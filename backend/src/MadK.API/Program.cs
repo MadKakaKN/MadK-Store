@@ -28,6 +28,10 @@ builder.Host.UseSerilog((context, loggerConfig) =>
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
+// ──── Real-time SignalR Hub & Notifications ────
+builder.Services.AddSignalR();
+builder.Services.AddScoped<MadK.Application.Interfaces.IRealtimeNotificationService, MadK.API.Services.RealtimeNotificationService>();
+
 // ──── JWT Authentication & Authorization ────
 var jwtKey = builder.Configuration["Jwt:Key"] ?? "MadK_Store_Super_Secret_Jwt_Signing_Key_2026_Enterprise_Security!@#$";
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "MadKStore";
@@ -57,6 +61,16 @@ builder.Services.AddAuthentication(options =>
     // Kiểm tra trạng thái tài khoản thời gian thực (Thu hồi quyền tức thì khi tài khoản bị khóa / vô hiệu hóa)
     options.Events = new JwtBearerEvents
     {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        },
         OnTokenValidated = async context =>
         {
             var userIdClaim = context.Principal?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
@@ -367,6 +381,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<MadK.API.Hubs.NotificationHub>("/hubs/notifications");
 
 // ──── Health Check Endpoint ────
 app.MapHealthChecks("/health", new HealthCheckOptions

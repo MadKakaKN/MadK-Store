@@ -23,6 +23,7 @@ public class OrderService : IOrderService
     private readonly IShippingFeeService? _shippingFeeService;
     private readonly IEmailSender? _emailSender;
     private readonly ITelegramNotificationService? _telegramNotificationService;
+    private readonly IRealtimeNotificationService? _realtimeNotificationService;
     private readonly ILoyaltyService? _loyaltyService;
     private readonly ILogger<OrderService> _logger;
 
@@ -30,7 +31,7 @@ public class OrderService : IOrderService
         IAppDbContext context,
         IInventoryService inventoryService,
         ILogger<OrderService> logger)
-        : this(context, inventoryService, null, null, null, null, null, null, logger)
+        : this(context, inventoryService, null, null, null, null, null, null, null, logger)
     {
     }
 
@@ -39,7 +40,7 @@ public class OrderService : IOrderService
         IInventoryService inventoryService,
         IPricingService? pricingService,
         ILogger<OrderService> logger)
-        : this(context, inventoryService, pricingService, null, null, null, null, null, logger)
+        : this(context, inventoryService, pricingService, null, null, null, null, null, null, logger)
     {
     }
 
@@ -50,7 +51,7 @@ public class OrderService : IOrderService
         ICouponService? couponService,
         IShippingFeeService? shippingFeeService,
         ILogger<OrderService> logger)
-        : this(context, inventoryService, pricingService, couponService, shippingFeeService, null, null, null, logger)
+        : this(context, inventoryService, pricingService, couponService, shippingFeeService, null, null, null, null, logger)
     {
     }
 
@@ -62,7 +63,7 @@ public class OrderService : IOrderService
         IShippingFeeService? shippingFeeService,
         IEmailSender? emailSender,
         ILogger<OrderService> logger)
-        : this(context, inventoryService, pricingService, couponService, shippingFeeService, emailSender, null, null, logger)
+        : this(context, inventoryService, pricingService, couponService, shippingFeeService, emailSender, null, null, null, logger)
     {
     }
 
@@ -75,7 +76,7 @@ public class OrderService : IOrderService
         IEmailSender? emailSender,
         ITelegramNotificationService? telegramNotificationService,
         ILogger<OrderService> logger)
-        : this(context, inventoryService, pricingService, couponService, shippingFeeService, emailSender, telegramNotificationService, null, logger)
+        : this(context, inventoryService, pricingService, couponService, shippingFeeService, emailSender, telegramNotificationService, null, null, logger)
     {
     }
 
@@ -89,6 +90,21 @@ public class OrderService : IOrderService
         ITelegramNotificationService? telegramNotificationService,
         ILoyaltyService? loyaltyService,
         ILogger<OrderService> logger)
+        : this(context, inventoryService, pricingService, couponService, shippingFeeService, emailSender, telegramNotificationService, null, loyaltyService, logger)
+    {
+    }
+
+    public OrderService(
+        IAppDbContext context,
+        IInventoryService inventoryService,
+        IPricingService? pricingService,
+        ICouponService? couponService,
+        IShippingFeeService? shippingFeeService,
+        IEmailSender? emailSender,
+        ITelegramNotificationService? telegramNotificationService,
+        IRealtimeNotificationService? realtimeNotificationService,
+        ILoyaltyService? loyaltyService,
+        ILogger<OrderService> logger)
     {
         _context = context;
         _efContext = (DbContext)context;
@@ -98,6 +114,7 @@ public class OrderService : IOrderService
         _shippingFeeService = shippingFeeService;
         _emailSender = emailSender;
         _telegramNotificationService = telegramNotificationService;
+        _realtimeNotificationService = realtimeNotificationService;
         _loyaltyService = loyaltyService;
         _logger = logger;
     }
@@ -539,6 +556,12 @@ public class OrderService : IOrderService
                     _ = _telegramNotificationService.SendNewOrderAlertAsync(order, ct);
                 }
 
+                // Gửi thông báo thời gian thực SignalR tới trình duyệt Quản trị viên và Sales
+                if (_realtimeNotificationService != null)
+                {
+                    _ = _realtimeNotificationService.SendNewOrderAlertAsync(order, ct);
+                }
+
                 return Result<OrderDto>.Success(MapToDto(order), "Đặt hàng COD thành công.");
             }
             catch (DbUpdateConcurrencyException ex)
@@ -588,6 +611,277 @@ public class OrderService : IOrderService
                 return Result<OrderDto>.Failure(ex.Message);
             }
         });
+    }
+
+    /// <inheritdoc />
+    public async Task<Result<OrderDto>> CheckoutPosAsync(
+        Guid? staffUserId,
+        string staffName,
+        PosCheckoutRequestDto request,
+        CancellationToken ct = default)
+    {
+        if (request.Items == null || request.Items.Count == 0)
+        {
+            return Result<OrderDto>.Failure("Giỏ hàng POS trống, vui lòng chọn ít nhất 1 sản phẩm.");
+        }
+
+        DateTime now = DateTime.UtcNow;
+        string orderNumber = $"MK-POS-{now:yyyyMMdd}-{Guid.NewGuid().ToString("N")[..6].ToUpper()}";
+        var orderId = Guid.NewGuid();
+
+        bool isRelational = _efContext.Database.IsRelational();
+        await using var tx = isRelational ? await _efContext.Database.BeginTransactionAsync(ct) : null;
+
+        try
+        {
+            decimal subtotalAmount = 0m;
+            var orderItems = new List<OrderItem>();
+            var itemSummaryList = new List<OrderItemEmailDto>();
+
+            foreach (var item in request.Items)
+            {
+                if (item.Quantity <= 0)
+                {
+                    return Result<OrderDto>.Failure("Số lượng sản phẩm không hợp lệ.");
+                }
+
+                var variant = await _context.ProductVariants
+                    .Include(v => v.Product)
+                    .Include(v => v.Images)
+                    .Include(v => v.PriceSchedules)
+                    .FirstOrDefaultAsync(v => v.Id == item.VariantId, ct);
+
+                if (variant == null)
+                {
+                    return Result<OrderDto>.Failure("Không tìm thấy một trong các biến thể sản phẩm đã chọn.");
+                }
+
+                if (!variant.IsActive)
+                {
+                    return Result<OrderDto>.Failure($"Sản phẩm '{variant.Name}' hiện đã ngừng kinh doanh.");
+                }
+
+                if (variant.StockQuantity < item.Quantity)
+                {
+                    return Result<OrderDto>.Failure($"Sản phẩm '{variant.Product?.Name ?? variant.Name} ({variant.Name})' chỉ còn {variant.StockQuantity} trong kho, không đủ số lượng bán ({item.Quantity}).");
+                }
+
+                // Tính giá bán hiện hành
+                var priceResult = _pricingService?.CalculateCurrentPrice(variant, now);
+                decimal unitPrice = priceResult != null ? priceResult.CurrentPrice : variant.SalePrice;
+                decimal originalPrice = priceResult != null ? priceResult.OriginalPrice : variant.OriginalPrice;
+                decimal lineTotal = unitPrice * item.Quantity;
+                subtotalAmount += lineTotal;
+
+                string? thumb = variant.Images?.OrderBy(img => img.DisplayOrder).FirstOrDefault()?.ImageUrl
+                                ?? variant.Product?.ThumbnailUrl;
+
+                var orderItem = new OrderItem
+                {
+                    Id = Guid.NewGuid(),
+                    OrderId = orderId,
+                    VariantId = variant.Id,
+                    ProductId = variant.ProductId,
+                    ProductNameSnapshot = variant.Product?.Name ?? variant.Name,
+                    VariantNameSnapshot = variant.Name,
+                    SkuSnapshot = variant.Sku,
+                    UnitPriceSnapshot = unitPrice,
+                    OriginalPriceSnapshot = originalPrice,
+                    Quantity = item.Quantity,
+                    TotalPrice = lineTotal,
+                    AttributesSnapshot = variant.Attributes ?? "{}",
+                    SpecificationsSnapshot = variant.Product?.Specifications,
+                    ThumbnailUrlSnapshot = thumb,
+                    CreatedAt = now
+                };
+
+                orderItems.Add(orderItem);
+                itemSummaryList.Add(new OrderItemEmailDto(orderItem.ProductNameSnapshot, orderItem.VariantNameSnapshot, orderItem.SkuSnapshot, orderItem.Quantity, orderItem.UnitPriceSnapshot, orderItem.TotalPrice, thumb));
+
+                // Trừ tồn kho trực tiếp cho giao dịch tại quầy (POS)
+                variant.StockQuantity -= item.Quantity;
+                variant.UpdatedAt = now;
+
+                var inv = await _context.Inventories.FirstOrDefaultAsync(i => i.VariantId == variant.Id, ct);
+                if (inv != null)
+                {
+                    inv.OnHandQuantity = Math.Max(0, inv.OnHandQuantity - item.Quantity);
+                    inv.UpdatedAt = now;
+                }
+
+                // Ghi nhận lịch sử xuất kho
+                var movement = new StockMovement
+                {
+                    Id = Guid.NewGuid(),
+                    InventoryId = inv?.Id ?? Guid.Empty,
+                    VariantId = variant.Id,
+                    Type = StockMovementType.Commit,
+                    Quantity = -item.Quantity,
+                    OnHandBefore = (inv?.OnHandQuantity ?? variant.StockQuantity) + item.Quantity,
+                    OnHandAfter = inv?.OnHandQuantity ?? variant.StockQuantity,
+                    ReservedBefore = inv?.ReservedQuantity ?? 0,
+                    ReservedAfter = inv?.ReservedQuantity ?? 0,
+                    ReferenceType = "POS",
+                    ReferenceId = orderNumber,
+                    Reason = $"Bán hàng tại quầy POS hóa đơn {orderNumber} bởi {staffName}",
+                    CreatedAt = now
+                };
+                _context.StockMovements.Add(movement);
+            }
+
+            // Xử lý mã giảm giá coupon tại quầy (nếu có)
+            decimal discountAmount = 0m;
+            string? couponSnapshot = null;
+            if (!string.IsNullOrWhiteSpace(request.CouponCode) && _couponService != null)
+            {
+                var couponResult = await _couponService.ClaimAndIncrementUsageAsync(
+                    code: request.CouponCode.Trim(),
+                    subtotalAmount: subtotalAmount,
+                    ct: ct);
+
+                if (couponResult.IsSuccess)
+                {
+                    discountAmount = couponResult.Data.DiscountAmount;
+                    couponSnapshot = JsonSerializer.Serialize(new
+                    {
+                        code = couponResult.Data.Coupon.Code,
+                        discountAmount = couponResult.Data.DiscountAmount
+                    });
+                }
+            }
+
+            decimal totalAmount = Math.Max(0, subtotalAmount - discountAmount);
+
+            var addressSnapshot = JsonSerializer.Serialize(new
+            {
+                recipientName = !string.IsNullOrWhiteSpace(request.CustomerName) ? request.CustomerName.Trim() : "Khách lẻ tại quầy",
+                phoneNumber = !string.IsNullOrWhiteSpace(request.CustomerPhone) ? request.CustomerPhone.Trim() : "",
+                detailedAddress = "Mua trực tiếp tại showroom MadK Store",
+                fullAddress = "Showroom MadK Store (Bán tại quầy)"
+            });
+
+            var adminNote = $"[POS] Thu ngân: {staffName}. Tiền khách đưa: {request.CashTendered:N0} đ. Tiền thối: {request.CashChange:N0} đ."
+                + (!string.IsNullOrWhiteSpace(request.StaffNote) ? $" | Ghi chú: {request.StaffNote.Trim()}" : "");
+
+            var order = new Order
+            {
+                Id = orderId,
+                OrderNumber = orderNumber,
+                UserId = request.CustomerId,
+                CustomerEmail = !string.IsNullOrWhiteSpace(request.CustomerEmail) ? request.CustomerEmail.Trim() : null,
+                CustomerPhone = !string.IsNullOrWhiteSpace(request.CustomerPhone) ? request.CustomerPhone.Trim() : null,
+                Status = OrderStatus.Completed,
+                PaymentStatus = PaymentStatus.Paid,
+                PaymentMethod = request.PaymentMethod,
+                SubtotalAmount = subtotalAmount,
+                DiscountAmount = discountAmount,
+                ShippingFee = 0m,
+                TotalAmount = totalAmount,
+                ShippingAddressSnapshot = addressSnapshot,
+                CouponSnapshot = couponSnapshot,
+                CustomerNote = "Đơn mua trực tiếp tại quầy (POS)",
+                AdminNote = adminNote,
+                Items = orderItems,
+                CreatedAt = now,
+                UpdatedAt = now
+            };
+
+            // Lịch sử trạng thái
+            var history = new OrderStatusHistory
+            {
+                Id = Guid.NewGuid(),
+                OrderId = order.Id,
+                FromStatus = null,
+                ToStatus = OrderStatus.Completed,
+                ChangedByUserId = staffUserId,
+                ChangedByName = staffName,
+                Reason = "Thanh toán và nhận hàng trực tiếp tại quầy POS.",
+                CreatedAt = now
+            };
+            order.StatusHistories.Add(history);
+            _context.OrderStatusHistories.Add(history);
+
+            // Ghi nhận thanh toán
+            var payment = new Payment
+            {
+                Id = Guid.NewGuid(),
+                OrderId = order.Id,
+                OrderNumber = orderNumber,
+                TxnRef = orderNumber,
+                TransactionNo = orderNumber,
+                Amount = totalAmount,
+                PaymentMethod = request.PaymentMethod,
+                Status = PaymentStatus.Paid,
+                PaymentTime = now,
+                CreatedAt = now
+            };
+            order.Payments.Add(payment);
+            _context.Payments.Add(payment);
+
+            _context.Orders.Add(order);
+
+            // Tích điểm thưởng loyalty nếu có tài khoản khách hàng
+            if (request.CustomerId.HasValue && _loyaltyService != null)
+            {
+                await _loyaltyService.AwardPointsForOrderAsync(order, ct);
+            }
+
+            await _context.SaveChangesAsync(ct);
+
+            if (tx != null)
+            {
+                await tx.CommitAsync(ct);
+            }
+
+            _logger.LogInformation("POS Order {OrderNumber} created and completed successfully by {StaffName}. Total: {Total:N0} VND",
+                order.OrderNumber, staffName, totalAmount);
+
+            // Phát thông báo thời gian thực SignalR
+            if (_realtimeNotificationService != null)
+            {
+                _ = _realtimeNotificationService.SendNewOrderAlertAsync(order, ct);
+            }
+
+            // Gửi thông báo Telegram Bot
+            if (_telegramNotificationService != null)
+            {
+                _ = _telegramNotificationService.SendNewOrderAlertAsync(order, ct);
+            }
+
+            // Gửi email hóa đơn điện tử nếu khách hàng cung cấp email
+            if (_emailSender != null && !string.IsNullOrWhiteSpace(order.CustomerEmail))
+            {
+                try
+                {
+                    var confirmDto = new OrderConfirmationEmailDto(
+                        OrderNumber: order.OrderNumber,
+                        RecipientEmail: order.CustomerEmail,
+                        RecipientName: request.CustomerName ?? "Quý khách",
+                        RecipientPhone: request.CustomerPhone ?? "",
+                        ShippingAddress: "Nhận trực tiếp tại Showroom MadK Store",
+                        PaymentMethod: order.PaymentMethod.ToString(),
+                        SubtotalAmount: order.SubtotalAmount,
+                        ShippingFee: 0m,
+                        DiscountAmount: order.DiscountAmount,
+                        TotalAmount: order.TotalAmount,
+                        CouponCode: request.CouponCode,
+                        CustomerNote: "Mua trực tiếp tại quầy (POS)",
+                        CreatedAt: order.CreatedAt,
+                        Items: itemSummaryList
+                    );
+                    _ = _emailSender.SendOrderConfirmationAsync(confirmDto, ct);
+                }
+                catch { }
+            }
+
+            return Result<OrderDto>.Success(MapToDto(order), "Bán hàng tại quầy POS và tạo hóa đơn thành công.");
+        }
+        catch (Exception ex)
+        {
+            if (tx != null) await tx.RollbackAsync(ct);
+            _logger.LogError(ex, "Lỗi khi xử lý đơn hàng POS {OrderNumber}", orderNumber);
+            return Result<OrderDto>.Failure("Lỗi thanh toán POS: " + ex.Message);
+        }
     }
 
     public async Task<Result<CheckoutEstimateResponseDto>> EstimateCheckoutAsync(
@@ -1022,6 +1316,12 @@ public class OrderService : IOrderService
                 }
             }
 
+            // Gửi thông báo thời gian thực SignalR
+            if (_realtimeNotificationService != null)
+            {
+                _ = _realtimeNotificationService.SendOrderStatusChangedAlertAsync(order, oldStatus.ToString(), OrderStatus.Cancelled.ToString(), ct);
+            }
+
             return Result<OrderDto>.Success(MapToDto(order), "Hủy đơn hàng thành công và đã hoàn kho.");
         }
         catch (Exception ex)
@@ -1205,6 +1505,12 @@ public class OrderService : IOrderService
                 {
                     _logger.LogError(emailEx, "Lỗi khi gửi email cập nhật trạng thái đơn {OrderNumber}", order.OrderNumber);
                 }
+            }
+
+            // Gửi thông báo thời gian thực SignalR
+            if (_realtimeNotificationService != null)
+            {
+                _ = _realtimeNotificationService.SendOrderStatusChangedAlertAsync(order, currentStatus.ToString(), targetStatus.ToString(), ct);
             }
 
             return Result<OrderDto>.Success(MapToDto(order), $"Chuyển trạng thái đơn hàng sang '{targetStatus}' thành công.");

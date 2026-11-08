@@ -118,3 +118,21 @@ public record UpdateOrderStatusRequestDto(
 public record UpdateOrderNoteRequestDto(
     string AdminNote
 );
+
+public record PosCheckoutItemDto(
+    Guid VariantId,
+    int Quantity
+);
+
+public record PosCheckoutRequestDto(
+    List<PosCheckoutItemDto> Items,
+    PaymentMethod PaymentMethod = PaymentMethod.Cash,
+    decimal CashTendered = 0m,
+    decimal CashChange = 0m,
+    string? CustomerName = null,
+    string? CustomerPhone = null,
+    string? CustomerEmail = null,
+    Guid? CustomerId = null,
+    string? CouponCode = null,
+    string? StaffNote = null
+);

@@ -3,7 +3,8 @@ import { useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../../auth/context/AuthContext';
 import { ADMIN_NAV_ITEMS } from '../../navigation/adminNavItems';
 import Badge from '../common/Badge';
-import { IconStore, IconUsers, IconLogout } from '../../../../components/common/Icons';
+import { IconStore, IconUsers, IconLogout, IconBell } from '../../../../components/common/Icons';
+import { useNotifications } from '../../../../context/NotificationContext';
 
 export interface AdminHeaderProps {
   onOpenMobileSidebar: () => void;
@@ -11,15 +12,21 @@ export interface AdminHeaderProps {
 
 export const AdminHeader: React.FC<AdminHeaderProps> = ({ onOpenMobileSidebar }) => {
   const { user, logout } = useAuth();
+  const { notifications, unreadCount, markAsRead, markAllAsRead, clearAll } = useNotifications();
   const location = useLocation();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const notifRef = useRef<HTMLDivElement>(null);
 
-  // Close user dropdown on outside click
+  // Close dropdowns on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
         setIsUserMenuOpen(false);
+      }
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+        setIsNotifOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -113,6 +120,115 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onOpenMobileSidebar })
           >
             {roleNameMap[primaryRole] || primaryRole}
           </Badge>
+        </div>
+
+        {/* Real-time Notification Bell */}
+        <div className="relative" ref={notifRef}>
+          <button
+            type="button"
+            onClick={() => setIsNotifOpen(!isNotifOpen)}
+            className="relative p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-hidden"
+            aria-label="Thông báo thời gian thực"
+            title="Thông báo thời gian thực (SignalR)"
+          >
+            <IconBell className="w-5 h-5 text-slate-600" />
+            {unreadCount > 0 && (
+              <span className="absolute top-1.5 right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-black text-white shadow-xs animate-pulse">
+                {unreadCount > 99 ? '99+' : unreadCount}
+              </span>
+            )}
+          </button>
+
+          {/* Notification Popover Dropdown */}
+          {isNotifOpen && (
+            <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-xl border border-slate-200 py-2 z-50 animate-in fade-in zoom-in-95 duration-150">
+              <div className="px-4 py-2.5 border-b border-slate-100 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-slate-900 text-xs uppercase tracking-wider">Thông báo thời gian thực</span>
+                  {unreadCount > 0 && (
+                    <span className="bg-rose-100 text-rose-700 text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                      {unreadCount} mới
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  {unreadCount > 0 && (
+                    <button
+                      type="button"
+                      onClick={markAllAsRead}
+                      className="text-[11px] text-blue-600 hover:text-blue-800 font-medium hover:underline"
+                    >
+                      Đã đọc tất cả
+                    </button>
+                  )}
+                  {notifications.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={clearAll}
+                      className="text-[11px] text-slate-400 hover:text-slate-600"
+                    >
+                      Xóa
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="max-h-80 overflow-y-auto divide-y divide-slate-100">
+                {notifications.length === 0 ? (
+                  <div className="py-8 text-center text-xs text-slate-400">
+                    <p className="font-medium">Chưa có thông báo mới nào</p>
+                    <p className="text-[11px] text-slate-400 mt-1">Chuông sẽ báo tức thì khi có đơn hàng hoặc thanh toán mới</p>
+                  </div>
+                ) : (
+                  notifications.map((n) => (
+                    <div
+                      key={n.id}
+                      onClick={() => markAsRead(n.id)}
+                      className={`p-3.5 hover:bg-slate-50 transition-colors flex items-start gap-3 cursor-pointer ${
+                        !n.read ? 'bg-blue-50/40' : ''
+                      }`}
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 text-sm">
+                        {n.type === 'ORDER' && '🛒'}
+                        {n.type === 'PAYMENT' && '💰'}
+                        {n.type === 'STOCK' && '⚠️'}
+                        {n.type === 'STATUS' && '📦'}
+                        {n.type === 'SYSTEM' && '🔔'}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2">
+                          <p className={`text-xs font-bold truncate ${!n.read ? 'text-blue-900' : 'text-slate-800'}`}>
+                            {n.title}
+                          </p>
+                          <span className="text-[10px] text-slate-400 shrink-0">
+                            {new Date(n.timestamp).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-600 mt-0.5 line-clamp-2 leading-relaxed">
+                          {n.message}
+                        </p>
+                        {n.linkUrl && (
+                          <Link
+                            to={n.linkUrl}
+                            onClick={() => {
+                              setIsNotifOpen(false);
+                              markAsRead(n.id);
+                            }}
+                            className="inline-block mt-1 text-[11px] font-bold text-blue-600 hover:underline"
+                          >
+                            Xem chi tiết &rarr;
+                          </Link>
+                        )}
+                      </div>
+                      {!n.read && (
+                        <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0 mt-1.5" />
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* User Dropdown */}

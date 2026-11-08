@@ -26,5 +26,15 @@ public enum PaymentMethod
     /// <summary>
     /// Ví điện tử MoMo (Chuyển tiền MoMo cá nhân).
     /// </summary>
-    MoMo = 4
+    MoMo = 4,
+
+    /// <summary>
+    /// Tiền mặt thanh toán trực tiếp tại quầy bán hàng (POS).
+    /// </summary>
+    Cash = 5,
+
+    /// <summary>
+    /// Quẹt thẻ ngân hàng qua máy POS tại quầy.
+    /// </summary>
+    PosCard = 6
 }

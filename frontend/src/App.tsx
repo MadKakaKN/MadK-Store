@@ -5,6 +5,7 @@ import { AuthProvider } from './features/auth/context/AuthContext';
 import { CartProvider } from './features/cart/context/CartContext';
 import { WishlistProvider } from './features/wishlist/context/WishlistContext';
 import { ToastProvider } from './features/admin/components/common/ToastContext';
+import { NotificationProvider } from './context/NotificationContext';
 import { GoogleOAuthCallback } from './features/auth/components/GoogleOAuthCallback';
 
 export const App: React.FC = () => {
@@ -15,7 +16,9 @@ export const App: React.FC = () => {
         <CartProvider>
           <WishlistProvider>
             <ToastProvider>
-              <AppRoutes />
+              <NotificationProvider>
+                <AppRoutes />
+              </NotificationProvider>
             </ToastProvider>
           </WishlistProvider>
         </CartProvider>

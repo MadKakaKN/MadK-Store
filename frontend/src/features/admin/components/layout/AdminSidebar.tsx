@@ -17,6 +17,7 @@ import {
   IconTrendingUp,
   IconStore,
   IconLogout,
+  IconReceipt,
 } from '../../../../components/common/Icons';
 
 export interface AdminSidebarProps {
@@ -30,6 +31,8 @@ const renderNavIcon = (id: string, className = 'w-4 h-4 shrink-0') => {
   switch (id) {
     case 'dashboard':
       return <IconBarChart className={className} />;
+    case 'pos':
+      return <IconReceipt className={className} />;
     case 'orders':
       return <IconPackage className={className} />;
     case 'returns':
