@@ -13,6 +13,8 @@ import SEOHead, { buildProductSchema, buildBreadcrumbSchema } from '../../../com
 import AuthRequiredModal from '../../../components/common/AuthRequiredModal';
 import ProductReviewsSection from '../components/ProductReviewsSection';
 import { useWishlist } from '../../wishlist/context/WishlistContext';
+import { useCompare } from '../../../context/CompareContext';
+import { ProductListDto } from '../../../types/catalog';
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -21,9 +23,11 @@ export const ProductDetailPage: React.FC = () => {
   const { addToCart } = useCart();
   const { isAuthenticated } = useAuth();
   const { isInWishlist, toggleWishlist } = useWishlist();
+  const { isInCompare, toggleCompare } = useCompare();
 
   const [product, setProduct] = useState<ProductDetailDto | null>(null);
   const isLiked = product ? isInWishlist(product.id) : false;
+  const inCompare = product ? isInCompare(product.id) : false;
   const [selectedVariant, setSelectedVariant] = useState<ProductVariantDto | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -629,6 +633,50 @@ export const ProductDetailPage: React.FC = () => {
                   strokeLinejoin="round"
                   d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                 />
+              </svg>
+            </button>
+
+            {/* Compare Button */}
+            <button
+              type="button"
+              onClick={() => {
+                if (!product) return;
+                const compareItem: ProductListDto = {
+                  id: product.id,
+                  name: product.name,
+                  slug: product.slug,
+                  shortDescription: product.shortDescription,
+                  thumbnailUrl: product.thumbnailUrl,
+                  basePrice: product.basePrice,
+                  minPrice: product.basePrice,
+                  maxPrice: product.basePrice,
+                  model3DUrl: product.model3DUrl,
+                  categoryId: product.category.id,
+                  categoryName: product.category.name,
+                  categorySlug: product.category.slug,
+                  brandId: product.brand.id,
+                  brandName: product.brand.name,
+                  brandSlug: product.brand.slug,
+                  isFeatured: product.isFeatured,
+                  createdAt: new Date().toISOString(),
+                };
+                toggleCompare(compareItem);
+              }}
+              title={inCompare ? 'Bỏ so sánh' : 'Thêm vào so sánh'}
+              className={`p-4 rounded-2xl border transition-all flex items-center justify-center shrink-0 ${
+                inCompare
+                  ? 'bg-cyan-50 text-cyan-600 border-cyan-400 shadow-sm'
+                  : 'bg-white hover:bg-slate-50 text-slate-400 hover:text-cyan-600 border-slate-200'
+              }`}
+            >
+              <svg
+                className="w-5 h-5 transition-transform active:scale-75"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
             </button>
           </div>

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ProductListDto } from '../../../types/catalog';
 import { formatVND } from '../../../utils/format';
 import { useWishlist } from '../../wishlist/context/WishlistContext';
+import { useCompare } from '../../../context/CompareContext';
 
 interface ProductCardProps {
   product: ProductListDto;
@@ -11,6 +12,8 @@ interface ProductCardProps {
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { isInWishlist, toggleWishlist } = useWishlist();
   const isLiked = isInWishlist(product.id);
+  const { isInCompare, toggleCompare } = useCompare();
+  const inCompare = isInCompare(product.id);
 
   const displayPrice =
     product.minPrice && product.maxPrice && product.minPrice !== product.maxPrice
@@ -49,6 +52,32 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             strokeLinejoin="round"
             d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
           />
+        </svg>
+      </button>
+
+      {/* Compare Button */}
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleCompare(product);
+        }}
+        title={inCompare ? 'Bỏ so sánh' : 'Thêm vào so sánh'}
+        className={`absolute top-14 right-3.5 z-20 w-9 h-9 rounded-2xl flex items-center justify-center transition-all duration-200 backdrop-blur-md shadow-xs ${
+          inCompare
+            ? 'bg-cyan-500 text-white scale-105 border border-cyan-400 shadow-cyan-500/30'
+            : 'bg-white/80 text-slate-400 hover:text-cyan-600 hover:scale-110 border border-slate-200/70 hover:bg-white'
+        }`}
+      >
+        <svg
+          className="w-4 h-4 transition-transform active:scale-75"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.2"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
         </svg>
       </button>
 

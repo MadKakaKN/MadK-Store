@@ -6,6 +6,7 @@ import { CartProvider } from './features/cart/context/CartContext';
 import { WishlistProvider } from './features/wishlist/context/WishlistContext';
 import { ToastProvider } from './features/admin/components/common/ToastContext';
 import { NotificationProvider } from './context/NotificationContext';
+import { CompareProvider } from './context/CompareContext';
 import { GoogleOAuthCallback } from './features/auth/components/GoogleOAuthCallback';
 
 export const App: React.FC = () => {
@@ -15,11 +16,13 @@ export const App: React.FC = () => {
         <GoogleOAuthCallback />
         <CartProvider>
           <WishlistProvider>
-            <ToastProvider>
-              <NotificationProvider>
-                <AppRoutes />
-              </NotificationProvider>
-            </ToastProvider>
+            <CompareProvider>
+              <ToastProvider>
+                <NotificationProvider>
+                  <AppRoutes />
+                </NotificationProvider>
+              </ToastProvider>
+            </CompareProvider>
           </WishlistProvider>
         </CartProvider>
       </AuthProvider>

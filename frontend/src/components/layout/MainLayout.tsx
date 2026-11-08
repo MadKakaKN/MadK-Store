@@ -2,6 +2,8 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
+import CompareFloatingBar from '../common/CompareFloatingBar';
+import AiShoppingAssistantWidget from '../../features/ai-assistant/components/AiShoppingAssistantWidget';
 
 export const MainLayout: React.FC = () => {
   return (
@@ -11,6 +13,8 @@ export const MainLayout: React.FC = () => {
         <Outlet />
       </main>
       <Footer />
+      <CompareFloatingBar />
+      <AiShoppingAssistantWidget />
     </div>
   );
 };

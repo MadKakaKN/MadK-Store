@@ -170,6 +170,11 @@ public static class DependencyInjection
             configuration.GetSection(MadK.Application.DTOs.Loyalty.LoyaltySettings.SectionName));
         services.AddScoped<ILoyaltyService, MadK.Infrastructure.Services.LoyaltyService>();
 
+        // AI Shopping Assistant & Tech Advisor (Gemini AI)
+        services.Configure<MadK.Application.DTOs.Ai.GeminiSettings>(
+            configuration.GetSection(MadK.Application.DTOs.Ai.GeminiSettings.SectionName));
+        services.AddScoped<MadK.Application.Interfaces.IAiShoppingAssistantService, MadK.Infrastructure.Services.AiShoppingAssistantService>();
+
         return services;
     }
 

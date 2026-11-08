@@ -5,12 +5,14 @@ import { CategoryTreeDto } from '../../types/catalog';
 import { useAuth } from '../../features/auth/context/AuthContext';
 import { useCart } from '../../features/cart/context/CartContext';
 import { useWishlist } from '../../features/wishlist/context/WishlistContext';
+import { useCompare } from '../../context/CompareContext';
 import SearchBox from './SearchBox';
 
 export const Header: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const { itemCount } = useCart();
   const { wishlistCount } = useWishlist();
+  const { items: compareItems } = useCompare();
   const [categories, setCategories] = useState<CategoryTreeDto[]>([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
@@ -195,6 +197,32 @@ export const Header: React.FC = () => {
               className="hidden xl:inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-slate-700 hover:text-blue-600 rounded-2xl hover:bg-slate-100 transition-colors"
             >
               Khám phá
+            </Link>
+
+            {/* Compare Icon */}
+            <Link
+              to="/compare"
+              className="p-2 sm:px-3 sm:py-2 rounded-2xl text-slate-700 hover:text-cyan-600 hover:bg-cyan-50 transition-colors relative flex items-center gap-1.5 border border-transparent hover:border-cyan-100"
+              title="So sánh sản phẩm"
+            >
+              <div className="relative">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-5 h-5 sm:w-5 sm:h-5 text-slate-700 hover:text-cyan-600 transition-colors"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                {compareItems.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
+                    {compareItems.length}
+                  </span>
+                )}
+              </div>
+              <span className="hidden xl:inline text-xs font-semibold">So sánh</span>
             </Link>
 
             {/* Wishlist Icon */}
