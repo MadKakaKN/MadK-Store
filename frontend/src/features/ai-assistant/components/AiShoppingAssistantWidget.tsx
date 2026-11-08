@@ -18,6 +18,18 @@ interface MessageItem {
   timestamp: string;
 }
 
+// Icon 3 ngôi sao AI lấp lánh khớp chuẩn với thiết kế hình ảnh của người dùng
+const AiSparkleIcon: React.FC<{ className?: string }> = ({ className = 'w-6 h-6' }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    {/* Ngôi sao chính (lớn nhất ở giữa bên trái) */}
+    <path d="M10 2.5C10 6.642 6.642 10 2.5 10C6.642 10 10 13.358 10 17.5C10 13.358 13.358 10 17.5 10C13.358 10 10 6.642 10 2.5Z" />
+    {/* Ngôi sao phụ phía trên bên phải */}
+    <path d="M17.5 3C17.5 4.933 15.933 6.5 14 6.5C15.933 6.5 17.5 8.067 17.5 10C17.5 8.067 19.067 6.5 21 6.5C19.067 6.5 17.5 4.933 17.5 3Z" />
+    {/* Ngôi sao nhỏ phía dưới bên phải */}
+    <path d="M17.5 14C17.5 15.657 16.157 17 14.5 17C16.157 17 17.5 18.343 17.5 20C17.5 18.343 18.843 17 20.5 17C18.843 17 17.5 15.657 17.5 14Z" />
+  </svg>
+);
+
 export const AiShoppingAssistantWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -58,8 +70,8 @@ export const AiShoppingAssistantWidget: React.FC = () => {
       const gain = ctx.createGain();
 
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(880, ctx.currentTime); // A5
-      osc.frequency.exponentialRampToValueAtTime(1320, ctx.currentTime + 0.12); // E6
+      osc.frequency.setValueAtTime(880, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1320, ctx.currentTime + 0.12);
 
       gain.gain.setValueAtTime(0.08, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
@@ -213,18 +225,18 @@ export const AiShoppingAssistantWidget: React.FC = () => {
 
           const parts = line.split(/(\*\*[^*]+\*\*)/g);
           return (
-            <p key={idx} className="text-slate-200">
+            <p key={idx} className="text-slate-800">
               {parts.map((part, pIdx) => {
                 if (part.startsWith('**') && part.endsWith('**')) {
                   return (
-                    <strong key={pIdx} className="font-bold text-cyan-300">
+                    <strong key={pIdx} className="font-bold text-blue-600">
                       {part.slice(2, -2)}
                     </strong>
                   );
                 }
                 if (part.startsWith('* ') || part.startsWith('- ')) {
                   return (
-                    <span key={pIdx} className="inline-block pl-2 text-slate-300">
+                    <span key={pIdx} className="inline-block pl-2 text-slate-700">
                       • {part.slice(2)}
                     </span>
                   );
@@ -240,65 +252,58 @@ export const AiShoppingAssistantWidget: React.FC = () => {
 
   return (
     <>
-      {/* Nút bấm nổi kích hoạt Chatbot AI (Góc dưới bên phải) */}
+      {/* Nút bấm nổi kích hoạt Chatbot AI (Góc dưới bên phải) - Thiết kế tròn xanh sáng chuẩn ảnh 2 */}
       <div className="fixed bottom-6 right-6 z-50">
         {!isOpen && (
           <button
             type="button"
             onClick={() => setIsOpen(true)}
-            className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 text-white shadow-[0_8px_32px_rgba(6,182,212,0.45)] hover:shadow-[0_12px_45px_rgba(6,182,212,0.65)] hover:scale-110 active:scale-95 transition-all duration-300 border border-cyan-300/40"
+            className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-sky-400 text-white shadow-[0_8px_30px_rgba(37,99,235,0.45)] hover:shadow-[0_12px_45px_rgba(37,99,235,0.65)] hover:scale-110 active:scale-95 transition-all duration-300 border-2 border-white/60"
             title="Trò chuyện với Trợ lý AI MadK"
           >
-            {/* Vòng sáng pulse animation */}
-            <span className="absolute -inset-1 rounded-full bg-cyan-400 opacity-40 animate-ping pointer-events-none" />
+            {/* Vòng sáng pulse animation nhẹ nhàng */}
+            <span className="absolute -inset-1 rounded-full bg-sky-400 opacity-40 animate-ping pointer-events-none" />
 
-            {/* Sparkle Icon */}
-            <svg
-              className="w-7 h-7 relative z-10 transition-transform group-hover:rotate-12"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
-            </svg>
+            {/* Icon 3 ngôi sao lấp lánh chuẩn theo ảnh mẫu */}
+            <div className="relative z-10 transition-transform group-hover:rotate-12 drop-shadow-sm">
+              <AiSparkleIcon className="w-7 h-7 text-white" />
+            </div>
 
             {/* Tooltip khi rê chuột */}
-            <span className="absolute right-16 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-slate-900/95 text-white text-xs font-semibold whitespace-nowrap shadow-xl border border-cyan-500/30 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            <span className="absolute right-16 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-slate-900/90 text-white text-xs font-semibold whitespace-nowrap shadow-xl border border-slate-700/50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
               Tư vấn AI MadK ✨
             </span>
           </button>
         )}
       </div>
 
-      {/* Cửa sổ Chatbot AI (Popup) */}
+      {/* Cửa sổ Chatbot AI - GIAO DIỆN MÀU SÁNG (LIGHT THEME) HIỆN ĐẠI */}
       {isOpen && (
-        <div className="fixed bottom-6 right-4 sm:right-6 z-50 w-[94vw] sm:w-[440px] h-[640px] max-h-[86vh] bg-slate-950/95 backdrop-blur-2xl border border-cyan-500/30 rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.85)] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed bottom-6 right-4 sm:right-6 z-50 w-[94vw] sm:w-[440px] h-[640px] max-h-[86vh] bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-3xl shadow-[0_20px_60px_rgba(15,23,42,0.18)] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200 text-slate-800">
           
-          {/* Top glowing laser line */}
-          <div className="h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent shrink-0" />
+          {/* Top highlight bar */}
+          <div className="h-[3px] bg-gradient-to-r from-blue-600 via-sky-400 to-indigo-600 shrink-0" />
 
-          {/* Header */}
-          <div className="px-4 py-3 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-indigo-950/90 border-b border-cyan-500/20 flex items-center justify-between shrink-0">
+          {/* Header màu sáng */}
+          <div className="px-4 py-3 bg-gradient-to-r from-slate-50 via-white to-blue-50/40 border-b border-slate-200/80 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
-              <div className="relative w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-cyan-500/30">
-                <svg className="w-5 h-5 animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-                </svg>
+              {/* Avatar tròn xanh lấp lánh chuẩn ảnh mẫu */}
+              <div className="relative w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-sky-400 flex items-center justify-center text-white shadow-md shadow-blue-500/25 border border-white">
+                <AiSparkleIcon className="w-5 h-5 text-white" />
                 {/* Trạng thái online */}
-                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-slate-950 flex items-center justify-center">
+                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center">
                   <span className="w-1 h-1 rounded-full bg-white animate-ping" />
                 </span>
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <h3 className="font-extrabold text-sm text-white">MadK Neural AI</h3>
-                  <span className="px-1.5 py-0.2 text-[9px] font-bold rounded bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-300 border border-cyan-500/40">
+                  <h3 className="font-extrabold text-sm text-slate-900">MadK Neural AI</h3>
+                  <span className="px-1.5 py-0.2 text-[9px] font-bold rounded bg-blue-100 text-blue-700 border border-blue-200">
                     GEMINI
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-400 flex items-center gap-1.5">
-                  <span className="text-emerald-400 font-semibold">● Trực tuyến 24/7</span>
+                <p className="text-[11px] text-slate-500 flex items-center gap-1.5">
+                  <span className="text-emerald-600 font-semibold">● Trực tuyến 24/7</span>
                   <span>•</span>
                   <span>Tư vấn phần cứng & gaming</span>
                 </p>
@@ -312,7 +317,7 @@ export const AiShoppingAssistantWidget: React.FC = () => {
                 onClick={() => setSoundEnabled(!soundEnabled)}
                 title={soundEnabled ? 'Tắt âm thanh thông báo' : 'Bật âm thanh'}
                 className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors ${
-                  soundEnabled ? 'hover:bg-slate-800/80 hover:text-cyan-300 text-slate-300' : 'text-slate-600 hover:text-slate-400'
+                  soundEnabled ? 'hover:bg-slate-100 hover:text-blue-600 text-slate-600' : 'text-slate-300 hover:text-slate-500'
                 }`}
               >
                 {soundEnabled ? (
@@ -333,7 +338,7 @@ export const AiShoppingAssistantWidget: React.FC = () => {
                 type="button"
                 onClick={handleClearChat}
                 title="Làm mới cuộc trò chuyện"
-                className="w-8 h-8 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-slate-800/60 flex items-center justify-center transition-colors"
+                className="w-8 h-8 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-slate-100 flex items-center justify-center transition-colors"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3" />
@@ -345,69 +350,73 @@ export const AiShoppingAssistantWidget: React.FC = () => {
                 type="button"
                 onClick={() => setIsOpen(false)}
                 title="Thu nhỏ"
-                className="w-8 h-8 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center justify-center transition-colors text-base"
+                className="w-8 h-8 rounded-xl text-slate-400 hover:text-slate-800 hover:bg-slate-100 flex items-center justify-center transition-colors text-base"
               >
                 ✕
               </button>
             </div>
           </div>
 
-          {/* Quick Categories Bar */}
-          <div className="px-3 py-2 bg-slate-900/60 border-b border-slate-800/80 flex items-center gap-1.5 overflow-x-auto scrollbar-none text-xs shrink-0">
+          {/* Quick Categories Bar (Màu sáng) */}
+          <div className="px-3 py-2 bg-slate-50 border-b border-slate-200/70 flex items-center gap-1.5 overflow-x-auto scrollbar-none text-xs shrink-0">
             <button
               type="button"
               onClick={() => handleSend('Tư vấn laptop gaming tầm 20 - 30 triệu')}
-              className="px-2.5 py-1 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 whitespace-nowrap transition-colors flex items-center gap-1 shrink-0"
+              className="px-2.5 py-1 rounded-xl bg-white hover:bg-blue-50 text-slate-700 hover:text-blue-600 border border-slate-200/80 shadow-2xs whitespace-nowrap transition-colors flex items-center gap-1 shrink-0 font-medium"
             >
               <span>🎮</span> Laptop Gaming
             </button>
             <button
               type="button"
               onClick={() => handleSend('Cấu hình PC thiết kế đồ họa & Render 3D')}
-              className="px-2.5 py-1 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 border border-purple-500/30 whitespace-nowrap transition-colors flex items-center gap-1 shrink-0"
+              className="px-2.5 py-1 rounded-xl bg-white hover:bg-purple-50 text-slate-700 hover:text-purple-600 border border-slate-200/80 shadow-2xs whitespace-nowrap transition-colors flex items-center gap-1 shrink-0 font-medium"
             >
               <span>🎨</span> PC Đồ họa
             </button>
             <button
               type="button"
               onClick={() => handleSend('Chuột gaming không dây siêu nhẹ cảm biến chuẩn')}
-              className="px-2.5 py-1 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 border border-blue-500/30 whitespace-nowrap transition-colors flex items-center gap-1 shrink-0"
+              className="px-2.5 py-1 rounded-xl bg-white hover:bg-sky-50 text-slate-700 hover:text-sky-600 border border-slate-200/80 shadow-2xs whitespace-nowrap transition-colors flex items-center gap-1 shrink-0 font-medium"
             >
               <span>🖱️</span> Chuột Gaming
             </button>
             <button
               type="button"
               onClick={() => handleSend('Bàn phím cơ văn phòng gõ êm ái, kết nối không dây')}
-              className="px-2.5 py-1 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 whitespace-nowrap transition-colors flex items-center gap-1 shrink-0"
+              className="px-2.5 py-1 rounded-xl bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-600 border border-slate-200/80 shadow-2xs whitespace-nowrap transition-colors flex items-center gap-1 shrink-0 font-medium"
             >
               <span>⌨️</span> Phím cơ êm
             </button>
           </div>
 
-          {/* Body tin nhắn */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-slate-800">
+          {/* Body tin nhắn (Màu sáng sạch sẽ, độ tương phản cao) */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/60">
             {messages.map((msg) => (
               <div
                 key={msg.id}
                 className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}
               >
                 <div
-                  className={`max-w-[88%] p-3.5 rounded-3xl shadow-sm ${
+                  className={`max-w-[88%] p-3.5 rounded-3xl shadow-xs ${
                     msg.role === 'user'
-                      ? 'bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 text-white rounded-br-xs shadow-cyan-600/15'
-                      : 'bg-slate-900 border border-slate-800 text-slate-100 rounded-bl-xs'
+                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-br-xs shadow-blue-500/15'
+                      : 'bg-white border border-slate-200/90 text-slate-800 rounded-bl-xs'
                   }`}
                 >
                   {renderFormattedText(msg.content)}
-                  <span className="block text-[10px] text-slate-400 text-right mt-1.5 opacity-70">
+                  <span
+                    className={`block text-[10px] text-right mt-1.5 opacity-70 ${
+                      msg.role === 'user' ? 'text-blue-100' : 'text-slate-400'
+                    }`}
+                  >
                     {msg.timestamp}
                   </span>
                 </div>
 
-                {/* Thẻ sản phẩm tương tác cao cấp */}
+                {/* Thẻ sản phẩm tương tác cao cấp (Màu sáng) */}
                 {msg.recommendedProducts && msg.recommendedProducts.length > 0 && (
                   <div className="mt-3 w-full space-y-2">
-                    <p className="text-[11px] font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-blue-600 flex items-center gap-1.5">
                       <span>⚡</span> Sản phẩm gợi ý từ cơ sở dữ liệu MadK:
                     </p>
                     <div className="grid grid-cols-1 gap-2.5">
@@ -416,13 +425,13 @@ export const AiShoppingAssistantWidget: React.FC = () => {
                         return (
                           <div
                             key={p.id}
-                            className="bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-950 border border-cyan-500/25 rounded-2xl p-3 shadow-lg hover:border-cyan-400/60 transition-all"
+                            className="bg-white border border-slate-200 hover:border-blue-400 rounded-2xl p-3 shadow-xs hover:shadow-md transition-all"
                           >
                             <div className="flex gap-3">
                               <Link
                                 to={`/products/${p.slug}`}
                                 onClick={() => setIsOpen(false)}
-                                className="w-16 h-16 bg-slate-950 border border-slate-800/80 rounded-xl p-1.5 shrink-0 overflow-hidden flex items-center justify-center hover:scale-105 transition-transform"
+                                className="w-16 h-16 bg-slate-50 border border-slate-100 rounded-xl p-1.5 shrink-0 overflow-hidden flex items-center justify-center hover:scale-105 transition-transform"
                               >
                                 <img
                                   src={p.thumbnailUrl || `/images/products/${p.slug}.png`}
@@ -436,21 +445,21 @@ export const AiShoppingAssistantWidget: React.FC = () => {
 
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center justify-between gap-1 mb-0.5">
-                                  <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">
+                                  <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">
                                     {p.brandName} • {p.categoryName}
                                   </span>
-                                  <span className="text-[10px] font-bold text-emerald-400">Chính hãng</span>
+                                  <span className="text-[10px] font-bold text-emerald-600">Chính hãng</span>
                                 </div>
                                 <Link
                                   to={`/products/${p.slug}`}
                                   onClick={() => setIsOpen(false)}
-                                  className="font-bold text-xs text-white hover:text-cyan-300 truncate block transition-colors"
+                                  className="font-bold text-xs text-slate-900 hover:text-blue-600 truncate block transition-colors"
                                   title={p.name}
                                 >
                                   {p.name}
                                 </Link>
                                 <div className="flex items-center gap-2 mt-1">
-                                  <span className="text-xs font-extrabold text-cyan-300">
+                                  <span className="text-xs font-extrabold text-blue-600">
                                     {formatVND(p.minPrice || p.basePrice)}
                                   </span>
                                 </div>
@@ -458,15 +467,15 @@ export const AiShoppingAssistantWidget: React.FC = () => {
                             </div>
 
                             {/* Actions bar inside product card */}
-                            <div className="mt-2.5 pt-2.5 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                            <div className="mt-2.5 pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2">
                               <button
                                 type="button"
                                 onClick={() => handleToggleCompare(p)}
                                 title={inCompare ? 'Bỏ khỏi so sánh' : 'Thêm vào so sánh'}
                                 className={`px-2.5 py-1 rounded-xl text-xs font-semibold flex items-center gap-1 transition-all ${
                                   inCompare
-                                    ? 'bg-cyan-500 text-slate-950 font-bold'
-                                    : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
+                                    ? 'bg-blue-600 text-white font-bold'
+                                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
                                 }`}
                               >
                                 <span>⚖️</span>
@@ -477,10 +486,10 @@ export const AiShoppingAssistantWidget: React.FC = () => {
                                 <button
                                   type="button"
                                   onClick={() => handleAddRecommendedToCart(p)}
-                                  className={`px-3 py-1 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 ${
+                                  className={`px-3 py-1 rounded-xl text-xs font-bold transition-all shadow-xs active:scale-95 ${
                                     addedProductId === p.id
                                       ? 'bg-emerald-600 text-white'
-                                      : 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-cyan-500/20'
+                                      : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/20'
                                   }`}
                                 >
                                   {addedProductId === p.id ? '✓ Đã thêm' : '+ Giỏ hàng'}
@@ -488,7 +497,7 @@ export const AiShoppingAssistantWidget: React.FC = () => {
                                 <Link
                                   to={`/products/${p.slug}`}
                                   onClick={() => setIsOpen(false)}
-                                  className="px-2.5 py-1 rounded-xl text-[11px] font-medium text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors"
+                                  className="px-2.5 py-1 rounded-xl text-[11px] font-medium text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 transition-colors"
                                 >
                                   Xem
                                 </Link>
@@ -505,38 +514,38 @@ export const AiShoppingAssistantWidget: React.FC = () => {
 
             {/* Hiệu ứng đang gõ tin nhắn */}
             {isLoading && (
-              <div className="flex items-center gap-2 p-3 bg-slate-900 border border-slate-800 rounded-2xl rounded-bl-xs w-32">
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce" />
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce [animation-delay:0.2s]" />
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce [animation-delay:0.4s]" />
-                <span className="text-[11px] text-slate-400 ml-1 font-medium">Đang phân tích...</span>
+              <div className="flex items-center gap-2 p-3 bg-white border border-slate-200 rounded-2xl rounded-bl-xs w-32 shadow-2xs">
+                <span className="w-2 h-2 rounded-full bg-blue-600 animate-bounce" />
+                <span className="w-2 h-2 rounded-full bg-blue-600 animate-bounce [animation-delay:0.2s]" />
+                <span className="w-2 h-2 rounded-full bg-blue-600 animate-bounce [animation-delay:0.4s]" />
+                <span className="text-[11px] text-slate-500 ml-1 font-medium">Đang phân tích...</span>
               </div>
             )}
 
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Gợi ý câu hỏi nhanh (Prompt chips) */}
-          <div className="px-3 py-2 bg-slate-900/60 border-t border-slate-800 flex items-center gap-1.5 overflow-x-auto scrollbar-none shrink-0">
+          {/* Gợi ý câu hỏi nhanh (Prompt chips màu sáng) */}
+          <div className="px-3 py-2 bg-white border-t border-slate-100 flex items-center gap-1.5 overflow-x-auto scrollbar-none shrink-0">
             {prompts.map((p, idx) => (
               <button
                 key={idx}
                 type="button"
                 onClick={() => handleSend(p)}
-                className="px-2.5 py-1 rounded-full bg-slate-800/80 hover:bg-cyan-950/60 hover:text-cyan-300 border border-slate-700/60 text-slate-300 text-[11px] whitespace-nowrap transition-colors"
+                className="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-blue-50 hover:text-blue-600 border border-slate-200/70 text-slate-700 text-[11px] whitespace-nowrap transition-colors font-medium"
               >
                 {p}
               </button>
             ))}
           </div>
 
-          {/* Ô nhập tin nhắn */}
+          {/* Ô nhập tin nhắn màu sáng */}
           <form
             onSubmit={(e) => {
               e.preventDefault();
               handleSend();
             }}
-            className="p-3 bg-gradient-to-t from-slate-950 via-slate-900 to-slate-900/90 border-t border-slate-800 shrink-0"
+            className="p-3 bg-white border-t border-slate-200/80 shrink-0"
           >
             <div className="flex items-center gap-2">
               <input
@@ -545,12 +554,12 @@ export const AiShoppingAssistantWidget: React.FC = () => {
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 placeholder="Hỏi cấu hình, so sánh, tầm giá..."
-                className="flex-1 bg-slate-950/90 border border-slate-800 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/40 rounded-2xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none transition-all shadow-inner"
+                className="flex-1 bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 rounded-2xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none transition-all shadow-inner"
               />
               <button
                 type="submit"
                 disabled={!inputMessage.trim() || isLoading}
-                className="w-10 h-10 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-white flex items-center justify-center shrink-0 shadow-lg shadow-cyan-500/20 active:scale-95 transition-all"
+                className="w-10 h-10 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 hover:from-blue-500 hover:to-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed text-white flex items-center justify-center shrink-0 shadow-md shadow-blue-500/20 active:scale-95 transition-all"
                 title="Gửi tin nhắn"
               >
                 <svg className="w-4 h-4 -rotate-45 relative left-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -558,7 +567,7 @@ export const AiShoppingAssistantWidget: React.FC = () => {
                 </svg>
               </button>
             </div>
-            <div className="mt-2 flex items-center justify-between text-[10px] text-slate-500 px-1">
+            <div className="mt-2 flex items-center justify-between text-[10px] text-slate-400 px-1">
               <span>⚡ Gemini AI • MadK Hardware DB</span>
               <span>Enter để gửi</span>
             </div>
