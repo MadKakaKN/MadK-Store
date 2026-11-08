@@ -41,6 +41,7 @@ import AdminDiscountsPage from '../features/admin/pages/AdminDiscountsPage';
 import AdminUsersPage from '../features/admin/pages/AdminUsersPage';
 import AdminAuditLogsPage from '../features/admin/pages/AdminAuditLogsPage';
 import AdminReportsPage from '../features/admin/pages/AdminReportsPage';
+import AdminSystemHealthPage from '../features/admin/pages/AdminSystemHealthPage';
 import AdminLoginPage from '../features/admin/pages/AdminLoginPage';
 
 export const AppRoutes: React.FC = () => {
@@ -218,6 +219,14 @@ export const AppRoutes: React.FC = () => {
           element={
             <AdminRouteGuard>
               <AdminReportsPage />
+            </AdminRouteGuard>
+          }
+        />
+        <Route
+          path="system"
+          element={
+            <AdminRouteGuard>
+              <AdminSystemHealthPage />
             </AdminRouteGuard>
           }
         />

@@ -108,6 +108,14 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
     description: 'Báo cáo doanh thu, tồn kho và hệ thống',
     requiredPermissions: ['report.revenue', 'report.inventory', 'report.all'],
   },
+  {
+    id: 'system',
+    label: 'Hạ tầng & Sức khỏe',
+    path: '/admin/system',
+    icon: 'activity',
+    description: 'Giám sát dịch vụ, độ trễ, RAM & Sandbox Webhook IPN',
+    requiredRoles: ['Admin', 'SuperAdmin'],
+  },
 ];
 
 /**

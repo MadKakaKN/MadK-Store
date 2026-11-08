@@ -240,3 +240,9 @@ export const IconLogout: React.FC<IconProps> = ({ className = 'w-5 h-5', size, s
     <line x1="21" y1="12" x2="9" y2="12" />
   </svg>
 );
+
+export const IconActivity: React.FC<IconProps> = ({ className = 'w-5 h-5', size, strokeWidth = 2 }) => (
+  <svg width={size} height={size} className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+  </svg>
+);

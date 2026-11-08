@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { ProductVariantDto } from '../../../../types/catalog';
 import { useWebGLSupport } from './useWebGLSupport';
@@ -80,11 +80,41 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
 }) => {
   const { isSupported, isMobile, maxDpr, reason } = useWebGLSupport();
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const [autoRotate, setAutoRotate] = useState(true);
   const [wireframe, setWireframe] = useState(false);
   const [customColor, setCustomColor] = useState<string | null>(null);
   const [showGuideModal, setShowGuideModal] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [lightingPreset, setLightingPreset] = useState<'city' | 'studio' | 'sunset' | 'night'>('city');
+
+  useEffect(() => {
+    const handleFsChange = () => {
+      setIsFullscreen(Boolean(document.fullscreenElement));
+    };
+    document.addEventListener('fullscreenchange', handleFsChange);
+    return () => document.removeEventListener('fullscreenchange', handleFsChange);
+  }, []);
+
+  const handleToggleFullscreen = async () => {
+    if (!containerRef.current) return;
+    try {
+      if (!document.fullscreenElement) {
+        await containerRef.current.requestFullscreen();
+      } else {
+        await document.exitFullscreen();
+      }
+    } catch {
+      // Ignore fullscreen denial/unsupported
+    }
+  };
+
+  const cycleLightingPreset = () => {
+    const presets: Array<'city' | 'studio' | 'sunset' | 'night'> = ['city', 'studio', 'sunset', 'night'];
+    const idx = presets.indexOf(lightingPreset);
+    setLightingPreset(presets[(idx + 1) % presets.length]);
+  };
 
   // Detect brand and form factor
   const brandName = useMemo(() => {
@@ -143,8 +173,13 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
 
   return (
     <div
+      ref={containerRef}
       id="product-3d-viewer-container"
-      className="relative aspect-square sm:aspect-[4/3] w-full rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 border border-slate-800 shadow-2xl overflow-hidden flex flex-col justify-between p-4 sm:p-5 select-none"
+      className={`${
+        isFullscreen
+          ? 'fixed inset-0 z-50 w-screen h-screen rounded-none'
+          : 'relative aspect-square sm:aspect-[4/3] w-full rounded-3xl'
+      } bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 border border-slate-800 shadow-2xl overflow-hidden flex flex-col justify-between p-4 sm:p-5 select-none transition-all`}
     >
       {/* Background 3D Grid lines */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#33415518_1px,transparent_1px),linear-gradient(to_bottom,#33415518_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
@@ -213,17 +248,38 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
           thumbnailUrl={thumbnailUrl}
           productSlug={productSlug}
           foldState={isFoldable ? foldState : undefined}
+          lightingPreset={lightingPreset}
         />
       </div>
 
       {/* ──── Floating Floating Action Overlay (Right Side) ──── */}
       <div className="relative z-10 self-end flex flex-col gap-2">
+        {/* Toggle Fullscreen */}
+        <button
+          type="button"
+          onClick={handleToggleFullscreen}
+          title={isFullscreen ? 'Thu nhỏ cửa sổ' : 'Phóng to toàn màn hình'}
+          className="w-9 h-9 rounded-2xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center text-sm font-bold backdrop-blur-md transition-all shadow-lg active:scale-95"
+        >
+          {isFullscreen ? '✕' : '⛶'}
+        </button>
+
+        {/* Cycle Lighting Environment */}
+        <button
+          type="button"
+          onClick={cycleLightingPreset}
+          title={`Ánh sáng môi trường: ${lightingPreset.toUpperCase()} (Bấm để đổi City/Studio/Sunset/Night)`}
+          className="w-9 h-9 rounded-2xl bg-slate-900/80 hover:bg-slate-800 text-amber-300 border border-slate-700 flex items-center justify-center text-sm font-bold backdrop-blur-md transition-all shadow-lg active:scale-95"
+        >
+          {lightingPreset === 'city' ? '🏙️' : lightingPreset === 'studio' ? '💡' : lightingPreset === 'sunset' ? '🌅' : '🌃'}
+        </button>
+
         {/* Toggle Auto-rotate */}
         <button
           type="button"
           onClick={() => setAutoRotate(!autoRotate)}
           title={autoRotate ? 'Tắt tự động xoay' : 'Bật tự động xoay'}
-          className={`w-9 h-9 rounded-2xl flex items-center justify-center text-sm font-bold backdrop-blur-md border transition-all shadow-lg ${
+          className={`w-9 h-9 rounded-2xl flex items-center justify-center text-sm font-bold backdrop-blur-md border transition-all shadow-lg active:scale-95 ${
             autoRotate
               ? 'bg-indigo-600/80 text-white border-indigo-400'
               : 'bg-slate-900/80 text-slate-400 border-slate-700 hover:text-white'
@@ -237,7 +293,7 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
           type="button"
           onClick={handleResetCamera}
           title="Đặt lại góc nhìn chính diện"
-          className="w-9 h-9 rounded-2xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-700 flex items-center justify-center text-sm font-bold backdrop-blur-md transition-all shadow-lg"
+          className="w-9 h-9 rounded-2xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-700 flex items-center justify-center text-sm font-bold backdrop-blur-md transition-all shadow-lg active:scale-95"
         >
           🎯
         </button>
@@ -247,7 +303,7 @@ export const Product3DViewer: React.FC<Product3DViewerProps> = ({
           type="button"
           onClick={() => setWireframe(!wireframe)}
           title={wireframe ? 'Tắt khung dây' : 'Bật khung dây Wireframe'}
-          className={`w-9 h-9 rounded-2xl flex items-center justify-center text-xs font-mono font-bold backdrop-blur-md border transition-all shadow-lg ${
+          className={`w-9 h-9 rounded-2xl flex items-center justify-center text-xs font-mono font-bold backdrop-blur-md border transition-all shadow-lg active:scale-95 ${
             wireframe
               ? 'bg-purple-600/80 text-white border-purple-400'
               : 'bg-slate-900/80 text-slate-400 border-slate-700 hover:text-white'
