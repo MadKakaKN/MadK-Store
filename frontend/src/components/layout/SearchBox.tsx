@@ -120,9 +120,10 @@ const POPULAR_SEARCH_TAGS = [
 interface SearchBoxProps {
   isMobile?: boolean;
   onNavigate?: () => void;
+  placeholder?: string;
 }
 
-export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNavigate }) => {
+export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNavigate, placeholder }) => {
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [liveResults, setLiveResults] = useState<ProductListDto[]>([]);
@@ -225,14 +226,19 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
         <input
           ref={inputRef}
           type="text"
-          placeholder="Bạn muốn mua gì hôm nay? (Tìm điện thoại, laptop, linh kiện...)"
+          placeholder={
+            placeholder ||
+            (isMobile
+              ? 'Bạn muốn tìm gì hôm nay?...'
+              : 'Bạn muốn tìm gì hôm nay? (iPhone 15, MacBook M3, RTX 4090, Bàn phím cơ...)')
+          }
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsOpen(true)}
           className={`w-full bg-slate-100 hover:bg-slate-200/60 focus:bg-white text-slate-900 placeholder-slate-400 text-sm transition-all border border-transparent focus:border-brand-500 focus:outline-none focus:ring-4 focus:ring-brand-500/10 ${
             isMobile
               ? 'rounded-xl pl-9 pr-14 py-2 border-slate-200'
-              : 'rounded-2xl pl-11 pr-24 py-2.5 sm:py-3'
+              : 'rounded-2xl pl-11 pr-20 py-2.5 sm:py-3'
           }`}
         />
 
@@ -273,10 +279,10 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
         {/* Search Action Button */}
         <button
           type="submit"
-          className={`absolute top-1/2 -translate-y-1/2 bg-brand-600 hover:bg-brand-700 text-white font-semibold transition-colors shadow-sm ${
+          className={`absolute top-1/2 -translate-y-1/2 bg-brand-600 hover:bg-brand-700 text-white font-semibold transition-colors shadow-sm active:scale-95 ${
             isMobile
               ? 'right-1 text-xs px-2.5 py-1 rounded-lg'
-              : 'right-1.5 text-xs px-3 py-1.5 sm:py-2 rounded-xl'
+              : 'right-1.5 text-xs px-3.5 py-1.5 sm:py-2 rounded-xl'
           }`}
         >
           Tìm
@@ -286,11 +292,7 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
       {/* ──── RECOMMENDATION & SEARCH RESULTS DROPDOWN ──── */}
       {isOpen && (
         <div
-          className={`absolute left-0 mt-2 bg-white rounded-3xl shadow-2xl border border-slate-200/90 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150 ${
-            isMobile
-              ? 'w-full max-h-[75vh] overflow-y-auto'
-              : 'w-[100%] sm:w-[580px] max-h-[85vh] overflow-y-auto left-0 md:-left-4'
-          }`}
+          className="absolute left-0 right-0 mt-2 bg-white rounded-3xl shadow-2xl border border-slate-200/90 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150 w-full max-h-[85vh] overflow-y-auto"
         >
           {/* 1. If Query is Empty: SHOW TRENDING & STORE RECOMMENDATIONS */}
           {!query.trim() && (
@@ -341,8 +343,8 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
                 </span>
               </div>
 
-              {/* 2-Column Grid of Store Products */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {/* 2-Column or 3-Column Grid of Store Products based on width */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                 {trendingProducts.map((prod) => (
                   <button
                     key={prod.id}

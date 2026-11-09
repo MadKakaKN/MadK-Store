@@ -74,7 +74,7 @@ export const Header: React.FC = () => {
         </span>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20 gap-3 sm:gap-6">
           {/* Brand Logo */}
           <div className="flex items-center gap-4 flex-shrink-0">
@@ -186,7 +186,7 @@ export const Header: React.FC = () => {
           </div>
 
           {/* Search bar with Recommendation Dropdown (Desktop & Tablet) */}
-          <div className="flex-1 max-w-xl mx-2 sm:mx-4">
+          <div className="hidden md:flex flex-1 max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl mx-3 sm:mx-6 min-w-[280px]">
             <SearchBox />
           </div>
 
@@ -401,6 +401,11 @@ export const Header: React.FC = () => {
               </svg>
             </button>
           </div>
+        </div>
+
+        {/* Mobile & Small Screens Dedicated Full-Width Search Bar */}
+        <div className="md:hidden pb-3 pt-0.5">
+          <SearchBox isMobile />
         </div>
       </div>
 
