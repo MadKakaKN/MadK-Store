@@ -100,7 +100,7 @@ export const Header: React.FC = () => {
           </div>
 
           {/* Desktop Category Menu trigger */}
-          <div className="hidden lg:block relative" ref={dropdownRef}>
+          <div className="hidden lg:block relative flex-shrink-0" ref={dropdownRef}>
             <button
               type="button"
               onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
@@ -186,19 +186,12 @@ export const Header: React.FC = () => {
           </div>
 
           {/* Search bar with Recommendation Dropdown (Desktop & Tablet) */}
-          <div className="hidden md:flex flex-1 max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl mx-3 sm:mx-6 min-w-[280px]">
+          <div className="hidden md:flex flex-1 max-w-3xl lg:max-w-4xl xl:max-w-5xl mx-3 sm:mx-6 min-w-[340px]">
             <SearchBox />
           </div>
 
           {/* Action buttons (Wishlist, Cart, Auth) */}
-          <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
-            <Link
-              to="/categories"
-              className="hidden xl:inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-slate-700 hover:text-blue-600 rounded-2xl hover:bg-slate-100 transition-colors"
-            >
-              Khám phá
-            </Link>
-
+          <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
             {/* Compare Icon */}
             <Link
               to="/compare"
@@ -222,7 +215,7 @@ export const Header: React.FC = () => {
                   </span>
                 )}
               </div>
-              <span className="hidden xl:inline text-xs font-semibold">So sánh</span>
+              <span className="hidden 2xl:inline text-xs font-semibold">So sánh</span>
             </Link>
 
             {/* Wishlist Icon */}
@@ -252,7 +245,7 @@ export const Header: React.FC = () => {
                   </span>
                 )}
               </div>
-              <span className="hidden xl:inline text-xs font-semibold">Yêu thích</span>
+              <span className="hidden 2xl:inline text-xs font-semibold">Yêu thích</span>
             </Link>
 
             {/* Cart Icon */}
@@ -280,7 +273,7 @@ export const Header: React.FC = () => {
                   {itemCount > 99 ? '99+' : itemCount}
                 </span>
               </div>
-              <span className="hidden xl:inline text-xs font-semibold">Giỏ hàng</span>
+              <span className="hidden 2xl:inline text-xs font-semibold">Giỏ hàng</span>
             </Link>
 
             {/* Quick Admin Portal shortcut button on Desktop */}

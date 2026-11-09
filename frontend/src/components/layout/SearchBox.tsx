@@ -229,8 +229,8 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
           placeholder={
             placeholder ||
             (isMobile
-              ? 'Bạn muốn tìm gì hôm nay?...'
-              : 'Bạn muốn tìm gì hôm nay? (iPhone 15, MacBook M3, RTX 4090, Bàn phím cơ...)')
+              ? 'Tìm kiếm sản phẩm tại MadK...'
+              : 'Tìm kiếm điện thoại, laptop, linh kiện, phụ kiện gaming...')
           }
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -292,11 +292,15 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
       {/* ──── RECOMMENDATION & SEARCH RESULTS DROPDOWN ──── */}
       {isOpen && (
         <div
-          className="absolute left-0 right-0 mt-2 bg-white rounded-3xl shadow-2xl border border-slate-200/90 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150 w-full max-h-[85vh] overflow-y-auto"
+          className={`absolute mt-2 bg-white rounded-3xl shadow-2xl border border-slate-200/90 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150 ${
+            isMobile
+              ? 'left-0 right-0 w-full max-h-[75vh] overflow-y-auto'
+              : 'left-0 md:left-1/2 md:-translate-x-1/2 w-full md:w-[680px] lg:w-[760px] max-w-[95vw] max-h-[82vh] overflow-y-auto'
+          }`}
         >
           {/* 1. If Query is Empty: SHOW TRENDING & STORE RECOMMENDATIONS */}
           {!query.trim() && (
-            <div className="p-3 sm:p-4 space-y-4">
+            <div className="p-3 sm:p-5 space-y-4">
               {/* Promotional Top Banner (as in user reference image) */}
               <div
                 onClick={() => {
@@ -343,20 +347,20 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
                 </span>
               </div>
 
-              {/* 2-Column or 3-Column Grid of Store Products based on width */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+              {/* Strict 2-Column Grid of Store Products */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {trendingProducts.map((prod) => (
                   <button
                     key={prod.id}
                     type="button"
                     onClick={() => handleSelectProduct(prod.slug)}
-                    className="flex items-center gap-2.5 p-2 rounded-2xl hover:bg-slate-50 border border-transparent hover:border-slate-200/80 transition-all text-left group"
+                    className="flex items-center gap-3 p-2.5 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-slate-200 transition-all text-left group"
                   >
-                    <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-slate-100 overflow-hidden flex-shrink-0 border border-slate-200/60">
+                    <div className="relative w-12 h-12 rounded-xl bg-slate-100 overflow-hidden flex-shrink-0 border border-slate-200/60 p-1">
                       <img
                         src={prod.thumbnailUrl}
                         alt={prod.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-200"
                         loading="lazy"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
@@ -373,12 +377,17 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
                       )}
                     </div>
 
-                    <div className="flex-1 min-w-0">
-                      <div className="text-xs font-semibold text-slate-800 group-hover:text-brand-600 truncate transition-colors">
+                    <div className="flex-1 min-w-0 pr-1">
+                      <div className="text-xs font-semibold text-slate-800 group-hover:text-brand-600 truncate transition-colors leading-snug">
                         {prod.name}
                       </div>
-                      <div className="text-[11px] font-bold text-emerald-600">
-                        {prod.price.toLocaleString('vi-VN')} đ
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-xs font-bold text-emerald-600">
+                          {prod.price.toLocaleString('vi-VN')} đ
+                        </span>
+                        <span className="text-[10px] text-slate-400 font-medium truncate">
+                          {prod.categoryName}
+                        </span>
                       </div>
                     </div>
                   </button>
