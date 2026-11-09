@@ -5,6 +5,8 @@ import HomePage from '../features/catalog/pages/HomePage';
 import CategoryPage from '../features/catalog/pages/CategoryPage';
 import ProductDetailPage from '../features/catalog/pages/ProductDetailPage';
 import ComparePage from '../features/catalog/pages/ComparePage';
+import PcBuilderPage from '../features/pc-builder/pages/PcBuilderPage';
+import OrderAndWarrantyTrackingPage from '../features/tracking/pages/OrderAndWarrantyTrackingPage';
 import LoginPage from '../features/auth/pages/LoginPage';
 import RegisterPage from '../features/auth/pages/RegisterPage';
 import ForgotPasswordPage from '../features/auth/pages/ForgotPasswordPage';
@@ -56,6 +58,9 @@ export const AppRoutes: React.FC = () => {
         <Route path="categories/:slug" element={<CategoryPage />} />
         <Route path="products/:slug" element={<ProductDetailPage />} />
         <Route path="compare" element={<ComparePage />} />
+        <Route path="pc-builder" element={<PcBuilderPage />} />
+        <Route path="tracking" element={<OrderAndWarrantyTrackingPage />} />
+        <Route path="tra-cuu" element={<OrderAndWarrantyTrackingPage />} />
 
         {/* Cart & Checkout */}
         <Route path="cart" element={<CartPage />} />

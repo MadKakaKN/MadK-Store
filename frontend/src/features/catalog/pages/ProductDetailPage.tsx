@@ -12,6 +12,9 @@ import { useAuth } from '../../auth/context/AuthContext';
 import SEOHead, { buildProductSchema, buildBreadcrumbSchema } from '../../../components/common/SEOHead';
 import AuthRequiredModal from '../../../components/common/AuthRequiredModal';
 import ProductReviewsSection from '../components/ProductReviewsSection';
+import { InstallmentCalculatorModal } from '../components/InstallmentCalculatorModal';
+import RecentlyViewedBar from '../components/RecentlyViewedBar';
+import { addRecentlyViewed } from '../../../utils/recentlyViewed';
 import { useWishlist } from '../../wishlist/context/WishlistContext';
 import { useCompare } from '../../../context/CompareContext';
 import { ProductListDto } from '../../../types/catalog';
@@ -45,6 +48,7 @@ export const ProductDetailPage: React.FC = () => {
   });
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showInstallmentModal, setShowInstallmentModal] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -58,6 +62,16 @@ export const ProductDetailPage: React.FC = () => {
           setProduct(data);
           if (data && data.variants && data.variants.length > 0) {
             setSelectedVariant(data.variants[0]);
+          }
+          if (data) {
+            addRecentlyViewed({
+              id: data.id,
+              name: data.name,
+              slug: data.slug,
+              price: data.basePrice,
+              thumbnailUrl: data.thumbnailUrl,
+              categoryName: data.category?.name,
+            });
           }
         }
       })
@@ -681,6 +695,26 @@ export const ProductDetailPage: React.FC = () => {
             </button>
           </div>
 
+          {/* Installment Calculator Trigger Button */}
+          <button
+            type="button"
+            onClick={() => setShowInstallmentModal(true)}
+            className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 border border-blue-200 text-blue-800 text-xs sm:text-sm font-bold flex items-center justify-between transition-all group shadow-2xs"
+          >
+            <div className="flex items-center gap-2.5">
+              <span className="w-7 h-7 rounded-xl bg-blue-600 text-white flex items-center justify-center text-xs shadow-xs">
+                💳
+              </span>
+              <div className="text-left">
+                <span className="block leading-tight">Trả góp 0% Lãi suất qua Thẻ tín dụng & Công ty tài chính</span>
+                <span className="text-[11px] text-blue-600 font-medium">Chỉ từ ~{formatVND(Math.round(currentPrice / 12))}/tháng &bull; Duyệt nhanh trong 15 phút</span>
+              </div>
+            </div>
+            <span className="text-blue-600 font-bold group-hover:translate-x-1 transition-transform">
+              Tính toán &rarr;
+            </span>
+          </button>
+
           {/* Service Perks */}
           <div className="pt-6 border-t border-slate-200/80 grid grid-cols-3 gap-2 text-center text-xs text-slate-600 font-medium">
             <div className="p-3 bg-slate-50 rounded-xl">
@@ -845,6 +879,13 @@ export const ProductDetailPage: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             type="button"
+            onClick={() => setShowInstallmentModal(true)}
+            className="px-2.5 py-2.5 rounded-xl bg-blue-50 text-blue-700 font-bold text-[11px] border border-blue-200"
+          >
+            Trả góp 0%
+          </button>
+          <button
+            type="button"
             disabled={isOutOfStock}
             onClick={handleAddToCart}
             className="px-3.5 py-2.5 rounded-xl bg-slate-900 disabled:bg-slate-300 text-white font-bold text-xs"
@@ -861,6 +902,18 @@ export const ProductDetailPage: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* Recently Viewed Products */}
+      <RecentlyViewedBar currentProductId={product.id} />
+
+      {/* Installment Calculator Modal */}
+      <InstallmentCalculatorModal
+        isOpen={showInstallmentModal}
+        onClose={() => setShowInstallmentModal(false)}
+        productName={product.name}
+        productPrice={currentPrice}
+        productImage={product.thumbnailUrl}
+      />
 
       {/* Auth Required Popup Modal (Login & Sign Up) */}
       <AuthRequiredModal

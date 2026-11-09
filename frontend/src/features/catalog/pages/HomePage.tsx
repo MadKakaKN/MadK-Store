@@ -4,6 +4,8 @@ import catalogApi from '../../../api/catalogApi';
 import { CategoryTreeDto, ProductListDto } from '../../../types/catalog';
 import ProductCard from '../components/ProductCard';
 import Hero3DShowcase from '../components/Hero3DShowcase';
+import FlashSaleSection from '../components/FlashSaleSection';
+import RecentlyViewedBar from '../components/RecentlyViewedBar';
 import LoadingSpinner from '../../../components/common/LoadingSpinner';
 import SEOHead, { buildOrganizationSchema, buildWebSiteSchema } from '../../../components/common/SEOHead';
 import { IconShield, IconTruck, IconStar, IconCube3D, IconLaptop } from '../../../components/common/Icons';
@@ -121,6 +123,9 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Flash Sale Giờ Vàng Section */}
+      <FlashSaleSection />
 
       {/* Featured Categories Grid */}
       <section>
@@ -246,6 +251,35 @@ export const HomePage: React.FC = () => {
           Trải nghiệm ngay &rarr;
         </Link>
       </section>
+
+      {/* PC Builder Callout Banner */}
+      <section className="rounded-3.5xl bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-950 text-white p-8 sm:p-12 shadow-2xl border border-blue-700/40 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+        <div className="absolute top-0 right-1/4 w-72 h-72 bg-blue-400/15 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="max-w-xl relative z-10 space-y-3">
+          <div className="inline-flex items-center gap-2 py-1 px-3.5 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-400/30">
+            <span>⚡</span>
+            <span>MADK PC BUILDER PRO</span>
+          </div>
+          <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+            Tự tay xây dựng dàn PC trong mơ của bạn
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            Công cụ lựa chọn linh kiện theo chuẩn socket, tự động tính công suất nguồn nguồn (Watt), kiểm tra độ tương thích phần cứng và in bảng báo giá chỉ trong 1 phút.
+          </p>
+        </div>
+
+        <Link
+          to="/pc-builder"
+          className="relative z-10 px-8 py-4 rounded-2.5xl font-bold text-sm bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-400 hover:to-indigo-400 text-white shadow-xl shadow-blue-500/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 flex-shrink-0"
+        >
+          <span>Bắt đầu Build PC ngay</span>
+          <span>&rarr;</span>
+        </Link>
+      </section>
+
+      {/* Recently Viewed Products Bar */}
+      <RecentlyViewedBar />
     </div>
   );
 };

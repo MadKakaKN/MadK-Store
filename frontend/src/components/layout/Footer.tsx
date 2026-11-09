@@ -118,6 +118,12 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/pc-builder" className="text-amber-400 hover:text-amber-300 font-bold transition-colors flex items-center gap-1">
+                  <span>🖥️</span>
+                  <span>Xây dựng cấu hình PC</span>
+                </Link>
+              </li>
+              <li>
                 <Link to="/categories" className="text-blue-400 hover:text-blue-300 font-semibold transition-colors flex items-center gap-1">
                   <span>Tất cả sản phẩm</span>
                   <span>&rarr;</span>
@@ -150,6 +156,12 @@ export const Footer: React.FC = () => {
               <li>
                 <Link to="/policies/privacy" className="hover:text-slate-200 transition-colors">
                   Bảo mật thông tin khách hàng
+                </Link>
+              </li>
+              <li>
+                <Link to="/tracking" className="text-blue-400 hover:text-blue-300 transition-colors font-medium flex items-center gap-1">
+                  <span>🔍</span>
+                  <span>Tra cứu đơn hàng & Bảo hành</span>
                 </Link>
               </li>
               <li>

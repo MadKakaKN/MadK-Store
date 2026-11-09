@@ -126,6 +126,20 @@ export const AiShoppingAssistantWidget: React.FC = () => {
       });
   }, []);
 
+  // Lắng nghe sự kiện mở box chat kèm prompt từ PC Builder / Sản phẩm
+  useEffect(() => {
+    const handleCustomPrompt = (event: Event) => {
+      const customEvent = event as CustomEvent<{ prompt?: string }>;
+      setIsOpen(true);
+      if (customEvent.detail?.prompt) {
+        handleSend(customEvent.detail.prompt);
+      }
+    };
+
+    window.addEventListener('madk:open-ai-chat', handleCustomPrompt);
+    return () => window.removeEventListener('madk:open-ai-chat', handleCustomPrompt);
+  }, []);
+
   // Xử lý gửi tin nhắn
   const handleSend = async (messageToSend?: string) => {
     const text = (messageToSend || inputMessage).trim();
