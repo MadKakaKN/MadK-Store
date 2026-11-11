@@ -34,6 +34,8 @@ export const DEMO_ACCOUNTS: Record<string, { pass: string; user: UserDto }> = {
         'inventory.view',
         'inventory.manage',
         'catalog.manage',
+        'review.manage',
+        'pricing.manage',
         'discount.manage',
         'user.view',
         'user.manage',

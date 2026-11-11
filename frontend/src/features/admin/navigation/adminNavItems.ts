@@ -66,7 +66,7 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
     path: '/admin/reviews',
     icon: '⭐',
     description: 'Kiểm duyệt nhận xét, phê duyệt hoặc trả lời khách hàng',
-    requiredPermissions: ['catalog.manage'],
+    requiredPermissions: ['review.manage'],
   },
   {
     id: 'pricing',
@@ -74,7 +74,7 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
     path: '/admin/pricing',
     icon: '💰',
     description: 'Lịch sử giá, khuyến mãi theo thời gian cho từng biến thể',
-    requiredPermissions: ['catalog.manage'],
+    requiredPermissions: ['pricing.manage'],
   },
   {
     id: 'discounts',

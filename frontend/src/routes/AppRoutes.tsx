@@ -182,7 +182,7 @@ export const AppRoutes: React.FC = () => {
         <Route
           path="reviews"
           element={
-            <AdminRouteGuard requiredPermission="catalog.manage">
+            <AdminRouteGuard requiredPermission="review.manage">
               <AdminReviewsPage />
             </AdminRouteGuard>
           }
@@ -190,7 +190,7 @@ export const AppRoutes: React.FC = () => {
         <Route
           path="pricing"
           element={
-            <AdminRouteGuard requiredPermission="catalog.manage">
+            <AdminRouteGuard requiredPermission="pricing.manage">
               <AdminPricingPage />
             </AdminRouteGuard>
           }
