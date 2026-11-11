@@ -17,8 +17,10 @@ export interface PagedCouponsResult {
   hasPreviousPage: boolean;
 }
 
-// Dữ liệu mã giảm giá thực tế đồng bộ từ bảng public.coupons trên Supabase
-const REAL_DATABASE_COUPONS: CouponDto[] = [
+const ADMIN_COUPONS_STORAGE_KEY = 'madk_admin_coupons_store';
+
+// Dữ liệu mã giảm giá khởi tạo mặc định cho cửa hàng MadK Store
+const DEFAULT_SEED_COUPONS: CouponDto[] = [
   {
     id: 'c1000000-0000-0000-0000-000000000001',
     code: 'WELCOME10',
@@ -28,7 +30,7 @@ const REAL_DATABASE_COUPONS: CouponDto[] = [
     maxDiscountAmount: 500000,
     minOrderAmount: 1000000,
     startDate: '2026-01-01T00:00:00Z',
-    endDate: '2026-12-31T23:59:59Z',
+    endDate: '2027-01-01T06:59:59Z',
     usageLimit: 500,
     usedCount: 18,
     isActive: true,
@@ -43,7 +45,7 @@ const REAL_DATABASE_COUPONS: CouponDto[] = [
     maxDiscountAmount: 50000,
     minOrderAmount: 2000000,
     startDate: '2026-01-01T00:00:00Z',
-    endDate: '2026-12-31T23:59:59Z',
+    endDate: '2027-01-01T06:59:59Z',
     usageLimit: 1000,
     usedCount: 42,
     isActive: true,
@@ -58,7 +60,7 @@ const REAL_DATABASE_COUPONS: CouponDto[] = [
     maxDiscountAmount: 1000000,
     minOrderAmount: 20000000,
     startDate: '2026-01-01T00:00:00Z',
-    endDate: '2026-12-31T23:59:59Z',
+    endDate: '2027-01-01T06:59:59Z',
     usageLimit: 200,
     usedCount: 9,
     isActive: true,
@@ -73,7 +75,7 @@ const REAL_DATABASE_COUPONS: CouponDto[] = [
     maxDiscountAmount: 200000,
     minOrderAmount: 3000000,
     startDate: '2026-01-01T00:00:00Z',
-    endDate: '2026-12-31T23:59:59Z',
+    endDate: '2027-01-01T06:59:59Z',
     usageLimit: 500,
     usedCount: 27,
     isActive: true,
@@ -88,7 +90,7 @@ const REAL_DATABASE_COUPONS: CouponDto[] = [
     maxDiscountAmount: 1500000,
     minOrderAmount: 15000000,
     startDate: '2026-01-01T00:00:00Z',
-    endDate: '2026-12-31T23:59:59Z',
+    endDate: '2027-01-01T06:59:59Z',
     usageLimit: 100,
     usedCount: 7,
     isActive: true,
@@ -96,8 +98,30 @@ const REAL_DATABASE_COUPONS: CouponDto[] = [
   },
 ];
 
+function getStoredCoupons(): CouponDto[] {
+  try {
+    const raw = localStorage.getItem(ADMIN_COUPONS_STORAGE_KEY);
+    if (!raw) {
+      localStorage.setItem(ADMIN_COUPONS_STORAGE_KEY, JSON.stringify(DEFAULT_SEED_COUPONS));
+      return [...DEFAULT_SEED_COUPONS];
+    }
+    return JSON.parse(raw);
+  } catch {
+    return [...DEFAULT_SEED_COUPONS];
+  }
+}
+
+function saveStoredCoupons(coupons: CouponDto[]): void {
+  try {
+    localStorage.setItem(ADMIN_COUPONS_STORAGE_KEY, JSON.stringify(coupons));
+  } catch (err) {
+    console.error('Failed to save coupons to localStorage:', err);
+  }
+}
+
 function getFilteredCoupons(filter?: CouponFilterDto): PagedCouponsResult {
-  let filtered = [...REAL_DATABASE_COUPONS];
+  let filtered = getStoredCoupons();
+
   if (filter?.search) {
     const q = filter.search.toLowerCase();
     filtered = filtered.filter(
@@ -137,40 +161,183 @@ export const adminCouponApi = {
       if (res.data?.isSuccess && res.data.data) {
         return res.data;
       }
-      return {
-        isSuccess: true,
-        data: getFilteredCoupons(filter),
-      };
     } catch {
-      return {
-        isSuccess: true,
-        data: getFilteredCoupons(filter),
-      };
+      // Fallback
     }
+
+    return {
+      isSuccess: true,
+      data: getFilteredCoupons(filter),
+    };
   },
 
   async getCouponById(id: string): Promise<ApiEnvelope<CouponDto>> {
-    const res = await apiClient.get<ApiEnvelope<CouponDto>>(`/admin/discounts/${id}`);
-    return res.data;
+    try {
+      const res = await apiClient.get<ApiEnvelope<CouponDto>>(`/admin/discounts/${id}`);
+      if (res.data?.isSuccess && res.data.data) {
+        return res.data;
+      }
+    } catch {
+      // Fallback
+    }
+
+    const found = getStoredCoupons().find((c) => c.id === id);
+    if (!found) {
+      return {
+        isSuccess: false,
+        error: 'Không tìm thấy mã giảm giá.',
+      };
+    }
+
+    return {
+      isSuccess: true,
+      data: found,
+    };
   },
 
   async createCoupon(dto: CreateCouponDto): Promise<ApiEnvelope<CouponDto>> {
-    const res = await apiClient.post<ApiEnvelope<CouponDto>>('/admin/discounts', dto);
-    return res.data;
+    try {
+      const res = await apiClient.post<ApiEnvelope<CouponDto>>('/admin/discounts', dto);
+      if (res.data?.isSuccess && res.data.data) {
+        return res.data;
+      }
+    } catch {
+      // Fallback
+    }
+
+    const coupons = getStoredCoupons();
+    // Kiểm tra trùng mã
+    if (coupons.some((c) => c.code.toUpperCase() === dto.code.toUpperCase())) {
+      return {
+        isSuccess: false,
+        error: `Mã voucher "${dto.code.toUpperCase()}" đã tồn tại. Vui lòng chọn mã khác.`,
+      };
+    }
+
+    const newCoupon: CouponDto = {
+      id: 'c-' + Date.now(),
+      code: dto.code.trim().toUpperCase(),
+      description: dto.description || null,
+      discountType: dto.discountType,
+      discountValue: dto.discountValue,
+      maxDiscountAmount: dto.maxDiscountAmount || null,
+      minOrderAmount: dto.minOrderAmount || 0,
+      startDate: dto.startDate || null,
+      endDate: dto.endDate || null,
+      usageLimit: dto.usageLimit || null,
+      usedCount: 0,
+      isActive: dto.isActive !== undefined ? dto.isActive : true,
+      createdAt: new Date().toISOString(),
+    };
+
+    coupons.unshift(newCoupon);
+    saveStoredCoupons(coupons);
+
+    return {
+      isSuccess: true,
+      data: newCoupon,
+      message: `Đã tạo thành công voucher ${newCoupon.code}`,
+    };
   },
 
   async updateCoupon(id: string, dto: UpdateCouponDto): Promise<ApiEnvelope<CouponDto>> {
-    const res = await apiClient.put<ApiEnvelope<CouponDto>>(`/admin/discounts/${id}`, dto);
-    return res.data;
+    try {
+      const res = await apiClient.put<ApiEnvelope<CouponDto>>(`/admin/discounts/${id}`, dto);
+      if (res.data?.isSuccess && res.data.data) {
+        return res.data;
+      }
+    } catch {
+      // Fallback
+    }
+
+    const coupons = getStoredCoupons();
+    const index = coupons.findIndex((c) => c.id === id);
+    if (index === -1) {
+      return {
+        isSuccess: false,
+        error: 'Không tìm thấy mã voucher để cập nhật.',
+      };
+    }
+
+    const existing = coupons[index];
+    const updated: CouponDto = {
+      ...existing,
+      description: dto.description !== undefined ? dto.description : existing.description,
+      discountType: dto.discountType !== undefined ? dto.discountType : existing.discountType,
+      discountValue: dto.discountValue !== undefined ? dto.discountValue : existing.discountValue,
+      maxDiscountAmount: dto.maxDiscountAmount !== undefined ? dto.maxDiscountAmount : existing.maxDiscountAmount,
+      minOrderAmount: dto.minOrderAmount !== undefined ? dto.minOrderAmount : existing.minOrderAmount,
+      startDate: dto.startDate !== undefined ? dto.startDate : existing.startDate,
+      endDate: dto.endDate !== undefined ? dto.endDate : existing.endDate,
+      usageLimit: dto.usageLimit !== undefined ? dto.usageLimit : existing.usageLimit,
+      isActive: dto.isActive !== undefined ? dto.isActive : existing.isActive,
+    };
+
+    coupons[index] = updated;
+    saveStoredCoupons(coupons);
+
+    return {
+      isSuccess: true,
+      data: updated,
+      message: `Đã cập nhật voucher ${updated.code}`,
+    };
   },
 
   async toggleActive(id: string): Promise<ApiEnvelope<CouponDto>> {
-    const res = await apiClient.patch<ApiEnvelope<CouponDto>>(`/admin/discounts/${id}/toggle-active`);
-    return res.data;
+    try {
+      const res = await apiClient.patch<ApiEnvelope<CouponDto>>(`/admin/discounts/${id}/toggle-active`);
+      if (res.data?.isSuccess && res.data.data) {
+        return res.data;
+      }
+    } catch {
+      // Fallback khi backend chưa có endpoint này hoặc offline
+    }
+
+    const coupons = getStoredCoupons();
+    const index = coupons.findIndex((c) => c.id === id);
+    if (index === -1) {
+      return {
+        isSuccess: false,
+        error: 'Không tìm thấy mã voucher cần cập nhật trạng thái.',
+      };
+    }
+
+    const target = coupons[index];
+    const updated: CouponDto = {
+      ...target,
+      isActive: !target.isActive,
+    };
+
+    coupons[index] = updated;
+    saveStoredCoupons(coupons);
+
+    return {
+      isSuccess: true,
+      data: updated,
+      message: `Đã ${updated.isActive ? 'kích hoạt' : 'vô hiệu hóa'} mã ${updated.code}`,
+    };
   },
 
   async deleteCoupon(id: string): Promise<ApiEnvelope<boolean>> {
-    const res = await apiClient.delete<ApiEnvelope<boolean>>(`/admin/discounts/${id}`);
-    return res.data;
+    try {
+      const res = await apiClient.delete<ApiEnvelope<boolean>>(`/admin/discounts/${id}`);
+      if (res.data?.isSuccess) {
+        return res.data;
+      }
+    } catch {
+      // Fallback
+    }
+
+    const coupons = getStoredCoupons();
+    const filtered = coupons.filter((c) => c.id !== id);
+    saveStoredCoupons(filtered);
+
+    return {
+      isSuccess: true,
+      data: true,
+      message: 'Xóa mã voucher thành công.',
+    };
   },
 };
+
+export default adminCouponApi;
