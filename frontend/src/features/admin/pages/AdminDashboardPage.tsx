@@ -965,68 +965,201 @@ export const AdminDashboardPage: React.FC = () => {
         </div>
       </div>
 
-      {/* ──── 6. QUICK OPERATION SHORTCUTS ──── */}
+      {/* ──── 6. DYNAMIC QUICK OPERATION SHORTCUTS BY ROLE ──── */}
       <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-xs">
-        <h3 className="text-base font-black text-slate-900 tracking-tight">
-          Lối Tắt Nghiệp Vụ Bán Hàng & Chăm Sóc Khách Hàng
-        </h3>
-        <p className="text-xs text-slate-500 mt-0.5">
-          Truy cập nhanh các phân hệ nghiệp vụ thuộc quyền hạn Sales
-        </p>
+        {activeRole === 'Warehouse' ? (
+          <>
+            <h3 className="text-base font-black text-slate-900 tracking-tight flex items-center gap-2">
+              <IconWarehouse className="w-5 h-5 text-amber-600" />
+              Lối Tắt Nghiệp Vụ Kho Vận & Quản Lý Tồn Kho
+            </h3>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Truy cập nhanh các phân hệ nghiệp vụ thuộc quyền hạn Thủ kho (Warehouse)
+            </p>
 
-        <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3.5">
-          <Link
-            to="/admin/orders"
-            className="p-5 rounded-2xl border border-slate-200/80 hover:border-blue-500 hover:bg-blue-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
-          >
-            <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
-              <IconPackage className="w-6 h-6 text-blue-600" />
-            </div>
-            <span className="text-xs font-bold text-slate-800 group-hover:text-blue-700">
-              Quản lý đơn hàng
-            </span>
-            <span className="text-[11px] text-slate-400">Duyệt & xử lý giao vận</span>
-          </Link>
+            <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+              <Link
+                to="/admin/inventory"
+                className="p-5 rounded-2xl border border-slate-200/80 hover:border-amber-500 hover:bg-amber-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
+                  <IconWarehouse className="w-6 h-6 text-amber-600" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 group-hover:text-amber-700">
+                  Quản lý tồn kho
+                </span>
+                <span className="text-[11px] text-slate-400">OnHand & Cảnh báo cạn kho</span>
+              </Link>
 
-          <Link
-            to="/admin/returns"
-            className="p-5 rounded-2xl border border-slate-200/80 hover:border-amber-500 hover:bg-amber-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
-          >
-            <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
-              <IconRotateCcw className="w-6 h-6 text-amber-600" />
-            </div>
-            <span className="text-xs font-bold text-slate-800 group-hover:text-amber-700">
-              Đổi trả & Hoàn tiền
-            </span>
-            <span className="text-[11px] text-slate-400">Thẩm định khiếu nại</span>
-          </Link>
+              <Link
+                to="/admin/orders"
+                className="p-5 rounded-2xl border border-slate-200/80 hover:border-blue-500 hover:bg-blue-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
+                  <IconPackage className="w-6 h-6 text-blue-600" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 group-hover:text-blue-700">
+                  Đơn hàng cần xuất
+                </span>
+                <span className="text-[11px] text-slate-400">Đóng gói & xuất kho GHN</span>
+              </Link>
 
-          <Link
-            to="/admin/discounts"
-            className="p-5 rounded-2xl border border-slate-200/80 hover:border-purple-500 hover:bg-purple-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
-          >
-            <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
-              <IconTicket className="w-6 h-6 text-purple-600" />
-            </div>
-            <span className="text-xs font-bold text-slate-800 group-hover:text-purple-700">
-              Mã giảm giá
-            </span>
-            <span className="text-[11px] text-slate-400">Tạo voucher kích cầu</span>
-          </Link>
+              <Link
+                to="/admin/returns"
+                className="p-5 rounded-2xl border border-slate-200/80 hover:border-rose-500 hover:bg-rose-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
+                  <IconRotateCcw className="w-6 h-6 text-rose-600" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 group-hover:text-rose-700">
+                  Đổi trả & Bảo hành
+                </span>
+                <span className="text-[11px] text-slate-400">Tiếp nhận sản phẩm hoàn/lỗi</span>
+              </Link>
 
-          <Link
-            to="/admin/reports"
-            className="p-5 rounded-2xl border border-slate-200/80 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
-          >
-            <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
-              <IconTrendingUp className="w-6 h-6 text-emerald-600" />
+              <Link
+                to="/admin/catalog"
+                className="p-5 rounded-2xl border border-slate-200/80 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
+                  <IconTag className="w-6 h-6 text-emerald-600" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 group-hover:text-emerald-700">
+                  Sản phẩm & Linh kiện
+                </span>
+                <span className="text-[11px] text-slate-400">Tra cứu mã SKU & cấu hình</span>
+              </Link>
             </div>
-            <span className="text-xs font-bold text-slate-800 group-hover:text-emerald-700">
-              Báo cáo doanh số
-            </span>
-            <span className="text-[11px] text-slate-400">Phân tích tăng trưởng</span>
-          </Link>
-        </div>
+          </>
+        ) : activeRole === 'Sales' ? (
+          <>
+            <h3 className="text-base font-black text-slate-900 tracking-tight flex items-center gap-2">
+              <IconBriefcase className="w-5 h-5 text-blue-600" />
+              Lối Tắt Nghiệp Vụ Bán Hàng & Chăm Sóc Khách Hàng
+            </h3>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Truy cập nhanh các phân hệ nghiệp vụ thuộc quyền hạn Thu ngân / Bán hàng (Sales)
+            </p>
+
+            <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+              <Link
+                to="/admin/pos"
+                className="p-5 rounded-2xl border border-slate-200/80 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
+                  <IconCreditCard className="w-6 h-6 text-emerald-600" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 group-hover:text-emerald-700">
+                  Bán tại quầy (POS)
+                </span>
+                <span className="text-[11px] text-slate-400">Quét mã vạch & in bill K80</span>
+              </Link>
+
+              <Link
+                to="/admin/orders"
+                className="p-5 rounded-2xl border border-slate-200/80 hover:border-blue-500 hover:bg-blue-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
+                  <IconPackage className="w-6 h-6 text-blue-600" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 group-hover:text-blue-700">
+                  Quản lý đơn hàng
+                </span>
+                <span className="text-[11px] text-slate-400">Duyệt & xử lý giao vận</span>
+              </Link>
+
+              <Link
+                to="/admin/returns"
+                className="p-5 rounded-2xl border border-slate-200/80 hover:border-amber-500 hover:bg-amber-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
+                  <IconRotateCcw className="w-6 h-6 text-amber-600" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 group-hover:text-amber-700">
+                  Đổi trả & Hoàn tiền
+                </span>
+                <span className="text-[11px] text-slate-400">Thẩm định khiếu nại</span>
+              </Link>
+
+              <Link
+                to="/admin/discounts"
+                className="p-5 rounded-2xl border border-slate-200/80 hover:border-purple-500 hover:bg-purple-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
+                  <IconTicket className="w-6 h-6 text-purple-600" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 group-hover:text-purple-700">
+                  Mã giảm giá
+                </span>
+                <span className="text-[11px] text-slate-400">Tạo voucher kích cầu</span>
+              </Link>
+            </div>
+          </>
+        ) : (
+          <>
+            <h3 className="text-base font-black text-slate-900 tracking-tight flex items-center gap-2">
+              <IconCrown className="w-5 h-5 text-purple-600" />
+              Lối Tắt Quản Trị Hệ Thống Toàn Diện
+            </h3>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Truy cập nhanh các phân hệ vận hành và quản lý quan trọng của Quản trị viên
+            </p>
+
+            <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+              <Link
+                to="/admin/orders"
+                className="p-5 rounded-2xl border border-slate-200/80 hover:border-blue-500 hover:bg-blue-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
+                  <IconPackage className="w-6 h-6 text-blue-600" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 group-hover:text-blue-700">
+                  Quản lý đơn hàng
+                </span>
+                <span className="text-[11px] text-slate-400">Toàn bộ chu trình đơn hàng</span>
+              </Link>
+
+              <Link
+                to="/admin/inventory"
+                className="p-5 rounded-2xl border border-slate-200/80 hover:border-amber-500 hover:bg-amber-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
+                  <IconWarehouse className="w-6 h-6 text-amber-600" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 group-hover:text-amber-700">
+                  Quản lý kho hàng
+                </span>
+                <span className="text-[11px] text-slate-400">Theo dõi tồn kho toàn hệ thống</span>
+              </Link>
+
+              <Link
+                to="/admin/users"
+                className="p-5 rounded-2xl border border-slate-200/80 hover:border-purple-500 hover:bg-purple-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
+                  <IconCrown className="w-6 h-6 text-purple-600" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 group-hover:text-purple-700">
+                  Người dùng & Quyền
+                </span>
+                <span className="text-[11px] text-slate-400">Phân quyền nhân viên</span>
+              </Link>
+
+              <Link
+                to="/admin/reports"
+                className="p-5 rounded-2xl border border-slate-200/80 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-md transition-all text-center group flex flex-col items-center justify-center gap-2"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
+                  <IconTrendingUp className="w-6 h-6 text-emerald-600" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 group-hover:text-emerald-700">
+                  Báo cáo kinh doanh
+                </span>
+                <span className="text-[11px] text-slate-400">Doanh thu & biên lợi nhuận</span>
+              </Link>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

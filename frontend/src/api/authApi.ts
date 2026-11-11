@@ -65,7 +65,7 @@ export const DEMO_ACCOUNTS: Record<string, { pass: string; user: UserDto }> = {
       isActive: true,
       emailConfirmed: true,
       roles: ['Warehouse'],
-      permissions: ['inventory.view', 'inventory.manage'],
+      permissions: ['inventory.view', 'inventory.manage', 'order.view', 'catalog.manage'],
     },
   },
   'customer@madkstore.vn': {
@@ -98,6 +98,11 @@ export const tokenStorage = {
       ) {
         tokenStorage.clear();
         return null;
+      }
+      // Tự động đồng bộ quyền demo mới nhất nếu đang dùng tài khoản demo
+      if (user && DEMO_ACCOUNTS[user.email]) {
+        user.permissions = DEMO_ACCOUNTS[user.email].user.permissions;
+        localStorage.setItem(USER_KEY, JSON.stringify(user));
       }
       return user;
     } catch {
