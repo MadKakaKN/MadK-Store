@@ -13,6 +13,7 @@ import SEOHead, { buildProductSchema, buildBreadcrumbSchema } from '../../../com
 import AuthRequiredModal from '../../../components/common/AuthRequiredModal';
 import ProductReviewsSection from '../components/ProductReviewsSection';
 import { InstallmentCalculatorModal } from '../components/InstallmentCalculatorModal';
+import { KeyboardSoundTestModal } from '../components/KeyboardSoundTestModal';
 import RecentlyViewedBar from '../components/RecentlyViewedBar';
 import { addRecentlyViewed } from '../../../utils/recentlyViewed';
 import { useWishlist } from '../../wishlist/context/WishlistContext';
@@ -49,6 +50,7 @@ export const ProductDetailPage: React.FC = () => {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showInstallmentModal, setShowInstallmentModal] = useState(false);
+  const [showSoundTestModal, setShowSoundTestModal] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -484,6 +486,48 @@ export const ProductDetailPage: React.FC = () => {
             )}
           </div>
 
+          {/* Virtual Keyboard Sound Test Studio Banner (Dành cho Bàn phím cơ) */}
+          {(product.category?.slug === 'ban-phim-co' ||
+            product.category?.name?.toLowerCase().includes('bàn phím') ||
+            product.name.toLowerCase().includes('bàn phím') ||
+            product.name.toLowerCase().includes('keyboard') ||
+            product.specifications?.toLowerCase().includes('switch')) && (
+            <div className="p-4 rounded-3xl bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 text-white border border-indigo-500/40 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-36 h-36 bg-blue-500/15 rounded-full blur-2xl pointer-events-none" />
+              <div className="flex items-center gap-3 relative z-10">
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-rose-500 via-indigo-500 to-cyan-400 p-0.5 shadow-md flex-shrink-0">
+                  <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center text-xl">
+                    🎧
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-indigo-300">
+                      Trải nghiệm âm thanh độc quyền
+                    </span>
+                    <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 font-bold">
+                      Web Audio HD
+                    </span>
+                  </div>
+                  <p className="text-xs sm:text-sm font-bold text-white mt-0.5">
+                    Phòng Thử Âm Bàn Phím Cơ (Sound Test Studio)
+                  </p>
+                  <p className="text-[11px] text-slate-300">
+                    Bấm gõ trực tiếp trên bàn phím máy tính của bạn để nghe thử switch thực tế
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowSoundTestModal(true)}
+                className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-black tracking-wide shadow-lg hover:scale-102 transition-all flex-shrink-0 flex items-center justify-center gap-1.5 relative z-10"
+              >
+                <span>Gõ thử phím ngay</span>
+                <span>→</span>
+              </button>
+            </div>
+          )}
+
           {/* Variant Selection (Màu sắc, Dung lượng, Switch...) */}
           {product.variants && product.variants.length > 0 && (
             <div className="space-y-3">
@@ -913,6 +957,27 @@ export const ProductDetailPage: React.FC = () => {
         productName={product.name}
         productPrice={currentPrice}
         productImage={product.thumbnailUrl}
+      />
+
+      {/* Keyboard Sound Test Studio Modal */}
+      <KeyboardSoundTestModal
+        isOpen={showSoundTestModal}
+        onClose={() => setShowSoundTestModal(false)}
+        productTitle={product.name}
+        onSelectSwitchVariant={(switchName) => {
+          // Tự động tìm và chọn variant khớp với switch vừa thử nếu có
+          if (product.variants && product.variants.length > 0) {
+            const matched = product.variants.find((v) =>
+              v.name.toLowerCase().includes(switchName.toLowerCase()) ||
+              v.attributes?.toLowerCase().includes(switchName.toLowerCase())
+            );
+            if (matched) {
+              setSelectedVariant(matched);
+              setToastMessage(`Đã chọn phiên bản: ${matched.name}`);
+              setTimeout(() => setToastMessage(null), 3000);
+            }
+          }
+        }}
       />
 
       {/* Auth Required Popup Modal (Login & Sign Up) */}

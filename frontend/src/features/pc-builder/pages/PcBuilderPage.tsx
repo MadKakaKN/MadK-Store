@@ -5,6 +5,7 @@ import { ComponentSlotConfig, ComponentSlotId, SelectedPart, PrebuiltConfig } fr
 import { ComponentSlotRow } from '../components/ComponentSlotRow';
 import { SelectPartModal } from '../components/SelectPartModal';
 import { WattageCalculatorCard } from '../components/WattageCalculatorCard';
+import { GamingFpsPredictorCard } from '../components/GamingFpsPredictorCard';
 import { PrintQuoteView } from '../components/PrintQuoteView';
 import { useCart } from '../../cart/context/CartContext';
 import { formatVND } from '../../../utils/format';
@@ -244,6 +245,9 @@ export const PcBuilderPage: React.FC = () => {
         <div className="lg:col-span-4 space-y-5 lg:sticky lg:top-24">
           {/* Wattage & Compatibility Widget */}
           <WattageCalculatorCard selectedParts={selectedParts} />
+
+          {/* AI Gaming FPS Predictor & Bottleneck Analyzer */}
+          <GamingFpsPredictorCard selectedParts={selectedParts} />
 
           {/* Pricing & 1-Click Order Summary Card */}
           <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-card space-y-5">
