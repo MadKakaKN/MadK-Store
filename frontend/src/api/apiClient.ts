@@ -2,8 +2,15 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { tokenStorage } from './authApi';
 import { ApiEnvelope, AuthResponseDto } from '../types/auth';
 
+const getDevApiBaseUrl = () => {
+  if (typeof window !== 'undefined' && window.location.hostname) {
+    return `http://${window.location.hostname}:5000/api/v1`;
+  }
+  return 'http://localhost:5000/api/v1';
+};
+
 const baseURL = import.meta.env.VITE_API_BASE_URL ||
-  (import.meta.env.PROD ? 'https://madk-api.onrender.com/api/v1' : 'http://localhost:5000/api/v1');
+  (import.meta.env.PROD ? 'https://madk-api.onrender.com/api/v1' : getDevApiBaseUrl());
 
 export const apiClient = axios.create({
   baseURL,

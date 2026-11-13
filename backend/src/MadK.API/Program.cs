@@ -305,8 +305,9 @@ builder.Services.AddCors(options =>
 
             if (Uri.TryCreate(origin, UriKind.Absolute, out var uri))
             {
-                // Local dev
+                // Local dev & LAN devices (điện thoại, tablet cùng mạng Wi-Fi/VPN)
                 if (uri.Host == "localhost" || uri.Host == "127.0.0.1") return true;
+                if (uri.Host.StartsWith("192.168.") || uri.Host.StartsWith("10.") || uri.Host.StartsWith("172.") || uri.Host.StartsWith("26.")) return true;
                 // Vercel preview & production deployments
                 if (uri.Host.EndsWith(".vercel.app", StringComparison.OrdinalIgnoreCase)) return true;
             }
