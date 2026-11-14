@@ -47,6 +47,17 @@ public class AdminOrdersController : ControllerBase
     }
 
     /// <summary>
+    /// Xóa toàn bộ đơn hàng trong hệ thống (Hỗ trợ reset/dọn dẹp dữ liệu mua hàng thử nghiệm).
+    /// </summary>
+    [HttpDelete("clear-all")]
+    [ProducesResponseType(typeof(Result<bool>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> ClearAllOrders(CancellationToken ct = default)
+    {
+        var result = await _orderService.ClearAllOrdersAsync(ct);
+        return Ok(result);
+    }
+
+    /// <summary>
     /// <summary>
     /// Xuất danh sách đơn hàng ra file Excel / CSV chuẩn UTF-8 (Quyền: order.view / Warehouse, Sales, Admin).
     /// </summary>

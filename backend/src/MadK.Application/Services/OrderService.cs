@@ -1116,6 +1116,38 @@ public class OrderService : IOrderService
         return Result<IReadOnlyList<OrderDto>>.Success(dtos);
     }
 
+    public async Task<Result<bool>> ClearAllOrdersAsync(CancellationToken ct = default)
+    {
+        try
+        {
+            var returnItems = await _context.ReturnRequestItems.ToListAsync(ct);
+            _context.ReturnRequestItems.RemoveRange(returnItems);
+
+            var returnRequests = await _context.ReturnRequests.ToListAsync(ct);
+            _context.ReturnRequests.RemoveRange(returnRequests);
+
+            var payments = await _context.Payments.ToListAsync(ct);
+            _context.Payments.RemoveRange(payments);
+
+            var histories = await _context.OrderStatusHistories.ToListAsync(ct);
+            _context.OrderStatusHistories.RemoveRange(histories);
+
+            var orderItems = await _context.OrderItems.ToListAsync(ct);
+            _context.OrderItems.RemoveRange(orderItems);
+
+            var orders = await _context.Orders.ToListAsync(ct);
+            _context.Orders.RemoveRange(orders);
+
+            await _context.SaveChangesAsync(ct);
+            return Result<bool>.Success(true);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Lỗi khi xóa sạch toàn bộ đơn hàng trong hệ thống");
+            return Result<bool>.Failure($"Không thể xóa đơn hàng: {ex.Message}");
+        }
+    }
+
     public async Task<Result<OrderDto>> CancelOrderAsync(
         string orderNumber,
         Guid? userId,

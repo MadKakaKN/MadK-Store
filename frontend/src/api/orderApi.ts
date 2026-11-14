@@ -9,6 +9,22 @@ import {
 import { guestSessionStorage } from './cartApi';
 
 const ORDERS_CACHE_KEY = 'madk_orders_cache';
+const ORDERS_RESET_KEY = 'madk_orders_reset_20261114_v3';
+
+// Tự động xóa sạch lịch sử mua hàng cũ trên trình duyệt khách hàng theo yêu cầu quản trị
+if (typeof window !== 'undefined') {
+  try {
+    if (localStorage.getItem(ORDERS_RESET_KEY) !== 'cleared') {
+      localStorage.removeItem(ORDERS_CACHE_KEY);
+      localStorage.setItem(ORDERS_CACHE_KEY, JSON.stringify([]));
+      localStorage.removeItem('madk_admin_orders_store');
+      localStorage.setItem('madk_admin_orders_store', JSON.stringify([]));
+      localStorage.setItem(ORDERS_RESET_KEY, 'cleared');
+    }
+  } catch {
+    // Ignore storage restriction
+  }
+}
 
 export function normalizeOrder(order: OrderDto): OrderDto {
   if (!order) return order;
@@ -81,6 +97,18 @@ export function saveStoredOrders(orders: OrderDto[]) {
 }
 
 export const orderApi = {
+  /**
+   * Xóa sạch toàn bộ đơn hàng và lịch sử sản phẩm đã mua trên tất cả tài khoản
+   */
+  clearAllOrders(): void {
+    try {
+      localStorage.setItem(ORDERS_CACHE_KEY, JSON.stringify([]));
+      localStorage.setItem('madk_admin_orders_store', JSON.stringify([]));
+    } catch (err) {
+      console.error('Failed to clear orders cache:', err);
+    }
+  },
+
   /**
    * Checkout và tạo đơn hàng COD (Thanh toán khi nhận hàng).
    * Chống bấm lặp lại với Idempotency Key và nạp Anonymous ID nếu là khách vãng lai.

@@ -63,6 +63,11 @@ public interface IOrderService
         CancellationToken ct = default);
 
     /// <summary>
+    /// Xóa sạch toàn bộ đơn hàng trong hệ thống (Hỗ trợ dọn dẹp dữ liệu mua hàng thử nghiệm).
+    /// </summary>
+    Task<Result<bool>> ClearAllOrdersAsync(CancellationToken ct = default);
+
+    /// <summary>
     /// Lấy danh sách lịch sử đơn hàng của người dùng đã đăng nhập kèm bộ lọc trạng thái.
     /// </summary>
     Task<Result<IReadOnlyList<OrderDto>>> GetMyOrdersAsync(

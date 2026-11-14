@@ -67,16 +67,16 @@ function generateClientFallbackRecommendation(request: AiChatRequest): AiChatRes
   const normMsg = normalizeVietnameseTelex(rawLower);
   const asciiMsg = removeDiacritics(normMsg);
 
-  // Phân tích hội thoại tự nhiên
-  const isGreeting =
-    /\b(chào|chao|xin chào|xin chao|hello|hi|hey|alo|good morning|shop ơi|shop oi|ad ơi|ad oi|admin ơi|admin oi|bot ơi|bot oi|bạn ơi|ban oi|em ơi|em oi|anh ơi|anh oi|hé lô|helo|halo)\b/i.test(normMsg) ||
-    /\b(chao|xin chao|hello|hi|hey|alo|shop oi|ad oi|admin oi|bot oi|ban oi|em oi|anh oi|helo|halo)\b/i.test(asciiMsg) ||
-    normMsg.includes('có ai không') ||
-    asciiMsg.includes('co ai khong') ||
-    normMsg.includes('có ai trực không') ||
-    asciiMsg.includes('co ai truc khong') ||
-    normMsg.includes('có ai ở đây không') ||
-    asciiMsg.includes('co ai o day khong');
+  // Phân tích hội thoại tự nhiên (Chống lỗi regex Unicode word boundary và telex)
+  const tokens = asciiMsg.replace(/[^\w\s]/g, ' ').split(/\s+/).filter(Boolean);
+  const greetingWords = ['chao', 'hello', 'hi', 'hey', 'alo', 'helo', 'halo'];
+  const hasGreetingWord = tokens.some((t) => greetingWords.includes(t));
+  const hasGreetingPhrase = [
+    'xin chao', 'shop oi', 'ad oi', 'admin oi', 'bot oi', 'ban oi', 'em oi', 'anh oi',
+    'he lo', 'co ai khong', 'co ai truc khong', 'co ai o day khong', 'good morning', 'good afternoon'
+  ].some((p) => asciiMsg.includes(p));
+
+  const isGreeting = hasGreetingWord || hasGreetingPhrase;
 
   const isThanks =
     /\b(cảm ơn|cam on|cám ơn|thanks|thank you|thx|tuyệt vời|tuyet voi|hay quá|hay qua|ok shop|oke shop|ok bạn|ok ban|ok em|oke em|oki|okie)\b/i.test(normMsg) ||

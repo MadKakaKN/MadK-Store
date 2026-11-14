@@ -1,5 +1,5 @@
 import { OrderDto, OrderStatus } from '../../../types/order';
-import { orderApi, getStoredOrders, normalizeOrder } from '../../../api/orderApi';
+import { orderApi, getStoredOrders } from '../../../api/orderApi';
 
 export interface TrackingTimelineStep {
   title: string;
@@ -75,146 +75,9 @@ export const MADK_SERVICE_CENTERS: ServiceCenterDto[] = [
 ];
 
 /**
- * Seed data representing verified orders for demo/testing and direct lookup
+ * Toàn bộ đơn hàng mẫu đã được xóa sạch. Hệ thống tra cứu theo đơn hàng và thiết bị thực tế phát sinh.
  */
-export const SEED_TRACKING_ORDERS: OrderDto[] = [
-  normalizeOrder({
-    id: 'ord-seed-bf7a52',
-    orderNumber: 'MK-20261114-BF7A52',
-    status: 'Pending',
-    paymentStatus: 'Pending',
-    paymentMethod: 'COD',
-    customerPhone: '0912345678',
-    subtotalAmount: 56990000,
-    discountAmount: 0,
-    shippingFee: 0,
-    totalAmount: 56990000,
-    shippingAddressSnapshot: JSON.stringify({
-      recipientName: 'Khách hàng MadK',
-      phoneNumber: '0912345678',
-      detailedAddress: 'Tòa nhà Landmark 81, 720A Điện Biên Phủ',
-      wardName: 'Phường 22',
-      districtName: 'Quận Bình Thạnh',
-      provinceName: 'TP. Hồ Chí Minh',
-    }),
-    carrierName: 'Giao Hàng Nhanh (GHN Express)',
-    trackingCode: 'GHN882194VN',
-    createdAt: '2026-11-14T14:30:00Z',
-    items: [
-      {
-        id: 'item-thinkpad-x1c12-01',
-        productId: 'laptop-lenovo-thinkpad-x1-carbon-gen-12',
-        productName: 'Lenovo ThinkPad X1 Carbon Gen 12',
-        productNameSnapshot: 'Lenovo ThinkPad X1 Carbon Gen 12',
-        variantName: 'ThinkPad X1 Carbon Gen 12 i7/32GB/1TB Đen',
-        variantNameSnapshot: 'ThinkPad X1 Carbon Gen 12 i7/32GB/1TB Đen',
-        sku: 'LAPTOP-LENOVO-THINKPAD-X1-CARBON-GEN-12-STD',
-        skuSnapshot: 'LAPTOP-LENOVO-THINKPAD-X1-CARBON-GEN-12-STD',
-        unitPrice: 56990000,
-        unitPriceSnapshot: 56990000,
-        originalPrice: 59990000,
-        originalPriceSnapshot: 59990000,
-        quantity: 1,
-        totalPrice: 56990000,
-        attributesSnapshot: '{}',
-        thumbnailUrl: '/images/products/laptop-lenovo-thinkpad-x1-carbon-gen-12.png',
-        thumbnailUrlSnapshot: '/images/products/laptop-lenovo-thinkpad-x1-carbon-gen-12.png',
-      },
-    ],
-    statusHistory: [
-      {
-        id: 'hist-bf7a52-1',
-        toStatus: 'Pending',
-        changedByName: 'Khách hàng',
-        createdAt: '2026-11-14T14:30:00Z',
-        note: 'Đơn hàng mới được tạo thành công trên hệ thống',
-      },
-    ],
-  }),
-  normalizeOrder({
-    id: 'ord-seed-89412',
-    orderNumber: 'MADK-2025-89412',
-    status: 'Shipping',
-    paymentStatus: 'Paid',
-    paymentMethod: 'VNPay',
-    subtotalAmount: 90880000,
-    discountAmount: 0,
-    shippingFee: 0,
-    totalAmount: 90880000,
-    shippingAddressSnapshot: JSON.stringify({
-      recipientName: 'Nguyễn Hữu Nam',
-      phoneNumber: '0912345678',
-      detailedAddress: 'Tòa nhà Bitexco, 2 Hải Triều',
-      wardName: 'Phường Bến Nghé',
-      districtName: 'Quận 1',
-      provinceName: 'TP. Hồ Chí Minh',
-    }),
-    carrierName: 'Giao Hàng Nhanh (GHN Express)',
-    trackingCode: 'GHN889234VN',
-    createdAt: '2025-10-24T14:15:00Z',
-    items: [
-      {
-        id: 'item-rog-01',
-        productName: 'ASUS ROG Strix SCAR 16 (2024)',
-        productNameSnapshot: 'ASUS ROG Strix SCAR 16 (2024)',
-        variantName: 'i9-14900HX • RTX 4090 • 32GB • 1TB • Đen Titanium',
-        variantNameSnapshot: 'i9-14900HX • RTX 4090 • 32GB • 1TB • Đen Titanium',
-        sku: 'SN-ASUS-99281-VN',
-        skuSnapshot: 'SN-ASUS-99281-VN',
-        unitPrice: 89990000,
-        unitPriceSnapshot: 89990000,
-        originalPrice: 89990000,
-        originalPriceSnapshot: 89990000,
-        quantity: 1,
-        totalPrice: 89990000,
-        attributesSnapshot: '{}',
-        thumbnailUrl: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=300',
-        thumbnailUrlSnapshot: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=300',
-      },
-      {
-        id: 'item-logi-01',
-        productName: 'Chuột Không Dây Logitech G304 Lightspeed (White)',
-        productNameSnapshot: 'Chuột Không Dây Logitech G304 Lightspeed (White)',
-        variantName: 'Cảm biến HERO 12K DPI • Trắng',
-        variantNameSnapshot: 'Cảm biến HERO 12K DPI • Trắng',
-        sku: 'SN-LOGI-88210',
-        skuSnapshot: 'SN-LOGI-88210',
-        unitPrice: 890000,
-        unitPriceSnapshot: 890000,
-        originalPrice: 890000,
-        originalPriceSnapshot: 890000,
-        quantity: 1,
-        totalPrice: 890000,
-        attributesSnapshot: '{}',
-        thumbnailUrl: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=300',
-        thumbnailUrlSnapshot: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=300',
-      },
-    ],
-    statusHistory: [
-      {
-        id: 'hist-89412-1',
-        toStatus: 'Pending',
-        changedByName: 'Khách hàng',
-        createdAt: '2025-10-24T14:15:00Z',
-        note: 'Đặt hàng thành công',
-      },
-      {
-        id: 'hist-89412-2',
-        toStatus: 'Confirmed',
-        changedByName: 'Hệ thống thanh toán',
-        createdAt: '2025-10-24T14:20:00Z',
-        note: 'Xác nhận thanh toán qua VNPay-QR thành công',
-      },
-      {
-        id: 'hist-89412-3',
-        toStatus: 'Shipping',
-        changedByName: 'Kho vận MadK Q1',
-        createdAt: '2025-10-24T15:10:00Z',
-        note: 'Bàn giao cho GHN Express đang trên đường giao',
-      },
-    ],
-  }),
-];
+export const SEED_TRACKING_ORDERS: OrderDto[] = [];
 
 /**
  * Clean and standardize order / serial / IMEI codes for search
@@ -563,40 +426,7 @@ function buildOrderTimeline(order: OrderDto): TrackingTimelineStep[] {
 /**
  * Standalone warranty lookup definitions for demo chips
  */
-const STANDALONE_WARRANTY_DEVICES: Record<string, Partial<WarrantyResultDto>> = {
-  'MK-20261102-FA4449': {
-    productName: 'Màn hình ASUS TUF Gaming VG249Q3A 24 inch Fast IPS 180Hz',
-    purchaseDate: '15/05/2025',
-    warrantyMonths: 36,
-    customerName: 'Nguyễn Hoàng Khang',
-    customerPhone: '0912.345.678',
-    distributor: 'MadK Store & ASUS Authorized Service Partner',
-  },
-  'FA4449': {
-    productName: 'Màn hình ASUS TUF Gaming VG249Q3A 24 inch Fast IPS 180Hz',
-    purchaseDate: '15/05/2025',
-    warrantyMonths: 36,
-    customerName: 'Nguyễn Hoàng Khang',
-    customerPhone: '0912.345.678',
-    distributor: 'MadK Store & ASUS Authorized Service Partner',
-  },
-  'SN-ASUS-99281-VN': {
-    productName: 'ASUS ROG Strix SCAR 16 (2024)',
-    purchaseDate: '24/10/2024',
-    warrantyMonths: 24,
-    customerName: 'Nguyễn Hữu Nam',
-    customerPhone: '0912.345.678',
-    distributor: 'MadK Store & ASUS ROG Vietnam Authorized Partner',
-  },
-  'SN-LOGI-88210': {
-    productName: 'Chuột Không Dây Logitech G304 Lightspeed (White)',
-    purchaseDate: '24/10/2024',
-    warrantyMonths: 24,
-    customerName: 'Nguyễn Hữu Nam',
-    customerPhone: '0912.345.678',
-    distributor: 'MadK Store & Logitech Vietnam Authorized Partner',
-  },
-};
+const STANDALONE_WARRANTY_DEVICES: Record<string, Partial<WarrantyResultDto>> = {};
 
 /**
  * Look up warranty info by Order Number, Serial, or IMEI

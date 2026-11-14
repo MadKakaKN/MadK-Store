@@ -94,14 +94,27 @@ public static class VietnameseTextNormalizer
     /// </summary>
     public static bool IsGreeting(string normMsg, string asciiMsg)
     {
-        return Regex.IsMatch(normMsg, @"\b(chào|chao|xin chào|xin chao|hello|hi|hey|alo|good morning|good afternoon|good evening|shop ơi|shop oi|ad ơi|ad oi|admin ơi|admin oi|bot ơi|bot oi|bạn ơi|ban oi|em ơi|em oi|anh ơi|anh oi|hé lô|helo|halo)\b", RegexOptions.IgnoreCase)
-            || Regex.IsMatch(asciiMsg, @"\b(chao|xin chao|hello|hi|hey|alo|shop oi|ad oi|admin oi|bot oi|ban oi|em oi|anh oi|helo|halo)\b", RegexOptions.IgnoreCase)
-            || normMsg.Contains("có ai không")
-            || asciiMsg.Contains("co ai khong")
-            || normMsg.Contains("có ai trực không")
-            || asciiMsg.Contains("co ai truc khong")
-            || normMsg.Contains("có ai ở đây không")
-            || asciiMsg.Contains("co ai o day khong");
+        var cleanAscii = Regex.Replace(asciiMsg ?? string.Empty, @"[^\w\s]", " ");
+        var tokens = cleanAscii.Split(new[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        var greetingWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "chao", "hello", "hi", "hey", "alo", "helo", "halo"
+        };
+        bool hasGreetingWord = tokens.Any(t => greetingWords.Contains(t));
+        bool hasGreetingPhrase = (asciiMsg ?? string.Empty).Contains("xin chao")
+            || (asciiMsg ?? string.Empty).Contains("shop oi")
+            || (asciiMsg ?? string.Empty).Contains("ad oi")
+            || (asciiMsg ?? string.Empty).Contains("admin oi")
+            || (asciiMsg ?? string.Empty).Contains("bot oi")
+            || (asciiMsg ?? string.Empty).Contains("ban oi")
+            || (asciiMsg ?? string.Empty).Contains("em oi")
+            || (asciiMsg ?? string.Empty).Contains("anh oi")
+            || (asciiMsg ?? string.Empty).Contains("he lo")
+            || (asciiMsg ?? string.Empty).Contains("co ai khong")
+            || (asciiMsg ?? string.Empty).Contains("co ai truc khong")
+            || (asciiMsg ?? string.Empty).Contains("co ai o day khong");
+
+        return hasGreetingWord || hasGreetingPhrase;
     }
 
     /// <summary>
