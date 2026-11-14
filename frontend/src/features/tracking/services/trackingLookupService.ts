@@ -84,6 +84,7 @@ export const SEED_TRACKING_ORDERS: OrderDto[] = [
     status: 'Pending',
     paymentStatus: 'Pending',
     paymentMethod: 'COD',
+    customerPhone: '0912345678',
     subtotalAmount: 56990000,
     discountAmount: 0,
     shippingFee: 0,
@@ -376,10 +377,14 @@ export async function findOrderForTracking(
         }
       }
 
-      if (cleanCode && cleanPhone) {
-        return (orderMatch || serialMatch) && phoneMatch;
+      if (cleanCode) {
+        if (!orderMatch && !serialMatch) return false;
+        if (cleanPhone && (o.customerPhone || o.shippingAddressSnapshot)) {
+          return phoneMatch;
+        }
+        return true;
       }
-      return orderMatch || serialMatch || (cleanPhone && phoneMatch);
+      return cleanPhone ? phoneMatch : false;
     });
 
     if (match) return match;
@@ -410,10 +415,14 @@ export async function findOrderForTracking(
       phoneMatch = true;
     }
 
-    if (cleanCode && cleanPhone) {
-      return (orderMatch || serialMatch) && phoneMatch;
+    if (cleanCode) {
+      if (!orderMatch && !serialMatch) return false;
+      if (cleanPhone && o.customerPhone) {
+        return phoneMatch;
+      }
+      return true;
     }
-    return orderMatch || serialMatch || (cleanPhone && phoneMatch);
+    return cleanPhone ? phoneMatch : false;
   });
 
   return seedMatch || null;
