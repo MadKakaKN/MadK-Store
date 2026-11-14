@@ -252,4 +252,121 @@ public class AiShoppingAssistantTests
         // Không chứa iPhone 15 Pro Max (34.99m) hay S24 Ultra (31.99m)
         result.RecommendedProducts.Should().NotContain(p => p.Name.Contains("Pro Max") || p.Name.Contains("S24 Ultra"));
     }
+
+    [Fact]
+    public async Task ChatAsync_WithChaoGreeting_ShouldGreetBackNaturallyWithoutProducts()
+    {
+        // Kiểm tra đúng trường hợp người dùng nhắn "chào"
+        var dbName = "AiTestDb_" + Guid.NewGuid();
+        using var context = await CreateSeededInMemoryDbContextAsync(dbName);
+        var service = CreateAssistantService(context);
+
+        var request = new AiChatRequestDto("chào");
+
+        var result = await service.ChatAsync(request);
+
+        // 1. Tuyệt đối KHÔNG ĐƯỢC tự ý ném sản phẩm ra khi khách chỉ chào hỏi
+        result.RecommendedProducts.Should().BeEmpty();
+
+        // 2. Phải chào lại tự nhiên, lịch sự
+        result.Reply.Should().Contain("xin chào");
+        result.Reply.Should().NotContain("ASUS ROG Strix SCAR");
+        result.Reply.Should().NotContain("Bàn phím cơ Keychron");
+    }
+
+    [Fact]
+    public async Task ChatAsync_WithXinChaoGreeting_ShouldGreetBackNaturallyWithoutProducts()
+    {
+        var dbName = "AiTestDb_" + Guid.NewGuid();
+        using var context = await CreateSeededInMemoryDbContextAsync(dbName);
+        var service = CreateAssistantService(context);
+
+        var request = new AiChatRequestDto("xin chào shop");
+
+        var result = await service.ChatAsync(request);
+
+        result.RecommendedProducts.Should().BeEmpty();
+        result.Reply.Should().Contain("xin chào");
+    }
+
+    [Fact]
+    public async Task ChatAsync_WithThanks_ShouldAcknowledgeWithoutProducts()
+    {
+        var dbName = "AiTestDb_" + Guid.NewGuid();
+        using var context = await CreateSeededInMemoryDbContextAsync(dbName);
+        var service = CreateAssistantService(context);
+
+        var request = new AiChatRequestDto("cảm ơn shop nhé");
+
+        var result = await service.ChatAsync(request);
+
+        result.RecommendedProducts.Should().BeEmpty();
+        result.Reply.Should().Contain("không có gì");
+    }
+
+    [Fact]
+    public async Task ChatAsync_WithStoreAddress_ShouldReturnAddressWithoutProducts()
+    {
+        var dbName = "AiTestDb_" + Guid.NewGuid();
+        using var context = await CreateSeededInMemoryDbContextAsync(dbName);
+        var service = CreateAssistantService(context);
+
+        var request = new AiChatRequestDto("shop ở đâu vậy");
+
+        var result = await service.ChatAsync(request);
+
+        result.RecommendedProducts.Should().BeEmpty();
+        result.Reply.Should().Contain("123 Đường Công Nghệ");
+    }
+
+    [Fact]
+    public async Task ChatAsync_WithWarrantyPolicy_ShouldReturnWarrantyWithoutProducts()
+    {
+        var dbName = "AiTestDb_" + Guid.NewGuid();
+        using var context = await CreateSeededInMemoryDbContextAsync(dbName);
+        var service = CreateAssistantService(context);
+
+        var request = new AiChatRequestDto("chính sách bảo hành ra sao");
+
+        var result = await service.ChatAsync(request);
+
+        result.RecommendedProducts.Should().BeEmpty();
+        result.Reply.Should().Contain("bảo hành");
+    }
+
+    [Fact]
+    public async Task ChatAsync_WithInstallment_ShouldReturnInstallmentWithoutProducts()
+    {
+        var dbName = "AiTestDb_" + Guid.NewGuid();
+        using var context = await CreateSeededInMemoryDbContextAsync(dbName);
+        var service = CreateAssistantService(context);
+
+        var request = new AiChatRequestDto("shop có hỗ trợ trả góp không");
+
+        var result = await service.ChatAsync(request);
+
+        result.RecommendedProducts.Should().BeEmpty();
+        result.Reply.Should().Contain("Trả góp 0%");
+    }
+
+    [Fact]
+    public async Task ChatAsync_WithCombinedGreetingAndCategory_ShouldGreetAndRecommendCategory()
+    {
+        // Khi người dùng vừa chào vừa hỏi sản phẩm: "chào shop, tư vấn cho tôi vài mẫu bàn phím"
+        var dbName = "AiTestDb_" + Guid.NewGuid();
+        using var context = await CreateSeededInMemoryDbContextAsync(dbName);
+        var service = CreateAssistantService(context);
+
+        var request = new AiChatRequestDto("chào shop, tư vấn cho tôi vài mẫu bàn phím");
+
+        var result = await service.ChatAsync(request);
+
+        result.RecommendedProducts.Should().NotBeNullOrEmpty();
+        result.RecommendedProducts.Should().OnlyContain(p =>
+            p.CategoryName.Contains("Bàn phím") ||
+            p.Name.Contains("Keychron") ||
+            p.Name.Contains("BlackWidow"));
+        result.Reply.Should().Contain("xin chào");
+        result.Reply.Should().Contain("Bàn phím");
+    }
 }

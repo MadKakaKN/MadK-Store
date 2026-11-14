@@ -18,7 +18,7 @@ using Microsoft.Extensions.Logging;
 namespace MadK.Infrastructure.Services;
 
 /// <summary>
-/// Bộ chuẩn hóa tiếng Việt, xử lý lỗi gõ Telex và nhận diện ý định danh mục thiết bị công nghệ.
+/// Bộ chuẩn hóa tiếng Việt, nhận diện ý định hội thoại tự nhiên và danh mục thiết bị công nghệ.
 /// </summary>
 public static class VietnameseTextNormalizer
 {
@@ -87,6 +87,74 @@ public static class VietnameseTextNormalizer
         result = Regex.Replace(result, @"aa", "a");
 
         return result;
+    }
+
+    /// <summary>
+    /// Nhận diện ý định chào hỏi tự nhiên (chào, hello, hi, alo, ...)
+    /// </summary>
+    public static bool IsGreeting(string normMsg, string asciiMsg)
+    {
+        return Regex.IsMatch(normMsg, @"\b(chào|chao|xin chào|xin chao|hello|hi|hey|alo|good morning|good afternoon|good evening|shop ơi|shop oi|ad ơi|ad oi|bot ơi|bot oi)\b", RegexOptions.IgnoreCase)
+            || Regex.IsMatch(asciiMsg, @"\b(chao|xin chao|hello|hi|hey|alo|shop oi|ad oi|bot oi)\b", RegexOptions.IgnoreCase);
+    }
+
+    /// <summary>
+    /// Nhận diện lời cảm ơn / phản hồi tích cực
+    /// </summary>
+    public static bool IsThanks(string normMsg, string asciiMsg)
+    {
+        return Regex.IsMatch(normMsg, @"\b(cảm ơn|cam on|cám ơn|thanks|thank you|thx|tuyệt vời|tuyet voi|hay quá|hay qua|ok shop|oke shop|ok bạn|ok ban)\b", RegexOptions.IgnoreCase)
+            || Regex.IsMatch(asciiMsg, @"\b(cam on|thanks|thank you|thx|tuyet voi|hay qua|ok shop|oke shop|ok ban)\b", RegexOptions.IgnoreCase);
+    }
+
+    /// <summary>
+    /// Nhận diện câu hỏi về danh tính / năng lực của bot
+    /// </summary>
+    public static bool IsBotInfo(string normMsg, string asciiMsg)
+    {
+        return normMsg.Contains("bạn là ai") || asciiMsg.Contains("ban la ai")
+            || normMsg.Contains("mày là ai") || asciiMsg.Contains("may la ai")
+            || normMsg.Contains("bạn có thể làm gì") || asciiMsg.Contains("ban co the lam gi")
+            || normMsg.Contains("chức năng") || asciiMsg.Contains("chuc nang")
+            || asciiMsg.Contains("who are you");
+    }
+
+    /// <summary>
+    /// Nhận diện câu hỏi về địa chỉ showroom, hotline, giờ mở cửa
+    /// </summary>
+    public static bool IsStoreAddressOrContact(string normMsg, string asciiMsg)
+    {
+        return normMsg.Contains("shop ở đâu") || asciiMsg.Contains("shop o dau")
+            || normMsg.Contains("cửa hàng ở đâu") || asciiMsg.Contains("cua hang o dau")
+            || normMsg.Contains("địa chỉ") || asciiMsg.Contains("dia chi")
+            || normMsg.Contains("hotline") || asciiMsg.Contains("hotline")
+            || normMsg.Contains("số điện thoại") || asciiMsg.Contains("so dien thoai")
+            || normMsg.Contains("sđt") || asciiMsg.Contains("sdt")
+            || normMsg.Contains("giờ mở cửa") || asciiMsg.Contains("gio mo cua");
+    }
+
+    /// <summary>
+    /// Nhận diện câu hỏi về chính sách bảo hành, đổi trả
+    /// </summary>
+    public static bool IsWarranty(string normMsg, string asciiMsg)
+    {
+        return normMsg.Contains("chính sách bảo hành") || asciiMsg.Contains("chinh sach bao hanh")
+            || normMsg.Contains("bảo hành như thế nào") || asciiMsg.Contains("bao hanh nhu the nao")
+            || normMsg.Contains("bảo hành ra sao") || asciiMsg.Contains("bao hanh ra sao")
+            || normMsg.Contains("đổi trả") || asciiMsg.Contains("doi tra")
+            || normMsg.Contains("1 đổi 1") || asciiMsg.Contains("1 doi 1")
+            || (normMsg.Contains("bảo hành") && !normMsg.Contains("mua") && !normMsg.Contains("mẫu") && !normMsg.Contains("laptop") && !normMsg.Contains("điện thoại"));
+    }
+
+    /// <summary>
+    /// Nhận diện câu hỏi về chính sách trả góp, phương thức thanh toán
+    /// </summary>
+    public static bool IsInstallment(string normMsg, string asciiMsg)
+    {
+        return normMsg.Contains("trả góp") || asciiMsg.Contains("tra gop")
+            || normMsg.Contains("có trả góp không") || asciiMsg.Contains("co tra gop khong")
+            || normMsg.Contains("phương thức thanh toán") || asciiMsg.Contains("phuong thuc thanh toan")
+            || normMsg.Contains("thanh toán như thế nào") || asciiMsg.Contains("thanh toan nhu the nao");
     }
 
     public static bool IsPhoneQuery(string normMsg, string asciiMsg)
@@ -201,6 +269,15 @@ public static class VietnameseTextNormalizer
             || asciiMsg.Contains("nhung mau")
             || asciiMsg.Contains("all");
     }
+
+    public static bool IsExplicitProductInquiry(string normMsg, string asciiMsg)
+    {
+        return normMsg.Contains("bán chạy") || asciiMsg.Contains("ban chay")
+            || normMsg.Contains("nổi bật") || asciiMsg.Contains("noi bat")
+            || normMsg.Contains("sản phẩm hot") || asciiMsg.Contains("san pham hot")
+            || normMsg.Contains("khuyến mãi") || asciiMsg.Contains("khuyen mai")
+            || normMsg.Contains("gợi ý sản phẩm") || asciiMsg.Contains("goi y san pham");
+    }
 }
 
 public class AiShoppingAssistantService : IAiShoppingAssistantService
@@ -242,12 +319,12 @@ public class AiShoppingAssistantService : IAiShoppingAssistantService
         if (string.IsNullOrWhiteSpace(request.Message))
         {
             return new AiChatResponseDto(
-                "Xin chào! Tôi là Trợ lý AI của MadK Store. Bạn đang quan tâm đến điện thoại, laptop, linh kiện hay gaming gear nào?",
+                "Dạ MadK Store xin chào bạn! 🤖 Rất vui được hỗ trợ bạn. Bạn đang quan tâm đến điện thoại, laptop, linh kiện máy tính hay gaming gear nào để em tư vấn cho bạn nhé?",
                 new List<AiRecommendedProductDto>()
             );
         }
 
-        // Lấy danh mục sản phẩm đang mở bán từ cơ sở dữ liệu (load đủ tất cả sản phẩm đang kinh doanh)
+        // Lấy danh mục sản phẩm đang mở bán từ cơ sở dữ liệu
         var products = await _context.Products
             .AsNoTracking()
             .Include(p => p.Category)
@@ -280,7 +357,7 @@ public class AiShoppingAssistantService : IAiShoppingAssistantService
             }
         }
 
-        // Fallback Engine: Bộ tư vấn chuyên gia phân tích ngữ nghĩa, sửa lỗi Telex & lọc cấu hình thông minh
+        // Fallback Engine: Bộ tư vấn chuyên gia phân tích ngữ nghĩa, giao tiếp tự nhiên & lọc danh mục chuẩn xác
         return BuildSmartCatalogRecommendation(request, products);
     }
 
@@ -301,30 +378,28 @@ public class AiShoppingAssistantService : IAiShoppingAssistantService
             catalogContextBuilder.AppendLine($"- ID: {p.Id} | Tên: {p.Name} | Hãng: {p.Brand?.Name} | Danh mục: {p.Category?.Name} | Giá: {minPrice:N0}đ");
         }
 
-        var systemPrompt = $@"Bạn là MadK AI Tech Assistant - Chuyên gia tư vấn công nghệ bán lẻ hàng đầu tại MadK Store (Việt Nam).
-Cửa hàng kinh doanh các mặt hàng công nghệ chính hãng:
-- Điện thoại thông minh (iPhone 15/14 series, Samsung Galaxy S24 series, Z Fold5, Z Flip5, Galaxy A series).
-- Laptop & Máy tính xách tay (Gaming, Đồ họa, Văn phòng, Mỏng nhẹ).
-- Phụ kiện & Gaming Gear (Bàn phím cơ, Chuột gaming, Tai nghe, Màn hình).
-- Linh kiện PC (CPU, VGA, RAM, SSD, Nguồn, Bo mạch chủ).
+        var systemPrompt = $@"Bạn là MadK AI Tech Assistant - Chuyên gia tư vấn công nghệ bán lẻ thân thiện, am hiểu và lịch sự tại MadK Store (Việt Nam).
 
-QUY TẮC BẮT BUỘC VỀ PHÂN LOẠI DANH MỤC:
-1. Khi khách hàng hỏi về ĐIỆN THOẠI (hoặc smartphone, iPhone, Samsung Galaxy, hoặc lỗi gõ phím telex như 'ddieeneenj thoại', 'dt', 'đt'):
+QUY TẮC GIAO TIẾP TỰ NHIÊN BẮT BUỘC:
+1. KHI KHÁCH HÀNG CHỈ CHÀO HỎI (ví dụ: 'chào', 'xin chào', 'hello', 'hi', 'alo'):
+   - Bạn hãy chào lại lịch sự, niềm nở và hỏi thăm nhu cầu của khách hàng.
+   - Nêu ngắn gọn các nhóm sản phẩm chính của shop (Điện thoại, Laptop, PC, Gaming Gear).
+   - TUYỆT ĐỐI KHÔNG ĐƯỢC thêm [RECOMMENDED_IDS] và KHÔNG ĐƯỢC tự ý nhét danh sách sản phẩm cụ thể khi khách mới chỉ chào hỏi!
+2. KHI KHÁCH HỎI THÔNG TIN CỬA HÀNG / BẢO HÀNH / TRẢ GÓP:
+   - Trả lời rõ ràng, chi tiết, súc tích và KHÔNG đính kèm thẻ sản phẩm không liên quan.
+3. KHI KHÁCH HÀNG HỎI VỀ ĐIỆN THOẠI (hoặc smartphone, iPhone, Samsung Galaxy, hoặc lỗi telex như 'ddieeneenj thoại', 'dt', 'đt'):
    - Bạn BẮT BUỘC CHỈ ĐƯỢC đề xuất sản phẩm thuộc danh mục ĐIỆN THOẠI THÔNG MINH (iPhone, Samsung Galaxy).
    - TUYỆT ĐỐI KHÔNG ĐƯỢC đề xuất bàn phím cơ, chuột hay laptop khi khách hỏi điện thoại!
-2. Khi khách hàng hỏi về BÀN PHÍM: Chỉ đề xuất bàn phím cơ.
-3. Khi khách hàng hỏi về LAPTOP: Chỉ đề xuất laptop.
-4. Khi khách hỏi 'cho tôi xem tất cả mẫu điện thoại' (hoặc 'tất cả mẫu...'):
-   - Hãy liệt kê tổng quan đầy đủ các dòng điện thoại có trong danh mục (iPhone 15 series, Samsung S24 series, Z Fold5/Flip5, Galaxy A55) kèm mức giá và thông số nổi bật.
-   - Thêm mã GUID của các sản phẩm đó vào [RECOMMENDED_IDS].
+4. KHI KHÁCH HÀNG HỎI VỀ BÀN PHÍM: Chỉ đề xuất bàn phím cơ.
+5. KHI KHÁCH HÀNG HỎI VỀ LAPTOP: Chỉ đề xuất laptop.
 
 DANH MỤC SẢN PHẨM CÓ SẴN TẠI MADK STORE:
 {catalogContextBuilder}
 
 QUY ĐỊNH KỸ THUẬT:
-Cuối câu trả lời, hãy thêm chính xác dòng này để hệ thống hiển thị thẻ sản phẩm tương ứng:
+Chỉ khi khách hàng hỏi mua hoặc cần tư vấn sản phẩm cụ thể, ở cuối câu trả lời hãy thêm dòng này:
 [RECOMMENDED_IDS: id1, id2, id3]
-(Thay id1, id2 bằng mã GUID thực tế của các sản phẩm bạn gợi ý trong danh mục trên).";
+(Thay id1, id2 bằng mã GUID thực tế của các sản phẩm bạn gợi ý trong danh mục trên. Nếu chỉ chào hỏi thông thường, KHÔNG THÊM thẻ này).";
 
         var contents = new List<object>();
 
@@ -388,10 +463,19 @@ Cuối câu trả lời, hãy thêm chính xác dòng này để hệ thống hi
 
         if (string.IsNullOrWhiteSpace(text)) return null;
 
+        var rawLower = request.Message.ToLowerInvariant();
+        var normMsg = VietnameseTextNormalizer.NormalizeTelex(rawLower);
+        var asciiMsg = VietnameseTextNormalizer.RemoveDiacritics(normMsg);
+        bool isGreetingOnly = VietnameseTextNormalizer.IsGreeting(normMsg, asciiMsg) &&
+                              !VietnameseTextNormalizer.IsPhoneQuery(normMsg, asciiMsg) &&
+                              !VietnameseTextNormalizer.IsLaptopQuery(normMsg, asciiMsg) &&
+                              !VietnameseTextNormalizer.IsKeyboardQuery(normMsg, asciiMsg) &&
+                              !VietnameseTextNormalizer.IsMouseQuery(normMsg, asciiMsg);
+
         // Trích xuất [RECOMMENDED_IDS: ...]
         var recommendedList = new List<AiRecommendedProductDto>();
         var match = Regex.Match(text, @"\[RECOMMENDED_IDS:\s*([^\]]+)\]", RegexOptions.IgnoreCase);
-        if (match.Success)
+        if (match.Success && !isGreetingOnly)
         {
             var rawIds = match.Groups[1].Value;
             var idStrings = rawIds.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -426,8 +510,6 @@ Cuối câu trả lời, hãy thêm chính xác dòng này để hệ thống hi
         }
 
         // BẢO VỆ CHỐNG HALLUCINATION: Kiểm tra tính hợp lệ của sản phẩm đề xuất
-        var normMsg = VietnameseTextNormalizer.NormalizeTelex(request.Message.ToLowerInvariant());
-        var asciiMsg = VietnameseTextNormalizer.RemoveDiacritics(normMsg);
         bool isPhoneQuery = VietnameseTextNormalizer.IsPhoneQuery(normMsg, asciiMsg);
 
         if (isPhoneQuery)
@@ -438,7 +520,6 @@ Cuối câu trả lời, hãy thêm chính xác dòng này để hệ thống hi
                 p.Name.Contains("iPhone", StringComparison.OrdinalIgnoreCase) ||
                 p.Name.Contains("Galaxy", StringComparison.OrdinalIgnoreCase)).ToList();
 
-            // Nếu Gemini không đề xuất được mẫu điện thoại nào hoặc câu trả lời chứa từ bàn phím cơ
             if (!recommendedList.Any() || text.Contains("bàn phím cơ", StringComparison.OrdinalIgnoreCase))
             {
                 // Fallback an toàn về bộ tư vấn danh mục nội bộ
@@ -455,10 +536,16 @@ Cuối câu trả lời, hãy thêm chính xác dòng này để hệ thống hi
         var normalizedMsg = VietnameseTextNormalizer.NormalizeTelex(rawLower);
         var asciiMsg = VietnameseTextNormalizer.RemoveDiacritics(normalizedMsg);
 
-        var replyBuilder = new StringBuilder();
-        var recommendedList = new List<AiRecommendedProductDto>();
+        // 1. Phân tích ngữ cảnh hội thoại tự nhiên (Chào hỏi, cảm ơn, hỏi thông tin shop, bảo hành, trả góp)
+        bool isGreeting = VietnameseTextNormalizer.IsGreeting(normalizedMsg, asciiMsg);
+        bool isThanks = VietnameseTextNormalizer.IsThanks(normalizedMsg, asciiMsg);
+        bool isBotInfo = VietnameseTextNormalizer.IsBotInfo(normalizedMsg, asciiMsg);
+        bool isStoreInfo = VietnameseTextNormalizer.IsStoreAddressOrContact(normalizedMsg, asciiMsg);
+        bool isWarranty = VietnameseTextNormalizer.IsWarranty(normalizedMsg, asciiMsg);
+        bool isInstallment = VietnameseTextNormalizer.IsInstallment(normalizedMsg, asciiMsg);
+        bool isExplicitProductInquiry = VietnameseTextNormalizer.IsExplicitProductInquiry(normalizedMsg, asciiMsg);
 
-        // 1. Phân tích ngân sách
+        // 2. Phân tích ngân sách
         decimal? budgetVnd = request.Budget;
         var budgetMatch = Regex.Match(rawLower, @"(\d+([\.,]\d+)?)\s*(triệu|tr|m|vnd|đ)");
         if (budgetMatch.Success && decimal.TryParse(budgetMatch.Groups[1].Value.Replace(",", "."), out var parsedNum))
@@ -470,7 +557,7 @@ Cuối câu trả lời, hãy thêm chính xác dòng này để hệ thống hi
             }
         }
 
-        // 2. Nhận diện danh mục bằng bộ phân tích ngữ nghĩa tiếng Việt
+        // 3. Nhận diện danh mục cụ thể
         bool isPhone = VietnameseTextNormalizer.IsPhoneQuery(normalizedMsg, asciiMsg);
         bool isLaptop = VietnameseTextNormalizer.IsLaptopQuery(normalizedMsg, asciiMsg);
         bool isKeyboard = VietnameseTextNormalizer.IsKeyboardQuery(normalizedMsg, asciiMsg);
@@ -479,21 +566,112 @@ Cuối câu trả lời, hãy thêm chính xác dòng này để hệ thống hi
         bool isMonitor = VietnameseTextNormalizer.IsMonitorQuery(normalizedMsg, asciiMsg);
         bool isTablet = VietnameseTextNormalizer.IsTabletQuery(normalizedMsg, asciiMsg);
         bool isComponent = VietnameseTextNormalizer.IsComponentQuery(normalizedMsg, asciiMsg);
-
-        // Nhận diện ý định xem toàn bộ danh mục ("tất cả mẫu", "các mẫu", "toàn bộ", ...)
         bool isAllRequest = VietnameseTextNormalizer.IsAllRequest(normalizedMsg, asciiMsg);
 
-        // Nhu cầu chuyên biệt
         bool isGaming = normalizedMsg.Contains("game") || asciiMsg.Contains("gaming") || asciiMsg.Contains("fps") || asciiMsg.Contains("esport");
         bool isDesign = normalizedMsg.Contains("đồ họa") || asciiMsg.Contains("do hoa") || asciiMsg.Contains("render") || asciiMsg.Contains("photoshop");
 
-        // Nhận diện thương hiệu cụ thể
         bool isApple = normalizedMsg.Contains("apple") || asciiMsg.Contains("apple") || normalizedMsg.Contains("iphone") || asciiMsg.Contains("iphone");
         bool isSamsung = normalizedMsg.Contains("samsung") || asciiMsg.Contains("samsung") || normalizedMsg.Contains("galaxy") || asciiMsg.Contains("galaxy");
 
         bool hasSpecificCategory = isPhone || isLaptop || isKeyboard || isMouse || isHeadset || isMonitor || isTablet || isComponent;
+        bool hasBudget = budgetVnd.HasValue && budgetVnd.Value > 0;
 
-        // 3. Lọc danh sách ứng viên (STRICT CATEGORY ISOLATION)
+        // XỬ LÝ HỘI THOẠI TỰ NHIÊN: Nếu người dùng chỉ chào hỏi hoặc hỏi chính sách mà chưa hỏi mua sản phẩm cụ thể
+        if (!hasSpecificCategory && !hasBudget && !isExplicitProductInquiry)
+        {
+            if (isGreeting)
+            {
+                var greetingReply = new StringBuilder();
+                greetingReply.AppendLine("Dạ MadK Store xin chào bạn! 🤖 Rất vui được đón tiếp bạn hôm nay.");
+                greetingReply.AppendLine();
+                greetingReply.AppendLine("Em là **MadK AI Tech Assistant** - chuyên viên tư vấn công nghệ tại cửa hàng. MadK Store hiện đang kinh doanh chính hãng các dòng sản phẩm:");
+                greetingReply.AppendLine("• 📱 **Điện thoại thông minh**: iPhone 15/14 Series VNA, Samsung Galaxy S24 Series, Z Fold5/Flip5");
+                greetingReply.AppendLine("• 💻 **Laptop & Máy tính xách tay**: Laptop Gaming (ASUS ROG, Acer Predator, Lenovo Legion), Laptop Doanh nhân, Đồ họa");
+                greetingReply.AppendLine("• ⌨️ **Gaming Gear & Phụ kiện**: Bàn phím cơ custom Keychron/Razer, Chuột gaming siêu nhẹ, Tai nghe chống ồn");
+                greetingReply.AppendLine("• 🖥️ **Màn hình & Linh kiện PC**: Màn hình 144Hz - 240Hz, CPU Intel/AMD, VGA RTX 40-Series, RAM, SSD");
+                greetingReply.AppendLine();
+                greetingReply.AppendLine("Hôm nay bạn đang quan tâm đến dòng sản phẩm nào hoặc cần tư vấn cấu hình trong tầm giá bao nhiêu để em hỗ trợ bạn chi tiết nhé?");
+
+                return new AiChatResponseDto(greetingReply.ToString().Trim(), new List<AiRecommendedProductDto>());
+            }
+
+            if (isThanks)
+            {
+                return new AiChatResponseDto(
+                    "Dạ không có gì ạ! Rất vui vì đã hỗ trợ được cho bạn. 😊\n\nNếu bạn cần xem chi tiết cấu hình, so sánh giữa các mẫu máy hoặc hướng dẫn đặt hàng để nhận quà tặng và ưu đãi tại MadK Store, bạn cứ nhắn cho em bất kỳ lúc nào nhé!",
+                    new List<AiRecommendedProductDto>()
+                );
+            }
+
+            if (isBotInfo)
+            {
+                return new AiChatResponseDto(
+                    "Em là **MadK AI Tech Assistant** 🤖 - Trợ lý trí tuệ nhân tạo chuyên sâu về phần cứng và thiết bị công nghệ tại hệ thống bán lẻ MadK Store.\n\n" +
+                    "Em có thể giúp bạn:\n" +
+                    "1. 🔍 **Tra cứu & Tìm kiếm sản phẩm**: Điện thoại, laptop, linh kiện PC và phụ kiện chính hãng.\n" +
+                    "2. ⚖️ **So sánh thông số phần cứng**: Phân tích CPU, GPU, màn hình, switch phím... giúp bạn chọn thiết bị tối ưu nhất.\n" +
+                    "3. 💰 **Tối ưu theo ngân sách**: Gợi ý các cấu hình có hiệu năng/giá thành (P/P) tốt nhất theo mức tiền bạn dự chi.\n" +
+                    "4. 🛡️ **Tư vấn chính sách**: Bảo hành 1 đổi 1 trong 30 ngày, trả góp 0%, tích điểm thành viên MadK Rewards.\n\n" +
+                    "Hôm nay bạn cần em hỗ trợ tìm kiếm hay so sánh thiết bị nào ạ?",
+                    new List<AiRecommendedProductDto>()
+                );
+            }
+
+            if (isStoreInfo)
+            {
+                return new AiChatResponseDto(
+                    "🏢 **Thông tin liên hệ & Hệ thống MadK Store:**\n\n" +
+                    "• **Địa chỉ showroom**: 123 Đường Công Nghệ, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh\n" +
+                    "• **Hotline hỗ trợ & đặt hàng**: 0901.316.434 (8:00 - 21:30 hàng ngày)\n" +
+                    "• **Thời gian mở cửa**: 8:00 - 21:30 (tất cả các ngày trong tuần, kể cả Thứ 7 & Chủ Nhật)\n" +
+                    "• **Giao hàng toàn quốc**: Hỏa tốc 2h nội thành và giao nhanh toàn quốc qua đối tác Giao Hàng Nhanh (GHN).\n\n" +
+                    "Bạn có thể ghé trực tiếp showroom để trải nghiệm sản phẩm thực tế hoặc đặt hàng trực tuyến trên website nhé!",
+                    new List<AiRecommendedProductDto>()
+                );
+            }
+
+            if (isWarranty)
+            {
+                return new AiChatResponseDto(
+                    "🛡️ **Chính sách bảo hành & Đổi trả an tâm tại MadK Store:**\n\n" +
+                    "• **Bảo hành chính hãng**: 12 đến 24 tháng theo tiêu chuẩn nhà sản xuất (Apple VNA, Samsung VN, ASUS, Keychron, Razer...).\n" +
+                    "• **Chính sách 1 đổi 1**: Đổi mới 100% trong 30 ngày đầu tiên nếu máy phát sinh lỗi phần cứng từ nhà sản xuất.\n" +
+                    "• **Hỗ trợ kỹ thuật trọn đời**: Vệ sinh máy, tra keo tản nhiệt miễn phí và hỗ trợ phần mềm trọn đời.\n" +
+                    "• **Bảo hành điện tử**: Tra cứu tình trạng bảo hành và lịch sử bảo dưỡng trực tiếp qua số điện thoại trên hệ thống.\n\n" +
+                    "Bạn cần kiểm tra bảo hành cho sản phẩm nào hay cần hỗ trợ thông tin gì thêm không ạ?",
+                    new List<AiRecommendedProductDto>()
+                );
+            }
+
+            if (isInstallment)
+            {
+                return new AiChatResponseDto(
+                    "💳 **Chính sách Trả góp & Thanh toán linh hoạt tại MadK Store:**\n\n" +
+                    "• **Trả góp 0% lãi suất**: Hỗ trợ qua thẻ tín dụng của hơn 25 ngân hàng hoặc qua công ty tài chính với thủ tục duyệt hồ sơ online trong 15 phút.\n" +
+                    "• **Phương thức thanh toán đa dạng**:\n" +
+                    "  - Quét mã VNPAY-QR, Ví MoMo nhận thêm mã giảm giá độc quyền.\n" +
+                    "  - Chuyển khoản ngân hàng tự động xác nhận qua VietQR.\n" +
+                    "  - Thanh toán tiền mặt khi nhận hàng (COD) toàn quốc.\n" +
+                    "  - Quẹt thẻ POS trực tiếp tại cửa hàng (Visa, Mastercard, Napas).\n\n" +
+                    "Bạn đang quan tâm hình thức trả góp cho dòng sản phẩm nào để em hướng dẫn chi tiết hồ sơ ạ?",
+                    new List<AiRecommendedProductDto>()
+                );
+            }
+
+            // Tin nhắn ngắn hoặc không rõ nghĩa (không phải hỏi sản phẩm)
+            if (rawLower.Length < 10)
+            {
+                return new AiChatResponseDto(
+                    "Dạ MadK Store có thể giúp gì cho bạn hôm nay ạ? Bạn đang quan tâm đến Điện thoại, Laptop, Linh kiện PC hay Gaming Gear để em tư vấn chi tiết cho bạn nhé!",
+                    new List<AiRecommendedProductDto>()
+                );
+            }
+        }
+
+        // 4. Lọc danh sách ứng viên (STRICT CATEGORY ISOLATION KHI CÓ NHU CẦU SẢN PHẨM CỤ THỂ)
+        var replyBuilder = new StringBuilder();
+        var recommendedList = new List<AiRecommendedProductDto>();
         IEnumerable<Product> candidates = products;
 
         if (isPhone)
@@ -592,7 +770,6 @@ Cuối câu trả lời, hãy thêm chính xác dòng này để hệ thống hi
 
         if (hasSpecificCategory)
         {
-            // CÔ LẬP DANH MỤC: Nếu khách hàng yêu cầu danh mục cụ thể, CHỈ ĐƯỢC trả về sản phẩm danh mục đó
             if (!candidateList.Any())
             {
                 string catLabel = isPhone ? "Điện thoại thông minh" :
@@ -612,25 +789,21 @@ Cuối câu trả lời, hãy thêm chính xác dòng này để hệ thống hi
         }
         else
         {
-            // Không có danh mục cụ thể: lấy sản phẩm theo ngân sách hoặc nổi bật nhất
-            if (candidateList.Any())
-            {
-                matchedProducts = candidateList.Where(p => p.IsFeatured).Take(takeCount).ToList();
-                if (!matchedProducts.Any()) matchedProducts = candidateList.Take(takeCount).ToList();
-            }
-            else
-            {
-                matchedProducts = products.Where(p => p.IsFeatured).Take(takeCount).ToList();
-                if (!matchedProducts.Any()) matchedProducts = products.Take(takeCount).ToList();
-            }
+            matchedProducts = candidateList.Where(p => p.IsFeatured).Take(takeCount).ToList();
+            if (!matchedProducts.Any()) matchedProducts = candidateList.Take(takeCount).ToList();
         }
 
-        // 4. Xây dựng câu trả lời chuyên nghiệp, chuẩn xác
+        // 5. Lời mở đầu tự nhiên, thân thiện
+        if (isGreeting)
+        {
+            replyBuilder.AppendLine("Dạ MadK Store xin chào bạn! Rất vui được hỗ trợ bạn.");
+        }
+
         if (isPhone)
         {
             if (isAllRequest)
             {
-                replyBuilder.AppendLine("Dạ chào bạn! MadK Store hiện đang phân phối đầy đủ các dòng **Điện thoại thông minh (Smartphones)** chính hãng mới nhất từ hai thương hiệu hàng đầu thế giới là **Apple** và **Samsung**:");
+                replyBuilder.AppendLine("MadK Store hiện đang phân phối đầy đủ các dòng **Điện thoại thông minh (Smartphones)** chính hãng mới nhất từ hai thương hiệu hàng đầu thế giới là **Apple** và **Samsung**:");
                 replyBuilder.AppendLine();
                 replyBuilder.AppendLine("📱 **Hệ sinh thái Apple iPhone Chính Hãng (VNA):**");
                 replyBuilder.AppendLine("• **iPhone 15 Pro Max & iPhone 15 Pro**: Khung viền Titan hàng không vũ trụ siêu nhẹ, chip Apple A17 Pro 3nm mạnh mẽ hàng đầu, camera tiềm vọng 5x chuyên nghiệp.");
@@ -647,7 +820,7 @@ Cuối câu trả lời, hãy thêm chính xác dòng này để hệ thống hi
             }
             else
             {
-                replyBuilder.AppendLine("Dạ chào bạn! Dưới đây là các mẫu **Điện thoại thông minh (Smartphones)** chính hãng nổi bật nhất tại MadK Store phù hợp với nhu cầu của bạn:");
+                replyBuilder.AppendLine("Dưới đây là các mẫu **Điện thoại thông minh (Smartphones)** chính hãng nổi bật nhất tại MadK Store phù hợp với nhu cầu của bạn:");
             }
         }
         else if (isLaptop)
@@ -681,7 +854,7 @@ Cuối câu trả lời, hãy thêm chính xác dòng này để hệ thống hi
         }
         else
         {
-            replyBuilder.AppendLine("✨ Dựa trên yêu cầu của bạn, đây là những thiết bị công nghệ chính hãng có hiệu năng/giá thành (P/P) tốt nhất hiện nay tại cửa hàng:");
+            replyBuilder.AppendLine("✨ Dưới đây là những thiết bị công nghệ nổi bật được yêu thích nhất tại cửa hàng:");
         }
 
         replyBuilder.AppendLine();

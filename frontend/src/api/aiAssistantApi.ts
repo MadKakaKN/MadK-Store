@@ -67,6 +67,60 @@ function generateClientFallbackRecommendation(request: AiChatRequest): AiChatRes
   const normMsg = normalizeVietnameseTelex(rawLower);
   const asciiMsg = removeDiacritics(normMsg);
 
+  // Phân tích hội thoại tự nhiên
+  const isGreeting =
+    /\b(chào|chao|xin chào|xin chao|hello|hi|hey|alo|good morning|shop ơi|shop oi|ad ơi|ad oi|bot ơi|bot oi)\b/i.test(normMsg) ||
+    /\b(chao|xin chao|hello|hi|hey|alo|shop oi|ad oi|bot oi)\b/i.test(asciiMsg);
+
+  const isThanks =
+    /\b(cảm ơn|cam on|cám ơn|thanks|thank you|thx|tuyệt vời|tuyet voi|hay quá|hay qua|ok shop|oke shop|ok bạn|ok ban)\b/i.test(normMsg) ||
+    /\b(cam on|thanks|thank you|thx|tuyet voi|hay qua|ok shop|oke shop|ok ban)\b/i.test(asciiMsg);
+
+  const isBotInfo =
+    normMsg.includes('bạn là ai') ||
+    asciiMsg.includes('ban la ai') ||
+    normMsg.includes('bạn có thể làm gì') ||
+    asciiMsg.includes('ban co the lam gi') ||
+    asciiMsg.includes('who are you');
+
+  const isStoreInfo =
+    normMsg.includes('shop ở đâu') ||
+    asciiMsg.includes('shop o dau') ||
+    normMsg.includes('cửa hàng ở đâu') ||
+    asciiMsg.includes('cua hang o dau') ||
+    normMsg.includes('địa chỉ') ||
+    asciiMsg.includes('dia chi') ||
+    normMsg.includes('hotline') ||
+    normMsg.includes('số điện thoại') ||
+    asciiMsg.includes('so dien thoai') ||
+    asciiMsg.includes('sdt');
+
+  const isWarranty =
+    normMsg.includes('chính sách bảo hành') ||
+    asciiMsg.includes('chinh sach bao hanh') ||
+    normMsg.includes('bảo hành ra sao') ||
+    asciiMsg.includes('bao hanh ra sao') ||
+    normMsg.includes('đổi trả') ||
+    asciiMsg.includes('doi tra') ||
+    normMsg.includes('1 đổi 1') ||
+    (normMsg.includes('bảo hành') && !normMsg.includes('mua') && !normMsg.includes('mẫu') && !normMsg.includes('laptop') && !normMsg.includes('điện thoại'));
+
+  const isInstallment =
+    normMsg.includes('trả góp') ||
+    asciiMsg.includes('tra gop') ||
+    normMsg.includes('có trả góp không') ||
+    asciiMsg.includes('co tra gop khong') ||
+    normMsg.includes('thanh toán') ||
+    asciiMsg.includes('thanh toan');
+
+  const isExplicitProductInquiry =
+    normMsg.includes('bán chạy') ||
+    asciiMsg.includes('ban chay') ||
+    normMsg.includes('nổi bật') ||
+    asciiMsg.includes('noi bat') ||
+    normMsg.includes('sản phẩm hot') ||
+    asciiMsg.includes('san pham hot');
+
   // Phân tích danh mục
   const isPhone =
     normMsg.includes('điện thoại') ||
@@ -129,6 +183,111 @@ function generateClientFallbackRecommendation(request: AiChatRequest): AiChatRes
   const isApple = normMsg.includes('apple') || asciiMsg.includes('apple') || normMsg.includes('iphone') || asciiMsg.includes('iphone');
   const isSamsung = normMsg.includes('samsung') || asciiMsg.includes('samsung') || normMsg.includes('galaxy') || asciiMsg.includes('galaxy');
 
+  const hasSpecificCategory = isPhone || isLaptop || isKeyboard || isMouse || isHeadset || isMonitor;
+
+  // XỬ LÝ HỘI THOẠI TỰ NHIÊN: Khi khách hàng chỉ chào hỏi hoặc hỏi chính sách chung
+  if (!hasSpecificCategory && !isExplicitProductInquiry) {
+    if (isGreeting) {
+      return {
+        reply: [
+          'Dạ MadK Store xin chào bạn! 🤖 Rất vui được đón tiếp bạn hôm nay.',
+          '',
+          'Em là **MadK AI Tech Assistant** - chuyên viên tư vấn công nghệ tại cửa hàng. MadK Store hiện đang kinh doanh chính hãng các dòng sản phẩm:',
+          '• 📱 **Điện thoại thông minh**: iPhone 15/14 Series VNA, Samsung Galaxy S24 Series, Z Fold5/Flip5',
+          '• 💻 **Laptop & Máy tính xách tay**: Laptop Gaming (ASUS ROG, Acer Predator, Lenovo Legion), Laptop Doanh nhân, Đồ họa',
+          '• ⌨️ **Gaming Gear & Phụ kiện**: Bàn phím cơ custom Keychron/Razer, Chuột gaming siêu nhẹ, Tai nghe chống ồn',
+          '• 🖥️ **Màn hình & Linh kiện PC**: Màn hình 144Hz - 240Hz, CPU Intel/AMD, VGA RTX 40-Series, RAM, SSD',
+          '',
+          'Hôm nay bạn đang quan tâm đến dòng sản phẩm nào hoặc cần tư vấn cấu hình trong tầm giá bao nhiêu để em hỗ trợ bạn chi tiết nhé?',
+        ].join('\n'),
+        recommendedProducts: [],
+      };
+    }
+
+    if (isThanks) {
+      return {
+        reply:
+          'Dạ không có gì ạ! Rất vui vì đã hỗ trợ được cho bạn. 😊\n\nNếu bạn cần xem chi tiết cấu hình, so sánh giữa các mẫu máy hoặc hướng dẫn đặt hàng để nhận quà tặng và ưu đãi tại MadK Store, bạn cứ nhắn cho em bất kỳ lúc nào nhé!',
+        recommendedProducts: [],
+      };
+    }
+
+    if (isBotInfo) {
+      return {
+        reply: [
+          'Em là **MadK AI Tech Assistant** 🤖 - Trợ lý trí tuệ nhân tạo chuyên sâu về phần cứng và thiết bị công nghệ tại hệ thống bán lẻ MadK Store.',
+          '',
+          'Em có thể giúp bạn:',
+          '1. 🔍 **Tra cứu & Tìm kiếm sản phẩm**: Điện thoại, laptop, linh kiện PC và phụ kiện chính hãng.',
+          '2. ⚖️ **So sánh thông số phần cứng**: Phân tích CPU, GPU, màn hình, switch phím... giúp bạn chọn thiết bị tối ưu nhất.',
+          '3. 💰 **Tối ưu theo ngân sách**: Gợi ý các cấu hình có hiệu năng/giá thành (P/P) tốt nhất theo mức tiền bạn dự chi.',
+          '4. 🛡️ **Tư vấn chính sách**: Bảo hành 1 đổi 1 trong 30 ngày, trả góp 0%, tích điểm thành viên MadK Rewards.',
+          '',
+          'Hôm nay bạn cần em hỗ trợ tìm kiếm hay so sánh thiết bị nào ạ?',
+        ].join('\n'),
+        recommendedProducts: [],
+      };
+    }
+
+    if (isStoreInfo) {
+      return {
+        reply: [
+          '🏢 **Thông tin liên hệ & Hệ thống MadK Store:**',
+          '',
+          '• **Địa chỉ showroom**: 123 Đường Công Nghệ, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh',
+          '• **Hotline hỗ trợ & đặt hàng**: 0901.316.434 (8:00 - 21:30 hàng ngày)',
+          '• **Thời gian mở cửa**: 8:00 - 21:30 (tất cả các ngày trong tuần, kể cả Thứ 7 & Chủ Nhật)',
+          '• **Giao hàng toàn quốc**: Hỏa tốc 2h nội thành và giao nhanh toàn quốc qua đối tác Giao Hàng Nhanh (GHN).',
+          '',
+          'Bạn có thể ghé trực tiếp showroom để trải nghiệm sản phẩm thực tế hoặc đặt hàng trực tuyến trên website nhé!',
+        ].join('\n'),
+        recommendedProducts: [],
+      };
+    }
+
+    if (isWarranty) {
+      return {
+        reply: [
+          '🛡️ **Chính sách bảo hành & Đổi trả an tâm tại MadK Store:**',
+          '',
+          '• **Bảo hành chính hãng**: 12 đến 24 tháng theo tiêu chuẩn nhà sản xuất (Apple VNA, Samsung VN, ASUS, Keychron, Razer...).',
+          '• **Chính sách 1 đổi 1**: Đổi mới 100% trong 30 ngày đầu tiên nếu máy phát sinh lỗi phần cứng từ nhà sản xuất.',
+          '• **Hỗ trợ kỹ thuật trọn đời**: Vệ sinh máy, tra keo tản nhiệt miễn phí và hỗ trợ phần mềm trọn đời.',
+          '• **Bảo hành điện tử**: Tra cứu tình trạng bảo hành và lịch sử bảo dưỡng trực tiếp qua số điện thoại trên hệ thống.',
+          '',
+          'Bạn cần kiểm tra bảo hành cho sản phẩm nào hay cần hỗ trợ thông tin gì thêm không ạ?',
+        ].join('\n'),
+        recommendedProducts: [],
+      };
+    }
+
+    if (isInstallment) {
+      return {
+        reply: [
+          '💳 **Chính sách Trả góp & Thanh toán linh hoạt tại MadK Store:**',
+          '',
+          '• **Trả góp 0% lãi suất**: Hỗ trợ qua thẻ tín dụng của hơn 25 ngân hàng hoặc qua công ty tài chính với thủ tục duyệt hồ sơ online trong 15 phút.',
+          '• **Phương thức thanh toán đa dạng**:',
+          '  - Quét mã VNPAY-QR, Ví MoMo nhận thêm mã giảm giá độc quyền.',
+          '  - Chuyển khoản ngân hàng tự động xác nhận qua VietQR.',
+          '  - Thanh toán tiền mặt khi nhận hàng (COD) toàn quốc.',
+          '  - Quẹt thẻ POS trực tiếp tại cửa hàng (Visa, Mastercard, Napas).',
+          '',
+          'Bạn đang quan tâm hình thức trả góp cho dòng sản phẩm nào để em hướng dẫn chi tiết hồ sơ ạ?',
+        ].join('\n'),
+        recommendedProducts: [],
+      };
+    }
+
+    if (rawLower.length < 10) {
+      return {
+        reply:
+          'Dạ MadK Store có thể giúp gì cho bạn hôm nay ạ? Bạn đang quan tâm đến Điện thoại, Laptop, Linh kiện PC hay Gaming Gear để em tư vấn chi tiết cho bạn nhé!',
+        recommendedProducts: [],
+      };
+    }
+  }
+
   let candidates = [...MOCK_PRODUCTS];
 
   if (isPhone) {
@@ -186,9 +345,13 @@ function generateClientFallbackRecommendation(request: AiChatRequest): AiChatRes
 
   const replyLines: string[] = [];
 
+  if (isGreeting) {
+    replyLines.push('Dạ MadK Store xin chào bạn! Rất vui được hỗ trợ bạn.');
+  }
+
   if (isPhone) {
     if (isAllRequest) {
-      replyLines.push('Dạ chào bạn! MadK Store hiện đang phân phối đầy đủ các dòng **Điện thoại thông minh (Smartphones)** chính hãng mới nhất từ hai thương hiệu hàng đầu thế giới là **Apple** và **Samsung**:');
+      replyLines.push('MadK Store hiện đang phân phối đầy đủ các dòng **Điện thoại thông minh (Smartphones)** chính hãng mới nhất từ hai thương hiệu hàng đầu thế giới là **Apple** và **Samsung**:');
       replyLines.push('');
       replyLines.push('📱 **Hệ sinh thái Apple iPhone Chính Hãng (VNA):**');
       replyLines.push('• **iPhone 15 Pro Max & iPhone 15 Pro**: Khung viền Titan siêu nhẹ, chip Apple A17 Pro mạnh mẽ hàng đầu, camera tiềm vọng 5x chuyên nghiệp.');
@@ -199,7 +362,7 @@ function generateClientFallbackRecommendation(request: AiChatRequest): AiChatRes
       replyLines.push('• **Galaxy Z Fold5 & Z Flip5**: Thiết kế màn hình gập thời thượng, bản lề Flex không kẽ hở, đa nhiệm đỉnh cao.');
       replyLines.push('• **Galaxy A55 5G**: Phân khúc cận cao cấp thiết kế khung kim loại sang trọng, pin 5000mAh.');
     } else {
-      replyLines.push('Dạ chào bạn! Dưới đây là các mẫu **Điện thoại thông minh (Smartphones)** chính hãng nổi bật nhất tại MadK Store phù hợp với nhu cầu của bạn:');
+      replyLines.push('Dưới đây là các mẫu **Điện thoại thông minh (Smartphones)** chính hãng nổi bật nhất tại MadK Store phù hợp với nhu cầu của bạn:');
     }
   } else if (isLaptop) {
     replyLines.push('💻 MadK Store xin gửi tới bạn danh sách các mẫu **Laptop chính hãng** đang được tin dùng nhất hiện nay:');
@@ -208,7 +371,7 @@ function generateClientFallbackRecommendation(request: AiChatRequest): AiChatRes
   } else if (isMouse) {
     replyLines.push('🖱️ Dưới đây là các mẫu **Chuột gaming không dây siêu nhẹ** với cảm biến quang học chính xác từng pixel:');
   } else {
-    replyLines.push('✨ Dựa trên yêu cầu của bạn, đây là những thiết bị công nghệ chính hãng có hiệu năng/giá thành (P/P) tốt nhất hiện nay tại MadK Store:');
+    replyLines.push('✨ Dưới đây là những thiết bị công nghệ nổi bật được yêu thích nhất tại MadK Store:');
   }
 
   replyLines.push('');
