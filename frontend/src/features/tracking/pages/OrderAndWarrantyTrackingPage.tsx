@@ -112,7 +112,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
             Tra Cứu Đơn Hàng &amp; Bảo Hành
           </h1>
           <p className="text-xs text-gray-500 mt-1">
-            Nhập thông tin mã đơn hàng hoặc số điện thoại để kiểm tra hành trình vận chuyển và kích hoạt bảo hành điện tử.
+            Nhập thông tin mã đơn hàng hoặc số Serial / IMEI để kiểm tra hành trình vận chuyển và kích hoạt bảo hành điện tử.
           </p>
         </div>
 
