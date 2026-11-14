@@ -47,7 +47,7 @@ export const AddressModal: React.FC<AddressModalProps> = ({
         const list = await addressApi.getProvinces();
         if (isMounted) setProvinces(list);
       } catch (err) {
-        console.error('L?i khi t?i danh s�ch t?nh th�nh:', err);
+        console.error('Lỗi khi tải danh sách tỉnh thành:', err);
       }
     };
     fetchProvinces();
@@ -110,7 +110,7 @@ export const AddressModal: React.FC<AddressModalProps> = ({
         const dList = await addressApi.getDistricts(code);
         setDistricts(dList);
       } catch (err) {
-        console.error('L?i t?i qu?n/huy?n:', err);
+        console.error('Lỗi tải quận/huyện:', err);
       } finally {
         setIsLoadingLocations(false);
       }
@@ -132,7 +132,7 @@ export const AddressModal: React.FC<AddressModalProps> = ({
         const wList = await addressApi.getWards(code);
         setWards(wList);
       } catch (err) {
-        console.error('L?i t?i phu?ng/x�:', err);
+        console.error('Lỗi tải phường/xã:', err);
       } finally {
         setIsLoadingLocations(false);
       }
@@ -150,40 +150,41 @@ export const AddressModal: React.FC<AddressModalProps> = ({
     const newErrors: { [key: string]: string } = {};
 
     if (!recipientName.trim()) {
-      newErrors.recipientName = 'Vui l�ng nh?p h? v� t�n ngu?i nh?n.';
+      newErrors.recipientName = 'Vui lòng nhập họ và tên người nhận.';
     } else if (recipientName.trim().length < 2) {
-      newErrors.recipientName = 'T�n ngu?i nh?n ph?i c� �t nh?t 2 k� t?.';
+      newErrors.recipientName = 'Tên người nhận phải có ít nhất 2 ký tự.';
     }
 
     const phoneRegex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
     if (!phoneNumber.trim()) {
-      newErrors.phoneNumber = 'Vui l�ng nh?p s? di?n tho?i.';
+      newErrors.phoneNumber = 'Vui lòng nhập số điện thoại.';
     } else if (!phoneRegex.test(phoneNumber.trim().replace(/\s+/g, ''))) {
-      newErrors.phoneNumber = 'S? di?n tho?i kh�ng d�ng d?nh d?ng Vi?t Nam (10 ch? s?).';
+      newErrors.phoneNumber = 'Số điện thoại không đúng định dạng Việt Nam (10 chữ số).';
     }
 
     if (!provinceCode) {
-      newErrors.provinceCode = 'Vui l�ng ch?n T?nh/Th�nh ph?.';
+      newErrors.provinceCode = 'Vui lòng chọn Tỉnh/Thành phố.';
     }
 
     if (!districtCode) {
-      newErrors.districtCode = 'Vui l�ng ch?n Qu?n/Huy?n.';
+      newErrors.districtCode = 'Vui lòng chọn Quận/Huyện.';
     }
 
     if (!wardCode) {
-      newErrors.wardCode = 'Vui l�ng ch?n Phu?ng/X�.';
+      newErrors.wardCode = 'Vui lòng chọn Phường/Xã.';
     }
 
     if (!detailedAddress.trim()) {
-      newErrors.detailedAddress = 'Vui l�ng nh?p s? nh�, t�n du?ng ho?c t�a nh�.';
+      newErrors.detailedAddress = 'Vui lòng nhập số nhà, tên đường hoặc tòa nhà.';
     } else if (detailedAddress.trim().length < 3) {
-      newErrors.detailedAddress = '�?a ch? chi ti?t ph?i c� �t nh?t 3 k� t?.';
+      newErrors.detailedAddress = 'Địa chỉ chi tiết phải có ít nhất 3 ký tự.';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setServerError(null);
@@ -192,22 +193,22 @@ export const AddressModal: React.FC<AddressModalProps> = ({
 
     setIsSubmitting(true);
     try {
-      const selectedProv = provinces.find((p) => p.code === provinceCode);
-      const selectedDist = districts.find((d) => d.code === districtCode);
+      const selectedProvince = provinces.find((p) => p.code === provinceCode);
+      const selectedDistrict = districts.find((d) => d.code === districtCode);
       const selectedWard = wards.find((w) => w.code === wardCode);
 
       const payload: CreateAddressRequestDto = {
         recipientName: recipientName.trim(),
-        phoneNumber: phoneNumber.trim(),
+        phoneNumber: phoneNumber.trim().replace(/\s+/g, ''),
         provinceCode,
-        provinceName: selectedProv?.fullName || selectedProv?.name || "",
- districtCode,
-        districtName: selectedDist?.fullName || selectedDist?.name || "",
- wardCode,
-        wardName: selectedWard?.fullName || selectedWard?.name || "",
- detailedAddress: detailedAddress.trim(),
- isDefault,
- };
+        provinceName: selectedProvince?.fullName || '',
+        districtCode,
+        districtName: selectedDistrict?.fullName || '',
+        wardCode,
+        wardName: selectedWard?.fullName || '',
+        detailedAddress: detailedAddress.trim(),
+        isDefault,
+      };
 
       if (initialData) {
         await addressApi.updateAddress(initialData.id, payload, userId);
@@ -218,7 +219,7 @@ export const AddressModal: React.FC<AddressModalProps> = ({
       onSuccess();
       onClose();
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'C� l?i x?y ra khi luu d?a ch?. Vui l�ng th? l?i.';
+      const msg = err instanceof Error ? err.message : 'Có lỗi xảy ra khi lưu địa chỉ. Vui lòng thử lại.';
       setServerError(msg);
     } finally {
       setIsSubmitting(false);
@@ -236,21 +237,21 @@ export const AddressModal: React.FC<AddressModalProps> = ({
       />
 
       <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-        <div className="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-xl border border-slate-100">
+        <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl border border-[#E5E7EB]">
           {/* Header */}
-          <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-slate-100">
+          <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-[#E5E7EB]">
             <div>
-              <h3 className="text-lg font-extrabold text-slate-900">
-                {initialData ? 'Ch?nh s?a d?a ch? nh?n h�ng' : 'Th�m d?a ch? nh?n h�ng m?i'}
+              <h3 className="text-base font-semibold text-gray-900">
+                {initialData ? 'Chỉnh sửa địa chỉ nhận hàng' : 'Thêm địa chỉ nhận hàng mới'}
               </h3>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Vui l�ng nh?p d?a ch? ch�nh x�c d? nh?n h�ng nhanh ch�ng
+              <p className="text-xs text-gray-500 mt-0.5">
+                Vui lòng nhập địa chỉ chính xác để nhận hàng nhanh chóng
               </p>
             </div>
             <button
               type="button"
               onClick={onClose}
-              className="text-slate-400 hover:text-slate-600 rounded-full p-1.5 hover:bg-slate-100 transition-colors"
+              className="text-gray-400 hover:text-gray-700 rounded p-1 hover:bg-gray-100 transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -261,8 +262,8 @@ export const AddressModal: React.FC<AddressModalProps> = ({
           {/* Form */}
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
             {serverError && (
-              <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium flex items-center gap-2">
-                <span>??</span>
+              <div className="p-3 rounded bg-red-50 border border-red-200 text-red-700 text-xs font-medium flex items-center gap-2">
+                <span className="material-symbols-outlined text-base">error</span>
                 <span>{serverError}</span>
               </div>
             )}
@@ -270,8 +271,8 @@ export const AddressModal: React.FC<AddressModalProps> = ({
             {/* Recipient & Phone */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                  H? v� t�n ngu?i nh?n <span className="text-rose-500">*</span>
+                <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">
+                  Họ và tên người nhận <span className="text-[#D70018]">*</span>
                 </label>
                 <input
                   type="text"
@@ -280,19 +281,19 @@ export const AddressModal: React.FC<AddressModalProps> = ({
                     setRecipientName(e.target.value);
                     if (errors.recipientName) setErrors((prev) => ({ ...prev, recipientName: '' }));
                   }}
-                  placeholder="V� d?: Nguy?n Van A"
-                  className={`w-full px-3.5 py-2.5 rounded-xl text-sm border ${
-                    errors.recipientName ? 'border-rose-400 bg-rose-50/30' : 'border-slate-200'
-                  } focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all`}
+                  placeholder="Ví dụ: Nguyễn Văn A"
+                  className={`w-full h-9 px-3 rounded border text-xs text-gray-900 placeholder-gray-400 ${
+                    errors.recipientName ? 'border-red-400 bg-red-50/30' : 'border-[#E5E7EB]'
+                  } focus:outline-none focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] transition-all`}
                 />
                 {errors.recipientName && (
-                  <p className="mt-1 text-xs text-rose-500 font-medium">{errors.recipientName}</p>
+                  <p className="mt-1 text-xs text-[#D70018] font-medium">{errors.recipientName}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                  S? di?n tho?i <span className="text-rose-500">*</span>
+                <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">
+                  Số điện thoại <span className="text-[#D70018]">*</span>
                 </label>
                 <input
                   type="tel"
@@ -301,30 +302,30 @@ export const AddressModal: React.FC<AddressModalProps> = ({
                     setPhoneNumber(e.target.value);
                     if (errors.phoneNumber) setErrors((prev) => ({ ...prev, phoneNumber: '' }));
                   }}
-                  placeholder="V� d?: 0901234567"
-                  className={`w-full px-3.5 py-2.5 rounded-xl text-sm border ${
-                    errors.phoneNumber ? 'border-rose-400 bg-rose-50/30' : 'border-slate-200'
-                  } focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all`}
+                  placeholder="Ví dụ: 0901234567"
+                  className={`w-full h-9 px-3 rounded border text-xs text-gray-900 placeholder-gray-400 ${
+                    errors.phoneNumber ? 'border-red-400 bg-red-50/30' : 'border-[#E5E7EB]'
+                  } focus:outline-none focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] transition-all`}
                 />
                 {errors.phoneNumber && (
-                  <p className="mt-1 text-xs text-rose-500 font-medium">{errors.phoneNumber}</p>
+                  <p className="mt-1 text-xs text-[#D70018] font-medium">{errors.phoneNumber}</p>
                 )}
               </div>
             </div>
 
-            {/* Cascading Dropdowns: Level 1 - T?nh/Th�nh */}
+            {/* Cascading Dropdowns: Level 1 - Tỉnh/Thành */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                T?nh / Th�nh ph? <span className="text-rose-500">*</span>
+              <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">
+                Tỉnh / Thành phố <span className="text-[#D70018]">*</span>
               </label>
               <select
                 value={provinceCode}
                 onChange={handleProvinceChange}
-                className={`w-full px-3.5 py-2.5 rounded-xl text-sm border bg-white ${
-                  errors.provinceCode ? 'border-rose-400 bg-rose-50/30' : 'border-slate-200'
-                } focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all`}
+                className={`w-full h-9 px-3 rounded border bg-white text-xs text-gray-900 ${
+                  errors.provinceCode ? 'border-red-400 bg-red-50/30' : 'border-[#E5E7EB]'
+                } focus:outline-none focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] transition-all`}
               >
-                <option value="">-- Ch?n T?nh / Th�nh ph? --</option>
+                <option value="">-- Chọn Tỉnh / Thành phố --</option>
                 {provinces.map((prov) => (
                   <option key={prov.code} value={prov.code}>
                     {prov.fullName}
@@ -332,26 +333,26 @@ export const AddressModal: React.FC<AddressModalProps> = ({
                 ))}
               </select>
               {errors.provinceCode && (
-                <p className="mt-1 text-xs text-rose-500 font-medium">{errors.provinceCode}</p>
+                <p className="mt-1 text-xs text-[#D70018] font-medium">{errors.provinceCode}</p>
               )}
             </div>
 
-            {/* Cascading Dropdowns: Level 2 & 3 - Qu?n/Huy?n & Phu?ng/X� */}
+            {/* Cascading Dropdowns: Level 2 & 3 - Quận/Huyện & Phường/Xã */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                  Qu?n / Huy?n <span className="text-rose-500">*</span>
+                <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">
+                  Quận / Huyện <span className="text-[#D70018]">*</span>
                 </label>
                 <select
                   value={districtCode}
                   onChange={handleDistrictChange}
                   disabled={!provinceCode || isLoadingLocations}
-                  className={`w-full px-3.5 py-2.5 rounded-xl text-sm border bg-white disabled:bg-slate-50 disabled:text-slate-400 ${
-                    errors.districtCode ? 'border-rose-400 bg-rose-50/30' : 'border-slate-200'
-                  } focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all`}
+                  className={`w-full h-9 px-3 rounded border bg-white text-xs text-gray-900 disabled:bg-gray-50 disabled:text-gray-400 ${
+                    errors.districtCode ? 'border-red-400 bg-red-50/30' : 'border-[#E5E7EB]'
+                  } focus:outline-none focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] transition-all`}
                 >
                   <option value="">
-                    {!provinceCode ? 'Vui l�ng ch?n T?nh/Th�nh tru?c' : '-- Ch?n Qu?n / Huy?n --'}
+                    {!provinceCode ? 'Vui lòng chọn Tỉnh/Thành trước' : '-- Chọn Quận / Huyện --'}
                   </option>
                   {districts.map((d) => (
                     <option key={d.code} value={d.code}>
@@ -360,24 +361,24 @@ export const AddressModal: React.FC<AddressModalProps> = ({
                   ))}
                 </select>
                 {errors.districtCode && (
-                  <p className="mt-1 text-xs text-rose-500 font-medium">{errors.districtCode}</p>
+                  <p className="mt-1 text-xs text-[#D70018] font-medium">{errors.districtCode}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                  Phu?ng / X� <span className="text-rose-500">*</span>
+                <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">
+                  Phường / Xã <span className="text-[#D70018]">*</span>
                 </label>
                 <select
                   value={wardCode}
                   onChange={handleWardChange}
                   disabled={!districtCode || isLoadingLocations}
-                  className={`w-full px-3.5 py-2.5 rounded-xl text-sm border bg-white disabled:bg-slate-50 disabled:text-slate-400 ${
-                    errors.wardCode ? 'border-rose-400 bg-rose-50/30' : 'border-slate-200'
-                  } focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all`}
+                  className={`w-full h-9 px-3 rounded border bg-white text-xs text-gray-900 disabled:bg-gray-50 disabled:text-gray-400 ${
+                    errors.wardCode ? 'border-red-400 bg-red-50/30' : 'border-[#E5E7EB]'
+                  } focus:outline-none focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] transition-all`}
                 >
                   <option value="">
-                    {!districtCode ? 'Vui l�ng ch?n Qu?n/Huy?n tru?c' : '-- Ch?n Phu?ng / X� --'}
+                    {!districtCode ? 'Vui lòng chọn Quận/Huyện trước' : '-- Chọn Phường / Xã --'}
                   </option>
                   {wards.map((w) => (
                     <option key={w.code} value={w.code}>
@@ -386,15 +387,15 @@ export const AddressModal: React.FC<AddressModalProps> = ({
                   ))}
                 </select>
                 {errors.wardCode && (
-                  <p className="mt-1 text-xs text-rose-500 font-medium">{errors.wardCode}</p>
+                  <p className="mt-1 text-xs text-[#D70018] font-medium">{errors.wardCode}</p>
                 )}
               </div>
             </div>
 
             {/* Detailed Address */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                �?a ch? c? th? (S? nh�, T�n du?ng, T�a nh�) <span className="text-rose-500">*</span>
+              <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">
+                Địa chỉ cụ thể (Số nhà, Tên đường, Tòa nhà) <span className="text-[#D70018]">*</span>
               </label>
               <textarea
                 rows={2}
@@ -403,13 +404,13 @@ export const AddressModal: React.FC<AddressModalProps> = ({
                   setDetailedAddress(e.target.value);
                   if (errors.detailedAddress) setErrors((prev) => ({ ...prev, detailedAddress: '' }));
                 }}
-                placeholder="V� d?: T�a Landmark 81, S? 720A �i?n Bi�n Ph?"
-                className={`w-full px-3.5 py-2.5 rounded-xl text-sm border ${
-                  errors.detailedAddress ? 'border-rose-400 bg-rose-50/30' : 'border-slate-200'
-                } focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all`}
+                placeholder="Ví dụ: Tòa Landmark 81, Số 720A Điện Biên Phủ"
+                className={`w-full p-2.5 rounded border text-xs text-gray-900 placeholder-gray-400 ${
+                  errors.detailedAddress ? 'border-red-400 bg-red-50/30' : 'border-[#E5E7EB]'
+                } focus:outline-none focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] transition-all`}
               />
               {errors.detailedAddress && (
-                <p className="mt-1 text-xs text-rose-500 font-medium">{errors.detailedAddress}</p>
+                <p className="mt-1 text-xs text-[#D70018] font-medium">{errors.detailedAddress}</p>
               )}
             </div>
 
@@ -420,37 +421,37 @@ export const AddressModal: React.FC<AddressModalProps> = ({
                 type="checkbox"
                 checked={isDefault}
                 onChange={(e) => setIsDefault(e.target.checked)}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300 rounded cursor-pointer"
+                className="h-4 w-4 text-[#1D4ED8] focus:ring-[#1D4ED8] border-[#E5E7EB] rounded cursor-pointer"
               />
-              <label htmlFor="is-default-checkbox" className="ml-2 text-xs font-semibold text-slate-700 cursor-pointer">
-                �?t l�m d?a ch? giao h�ng m?c d?nh
+              <label htmlFor="is-default-checkbox" className="ml-2 text-xs font-medium text-gray-700 cursor-pointer">
+                Đặt làm địa chỉ giao hàng mặc định
               </label>
             </div>
 
             {/* Actions */}
-            <div className="pt-4 flex items-center justify-end gap-3 border-t border-slate-100">
+            <div className="pt-4 flex items-center justify-end gap-2.5 border-t border-[#E5E7EB]">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-colors"
+                className="px-4 h-9 rounded border border-[#E5E7EB] text-xs font-medium text-gray-700 hover:bg-gray-50 transition-colors"
               >
-                H?y
+                Hủy
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="px-6 py-2.5 rounded-xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 shadow-md shadow-blue-600/20 disabled:opacity-50 transition-all flex items-center gap-2"
+                className="px-5 h-9 rounded text-xs font-semibold text-white bg-[#1D4ED8] hover:bg-[#1e40af] disabled:opacity-50 transition-colors flex items-center gap-1.5"
               >
                 {isSubmitting ? (
                   <>
-                    <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
+                    <svg className="animate-spin h-3.5 w-3.5 text-white" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                     </svg>
-                    <span>�ang luu...</span>
+                    <span>Đang lưu...</span>
                   </>
                 ) : (
-                  <span>{initialData ? 'C?p nh?t d?a ch?' : 'Th�m d?a ch?'}</span>
+                  <span>{initialData ? 'Cập nhật địa chỉ' : 'Thêm địa chỉ'}</span>
                 )}
               </button>
             </div>
@@ -460,3 +461,5 @@ export const AddressModal: React.FC<AddressModalProps> = ({
     </div>
   );
 };
+
+export default AddressModal;
