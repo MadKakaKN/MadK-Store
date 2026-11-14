@@ -245,27 +245,27 @@ export const AiShoppingAssistantWidget: React.FC = () => {
   };
 
   // Định dạng nội dung tin nhắn với Markdown và thẻ làm nổi bật
-  const renderFormattedText = (content: string) => {
+  const renderFormattedText = (content: string, isUser: boolean = false) => {
     const lines = content.split('\n');
     return (
-      <div className="space-y-1.5 leading-relaxed text-sm">
+      <div className={`space-y-1.5 leading-relaxed text-sm ${isUser ? 'text-white' : 'text-slate-800'}`}>
         {lines.map((line, idx) => {
           if (!line.trim()) return <div key={idx} className="h-2" />;
 
           const parts = line.split(/(\*\*[^*]+\*\*)/g);
           return (
-            <p key={idx} className="text-slate-800">
+            <p key={idx} className={isUser ? 'text-white font-medium' : 'text-slate-800'}>
               {parts.map((part, pIdx) => {
                 if (part.startsWith('**') && part.endsWith('**')) {
                   return (
-                    <strong key={pIdx} className="font-bold text-blue-600">
+                    <strong key={pIdx} className={isUser ? 'font-bold text-white' : 'font-bold text-blue-600'}>
                       {part.slice(2, -2)}
                     </strong>
                   );
                 }
                 if (part.startsWith('* ') || part.startsWith('- ')) {
                   return (
-                    <span key={pIdx} className="inline-block pl-2 text-slate-700">
+                    <span key={pIdx} className={`inline-block pl-2 ${isUser ? 'text-white' : 'text-slate-700'}`}>
                       • {part.slice(2)}
                     </span>
                   );
@@ -428,14 +428,14 @@ export const AiShoppingAssistantWidget: React.FC = () => {
                 <div
                   className={`max-w-[88%] p-3.5 rounded-3xl shadow-xs ${
                     msg.role === 'user'
-                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-br-xs shadow-blue-500/15'
+                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-br-xs shadow-blue-500/20'
                       : 'bg-white border border-slate-200/90 text-slate-800 rounded-bl-xs'
                   }`}
                 >
-                  {renderFormattedText(msg.content)}
+                  {renderFormattedText(msg.content, msg.role === 'user')}
                   <span
-                    className={`block text-[10px] text-right mt-1.5 opacity-70 ${
-                      msg.role === 'user' ? 'text-blue-100' : 'text-slate-400'
+                    className={`block text-[10px] text-right mt-1.5 font-medium ${
+                      msg.role === 'user' ? 'text-blue-100/95' : 'text-slate-400'
                     }`}
                   >
                     {msg.timestamp}
