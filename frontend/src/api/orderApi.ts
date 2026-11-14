@@ -47,7 +47,7 @@ export function normalizeOrder(order: OrderDto): OrderDto {
   };
 }
 
-function getStoredOrders(): OrderDto[] {
+export function getStoredOrders(): OrderDto[] {
   try {
     const raw = localStorage.getItem(ORDERS_CACHE_KEY);
     const parsed: OrderDto[] = raw ? JSON.parse(raw) : [];
@@ -72,7 +72,7 @@ function getStoredOrders(): OrderDto[] {
   }
 }
 
-function saveStoredOrders(orders: OrderDto[]) {
+export function saveStoredOrders(orders: OrderDto[]) {
   try {
     localStorage.setItem(ORDERS_CACHE_KEY, JSON.stringify(orders));
   } catch (err) {
@@ -166,21 +166,24 @@ export const orderApi = {
    * Server có kiểm tra IDOR: chỉ chủ sở hữu hoặc Staff/Admin mới xem được.
    */
   async getOrderByNumber(orderNumber: string): Promise<ApiEnvelope<OrderDto>> {
+    const cleanNumber = orderNumber.trim().replace(/^#/, '');
     try {
-      const res = await apiClient.get<ApiEnvelope<OrderDto>>(`/orders/${encodeURIComponent(orderNumber)}`);
+      const res = await apiClient.get<ApiEnvelope<OrderDto>>(`/orders/${encodeURIComponent(cleanNumber)}`);
       if (res.data?.isSuccess && res.data.data) {
         res.data.data = normalizeOrder(res.data.data);
+        return res.data;
       }
-      return res.data;
     } catch {
-      const found = getStoredOrders().find(
-        (o) => o.orderNumber.toUpperCase() === orderNumber.trim().toUpperCase()
-      );
-      if (found) {
-        return { isSuccess: true, data: normalizeOrder(found) };
-      }
-      return { isSuccess: false, error: 'Không tìm thấy thông tin đơn hàng.' };
+      // Fallback local storage
     }
+
+    const found = getStoredOrders().find(
+      (o) => o.orderNumber.replace(/^#/, '').toUpperCase() === cleanNumber.toUpperCase()
+    );
+    if (found) {
+      return { isSuccess: true, data: normalizeOrder(found) };
+    }
+    return { isSuccess: false, error: 'Không tìm thấy thông tin đơn hàng.' };
   },
 
   /**
