@@ -1,0 +1,18 @@
+{
+  "name": "projects/15376973039181247916/screens/321a7c8b9ecb4e15a00ca81a0b135222",
+  "title": "MadK Store - Giỏ Hàng & Thanh Toán Chuẩn Bán Lẻ (Desktop)",
+  "screenshot": {
+    "name": "projects/15376973039181247916/files/6091277074463592083",
+    "downloadUrl": "https://stitch.googleapis.com/v1/projects/15376973039181247916/files/6091277074463592083:download",
+    "mimeType": "image/jpeg"
+  },
+  "htmlCode": {
+    "name": "projects/15376973039181247916/files/14638714323056071733",
+    "downloadUrl": "https://stitch.googleapis.com/v1/projects/15376973039181247916/files/14638714323056071733:download",
+    "mimeType": "text/html"
+  },
+  "width": "2560",
+  "height": "3110",
+  "deviceType": "DESKTOP",
+  "screenType": "DESIGN"
+}

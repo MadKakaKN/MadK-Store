@@ -124,7 +124,43 @@ export const OrderSuccessPage: React.FC = () => {
   const isOnlinePayment = isBankTransfer || isMoMo;
 
   return (
-    <div className="min-h-screen py-8 sm:py-14 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-8 animate-fade-in">
+    <div className="py-4 sm:py-6 px-4 md:px-6 max-w-[1200px] mx-auto space-y-6">
+      {/* Breadcrumb */}
+      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-gray-500">
+        <Link to="/" className="hover:text-[#1D4ED8] hover:underline">Trang chủ</Link>
+        <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+        <span className="text-[#111827] font-semibold">Đặt hàng thành công</span>
+      </nav>
+
+      {/* STEP PROGRESSION BAR (Screen 7 Retail Stepper) */}
+      <div className="bg-white border border-[#E5E7EB] rounded-lg p-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+          {/* Step 1: Complete */}
+          <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-white border border-[#E5E7EB] text-left opacity-75">
+            <div className="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">✓</div>
+            <div className="leading-tight">
+              <span className="text-[13px] font-semibold text-gray-800 block">1. Giỏ hàng</span>
+              <span className="text-[11px] text-gray-500 block">Đã hoàn tất chọn cấu hình</span>
+            </div>
+          </div>
+          {/* Step 2: Complete */}
+          <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-white border border-[#E5E7EB] text-left opacity-75">
+            <div className="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">✓</div>
+            <div className="leading-tight">
+              <span className="text-[13px] font-semibold text-gray-800 block">2. Thanh toán &amp; Đặt hàng</span>
+              <span className="text-[11px] text-gray-500 block">Đã ghi nhận thông tin nhận hàng</span>
+            </div>
+          </div>
+          {/* Step 3: Active */}
+          <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-[#EFF6FF] border border-[#1D4ED8] text-left">
+            <div className="w-7 h-7 rounded-lg bg-[#1D4ED8] text-white flex items-center justify-center font-bold text-xs">3</div>
+            <div className="leading-tight">
+              <span className="text-[13px] font-bold text-[#1D4ED8] block">3. Đặt hàng thành công</span>
+              <span className="text-[11px] text-blue-700 block">Mã đơn &amp; hướng dẫn nhận máy</span>
+            </div>
+          </div>
+        </div>
+      </div>
       {/* 1. Header & Congratulations Banner */}
       <div className="text-center space-y-4">
         {/* Hiệu ứng 3D nhẹ mừng đặt hàng thành công kèm fallback 2D */}

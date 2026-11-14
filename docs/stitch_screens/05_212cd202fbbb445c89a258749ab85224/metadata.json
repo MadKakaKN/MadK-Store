@@ -1,0 +1,18 @@
+{
+  "name": "projects/15376973039181247916/screens/212cd202fbbb445c89a258749ab85224",
+  "title": "MadK Console - Bán Tại Quầy POS & Hóa Đơn K80 Chuẩn Bán Lẻ",
+  "screenshot": {
+    "name": "projects/15376973039181247916/screens/212cd202fbbb445c89a258749ab85224/fileEntries/screenshot",
+    "downloadUrl": "https://stitch.googleapis.com/v1/projects/15376973039181247916/files/screenshot_00066013cabd4784054cfe3a57235afd:download",
+    "mimeType": "image/png"
+  },
+  "htmlCode": {
+    "name": "projects/15376973039181247916/screens/212cd202fbbb445c89a258749ab85224/fileEntries/html",
+    "downloadUrl": "https://stitch.googleapis.com/v1/projects/15376973039181247916/files/212cd202fbbb445c89a258749ab85224:download",
+    "mimeType": "text/html"
+  },
+  "width": "2560",
+  "height": "2048",
+  "deviceType": "DESKTOP",
+  "screenType": "DESIGN"
+}

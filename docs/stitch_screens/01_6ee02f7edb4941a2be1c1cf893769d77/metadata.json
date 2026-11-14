@@ -1,0 +1,18 @@
+{
+  "name": "projects/15376973039181247916/screens/6ee02f7edb4941a2be1c1cf893769d77",
+  "title": "MadK Store - Danh Mục Laptop Chuẩn Bán Lẻ (Desktop)",
+  "screenshot": {
+    "name": "projects/15376973039181247916/screens/6ee02f7edb4941a2be1c1cf893769d77/fileEntries/screenshot",
+    "downloadUrl": "https://stitch.googleapis.com/v1/projects/15376973039181247916/files/screenshot_00066012fdf75cdb0503c2e9a3071a55:download",
+    "mimeType": "image/png"
+  },
+  "htmlCode": {
+    "name": "projects/15376973039181247916/screens/6ee02f7edb4941a2be1c1cf893769d77/fileEntries/html",
+    "downloadUrl": "https://stitch.googleapis.com/v1/projects/15376973039181247916/files/6ee02f7edb4941a2be1c1cf893769d77:download",
+    "mimeType": "text/html"
+  },
+  "width": "2560",
+  "height": "4048",
+  "deviceType": "DESKTOP",
+  "screenType": "DESIGN"
+}

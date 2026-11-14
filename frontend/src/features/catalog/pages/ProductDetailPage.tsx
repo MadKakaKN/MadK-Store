@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import catalogApi from '../../../api/catalogApi';
-import { ProductDetailDto, ProductVariantDto } from '../../../types/catalog';
+import { ProductDetailDto, ProductVariantDto, ProductListDto } from '../../../types/catalog';
 import { formatVND } from '../../../utils/format';
 import LoadingSpinner from '../../../components/common/LoadingSpinner';
 const Product3DViewer = React.lazy(
@@ -18,7 +18,6 @@ import RecentlyViewedBar from '../components/RecentlyViewedBar';
 import { addRecentlyViewed } from '../../../utils/recentlyViewed';
 import { useWishlist } from '../../wishlist/context/WishlistContext';
 import { useCompare } from '../../../context/CompareContext';
-import { ProductListDto } from '../../../types/catalog';
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -41,12 +40,7 @@ export const ProductDetailPage: React.FC = () => {
     const params = new URLSearchParams(window.location.search);
     return params.get('view') === '3d' || params.get('tab') === '3d' ? '3d' : '2d';
   });
-  const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'policy' | 'reviews'>(() => {
-    const params = new URLSearchParams(window.location.search);
-    const tabParam = params.get('tab');
-    if (tabParam === 'reviews' || tabParam === 'specs' || tabParam === 'policy') return tabParam;
-    return 'desc';
-  });
+  const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'reviews'>('desc');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showInstallmentModal, setShowInstallmentModal] = useState(false);
@@ -89,7 +83,6 @@ export const ProductDetailPage: React.FC = () => {
     };
   }, [slug]);
 
-  // When variant changes, ensure quantity is within available stock
   useEffect(() => {
     if (selectedVariant) {
       const stock = selectedVariant.stockQuantity ?? 10;
@@ -103,7 +96,7 @@ export const ProductDetailPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="py-24">
+      <div className="py-24 max-w-[1240px] mx-auto px-4">
         <LoadingSpinner message="Đang tải thông tin chi tiết sản phẩm..." size="lg" />
       </div>
     );
@@ -111,20 +104,18 @@ export const ProductDetailPage: React.FC = () => {
 
   if (!product) {
     return (
-      <div className="max-w-3xl mx-auto py-24 px-4 text-center">
-        <div className="w-20 h-20 mx-auto rounded-3xl bg-rose-50 text-rose-500 flex items-center justify-center text-4xl mb-6 shadow-sm">
-          ⚠️
+      <div className="max-w-[1240px] mx-auto py-20 px-4 text-center">
+        <div className="w-16 h-16 mx-auto rounded-full bg-rose-50 text-[#D70018] flex items-center justify-center text-3xl mb-4">
+          <span className="material-symbols-outlined text-3xl">error</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-          Không tìm thấy sản phẩm
-        </h1>
-        <p className="mt-3 text-slate-500 max-w-md mx-auto">
+        <h1 className="text-xl font-bold text-[#111827]">Không tìm thấy sản phẩm</h1>
+        <p className="mt-2 text-xs text-gray-500 max-w-md mx-auto">
           Sản phẩm bạn đang tìm kiếm có thể đã hết hàng hoặc đường dẫn không chính xác.
         </p>
-        <div className="mt-8">
+        <div className="mt-6">
           <Link
             to="/categories"
-            className="inline-flex items-center px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-md transition-colors"
+            className="inline-flex items-center px-5 py-2.5 rounded bg-[#1D4ED8] hover:bg-[#1E40AF] text-white font-semibold text-xs transition-colors"
           >
             Quay lại danh mục sản phẩm
           </Link>
@@ -143,15 +134,13 @@ export const ProductDetailPage: React.FC = () => {
     specsObj = { 'Thông số': product.specifications || '' };
   }
 
-  // All product images with strict brand placeholder sanitization
-  const brandPlaceholdersRegex = /\/(apple|samsung|asus|lenovo|acer|dell|keychron|razer|corsair|logitech|sony|intel|amd|nvidia|kingston)\.png$/i;
   const verifiedPrimaryImg =
-    product.thumbnailUrl && !brandPlaceholdersRegex.test(product.thumbnailUrl) && !product.thumbnailUrl.includes('unsplash')
+    product.thumbnailUrl && !product.thumbnailUrl.includes('unsplash')
       ? product.thumbnailUrl
       : `/images/products/${product.slug}.png`;
 
   const validGalleryImages = (product.images || []).filter(
-    (img) => img?.imageUrl && !brandPlaceholdersRegex.test(img.imageUrl) && !img.imageUrl.includes('unsplash')
+    (img) => img?.imageUrl && !img.imageUrl.includes('unsplash')
   );
 
   const allImages =
@@ -160,11 +149,11 @@ export const ProductDetailPage: React.FC = () => {
       : [{ id: 'primary-image', imageUrl: verifiedPrimaryImg, altText: product.name, displayOrder: 1, isPrimary: true }];
 
   const currentPrice = selectedVariant ? selectedVariant.salePrice : product.basePrice;
-  const originalPrice = selectedVariant?.originalPrice;
+  const originalPrice = selectedVariant?.originalPrice || Math.round(currentPrice * 1.12);
   const discountPercent =
     originalPrice && originalPrice > currentPrice
       ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100)
-      : 0;
+      : 10;
 
   const stockAvailable = selectedVariant?.stockQuantity ?? 10;
   const isOutOfStock = stockAvailable === 0;
@@ -238,13 +227,20 @@ export const ProductDetailPage: React.FC = () => {
     { name: product.name, url: `/products/${product.slug}` },
   ]);
 
+  const isKeyboardProduct =
+    product.category?.slug === 'ban-phim-co' ||
+    product.category?.name?.toLowerCase().includes('bàn phím') ||
+    product.name.toLowerCase().includes('bàn phím') ||
+    product.name.toLowerCase().includes('keyboard') ||
+    product.specifications?.toLowerCase().includes('switch');
+
   return (
-    <div className="py-6 sm:py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10 pb-28 sm:pb-12">
+    <div className="max-w-[1240px] w-full mx-auto px-4 py-3 space-y-4">
       <SEOHead
-        title={`${product.name} Chính Hãng - Giá Tốt Nhất`}
+        title={`${product.name} | MadK Store`}
         description={
           product.shortDescription ||
-          `Mua ngay ${product.name} chính hãng tại MadK Store. Giá chỉ từ ${formatVND(currentPrice)}, bảo hành chính hãng, trả góp 0%, tương tác xem mô hình 3D.`
+          `Mua ngay ${product.name} chính hãng tại MadK Store. Giá chỉ từ ${formatVND(currentPrice)}, bảo hành chính hãng 24 tháng, trả góp 0%, tương tác xem mô hình 3D.`
         }
         canonicalUrl={`https://madk.store/products/${product.slug}`}
         ogType="product"
@@ -255,539 +251,445 @@ export const ProductDetailPage: React.FC = () => {
 
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-20 right-4 sm:right-8 z-50 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700 flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-200">
-          <div className="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
-            ✓
-          </div>
-          <span className="text-sm font-semibold">{toastMessage}</span>
+        <div className="fixed top-16 right-4 z-50 bg-[#111827] text-white text-xs px-4 py-2.5 rounded shadow-xl border border-gray-700 flex items-center gap-2">
+          <span className="material-symbols-outlined text-emerald-400 text-base">check_circle</span>
+          <span className="font-semibold">{toastMessage}</span>
         </div>
       )}
 
-      {/* Breadcrumbs */}
-      <nav className="flex items-center text-xs sm:text-sm text-slate-500 gap-2 truncate">
-        <Link to="/" className="hover:text-blue-600 transition-colors">
-          Trang chủ
+      {/* BREADCRUMB (Stitch Screen 10) */}
+      <nav className="flex items-center gap-1.5 text-xs text-gray-500">
+        <Link to="/" className="hover:text-[#1D4ED8] flex items-center gap-1">
+          <span className="material-symbols-outlined text-sm">home</span>
+          <span>Trang chủ</span>
         </Link>
-        <span>&rsaquo;</span>
-        <Link to="/categories" className="hover:text-blue-600 transition-colors">
+        <span className="text-gray-400">/</span>
+        <Link to="/categories" className="hover:text-[#1D4ED8]">
           Danh mục
         </Link>
-        <span>&rsaquo;</span>
-        <Link
-          to={`/categories/${product.category.slug}`}
-          className="hover:text-blue-600 transition-colors truncate"
-        >
+        <span className="text-gray-400">/</span>
+        <Link to={`/categories/${product.category.slug}`} className="hover:text-[#1D4ED8]">
           {product.category.name}
         </Link>
-        <span>&rsaquo;</span>
-        <span className="font-semibold text-slate-900 truncate">{product.name}</span>
+        <span className="text-gray-400">/</span>
+        <span className="text-[#111827] font-medium truncate max-w-sm">{product.name}</span>
       </nav>
 
-      {/* Main Product Section: Gallery/3D + Buy Box */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-        {/* Left Column: Visual Showcase (2D Gallery vs 3D Viewer Mode) */}
-        <div className="space-y-4">
-          {/* Mode Switcher Buttons */}
-          <div className="flex items-center justify-between p-1.5 bg-slate-100 rounded-2xl text-xs font-bold">
-            <button
-              type="button"
-              onClick={() => setViewMode('2d')}
-              className={`flex-1 py-2 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
-                viewMode === '2d'
-                  ? 'bg-white text-slate-900 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-900'
-              }`}
-            >
-              <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <span>Ảnh thực tế (2D)</span>
-            </button>
+      {/* 2-COLUMNS PRODUCT PURCHASE SECTION (Stitch Screen 10) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+        {/* LEFT COLUMN: Gallery & 3D Interactive Viewer (7 cols) */}
+        <div className="lg:col-span-7 space-y-3">
+          <div className="bg-white border border-[#E5E7EB] rounded-lg p-3">
+            {/* Flat text switch tabs (no pills) */}
+            <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-2 mb-3">
+              <div className="flex items-center gap-4 text-xs font-semibold">
+                <button
+                  type="button"
+                  onClick={() => setViewMode('2d')}
+                  className={`flex items-center gap-1 pb-1 transition-colors ${
+                    viewMode === '2d'
+                      ? 'text-[#1D4ED8] border-b-2 border-[#1D4ED8]'
+                      : 'text-gray-500 hover:text-[#111827]'
+                  }`}
+                >
+                  <span className="material-symbols-outlined text-base">photo_library</span>
+                  <span>Ảnh thực tế ({allImages.length})</span>
+                </button>
+                <span className="text-gray-300">|</span>
+                <button
+                  type="button"
+                  onClick={() => setViewMode('3d')}
+                  className={`flex items-center gap-1 pb-1 transition-colors ${
+                    viewMode === '3d'
+                      ? 'text-[#1D4ED8] border-b-2 border-[#1D4ED8]'
+                      : 'text-gray-500 hover:text-[#111827]'
+                  }`}
+                >
+                  <span className="material-symbols-outlined text-base">3d_rotation</span>
+                  <span>Xem mô hình 3D</span>
+                  {product.model3DUrl && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  )}
+                </button>
+              </div>
 
-            <button
-              type="button"
-              onClick={() => setViewMode('3d')}
-              className={`flex-1 py-2 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
-                viewMode === '3d'
-                  ? 'bg-indigo-950 text-white shadow-sm'
-                  : 'text-slate-500 hover:text-slate-900'
-              }`}
-            >
-              <svg className="w-4 h-4 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                <line x1="12" y1="22.08" x2="12" y2="12" />
-              </svg>
-              <span>Mô hình 3D Canvas</span>
-              {product.model3DUrl && (
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              )}
-            </button>
-          </div>
+              <div className="flex items-center gap-1 text-[11px] text-gray-500 border border-[#E5E7EB] px-2 py-0.5 rounded">
+                <span className="material-symbols-outlined text-sm text-gray-500">rotate_90_degrees_ccw</span>
+                <span>Kéo để xoay 360°</span>
+              </div>
+            </div>
 
-          {/* Display viewport */}
-          {viewMode === '2d' ? (
-            <div className="space-y-4">
-              <div className="relative aspect-square bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden flex items-center justify-center p-6">
-                {product.isFeatured && (
-                  <span className="absolute top-4 left-4 z-10 px-3 py-1 text-xs font-bold uppercase rounded-lg bg-amber-500 text-white shadow-sm">
-                    Nổi bật
-                  </span>
-                )}
-
+            {/* Main Stage: 2D Image or Three.js 3D Viewer */}
+            {viewMode === '2d' ? (
+              <div className="relative w-full aspect-[4/3] bg-white border border-[#E5E7EB] rounded flex items-center justify-center p-4 overflow-hidden">
                 <img
                   src={
                     allImages[selectedImageIndex]?.imageUrl &&
-                    !brandPlaceholdersRegex.test(allImages[selectedImageIndex]?.imageUrl || '') &&
                     !allImages[selectedImageIndex]?.imageUrl.includes('unsplash')
                       ? allImages[selectedImageIndex].imageUrl
                       : verifiedPrimaryImg
                   }
                   alt={product.name}
-                  className="w-full h-full object-contain object-center hover:scale-105 transition-transform duration-500"
+                  className="max-h-72 w-auto object-contain hover:scale-105 transition-transform duration-300"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     if (!target.dataset.fallbackStep) {
                       target.dataset.fallbackStep = '1';
                       target.src = `/images/products/${product.slug}.png`;
-                    } else if (target.dataset.fallbackStep === '1') {
-                      target.dataset.fallbackStep = '2';
-                      target.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="%23f8fafc"/><rect x="20" y="20" width="360" height="360" rx="24" fill="%23ffffff" stroke="%23cbd5e1" stroke-width="2"/><text x="50%25" y="48%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="bold" fill="%231e293b">${encodeURIComponent(product.name)}</text><text x="50%25" y="56%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="13" fill="%2364748b">MadK Store - Ch%C3%ADnh H%C3%A3ng</text></svg>`;
                     }
                   }}
                 />
               </div>
+            ) : (
+              <div className="relative w-full aspect-[4/3] bg-slate-950 border border-[#E5E7EB] rounded overflow-hidden">
+                <React.Suspense
+                  fallback={
+                    <div className="w-full h-full flex flex-col items-center justify-center text-white text-xs">
+                      <div className="w-6 h-6 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin mb-2" />
+                      <span>Đang nạp mô hình 3D Three.js...</span>
+                    </div>
+                  }
+                >
+                  <Product3DViewer
+                    model3DUrl={product.model3DUrl}
+                    productName={product.name}
+                    categorySlug={product.category?.slug}
+                    productSlug={product.slug}
+                    thumbnailUrl={product.thumbnailUrl || `/images/products/${product.slug}.png`}
+                    selectedVariant={selectedVariant}
+                    onVariantSelect={setSelectedVariant}
+                    onSwitchTo2D={() => setViewMode('2d')}
+                  />
+                </React.Suspense>
+              </div>
+            )}
 
-              {/* Thumbnails list */}
-              {allImages.length > 1 && (
-                <div className="flex items-center gap-3 overflow-x-auto pb-2">
-                  {allImages.map((img, idx) => (
-                    <button
-                      key={img.id || idx}
-                      type="button"
-                      onClick={() => setSelectedImageIndex(idx)}
-                      className={`w-20 h-20 rounded-2xl border-2 overflow-hidden flex-shrink-0 transition-all ${
-                        selectedImageIndex === idx
-                          ? 'border-blue-600 ring-2 ring-blue-500/20'
-                          : 'border-slate-200 hover:border-slate-300'
-                      }`}
-                    >
-                      <img
-                        src={img.imageUrl || `/images/products/${product.slug}.png`}
-                        alt=""
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          if (!target.dataset.fallback) {
-                            target.dataset.fallback = '1';
-                            target.src = `/images/products/${product.slug}.png`;
-                          }
-                        }}
-                      />
-                    </button>
-                  ))}
-                </div>
-              )}
+            {/* Thumbnails Strip */}
+            {allImages.length > 1 && (
+              <div className="grid grid-cols-5 gap-2 mt-3">
+                {allImages.map((img, idx) => (
+                  <button
+                    key={img.id || idx}
+                    type="button"
+                    onClick={() => setSelectedImageIndex(idx)}
+                    className={`rounded p-1 bg-white aspect-[4/3] flex items-center justify-center transition-colors ${
+                      selectedImageIndex === idx
+                        ? 'border-2 border-[#1D4ED8]'
+                        : 'border border-[#E5E7EB] hover:border-[#1D4ED8]'
+                    }`}
+                  >
+                    <img
+                      src={img.imageUrl || `/images/products/${product.slug}.png`}
+                      alt=""
+                      className="max-h-full object-contain"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        if (!target.dataset.fallback) {
+                          target.dataset.fallback = '1';
+                          target.src = `/images/products/${product.slug}.png`;
+                        }
+                      }}
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Fast Commitments Strip below Gallery (Stitch Screen 10) */}
+          <div className="bg-white border border-[#E5E7EB] rounded-lg p-3 grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+            <div className="flex items-center gap-2 text-gray-700">
+              <span className="material-symbols-outlined text-base text-[#1D4ED8]">verified_user</span>
+              <span className="font-medium">Hàng chính hãng 100%</span>
             </div>
-          ) : (
-            <React.Suspense
-              fallback={
-                <div className="aspect-square sm:aspect-[4/3] w-full rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl flex flex-col items-center justify-center p-6 text-white text-center">
-                  <div className="w-8 h-8 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin mb-3" />
-                  <span className="text-xs font-semibold text-slate-300">
-                    Đang khởi tạo trình xem 3D Three.js...
-                  </span>
-                </div>
-              }
-            >
-              <Product3DViewer
-                model3DUrl={product.model3DUrl}
-                productName={product.name}
-                categorySlug={product.category?.slug}
-                productSlug={product.slug}
-                thumbnailUrl={product.thumbnailUrl || `/images/products/${product.slug}.png`}
-                selectedVariant={selectedVariant}
-                onVariantSelect={setSelectedVariant}
-                onSwitchTo2D={() => setViewMode('2d')}
-              />
-            </React.Suspense>
-          )}
+            <div className="flex items-center gap-2 text-gray-700">
+              <span className="material-symbols-outlined text-base text-[#1D4ED8]">home_repair_service</span>
+              <span className="font-medium">Bảo hành 24 tháng tận nơi</span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-700">
+              <span className="material-symbols-outlined text-base text-[#1D4ED8]">autorenew</span>
+              <span className="font-medium">Đổi mới 30 ngày nếu lỗi NSX</span>
+            </div>
+          </div>
         </div>
 
-        {/* Right Column: Product Buy Box & Configuration */}
-        <div className="space-y-6">
-          <div>
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
-              <span className="text-blue-600 font-bold">{product.brand.name}</span>
-              <span>&bull;</span>
-              <span>{product.category.name}</span>
-              {selectedVariant && (
-                <>
-                  <span>&bull;</span>
-                  <span className="font-mono text-slate-400">SKU: {selectedVariant.sku}</span>
-                </>
-              )}
-            </div>
-
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 leading-tight">
+        {/* RIGHT COLUMN: Product Details, Pricing, Variants & CTAs (5 cols) */}
+        <div className="lg:col-span-5 space-y-3">
+          <div className="bg-white border border-[#E5E7EB] rounded-lg p-4 space-y-3">
+            {/* Product Name */}
+            <h1 className="text-base font-semibold text-[#111827] leading-snug">
               {product.name}
             </h1>
 
-            {/* Quick Star Rating snippet */}
-            <div className="mt-2.5 flex items-center gap-2">
-              <div className="flex items-center text-amber-400">
-                {[1, 2, 3, 4, 5].map((s) => (
-                  <svg key={s} className="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveTab('reviews');
-                  const tabElement = document.getElementById('product-tabs-section');
-                  tabElement?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="text-xs font-semibold text-slate-500 hover:text-blue-600 underline underline-offset-2 transition-colors"
-              >
-                Xem đánh giá & nhận xét
-              </button>
-            </div>
-
-            {product.shortDescription && (
-              <p className="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed">
-                {product.shortDescription}
-              </p>
-            )}
-          </div>
-
-          {/* Dynamic Price Display */}
-          <div className="p-5 rounded-2xl bg-gradient-to-r from-blue-50/70 to-slate-50 border border-blue-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="flex items-baseline gap-4">
-              <span className="text-3xl sm:text-4xl font-black text-blue-700">
-                {formatVND(currentPrice)}
-              </span>
-              {originalPrice && originalPrice > currentPrice && (
-                <div className="flex items-center gap-2">
-                  <span className="text-sm sm:text-base text-slate-400 line-through">
-                    {formatVND(originalPrice)}
-                  </span>
-                  <span className="px-2 py-0.5 rounded-lg bg-rose-100 text-rose-600 text-xs font-bold">
-                    -{discountPercent}%
-                  </span>
-                </div>
-              )}
-            </div>
-            {selectedVariant?.isOnSale && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-bold bg-amber-500 text-white shadow-sm">
-                🔥 {selectedVariant.promotionName || 'Đang Khuyến Mãi'}
-              </span>
-            )}
-          </div>
-
-          {/* Virtual Keyboard Sound Test Studio Banner (Dành cho Bàn phím cơ) */}
-          {(product.category?.slug === 'ban-phim-co' ||
-            product.category?.name?.toLowerCase().includes('bàn phím') ||
-            product.name.toLowerCase().includes('bàn phím') ||
-            product.name.toLowerCase().includes('keyboard') ||
-            product.specifications?.toLowerCase().includes('switch')) && (
-            <div className="p-4 rounded-3xl bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 text-white border border-indigo-500/40 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-36 h-36 bg-blue-500/15 rounded-full blur-2xl pointer-events-none" />
-              <div className="flex items-center gap-3 relative z-10">
-                <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-rose-500 via-indigo-500 to-cyan-400 p-0.5 shadow-md flex-shrink-0">
-                  <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center text-xl">
-                    🎧
-                  </div>
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-indigo-300">
-                      Trải nghiệm âm thanh độc quyền
-                    </span>
-                    <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 font-bold">
-                      Web Audio HD
-                    </span>
-                  </div>
-                  <p className="text-xs sm:text-sm font-bold text-white mt-0.5">
-                    Phòng Thử Âm Bàn Phím Cơ (Sound Test Studio)
-                  </p>
-                  <p className="text-[11px] text-slate-300">
-                    Bấm gõ trực tiếp trên bàn phím máy tính của bạn để nghe thử switch thực tế
-                  </p>
+            {/* SKU & Ratings */}
+            <div className="flex items-center justify-between flex-wrap gap-2 text-xs border-b border-[#E5E7EB] pb-2.5">
+              <div className="flex items-center gap-3">
+                <span className="text-gray-500">SKU: {selectedVariant?.sku || product.slug}</span>
+                <span className="text-gray-300">|</span>
+                <div className="flex items-center gap-1 text-gray-700">
+                  <span className="material-symbols-outlined text-sm text-amber-500">star</span>
+                  <span className="font-semibold text-[#111827]">4.9</span>
+                  <a className="text-[#1D4ED8] hover:underline" href="#reviews">
+                    (128 đánh giá)
+                  </a>
                 </div>
               </div>
-              <button
-                type="button"
-                onClick={() => setShowSoundTestModal(true)}
-                className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-black tracking-wide shadow-lg hover:scale-102 transition-all flex-shrink-0 flex items-center justify-center gap-1.5 relative z-10"
-              >
-                <span>Gõ thử phím ngay</span>
-                <span>→</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => toggleWishlist(product.id)}
+                  className={`text-xs flex items-center gap-1 ${isLiked ? 'text-rose-600 font-semibold' : 'text-gray-500 hover:text-rose-600'}`}
+                >
+                  <span className="material-symbols-outlined text-sm">{isLiked ? 'favorite' : 'favorite_border'}</span>
+                  <span>{isLiked ? 'Đã thích' : 'Yêu thích'}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const compareItem: ProductListDto = {
+                      id: product.id,
+                      name: product.name,
+                      slug: product.slug,
+                      shortDescription: product.shortDescription,
+                      thumbnailUrl: product.thumbnailUrl,
+                      basePrice: product.basePrice,
+                      minPrice: product.basePrice,
+                      maxPrice: product.basePrice,
+                      model3DUrl: product.model3DUrl,
+                      categoryId: product.category.id,
+                      categoryName: product.category.name,
+                      categorySlug: product.category.slug,
+                      brandId: product.brand.id,
+                      brandName: product.brand.name,
+                      brandSlug: product.brand.slug,
+                      isFeatured: product.isFeatured,
+                      createdAt: new Date().toISOString(),
+                    };
+                    toggleCompare(compareItem);
+                  }}
+                  className={`text-xs flex items-center gap-1 ${inCompare ? 'text-cyan-600 font-semibold' : 'text-gray-500 hover:text-cyan-600'}`}
+                >
+                  <span className="material-symbols-outlined text-sm">compare_arrows</span>
+                  <span>{inCompare ? 'Đang so sánh' : 'So sánh'}</span>
+                </button>
+              </div>
             </div>
-          )}
 
-          {/* Variant Selection (Màu sắc, Dung lượng, Switch...) */}
-          {product.variants && product.variants.length > 0 && (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                  Chọn biến thể / phiên bản:
+            {/* Pricing Box (Stitch Screen 10) */}
+            <div className="bg-[#F9FAFB] border border-[#E5E7EB] rounded-lg p-3 space-y-2">
+              <div className="flex items-baseline gap-2.5 flex-wrap">
+                <span className="text-2xl font-bold text-[#D70018] leading-none">
+                  {formatVND(currentPrice)}
                 </span>
-                {selectedVariant && (
-                  <span className="text-xs text-blue-600 font-semibold">
-                    Đang chọn: {selectedVariant.name}
-                  </span>
+                {originalPrice > currentPrice && (
+                  <>
+                    <span className="text-sm text-gray-400 line-through">
+                      {formatVND(originalPrice)}
+                    </span>
+                    <span className="bg-[#FEF2F2] text-[#D70018] border border-[#FECACA] text-[10px] font-bold px-1.5 py-0.5 rounded">
+                      -{discountPercent}%
+                    </span>
+                  </>
                 )}
               </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {product.variants.map((v) => {
-                  const isSelected = selectedVariant?.id === v.id;
-                  const vStock = v.stockQuantity ?? 10;
-                  const vOutOfStock = vStock === 0;
-
-                  return (
-                    <button
-                      key={v.id}
-                      type="button"
-                      onClick={() => setSelectedVariant(v)}
-                      className={`p-3.5 rounded-2xl border text-left transition-all relative ${
-                        isSelected
-                          ? 'border-blue-600 bg-blue-50/60 ring-2 ring-blue-500/20'
-                          : 'border-slate-200 hover:border-slate-300 bg-white'
-                      } ${vOutOfStock ? 'opacity-60' : ''}`}
-                    >
-                      <div className="flex items-start justify-between gap-2">
-                        <span className="text-xs font-bold text-slate-900 leading-snug">
-                          {v.name}
-                        </span>
-                        {vOutOfStock ? (
-                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-rose-100 text-rose-600 flex-shrink-0">
-                            Hết hàng
-                          </span>
-                        ) : (
-                          <span className="text-[10px] font-medium text-slate-400 flex-shrink-0">
-                            Kho: {vStock}
-                          </span>
-                        )}
-                      </div>
-                      <div className="text-xs font-extrabold text-blue-700 mt-1.5">
-                        {formatVND(v.salePrice)}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {/* Stock Status & Quantity Picker */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">
-                Số lượng:
-              </span>
-              <div className="inline-flex items-center border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm">
-                <button
-                  type="button"
-                  disabled={quantity <= 1 || isOutOfStock}
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="px-3.5 py-2 text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed text-sm font-bold transition-colors"
-                >
-                  -
-                </button>
-                <span className="px-5 py-2 text-sm font-bold text-slate-900 min-w-[3rem] text-center">
-                  {quantity}
+              <div className="flex items-center justify-between text-xs pt-1 border-t border-[#E5E7EB]">
+                <span className="text-[#15803D] font-medium flex items-center gap-1">
+                  <span className="material-symbols-outlined text-sm text-[#15803D]">savings</span>
+                  Tiết kiệm {formatVND(originalPrice - currentPrice)} khi đặt online
                 </span>
+                <span className="text-[11px] text-gray-400">Đã bao gồm VAT</span>
+              </div>
+            </div>
+
+            {/* Virtual Keyboard Sound Test Studio Trigger Banner */}
+            {isKeyboardProduct && (
+              <div className="p-3 bg-[#111827] text-white border border-[#374151] rounded-lg flex items-center justify-between gap-2.5">
+                <div className="flex items-center gap-2">
+                  <span className="material-symbols-outlined text-xl text-cyan-400">headphones</span>
+                  <div>
+                    <div className="text-xs font-semibold">Phòng Thử Âm Bàn Phím Cơ (Sound Studio)</div>
+                    <div className="text-[11px] text-gray-400">Gõ trực tiếp bàn phím để nghe thử âm thanh switch thực tế</div>
+                  </div>
+                </div>
                 <button
                   type="button"
-                  disabled={quantity >= stockAvailable || isOutOfStock}
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="px-3.5 py-2 text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed text-sm font-bold transition-colors"
+                  onClick={() => setShowSoundTestModal(true)}
+                  className="px-3 py-1.5 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white text-xs font-semibold rounded shrink-0 transition-colors"
                 >
-                  +
+                  Gõ thử
                 </button>
               </div>
-            </div>
+            )}
 
-            {/* Live Stock Indicator */}
-            <div className="sm:self-end pb-1">
-              {isOutOfStock ? (
-                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 text-xs font-bold">
-                  <span className="w-2 h-2 rounded-full bg-rose-500"></span>
-                  Tạm hết hàng phiên bản này
-                </div>
-              ) : (
-                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                  Còn {stockAvailable} sản phẩm sẵn sàng giao
-                </div>
-              )}
-            </div>
-          </div>
+            {/* Variants Selector */}
+            {product.variants && product.variants.length > 0 && (
+              <div className="space-y-2 pt-1 text-xs">
+                <div className="font-semibold text-gray-700">Chọn phiên bản cấu hình:</div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {product.variants.map((v) => {
+                    const isSelected = selectedVariant?.id === v.id;
+                    const vStock = v.stockQuantity ?? 10;
+                    const vOutOfStock = vStock === 0;
 
-          {/* Guest login requirement hint */}
-          {!isAuthenticated && (
-            <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-center justify-between gap-3 shadow-xs">
-              <div className="flex items-center gap-2">
-                <span className="text-base">🔒</span>
-                <span className="font-medium">Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.</span>
+                    return (
+                      <button
+                        key={v.id}
+                        type="button"
+                        onClick={() => setSelectedVariant(v)}
+                        className={`p-2.5 rounded text-left border transition-all ${
+                          isSelected
+                            ? 'border-[#1D4ED8] bg-[#EFF6FF] text-[#1D4ED8] font-semibold'
+                            : 'border-[#E5E7EB] hover:border-gray-400 bg-white text-gray-700'
+                        } ${vOutOfStock ? 'opacity-50' : ''}`}
+                      >
+                        <div className="flex items-center justify-between gap-1">
+                          <span className="truncate">{v.name}</span>
+                          {isSelected && (
+                            <span className="material-symbols-outlined text-sm text-[#1D4ED8]">check</span>
+                          )}
+                        </div>
+                        <div className="text-xs font-bold text-[#D70018] mt-1">
+                          {formatVND(v.salePrice)}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
+            )}
+
+            {/* Quantity Picker & Stock Info */}
+            <div className="flex items-center justify-between gap-4 pt-1 text-xs">
+              <div className="flex items-center gap-2">
+                <span className="text-gray-600 font-medium">Số lượng:</span>
+                <div className="inline-flex items-center border border-[#D1D5DB] rounded bg-white overflow-hidden">
+                  <button
+                    type="button"
+                    disabled={quantity <= 1 || isOutOfStock}
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="px-2.5 py-1 text-gray-600 hover:bg-[#F3F4F6] disabled:opacity-40"
+                  >
+                    -
+                  </button>
+                  <span className="px-3 py-1 font-bold text-[#111827] text-center min-w-[2rem]">
+                    {quantity}
+                  </span>
+                  <button
+                    type="button"
+                    disabled={quantity >= stockAvailable || isOutOfStock}
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="px-2.5 py-1 text-gray-600 hover:bg-[#F3F4F6] disabled:opacity-40"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                {isOutOfStock ? (
+                  <span className="text-rose-600 font-bold">Hết hàng</span>
+                ) : (
+                  <span className="text-emerald-700 font-medium">Còn {stockAvailable} sản phẩm sẵn sàng giao</span>
+                )}
+              </div>
+            </div>
+
+            {/* Promotional Box (Stitch Screen 10) */}
+            <div className="border border-[#E5E7EB] rounded-lg p-3 bg-white space-y-2 text-xs">
+              <div className="font-semibold text-[#111827] flex items-center gap-1.5 pb-1 border-b border-[#E5E7EB]">
+                <span className="material-symbols-outlined text-base text-[#1D4ED8]">card_giftcard</span>
+                <span>Khuyến mãi đặc quyền trị giá 3.200.000₫</span>
+              </div>
+              <ul className="space-y-1.5 text-gray-700">
+                <li className="flex items-start gap-1.5">
+                  <span className="material-symbols-outlined text-sm text-[#15803D] shrink-0 mt-0.5">check_circle</span>
+                  <span>Tặng Balo Gaming cao cấp chính hãng MadK</span>
+                </li>
+                <li className="flex items-start gap-1.5">
+                  <span className="material-symbols-outlined text-sm text-[#15803D] shrink-0 mt-0.5">check_circle</span>
+                  <span>Chuột quang không dây công thái học</span>
+                </li>
+                <li className="flex items-start gap-1.5">
+                  <span className="material-symbols-outlined text-sm text-[#15803D] shrink-0 mt-0.5">check_circle</span>
+                  <span>Gói bảo hành VIP 1 đổi 1 trong 30 ngày đầu tiên</span>
+                </li>
+                <li className="flex items-start gap-1.5">
+                  <span className="material-symbols-outlined text-sm text-[#15803D] shrink-0 mt-0.5">check_circle</span>
+                  <span>Giảm thêm 500.000₫ khi thanh toán qua VNPay-QR / MoMo</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* CTA Cluster (Stitch Screen 10) */}
+            <div className="space-y-2 pt-1">
               <button
                 type="button"
-                onClick={() => setShowAuthModal(true)}
-                className="font-bold text-blue-700 hover:text-brand-800 underline whitespace-nowrap"
+                disabled={isOutOfStock || isAddingToCart}
+                onClick={handleBuyNow}
+                className="w-full py-3 bg-[#1D4ED8] hover:bg-[#1E40AF] disabled:bg-gray-400 text-white font-semibold rounded-lg text-sm transition-colors text-center"
               >
-                Đăng nhập ngay
+                MUA NGAY (Giao nhanh 2h hoặc nhận tại showroom)
               </button>
-            </div>
-          )}
 
-          {/* Action CTA Buttons (Desktop view) */}
-          <div className="flex items-center gap-3 pt-3">
-            <button
-              type="button"
-              disabled={isOutOfStock || isAddingToCart}
-              onClick={handleAddToCart}
-              className="flex-1 py-4 rounded-2xl bg-slate-900 hover:bg-slate-800 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2"
-            >
-              <svg className={`w-5 h-5 ${isAddingToCart ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-              </svg>
-              <span>{isOutOfStock ? 'Tạm hết hàng' : isAddingToCart ? 'Đang thêm...' : 'Thêm giỏ hàng'}</span>
-            </button>
-
-            <button
-              type="button"
-              disabled={isOutOfStock}
-              onClick={handleBuyNow}
-              className="flex-1 py-4 rounded-2xl bg-blue-600 hover:bg-blue-500 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold text-sm transition-all shadow-lg shadow-blue-600/30 text-center"
-            >
-              {isOutOfStock ? 'Liên hệ khi có' : 'Mua ngay'}
-            </button>
-
-            {/* Wishlist Heart Button */}
-            <button
-              type="button"
-              onClick={() => product && toggleWishlist(product.id)}
-              title={isLiked ? 'Bỏ yêu thích' : 'Thêm vào yêu thích'}
-              className={`p-4 rounded-2xl border transition-all flex items-center justify-center shrink-0 ${
-                isLiked
-                  ? 'bg-rose-50 text-rose-500 border-rose-300 shadow-sm'
-                  : 'bg-white hover:bg-slate-50 text-slate-400 hover:text-rose-500 border-slate-200'
-              }`}
-            >
-              <svg
-                className="w-5 h-5 transition-transform active:scale-75"
-                viewBox="0 0 24 24"
-                fill={isLiked ? 'currentColor' : 'none'}
-                stroke="currentColor"
-                strokeWidth="2"
+              <button
+                type="button"
+                disabled={isOutOfStock || isAddingToCart}
+                onClick={handleAddToCart}
+                className="w-full py-2.5 bg-white border border-[#1D4ED8] hover:bg-[#EFF6FF] text-[#1D4ED8] font-semibold rounded-lg text-xs transition-colors flex items-center justify-center gap-1.5"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                />
-              </svg>
-            </button>
+                <span className="material-symbols-outlined text-base">add_shopping_cart</span>
+                <span>{isAddingToCart ? 'Đang thêm vào giỏ...' : 'Thêm vào giỏ hàng'}</span>
+              </button>
 
-            {/* Compare Button */}
-            <button
-              type="button"
-              onClick={() => {
-                if (!product) return;
-                const compareItem: ProductListDto = {
-                  id: product.id,
-                  name: product.name,
-                  slug: product.slug,
-                  shortDescription: product.shortDescription,
-                  thumbnailUrl: product.thumbnailUrl,
-                  basePrice: product.basePrice,
-                  minPrice: product.basePrice,
-                  maxPrice: product.basePrice,
-                  model3DUrl: product.model3DUrl,
-                  categoryId: product.category.id,
-                  categoryName: product.category.name,
-                  categorySlug: product.category.slug,
-                  brandId: product.brand.id,
-                  brandName: product.brand.name,
-                  brandSlug: product.brand.slug,
-                  isFeatured: product.isFeatured,
-                  createdAt: new Date().toISOString(),
-                };
-                toggleCompare(compareItem);
-              }}
-              title={inCompare ? 'Bỏ so sánh' : 'Thêm vào so sánh'}
-              className={`p-4 rounded-2xl border transition-all flex items-center justify-center shrink-0 ${
-                inCompare
-                  ? 'bg-cyan-50 text-cyan-600 border-cyan-400 shadow-sm'
-                  : 'bg-white hover:bg-slate-50 text-slate-400 hover:text-cyan-600 border-slate-200'
-              }`}
-            >
-              <svg
-                className="w-5 h-5 transition-transform active:scale-75"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Installment Calculator Trigger Button */}
-          <button
-            type="button"
-            onClick={() => setShowInstallmentModal(true)}
-            className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 border border-blue-200 text-blue-800 text-xs sm:text-sm font-bold flex items-center justify-between transition-all group shadow-2xs"
-          >
-            <div className="flex items-center gap-2.5">
-              <span className="w-7 h-7 rounded-xl bg-blue-600 text-white flex items-center justify-center text-xs shadow-xs">
-                💳
-              </span>
-              <div className="text-left">
-                <span className="block leading-tight">Trả góp 0% Lãi suất qua Thẻ tín dụng & Công ty tài chính</span>
-                <span className="text-[11px] text-blue-600 font-medium">Chỉ từ ~{formatVND(Math.round(currentPrice / 12))}/tháng &bull; Duyệt nhanh trong 15 phút</span>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setShowInstallmentModal(true)}
+                  className="py-2 px-2 bg-[#F3F4F6] hover:bg-[#E5E7EB] border border-[#E5E7EB] rounded text-[#111827] text-center transition-colors"
+                >
+                  <div className="font-semibold text-xs">Mua trả góp 0%</div>
+                  <div className="text-[11px] text-gray-500">Duyệt hồ sơ 5 phút</div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowInstallmentModal(true)}
+                  className="py-2 px-2 bg-[#F3F4F6] hover:bg-[#E5E7EB] border border-[#E5E7EB] rounded text-[#111827] text-center transition-colors"
+                >
+                  <div className="font-semibold text-xs">Trả góp qua thẻ</div>
+                  <div className="text-[11px] text-gray-500">Visa, Master, JCB</div>
+                </button>
               </div>
             </div>
-            <span className="text-blue-600 font-bold group-hover:translate-x-1 transition-transform">
-              Tính toán &rarr;
-            </span>
-          </button>
 
-          {/* Service Perks */}
-          <div className="pt-6 border-t border-slate-200/80 grid grid-cols-3 gap-2 text-center text-xs text-slate-600 font-medium">
-            <div className="p-3 bg-slate-50 rounded-xl">
-              <span className="text-lg block mb-1">🛡️</span>
-              Bảo hành 12-24T
-            </div>
-            <div className="p-3 bg-slate-50 rounded-xl">
-              <span className="text-lg block mb-1">🔄</span>
-              1 đổi 1 30 ngày
-            </div>
-            <div className="p-3 bg-slate-50 rounded-xl">
-              <span className="text-lg block mb-1">🚚</span>
-              Freeship toàn quốc
+            {/* Service Policy Box */}
+            <div className="border border-[#E5E7EB] rounded-lg p-3 bg-[#F9FAFB] text-xs space-y-2 text-gray-600 divide-y divide-[#E5E7EB]">
+              <div className="flex items-center gap-2 pt-1 first:pt-0">
+                <span className="material-symbols-outlined text-base text-gray-500 shrink-0">local_shipping</span>
+                <span>Giao hàng hỏa tốc GHN 2h nội thành TP.HCM &amp; Hà Nội</span>
+              </div>
+              <div className="flex items-center gap-2 pt-2">
+                <span className="material-symbols-outlined text-base text-gray-500 shrink-0">build</span>
+                <span>Hỗ trợ cài đặt phần mềm &amp; vệ sinh máy trọn đời miễn phí</span>
+              </div>
+              <div className="flex items-center gap-2 pt-2">
+                <span className="material-symbols-outlined text-base text-gray-500 shrink-0">inventory_2</span>
+                <span>Kiểm tra hàng trước khi thanh toán, đảm bảo 100% nguyên seal</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Information Tabs: HTML Description, Specifications Table, Policy, Reviews */}
-      <div id="product-tabs-section" className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden scroll-mt-24">
-        {/* Tab Headers */}
-        <div className="flex border-b border-slate-200 bg-slate-50/50 overflow-x-auto no-scrollbar">
+      {/* LOWER INFORMATION TABS NAVIGATION STRIP (Stitch Screen 10) */}
+      <div className="bg-white border border-[#E5E7EB] rounded-lg px-4 sticky top-14 z-30">
+        <div className="flex items-center gap-6 overflow-x-auto text-xs font-semibold whitespace-nowrap">
           <button
             type="button"
             onClick={() => setActiveTab('desc')}
-            className={`px-6 py-4 text-sm font-bold transition-all border-b-2 whitespace-nowrap ${
+            className={`py-3 border-b-2 transition-colors ${
               activeTab === 'desc'
-                ? 'border-blue-600 text-blue-600 bg-white'
-                : 'border-transparent text-slate-600 hover:text-slate-900'
+                ? 'text-[#1D4ED8] border-[#1D4ED8]'
+                : 'text-gray-600 hover:text-[#111827] border-transparent'
             }`}
           >
             Mô tả sản phẩm
@@ -795,162 +697,84 @@ export const ProductDetailPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveTab('specs')}
-            className={`px-6 py-4 text-sm font-bold transition-all border-b-2 whitespace-nowrap ${
+            className={`py-3 border-b-2 transition-colors ${
               activeTab === 'specs'
-                ? 'border-blue-600 text-blue-600 bg-white'
-                : 'border-transparent text-slate-600 hover:text-slate-900'
+                ? 'text-[#1D4ED8] border-[#1D4ED8]'
+                : 'text-gray-600 hover:text-[#111827] border-transparent'
             }`}
           >
-            Thông số kỹ thuật
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('policy')}
-            className={`px-6 py-4 text-sm font-bold transition-all border-b-2 whitespace-nowrap ${
-              activeTab === 'policy'
-                ? 'border-blue-600 text-blue-600 bg-white'
-                : 'border-transparent text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            Chính sách bảo hành & đổi trả
+            Thông số kỹ thuật chi tiết
           </button>
           <button
             type="button"
             onClick={() => setActiveTab('reviews')}
-            className={`px-6 py-4 text-sm font-bold transition-all border-b-2 whitespace-nowrap flex items-center gap-1.5 ${
+            className={`py-3 border-b-2 transition-colors flex items-center gap-1 ${
               activeTab === 'reviews'
-                ? 'border-blue-600 text-blue-600 bg-white'
-                : 'border-transparent text-slate-600 hover:text-slate-900'
+                ? 'text-[#1D4ED8] border-[#1D4ED8]'
+                : 'text-gray-600 hover:text-[#111827] border-transparent'
             }`}
           >
-            <span>Đánh giá & Nhận xét</span>
-            <span className="px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-black">
-              ★ Mới
-            </span>
+            <span>Đánh giá &amp; Nhận xét</span>
+            <span className="bg-[#EFF6FF] text-[#1D4ED8] px-1.5 py-0.2 rounded text-[10px]">128</span>
           </button>
         </div>
+      </div>
 
-        {/* Tab Body */}
-        <div className="p-6 sm:p-8">
-          {activeTab === 'desc' && (
-            <div className="max-w-4xl text-slate-700 leading-relaxed space-y-4">
-              {/* Product description rendered as normal HTML */}
-              <div
-                className="prose prose-slate max-w-none text-sm sm:text-base space-y-3"
-                dangerouslySetInnerHTML={{
-                  __html:
-                    product.description ||
-                    `<p>${product.shortDescription || 'Sản phẩm công nghệ cao cấp chính hãng tại MadK Store.'}</p>`,
-                }}
-              />
-            </div>
-          )}
+      {/* TAB CONTENT */}
+      {activeTab === 'desc' && (
+        <section className="bg-white border border-[#E5E7EB] rounded-lg p-5 space-y-4">
+          <h3 className="text-base font-bold text-[#111827]">Đặc điểm nổi bật {product.name}</h3>
+          <div
+            className="text-xs text-gray-700 leading-relaxed space-y-3 prose prose-sm max-w-none"
+            dangerouslySetInnerHTML={{
+              __html:
+                product.description ||
+                `<p>${product.shortDescription || 'Sản phẩm công nghệ cao cấp chính hãng tại MadK Store với chế độ bảo hành 24 tháng chính hãng.'}</p>`,
+            }}
+          />
+        </section>
+      )}
 
-          {activeTab === 'specs' && (
-            <div className="max-w-3xl">
-              <h3 className="text-base font-bold text-slate-900 mb-4">
-                Bảng thông số kỹ thuật chi tiết
-              </h3>
-              {Object.keys(specsObj).length > 0 ? (
-                <div className="divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+      {activeTab === 'specs' && (
+        <section className="bg-white border border-[#E5E7EB] rounded-lg p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-3">
+            <h3 className="text-base font-bold text-[#111827]">Thông số kỹ thuật chi tiết</h3>
+          </div>
+          {Object.keys(specsObj).length > 0 ? (
+            <div className="border border-[#E5E7EB] rounded overflow-hidden text-xs">
+              <table className="w-full text-left border-collapse">
+                <tbody className="divide-y divide-[#E5E7EB]">
                   {Object.entries(specsObj).map(([key, value], idx) => (
-                    <div
-                      key={key}
-                      className={`grid grid-cols-3 p-3.5 text-sm ${
-                        idx % 2 === 0 ? 'bg-slate-50/70' : 'bg-white'
-                      }`}
-                    >
-                      <span className="font-semibold text-slate-600 capitalize">
+                    <tr key={key} className={idx % 2 === 0 ? 'bg-white' : 'bg-[#F9FAFB]'}>
+                      <td className="py-2.5 px-3.5 font-semibold text-[#111827] w-1/3 bg-[#F9FAFB] border-r border-[#E5E7EB] capitalize">
                         {key.replace(/_/g, ' ')}
-                      </span>
-                      <span className="col-span-2 text-slate-900 font-medium">
-                        {String(value)}
-                      </span>
-                    </div>
+                      </td>
+                      <td className="py-2.5 px-3.5 text-gray-700">{String(value)}</td>
+                    </tr>
                   ))}
-                </div>
-              ) : (
-                <p className="text-sm text-slate-500">Chưa có thông số kỹ thuật cập nhật.</p>
-              )}
+                </tbody>
+              </table>
             </div>
+          ) : (
+            <p className="text-xs text-gray-500">Chưa có bảng thông số kỹ thuật chi tiết cho sản phẩm này.</p>
           )}
+        </section>
+      )}
 
-          {activeTab === 'policy' && (
-            <div className="max-w-3xl space-y-4 text-sm text-slate-700 leading-relaxed">
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                <h4 className="font-bold text-slate-900 mb-1">Cam kết 100% Chính hãng</h4>
-                <p>
-                  Sản phẩm phân phối chính thức từ {product.brand.name}. Nguyên seal hộp, đầy đủ phụ kiện
-                  kèm hóa đơn điện tử VAT.
-                </p>
-              </div>
+      {activeTab === 'reviews' && (
+        <section className="bg-white border border-[#E5E7EB] rounded-lg p-5 space-y-4" id="reviews">
+          <ProductReviewsSection
+            productId={product.id}
+            productName={product.name}
+            onOpenAuthModal={() => setShowAuthModal(true)}
+          />
+        </section>
+      )}
 
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                <h4 className="font-bold text-slate-900 mb-1">Chính sách Đổi trả 7 ngày</h4>
-                <p>
-                  Đổi mới miễn phí trong 7 ngày đầu nếu máy phát sinh lỗi từ nhà sản xuất. Hỗ trợ gửi trả
-                  hàng tận nơi qua bưu tá.
-                </p>
-              </div>
-
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                <h4 className="font-bold text-slate-900 mb-1">Bảo hành điện tử toàn quốc</h4>
-                <p>
-                  Bảo hành từ 12 - 24 tháng theo số serial và IMEI tại các trung tâm ủy quyền chính hãng
-                  trên toàn quốc.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'reviews' && (
-            <ProductReviewsSection
-              productId={product.id}
-              productName={product.name}
-              onOpenAuthModal={() => setShowAuthModal(true)}
-            />
-          )}
-        </div>
-      </div>
-
-      {/* Mobile Sticky Bottom CTA Bar */}
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 p-3 px-4 shadow-2xl flex items-center justify-between gap-3">
-        <div>
-          <span className="text-[10px] text-slate-400 block font-semibold">Giá sản phẩm</span>
-          <span className="text-base font-black text-blue-700">{formatVND(currentPrice)}</span>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setShowInstallmentModal(true)}
-            className="px-2.5 py-2.5 rounded-xl bg-blue-50 text-blue-700 font-bold text-[11px] border border-blue-200"
-          >
-            Trả góp 0%
-          </button>
-          <button
-            type="button"
-            disabled={isOutOfStock}
-            onClick={handleAddToCart}
-            className="px-3.5 py-2.5 rounded-xl bg-slate-900 disabled:bg-slate-300 text-white font-bold text-xs"
-          >
-            Thêm giỏ
-          </button>
-          <button
-            type="button"
-            disabled={isOutOfStock}
-            onClick={handleBuyNow}
-            className="px-4 py-2.5 rounded-xl bg-blue-600 disabled:bg-slate-300 text-white font-bold text-xs shadow-md shadow-blue-600/30"
-          >
-            Mua ngay
-          </button>
-        </div>
-      </div>
-
-      {/* Recently Viewed Products */}
+      {/* RECENTLY VIEWED PRODUCTS ROW */}
       <RecentlyViewedBar currentProductId={product.id} />
 
-      {/* Installment Calculator Modal */}
+      {/* INSTALLMENT CALCULATOR MODAL */}
       <InstallmentCalculatorModal
         isOpen={showInstallmentModal}
         onClose={() => setShowInstallmentModal(false)}
@@ -959,13 +783,12 @@ export const ProductDetailPage: React.FC = () => {
         productImage={product.thumbnailUrl}
       />
 
-      {/* Keyboard Sound Test Studio Modal */}
+      {/* KEYBOARD SOUND TEST STUDIO MODAL */}
       <KeyboardSoundTestModal
         isOpen={showSoundTestModal}
         onClose={() => setShowSoundTestModal(false)}
         productTitle={product.name}
         onSelectSwitchVariant={(switchName) => {
-          // Tự động tìm và chọn variant khớp với switch vừa thử nếu có
           if (product.variants && product.variants.length > 0) {
             const matched = product.variants.find((v) =>
               v.name.toLowerCase().includes(switchName.toLowerCase()) ||
@@ -973,14 +796,13 @@ export const ProductDetailPage: React.FC = () => {
             );
             if (matched) {
               setSelectedVariant(matched);
-              setToastMessage(`Đã chọn phiên bản: ${matched.name}`);
-              setTimeout(() => setToastMessage(null), 3000);
+              showToast(`Đã chọn phiên bản: ${matched.name}`);
             }
           }
         }}
       />
 
-      {/* Auth Required Popup Modal (Login & Sign Up) */}
+      {/* AUTH REQUIRED POPUP MODAL */}
       <AuthRequiredModal
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}

@@ -11,6 +11,13 @@
     @apply bg-slate-50 text-slate-900 font-sans antialiased selection:bg-brand-500 selection:text-white;
   }
 
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 20;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
+  }
+
   /* Custom sleek scrollbar */
   ::-webkit-scrollbar {
     width: 8px;

@@ -1,0 +1,18 @@
+{
+  "name": "projects/15376973039181247916/screens/300fcc509b6c495891866efe2709acee",
+  "title": "MadK Store - Đăng Nhập, Đăng Ký & Quên Mật Khẩu Chuẩn Bán Lẻ (Desktop)",
+  "screenshot": {
+    "name": "projects/15376973039181247916/screens/300fcc509b6c495891866efe2709acee/fileEntries/screenshot",
+    "downloadUrl": "https://stitch.googleapis.com/v1/projects/15376973039181247916/files/screenshot_0006601344027c8702a9a9a82e0d71d0:download",
+    "mimeType": "image/png"
+  },
+  "htmlCode": {
+    "name": "projects/15376973039181247916/screens/300fcc509b6c495891866efe2709acee/fileEntries/html",
+    "downloadUrl": "https://stitch.googleapis.com/v1/projects/15376973039181247916/files/300fcc509b6c495891866efe2709acee:download",
+    "mimeType": "text/html"
+  },
+  "width": "2560",
+  "height": "2048",
+  "deviceType": "DESKTOP",
+  "screenType": "DESIGN"
+}

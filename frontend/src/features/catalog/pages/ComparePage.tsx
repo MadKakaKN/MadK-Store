@@ -171,38 +171,41 @@ export const ComparePage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <div className="py-4 sm:py-6 px-4 md:px-6 max-w-[1240px] mx-auto space-y-6">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-xs md:text-sm text-slate-400 mb-6">
-        <Link to="/" className="hover:text-blue-600 transition-colors">Trang chủ</Link>
-        <span>/</span>
-        <span className="text-slate-800 font-semibold">So sánh sản phẩm</span>
+      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-gray-500">
+        <Link to="/" className="hover:text-[#1D4ED8] flex items-center gap-1">
+          <span className="material-symbols-outlined text-[14px]">home</span>
+          <span>Trang chủ</span>
+        </Link>
+        <span className="text-gray-300">/</span>
+        <span className="text-[#111827] font-semibold">So sánh sản phẩm</span>
       </nav>
 
       {/* Header & Controls */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 pb-6 border-b border-slate-200">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-[#E5E7EB]">
         <div>
-          <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-slate-900">
-              So sánh thông số kỹ thuật
+          <div className="flex items-center gap-2.5 mb-1">
+            <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[#111827]">
+              So Sánh Chi Tiết Sản Phẩm
             </h1>
-            <span className="px-3 py-1 rounded-full text-xs font-bold bg-cyan-100 text-cyan-800 border border-cyan-200">
+            <span className="px-2.5 py-0.5 rounded text-xs font-semibold bg-blue-100 text-[#1D4ED8]">
               {items.length} / {maxItems} sản phẩm
             </span>
           </div>
-          <p className="text-slate-500 text-sm">
+          <p className="text-gray-500 text-xs">
             Đối chiếu chi tiết cấu hình, giá bán, hiệu năng để chọn sản phẩm phù hợp nhất với nhu cầu của bạn.
           </p>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           {/* Toggle "Chỉ hiện điểm khác biệt" */}
-          <label className="flex items-center gap-2.5 cursor-pointer select-none px-4 py-2 bg-white rounded-2xl border border-slate-200 hover:border-slate-300 transition-all text-xs md:text-sm font-medium text-slate-700 shadow-2xs">
+          <label className="flex items-center gap-2 cursor-pointer select-none px-3 py-1.5 bg-white rounded-lg border border-[#E5E7EB] hover:bg-gray-50 transition-colors text-xs font-medium text-gray-700">
             <input
               type="checkbox"
               checked={diffOnly}
               onChange={(e) => setDiffOnly(e.target.checked)}
-              className="w-4 h-4 rounded text-cyan-600 focus:ring-cyan-500 border-slate-300"
+              className="w-4 h-4 rounded text-[#1D4ED8] focus:ring-0 border-gray-300"
             />
             <span>Chỉ xem điểm khác biệt</span>
           </label>
@@ -211,28 +214,29 @@ export const ComparePage: React.FC = () => {
           <button
             type="button"
             onClick={clearCompare}
-            className="px-4 py-2 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 text-xs md:text-sm font-semibold transition-colors"
+            className="px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold transition-colors flex items-center gap-1"
           >
-            Xóa danh sách
+            <span className="material-symbols-outlined text-[16px]">delete_sweep</span>
+            <span>Xóa danh sách</span>
           </button>
         </div>
       </div>
 
       {loading && (
-        <div className="text-center py-4 text-xs font-medium text-slate-400 flex items-center justify-center gap-2">
-          <div className="w-4 h-4 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin" />
-          Đang tải thông số kỹ thuật chi tiết...
+        <div className="text-center py-3 text-xs font-medium text-gray-500 flex items-center justify-center gap-2">
+          <div className="w-4 h-4 border-2 border-[#1D4ED8] border-t-transparent rounded-full animate-spin" />
+          <span>Đang tải thông số kỹ thuật chi tiết...</span>
         </div>
       )}
 
       {/* Comparison Grid Table */}
-      <div className="overflow-x-auto rounded-3xl border border-slate-200 bg-white shadow-xl">
-        <table className="w-full border-collapse text-left text-sm">
+      <div className="overflow-x-auto rounded-lg border border-[#E5E7EB] bg-white">
+        <table className="w-full border-collapse text-left text-xs sm:text-sm">
           {/* Product Header Row (Cards) */}
           <thead>
-            <tr className="border-b border-slate-200 bg-slate-50/70">
-              <th className="p-4 md:p-6 w-48 min-w-[180px] font-bold text-slate-400 uppercase tracking-wider text-xs align-top border-r border-slate-200">
-                Sản phẩm đối chiếu
+            <tr className="border-b border-[#E5E7EB] bg-[#F9FAFB]">
+              <th className="p-4 w-44 min-w-[160px] font-semibold text-gray-500 uppercase tracking-wider text-[11px] align-top border-r border-[#E5E7EB]">
+                Thông số / Tính năng
               </th>
               {items.map((item) => {
                 const detail = details[item.slug];
@@ -243,22 +247,22 @@ export const ComparePage: React.FC = () => {
                 return (
                   <th
                     key={item.id}
-                    className="p-4 md:p-6 min-w-[240px] max-w-[280px] align-top border-r border-slate-200 last:border-r-0 relative group"
+                    className="p-4 min-w-[220px] max-w-[260px] align-top border-r border-[#E5E7EB] last:border-r-0 relative group"
                   >
                     {/* Nút xóa khỏi so sánh */}
                     <button
                       type="button"
                       onClick={() => removeFromCompare(item.id)}
-                      className="absolute top-4 right-4 w-7 h-7 rounded-full bg-slate-200/80 hover:bg-rose-500 text-slate-600 hover:text-white flex items-center justify-center text-xs transition-all shadow-xs"
+                      className="absolute top-2 right-2 w-6 h-6 rounded bg-gray-100 hover:bg-red-50 text-gray-500 hover:text-red-600 flex items-center justify-center text-xs transition-colors"
                       title="Xóa sản phẩm này"
                     >
-                      ×
+                      ✕
                     </button>
 
                     {/* Image */}
                     <Link
                       to={`/products/${item.slug}`}
-                      className="block aspect-square w-32 h-32 mx-auto mb-4 bg-slate-100 rounded-2xl p-2 overflow-hidden hover:scale-105 transition-transform"
+                      className="block aspect-square w-28 h-28 mx-auto mb-3 bg-white border border-[#E5E7EB] rounded-lg p-1.5 overflow-hidden hover:scale-105 transition-transform"
                     >
                       <img
                         src={item.thumbnailUrl || `/images/products/${item.slug}.png`}
@@ -271,64 +275,55 @@ export const ComparePage: React.FC = () => {
                     </Link>
 
                     {/* Brand & Name */}
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600 block mb-1">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#1D4ED8] block mb-1">
                       {item.brandName || detail?.brand?.name || 'Chính hãng'}
                     </span>
                     <Link
                       to={`/products/${item.slug}`}
-                      className="font-bold text-slate-900 hover:text-blue-600 text-sm md:text-base line-clamp-2 mb-2 transition-colors"
+                      className="font-semibold text-gray-900 hover:text-[#1D4ED8] text-xs sm:text-sm line-clamp-2 mb-2 transition-colors"
                       title={item.name}
                     >
                       {item.name}
                     </Link>
 
                     {/* Price */}
-                    <div className="mb-4">
-                      <div className="text-lg font-extrabold text-blue-600">
+                    <div className="mb-3">
+                      <div className="text-base font-bold text-[#D70018]">
                         {formatVND(item.minPrice || item.basePrice)}
                       </div>
                     </div>
 
                     {/* Actions */}
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-1.5">
                       <button
                         type="button"
                         disabled={isOutOfStock}
                         onClick={() => detail && handleAddToCart(detail)}
-                        className={`w-full py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs ${
+                        className={`w-full h-8 px-3 rounded font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors ${
                           isOutOfStock
-                            ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                             : addedSlug === item.slug
                             ? 'bg-emerald-600 text-white'
-                            : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/20 active:scale-95'
+                            : 'bg-[#1D4ED8] hover:bg-[#1E40AF] text-white'
                         }`}
                       >
                         {addedSlug === item.slug ? (
-                          <>
-                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                              <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            Đã thêm giỏ!
-                          </>
+                          'Đã thêm giỏ!'
                         ) : isOutOfStock ? (
                           'Tạm hết hàng'
                         ) : (
                           <>
-                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <circle cx="9" cy="21" r="1" />
-                              <circle cx="20" cy="21" r="1" />
-                              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                            </svg>
-                            Thêm vào giỏ
+                            <span className="material-symbols-outlined text-[15px]">shopping_cart</span>
+                            <span>Thêm vào giỏ</span>
                           </>
                         )}
                       </button>
 
                       <Link
                         to={`/products/${item.slug}`}
-                        className="w-full py-2 px-3 rounded-xl font-medium text-xs text-center text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors"
+                        className="w-full h-8 px-3 rounded border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-medium flex items-center justify-center transition-colors"
                       >
-                        Xem chi tiết & cấu hình
+                        Xem chi tiết
                       </Link>
                     </div>
                   </th>

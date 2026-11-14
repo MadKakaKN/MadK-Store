@@ -141,7 +141,7 @@ export const PcBuilderPage: React.FC = () => {
   };
 
   return (
-    <div className="py-6 sm:py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8 pb-32">
+    <div className="py-4 sm:py-6 px-4 md:px-6 max-w-[1200px] mx-auto space-y-6 pb-24">
       <SEOHead
         title="Xây Dựng Cấu Hình PC - MadK PC Builder Pro"
         description="Công cụ tự build PC gaming và đồ họa chuyên nghiệp của MadK Store. Tự động tính toán công suất nguồn (Wattage), kiểm tra tương thích phần cứng và in báo giá nhanh chóng."
@@ -151,83 +151,88 @@ export const PcBuilderPage: React.FC = () => {
 
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-20 right-4 sm:right-8 z-50 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700 flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-200">
-          <div className="w-7 h-7 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
-            ✓
-          </div>
-          <span className="text-sm font-semibold">{toastMessage}</span>
+        <div className="fixed top-20 right-4 sm:right-8 z-50 bg-[#111827] text-white px-4 py-3 rounded-lg shadow-xl border border-gray-700 flex items-center gap-2.5 animate-in fade-in slide-in-from-top-4 duration-200">
+          <span className="material-symbols-outlined text-[18px] text-emerald-400">check_circle</span>
+          <span className="text-xs sm:text-sm font-medium">{toastMessage}</span>
         </div>
       )}
 
-      {/* Hero Banner Header */}
-      <div className="rounded-3.5xl bg-gradient-to-r from-slate-950 via-slate-900 to-blue-950 text-white p-6 sm:p-10 border border-slate-800 shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none" />
+      {/* Breadcrumb & Page Title Strip (Screen 8 Retail Standard) */}
+      <div className="bg-white border border-[#E5E7EB] rounded-lg p-4 sm:p-5">
+        <nav className="flex items-center text-xs text-gray-500 gap-2 mb-2">
+          <a className="hover:text-[#1D4ED8] flex items-center gap-1" href="/">
+            <span className="material-symbols-outlined text-[14px]">home</span>
+            <span>Trang chủ</span>
+          </a>
+          <span className="text-gray-300">/</span>
+          <span className="text-gray-600">Tiện ích</span>
+          <span className="text-gray-300">/</span>
+          <span className="text-[#111827] font-semibold">Xây dựng cấu hình PC</span>
+        </nav>
 
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 py-1.5 px-3.5 rounded-full text-xs font-bold tracking-wider uppercase bg-blue-500/15 text-blue-300 border border-blue-400/30">
-              <span>🖥️</span>
-              <span>MADK PC BUILDER PRO 2026</span>
-            </div>
-            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
-              Xây dựng cấu hình máy tính{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">
-                theo ý bạn
-              </span>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[#111827] flex items-center gap-2">
+              <span className="material-symbols-outlined text-[#1D4ED8] text-2xl">build</span>
+              <span>Xây Dựng Cấu Hình PC &amp; Kiểm Tra Tương Thích Tự Động</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Tự tay chọn từng linh kiện chính hãng, bộ đo công suất nguồn tự động (TDP Watt), cảnh báo tương thích thông minh và xuất bảng báo giá chuẩn chỉ với 1 click.
+            <p className="text-xs text-gray-600 mt-1">
+              Thuật toán tự động quét socket CPU, chuẩn RAM, chiều dài VGA và công suất PSU đề xuất theo thời gian thực.
             </p>
           </div>
 
-          {/* Quick preset selector buttons */}
-          <div className="flex flex-col gap-2.5 flex-shrink-0">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-              Hoặc chọn nhanh cấu hình mẫu:
-            </span>
-            <div className="flex flex-wrap gap-2">
-              {PREBUILT_CONFIGS.map((preset) => (
-                <button
-                  key={preset.id}
-                  type="button"
-                  onClick={() => handleApplyPreset(preset)}
-                  className="px-4 py-2.5 rounded-2xl bg-slate-800/90 hover:bg-blue-600 text-slate-200 hover:text-white border border-slate-700/80 text-xs font-bold transition-all shadow-sm hover:scale-102 flex items-center gap-2"
-                >
-                  <span>⚡</span>
-                  <span>{preset.name}</span>
-                  <span className="text-[10px] bg-blue-500/30 px-1.5 py-0.5 rounded text-blue-200">
-                    {formatVND(preset.estimatedPrice)}
-                  </span>
-                </button>
-              ))}
-            </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleReset}
+              className="h-8 px-3 bg-white border border-[#E5E7EB] hover:bg-gray-50 rounded-lg text-xs font-semibold text-gray-700 flex items-center gap-1.5 transition-colors"
+            >
+              <span className="material-symbols-outlined text-[16px] text-gray-500">restart_alt</span>
+              <span>Làm mới cấu hình</span>
+            </button>
           </div>
+        </div>
+
+        {/* Quick preset selector pills */}
+        <div className="mt-3.5 pt-3 border-t border-[#F3F4F6] flex flex-wrap items-center gap-2">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-gray-500 mr-1 flex items-center gap-1">
+            <span className="material-symbols-outlined text-[15px] text-amber-500">bolt</span>
+            <span>Cấu hình mẫu:</span>
+          </span>
+          {PREBUILT_CONFIGS.map((preset) => (
+            <button
+              key={preset.id}
+              type="button"
+              onClick={() => handleApplyPreset(preset)}
+              className="px-3 py-1 rounded text-xs font-medium bg-[#F3F4F6] hover:bg-[#EFF6FF] text-gray-700 hover:text-[#1D4ED8] border border-[#E5E7EB] hover:border-[#1D4ED8] transition-colors flex items-center gap-1.5"
+            >
+              <span>{preset.name}</span>
+              <span className="text-[10px] font-bold text-[#D70018]">
+                {formatVND(preset.estimatedPrice)}
+              </span>
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Main Grid: Component Slots on Left & Calculator on Right */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Component Slots List (8 cols) */}
-        <div className="lg:col-span-8 space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-200">
-            <h2 className="text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
-              <span>Danh sách linh kiện máy tính</span>
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 font-bold">
-                {Object.keys(selectedParts).length} / {COMPONENT_SLOTS.length} mục
+        <div className="lg:col-span-8 bg-white border border-[#E5E7EB] rounded-lg overflow-hidden">
+          {/* Header Bảng */}
+          <div className="bg-[#F9FAFB] px-4 py-3 border-b border-[#E5E7EB] flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-xs uppercase tracking-wider text-gray-700 font-semibold">
+                Danh mục {COMPONENT_SLOTS.length} linh kiện lắp ráp
               </span>
-            </h2>
-
-            <button
-              type="button"
-              onClick={handleReset}
-              className="text-xs font-semibold text-rose-500 hover:text-rose-700 hover:underline flex items-center gap-1"
-            >
-              <span>🗑️</span>
-              <span>Làm mới cấu hình</span>
-            </button>
+              <span className="bg-blue-100 text-[#1D4ED8] text-[11px] px-2 py-0.5 rounded font-semibold">
+                {Object.keys(selectedParts).length}/{COMPONENT_SLOTS.length} Đã chọn
+              </span>
+            </div>
+            <span className="text-xs text-gray-500 hidden sm:inline">Chuẩn phần cứng ATX / PCIe 4.0 &amp; 5.0</span>
           </div>
 
-          <div className="space-y-3">
+          <div className="p-3 space-y-2.5">
             {COMPONENT_SLOTS.map((slot) => (
               <ComponentSlotRow
                 key={slot.id}
@@ -250,28 +255,28 @@ export const PcBuilderPage: React.FC = () => {
           <GamingFpsPredictorCard selectedParts={selectedParts} />
 
           {/* Pricing & 1-Click Order Summary Card */}
-          <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-card space-y-5">
+          <div className="bg-white rounded-lg p-5 border border-[#E5E7EB] space-y-4">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">
-                Chi phí dự tính
+              <span className="text-xs font-bold uppercase tracking-wider text-gray-500 block mb-1">
+                Chi phí dự tính ({totalPartsCount} linh kiện)
               </span>
-              <div className="text-3xl font-black text-blue-700 tracking-tight">
+              <div className="text-2xl font-bold text-[#D70018] tracking-tight">
                 {formatVND(totalPrice)}
               </div>
-              <p className="text-xs text-slate-500 mt-1">
-                Đã bao gồm VAT, công ráp máy & cài đặt hoàn toàn miễn phí.
+              <p className="text-[11px] text-gray-500 mt-1">
+                Đã bao gồm VAT 10%, công lắp ráp và cài đặt Windows/Driver chuẩn bán lẻ hoàn toàn miễn phí.
               </p>
             </div>
 
-            <div className="space-y-2.5 pt-2 border-t border-slate-100">
+            <div className="space-y-2 pt-3 border-t border-[#E5E7EB]">
               {/* Primary CTA: Add All to Cart */}
               <button
                 type="button"
                 disabled={isAddingCart || totalPartsCount === 0}
                 onClick={handleAddAllToCart}
-                className="w-full py-4 rounded-2.5xl font-black text-sm text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-500 hover:to-indigo-500 disabled:bg-slate-300 disabled:from-slate-300 disabled:to-slate-300 shadow-xl shadow-blue-600/25 transition-all hover:scale-102 active:scale-98 flex items-center justify-center gap-2"
+                className="w-full h-11 rounded-lg font-semibold text-xs sm:text-sm text-white bg-[#1D4ED8] hover:bg-[#1E40AF] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
               >
-                <span>🛒</span>
+                <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
                 <span>{isAddingCart ? 'Đang thêm linh kiện...' : 'Thêm cả bộ vào giỏ hàng'}</span>
               </button>
 
@@ -280,9 +285,9 @@ export const PcBuilderPage: React.FC = () => {
                 type="button"
                 disabled={totalPartsCount === 0}
                 onClick={() => setShowPrintView(true)}
-                className="w-full py-3 rounded-2xl font-bold text-xs text-slate-700 bg-slate-100 hover:bg-slate-200 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                className="w-full h-9 rounded-lg font-semibold text-xs text-gray-700 bg-gray-100 hover:bg-gray-200 disabled:opacity-50 transition-colors flex items-center justify-center gap-1.5"
               >
-                <span>🖨️</span>
+                <span className="material-symbols-outlined text-[16px]">print</span>
                 <span>In bảng báo giá / Lưu PDF</span>
               </button>
 
@@ -290,20 +295,20 @@ export const PcBuilderPage: React.FC = () => {
               <button
                 type="button"
                 onClick={handleConsultAi}
-                className="w-full py-3 rounded-2xl font-bold text-xs text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition-colors flex items-center justify-center gap-2"
+                className="w-full h-9 rounded-lg font-semibold text-xs text-[#1D4ED8] bg-[#EFF6FF] hover:bg-[#DBEAFE] border border-blue-200 transition-colors flex items-center justify-center gap-1.5"
               >
-                <span>✨</span>
-                <span>Hỏi MadK Neural AI chấm điểm cấu hình</span>
+                <span className="material-symbols-outlined text-[16px]">smart_toy</span>
+                <span>Hỏi MadK AI kiểm tra nghẽn cổ chai</span>
               </button>
 
               {/* Share link */}
               <button
                 type="button"
                 onClick={handleShareConfig}
-                className="w-full py-2.5 rounded-2xl font-medium text-xs text-slate-500 hover:text-slate-800 transition-colors flex items-center justify-center gap-1.5"
+                className="w-full py-1.5 rounded-lg font-medium text-xs text-gray-500 hover:text-gray-900 transition-colors flex items-center justify-center gap-1"
               >
-                <span>🔗</span>
-                <span>Sao chép liên kết chia sẻ</span>
+                <span className="material-symbols-outlined text-[14px]">share</span>
+                <span>Sao chép liên kết cấu hình</span>
               </button>
             </div>
           </div>

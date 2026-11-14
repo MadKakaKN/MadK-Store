@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-[#F3F4F6]" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Đăng nhập &amp; Tài khoản - MadK Store</title>
+<!-- Google Fonts: Inter & Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              DEFAULT: "#1D4ED8",
+              hover: "#1E40AF"
+            },
+            price: "#D70018",
+            dark: "#111827"
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"]
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            sm: "0.25rem",
+            md: "0.25rem",
+            lg: "0.5rem"
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="min-h-full bg-[#F3F4F6] text-gray-900 font-sans antialiased flex flex-col justify-between">
+<!-- ================= TOP UTILITY STRIP ================= -->
+<div class="bg-dark text-gray-300 text-xs border-b border-gray-800">
+<div class="max-w-7xl mx-auto px-4 h-8 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<span>Hệ thống phân phối công nghệ số 1 Việt Nam</span>
+<span class="hidden md:inline text-gray-500">|</span>
+<span class="hidden md:inline text-gray-300">Bảo mật giao dịch an toàn 100%</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-1.5 text-gray-300">
+<span class="material-symbols-outlined text-[15px]">call</span>
+<span>Hotline: <strong class="text-white font-semibold">1800 6868</strong> (Miễn phí)</span>
+</div>
+<a class="hover:text-white transition-colors" href="#">Tra cứu đơn hàng</a>
+<a class="hover:text-white transition-colors" href="#">Hệ thống showroom</a>
+</div>
+</div>
+</div>
+<!-- ================= MAIN HEADER ================= -->
+<header class="bg-white border-b border-gray-200 sticky top-0 z-40">
+<div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-6">
+<!-- Brand Logo -->
+<a class="flex items-center gap-2.5 shrink-0" href="#">
+<div class="w-8 h-8 rounded bg-brand flex items-center justify-center text-white font-bold text-base shadow-none">
+<span class="material-symbols-outlined text-[20px]">view_in_ar</span>
+</div>
+<div class="flex flex-col">
+<span class="text-lg font-bold text-gray-950 tracking-tight leading-tight">MadK Store</span>
+<span class="text-[10px] text-gray-500 uppercase font-semibold tracking-wider -mt-0.5">3D Retail Hardware</span>
+</div>
+</a>
+<!-- Full-width Search Bar -->
+<div class="flex-1 max-w-2xl mx-4 hidden sm:block">
+<form class="relative flex items-center" onsubmit="event.preventDefault();">
+<input class="w-full h-10 pl-3.5 pr-10 text-sm bg-gray-50 border border-gray-300 rounded focus:bg-white focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-colors" placeholder="Bạn cần tìm điện thoại, laptop, linh kiện PC..." type="text"/>
+<button class="absolute right-1 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-brand" type="submit">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</button>
+</form>
+</div>
+<!-- Action Items -->
+<div class="flex items-center gap-4 shrink-0">
+<a class="hidden lg:flex items-center gap-2 text-xs text-gray-700 hover:text-brand transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px] text-gray-500">storefront</span>
+<span class="text-left font-medium">Cửa hàng<br/><span class="text-gray-400 font-normal">Gần bạn</span></span>
+</a>
+<a class="flex items-center gap-2 text-xs text-gray-700 hover:text-brand transition-colors" href="#">
+<div class="relative">
+<span class="material-symbols-outlined text-[24px] text-gray-700">shopping_cart</span>
+<span class="absolute -top-1.5 -right-2 bg-price text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full min-w-[18px] text-center">3</span>
+</div>
+<span class="hidden md:inline font-medium text-left">Giỏ hàng<br/><span class="text-gray-400 font-normal">3 sản phẩm</span></span>
+</a>
+</div>
+</div>
+</header>
+<!-- ================= CENTERED 400PX AUTH CONTAINER ================= -->
+<main class="flex-1 flex items-center justify-center py-10 px-4">
+<div class="w-full max-w-[400px] bg-white border border-gray-200 rounded-lg p-8 shadow-none">
+<!-- Top Flat Border Tabs -->
+<div class="flex border-b border-gray-200 mb-6">
+<button class="flex-1 pb-3 text-sm font-semibold text-brand border-b-2 border-brand text-center transition-colors" id="tab-login" onclick="switchAuthTab('login')">
+          Đăng nhập
+        </button>
+<button class="flex-1 pb-3 text-sm font-semibold text-gray-500 hover:text-gray-800 border-b-2 border-transparent text-center transition-colors" id="tab-register" onclick="switchAuthTab('register')">
+          Đăng ký
+        </button>
+<button class="flex-1 pb-3 text-sm font-semibold text-gray-500 hover:text-gray-800 border-b-2 border-transparent text-center transition-colors" id="tab-forgot" onclick="switchAuthTab('forgot')">
+          Quên mật khẩu
+        </button>
+</div>
+<!-- Social Login Block (Google) -->
+<div class="space-y-4" id="social-auth-block">
+<button class="w-full h-10 px-4 bg-white border border-gray-300 rounded text-sm font-medium text-gray-700 hover:bg-gray-50 active:bg-gray-100 flex items-center justify-center gap-2.5 transition-colors" type="button">
+<svg class="w-4 h-4 shrink-0" viewbox="0 0 24 24">
+<path d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.15z" fill="#4285F4"></path>
+<path d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.15C3.25 21.37 7.31 24 12 24z" fill="#34A853"></path>
+<path d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.26C.46 8.17 0 9.99 0 12s.46 3.83 1.26 5.42l4.02-3.15z" fill="#FBBC05"></path>
+<path d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.25 2.63 1.26 6.58l4.02 3.15c.95-2.83 3.6-4.98 6.72-4.98z" fill="#EA4335"></path>
+</svg>
+<span>Đăng nhập với Google</span>
+</button>
+<!-- Divider -->
+<div class="relative py-2 flex items-center justify-center">
+<div class="w-full border-t border-gray-200"></div>
+<span class="bg-white px-2.5 text-xs text-gray-500 absolute">
+            hoặc đăng nhập bằng số điện thoại / email
+          </span>
+</div>
+</div>
+<!-- ================= 1. FORM ĐĂNG NHẬP ================= -->
+<form class="space-y-4" id="form-login" onsubmit="event.preventDefault();">
+<div>
+<label class="block text-xs font-semibold text-gray-700 mb-1">
+            Email hoặc Số điện thoại <span class="text-price">*</span>
+</label>
+<input class="w-full h-9 px-3 text-sm bg-white border border-gray-300 rounded focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-colors" placeholder="Nhập email hoặc số điện thoại" type="text" value="nam.nguyen@techcorp.vn"/>
+</div>
+<div>
+<div class="flex items-center justify-between mb-1">
+<label class="block text-xs font-semibold text-gray-700">
+              Mật khẩu <span class="text-price">*</span>
+</label>
+</div>
+<div class="relative">
+<input class="w-full h-9 pl-3 pr-9 text-sm bg-white border border-gray-300 rounded focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-colors" id="login-pass" placeholder="Nhập mật khẩu" type="password" value="TechMadK2025!"/>
+<button class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" onclick="togglePassVisibility('login-pass', this)" type="button">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+</div>
+</div>
+<div class="flex items-center justify-between pt-0.5">
+<label class="flex items-center gap-2 cursor-pointer">
+<input checked="" class="w-4 h-4 rounded text-brand focus:ring-0 border-gray-300" type="checkbox"/>
+<span class="text-xs text-gray-600">Ghi nhớ đăng nhập</span>
+</label>
+<button class="text-xs text-brand hover:underline font-medium" onclick="switchAuthTab('forgot')" type="button">
+            Quên mật khẩu?
+          </button>
+</div>
+<button class="w-full h-10 mt-1 bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded transition-colors" type="submit">
+          Đăng nhập
+        </button>
+<p class="text-center text-xs text-gray-500 pt-2">
+          Chưa có tài khoản? 
+          <button class="text-brand font-medium hover:underline" onclick="switchAuthTab('register')" type="button">
+            Đăng ký ngay
+          </button>
+</p>
+</form>
+<!-- ================= 2. FORM ĐĂNG KÝ ================= -->
+<form class="space-y-4 hidden" id="form-register" onsubmit="event.preventDefault();">
+<div>
+<label class="block text-xs font-semibold text-gray-700 mb-1">Họ và tên <span class="text-price">*</span></label>
+<input class="w-full h-9 px-3 text-sm bg-white border border-gray-300 rounded focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-colors" placeholder="Nguyễn Văn A" type="text"/>
+</div>
+<div>
+<label class="block text-xs font-semibold text-gray-700 mb-1">Số điện thoại <span class="text-price">*</span></label>
+<input class="w-full h-9 px-3 text-sm bg-white border border-gray-300 rounded focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-colors" placeholder="0912 345 678" type="tel"/>
+</div>
+<div>
+<label class="block text-xs font-semibold text-gray-700 mb-1">Email <span class="text-price">*</span></label>
+<input class="w-full h-9 px-3 text-sm bg-white border border-gray-300 rounded focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-colors" placeholder="name@example.com" type="email"/>
+</div>
+<div>
+<label class="block text-xs font-semibold text-gray-700 mb-1">Mật khẩu <span class="text-price">*</span></label>
+<div class="relative">
+<input class="w-full h-9 pl-3 pr-9 text-sm bg-white border border-gray-300 rounded focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-colors" id="reg-pass" placeholder="Tối thiểu 6 ký tự" type="password"/>
+<button class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" onclick="togglePassVisibility('reg-pass', this)" type="button">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+</div>
+</div>
+<div>
+<label class="block text-xs font-semibold text-gray-700 mb-1">Mã giới thiệu (không bắt buộc)</label>
+<input class="w-full h-9 px-3 text-sm bg-white border border-gray-300 rounded focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-colors" placeholder="MADK-VIP" type="text"/>
+</div>
+<label class="flex items-start gap-2 cursor-pointer pt-0.5">
+<input checked="" class="w-4 h-4 mt-0.5 rounded text-brand focus:ring-0 border-gray-300" type="checkbox"/>
+<span class="text-xs text-gray-600">
+            Tôi đồng ý với <a class="text-brand hover:underline" href="#">Điều khoản dịch vụ</a> và <a class="text-brand hover:underline" href="#">Chính sách bảo mật</a>
+</span>
+</label>
+<button class="w-full h-10 mt-1 bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded transition-colors" type="submit">
+          Đăng ký tài khoản
+        </button>
+<p class="text-center text-xs text-gray-500 pt-2">
+          Đã có tài khoản? 
+          <button class="text-brand font-medium hover:underline" onclick="switchAuthTab('login')" type="button">
+            Đăng nhập ngay
+          </button>
+</p>
+</form>
+<!-- ================= 3. FORM QUÊN MẬT KHẨU ================= -->
+<form class="space-y-4 hidden" id="form-forgot" onsubmit="event.preventDefault();">
+<div class="p-3 bg-gray-50 border border-gray-200 rounded text-xs text-gray-600">
+          Nhập số điện thoại hoặc email đã đăng ký. Hệ thống sẽ gửi mã xác thực (OTP via SMS) để thiết lập lại mật khẩu của bạn.
+        </div>
+<div>
+<label class="block text-xs font-semibold text-gray-700 mb-1">
+            Số điện thoại hoặc Email <span class="text-price">*</span>
+</label>
+<input class="w-full h-9 px-3 text-sm bg-white border border-gray-300 rounded focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-colors" placeholder="090xxxxxxx hoặc email@example.com" type="text"/>
+</div>
+<button class="w-full h-10 bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded transition-colors" type="submit">
+          Gửi mã OTP (SMS)
+        </button>
+<div class="text-center pt-2">
+<button class="text-xs text-brand font-medium hover:underline inline-flex items-center gap-1" onclick="switchAuthTab('login')" type="button">
+<span class="material-symbols-outlined text-[14px]">arrow_back</span>
+<span>Quay lại Đăng nhập</span>
+</button>
+</div>
+</form>
+</div>
+</main>
+<!-- ================= STANDARD RETAIL FOOTER ================= -->
+<footer class="bg-dark text-gray-300 text-xs border-t border-gray-800 pt-10 pb-8 mt-12">
+<div class="max-w-7xl mx-auto px-4">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 pb-8 border-b border-gray-800">
+<!-- Col 1 -->
+<div>
+<h4 class="text-white text-sm font-semibold uppercase mb-3">Về MadK Store</h4>
+<ul class="space-y-2">
+<li><a class="hover:text-white transition-colors" href="#">Giới thiệu công ty</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Hệ thống showroom (32 chi nhánh)</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Tuyển dụng nhân tài</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Chính sách bảo mật thông tin</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Quy chế hoạt động sàn TMĐT</a></li>
+</ul>
+</div>
+<!-- Col 2 -->
+<div>
+<h4 class="text-white text-sm font-semibold uppercase mb-3">Hỗ trợ khách hàng</h4>
+<ul class="space-y-2">
+<li><a class="hover:text-white transition-colors" href="#">Hướng dẫn mua hàng online</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Chính sách bảo hành 24 tháng</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Chính sách đổi trả 1 - 1</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Chính sách vận chuyển &amp; giao hàng</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Hướng dẫn trả góp 0%</a></li>
+</ul>
+</div>
+<!-- Col 3 -->
+<div>
+<h4 class="text-white text-sm font-semibold uppercase mb-3">Tổng đài hỗ trợ</h4>
+<ul class="space-y-2">
+<li>Gọi mua hàng: <strong class="text-white">1800 6868</strong> (8:00 - 21:30)</li>
+<li>Kỹ thuật &amp; Bảo hành: <strong class="text-white">1800 6869</strong> (8:00 - 21:00)</li>
+<li>Khiếu nại dịch vụ: <strong class="text-white">1800 6870</strong> (8:00 - 21:00)</li>
+<li>Email: <a class="text-brand hover:underline" href="mailto:cskh@madk.vn">cskh@madk.vn</a></li>
+</ul>
+</div>
+<!-- Col 4 -->
+<div>
+<h4 class="text-white text-sm font-semibold uppercase mb-3">Phương thức thanh toán</h4>
+<div class="flex flex-wrap gap-2 text-[11px] text-gray-400 mb-4">
+<span class="px-2 py-1 bg-gray-800 rounded border border-gray-700">Tiền mặt (COD)</span>
+<span class="px-2 py-1 bg-gray-800 rounded border border-gray-700">Chuyển khoản</span>
+<span class="px-2 py-1 bg-gray-800 rounded border border-gray-700">Visa / Mastercard</span>
+<span class="px-2 py-1 bg-gray-800 rounded border border-gray-700">VNPAY QR</span>
+<span class="px-2 py-1 bg-gray-800 rounded border border-gray-700">Trả góp 0%</span>
+</div>
+<div class="pt-2">
+<div class="border border-gray-700 p-2 rounded text-center text-[11px] text-gray-400">
+              ĐÃ THÔNG BÁO BỘ CÔNG THƯƠNG
+            </div>
+</div>
+</div>
+</div>
+<!-- Bottom notice text -->
+<div class="pt-6 flex flex-col md:flex-row items-center justify-between text-gray-400 text-[11px] gap-2">
+<p>© 2025 Công ty Cổ phần Bán lẻ Kỹ thuật số MadK Store Vietnam. Giấy phép ĐKKD số 0102030405 do Sở KH&amp;ĐT TP.HCM cấp.</p>
+<p>Bảo lưu mọi quyền. Thiết kế theo tiêu chuẩn Flat Retail UI.</p>
+</div>
+</div>
+</footer>
+<!-- ================= TAB SWITCHING JAVASCRIPT ================= -->
+<script>
+    function switchAuthTab(state) {
+      const formLogin = document.getElementById('form-login');
+      const formRegister = document.getElementById('form-register');
+      const formForgot = document.getElementById('form-forgot');
+      const socialBlock = document.getElementById('social-auth-block');
+
+      const tabLogin = document.getElementById('tab-login');
+      const tabRegister = document.getElementById('tab-register');
+      const tabForgot = document.getElementById('tab-forgot');
+
+      const activeClass = "flex-1 pb-3 text-sm font-semibold text-brand border-b-2 border-brand text-center transition-colors";
+      const inactiveClass = "flex-1 pb-3 text-sm font-semibold text-gray-500 hover:text-gray-800 border-b-2 border-transparent text-center transition-colors";
+
+      tabLogin.className = inactiveClass;
+      tabRegister.className = inactiveClass;
+      tabForgot.className = inactiveClass;
+
+      formLogin.classList.add('hidden');
+      formRegister.classList.add('hidden');
+      formForgot.classList.add('hidden');
+
+      if (state === 'login') {
+        tabLogin.className = activeClass;
+        formLogin.classList.remove('hidden');
+        socialBlock.classList.remove('hidden');
+      } else if (state === 'register') {
+        tabRegister.className = activeClass;
+        formRegister.classList.remove('hidden');
+        socialBlock.classList.remove('hidden');
+      } else if (state === 'forgot') {
+        tabForgot.className = activeClass;
+        formForgot.classList.remove('hidden');
+        socialBlock.classList.add('hidden');
+      }
+    }
+
+    function togglePassVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const icon = btn.querySelector('.material-symbols-outlined');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.innerText = 'visibility_off';
+      } else {
+        input.type = 'password';
+        icon.innerText = 'visibility';
+      }
+    }
+  </script>
+</body></html>

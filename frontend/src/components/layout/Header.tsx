@@ -62,335 +62,283 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/85 border-b border-slate-200/70 shadow-2xs transition-all">
-      {/* Top micro banner */}
-      <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-blue-950 text-slate-300 text-[11px] sm:text-xs py-1.5 px-4 text-center font-medium tracking-wide">
-        <div className="max-w-7xl 2xl:max-w-[1536px] mx-auto flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2 truncate">
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-300 font-semibold text-[10px]">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
-              NEW TECH
-            </span>
-            <span className="truncate">
-              Miễn phí giao hàng GHN cho đơn từ 1.000.000₫ &bull; Trải nghiệm tương tác mô hình 3D xoay 360°
-            </span>
+    <>
+      {/* TOP ANNOUNCEMENT BAR (Screen 4 Retail Standard) */}
+      <div className="bg-[#111827] text-white text-xs border-b border-[#374151]">
+        <div className="max-w-[1240px] mx-auto px-4 h-8 flex items-center justify-between">
+          <div className="flex items-center gap-2 text-gray-300 text-xs">
+            <span className="material-symbols-outlined text-sm text-gray-400">local_shipping</span>
+            <span>Miễn phí giao hàng GHN cho đơn từ 1.000.000₫ &bull; Trải nghiệm tương tác 3D 360°</span>
           </div>
 
-          <div className="hidden sm:flex items-center gap-4 text-xs font-semibold text-slate-300 flex-shrink-0">
-            <Link to="/pc-builder" className="hover:text-blue-400 flex items-center gap-1 transition-colors">
-              <span>🖥️</span>
+          <div className="hidden sm:flex items-center gap-4 text-xs text-gray-300">
+            <Link to="/pc-builder" className="hover:text-white flex items-center gap-1 transition-colors">
+              <span className="material-symbols-outlined text-sm text-gray-400">construction</span>
               <span>Xây dựng PC</span>
             </Link>
-            <span className="text-slate-600">|</span>
-            <Link to="/tracking" className="hover:text-blue-400 flex items-center gap-1 transition-colors">
-              <span>🔍</span>
+            <span className="text-gray-600">|</span>
+            <Link to="/tracking" className="hover:text-white flex items-center gap-1 transition-colors">
+              <span className="material-symbols-outlined text-sm text-gray-400">receipt_long</span>
               <span>Tra cứu đơn & Bảo hành</span>
             </Link>
+            <span className="text-gray-600">|</span>
+            <a href="tel:18006868" className="hover:text-white flex items-center gap-1 transition-colors">
+              <span className="material-symbols-outlined text-sm text-gray-400">call</span>
+              <span>Hotline: <strong className="text-[#D70018] font-semibold">1800 6868</strong> <span className="text-gray-400 font-normal">(Miễn phí)</span></span>
+            </a>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20 gap-3 sm:gap-6">
-          {/* Brand Logo */}
-          <div className="flex items-center gap-4 flex-shrink-0">
-            <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-blue-500 text-white flex items-center justify-center shadow-md shadow-blue-600/25 group-hover:scale-105 group-hover:shadow-blue-600/40 transition-all duration-300 relative overflow-hidden">
-                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <svg className="w-6 h-6 transform -rotate-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                  <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                  <line x1="12" y1="22.08" x2="12" y2="12" />
-                </svg>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-extrabold text-xl sm:text-2xl tracking-tight text-slate-900 leading-none">
-                  MadK<span className="text-gradient-sapphire font-black">Store</span>
-                </span>
-                <span className="text-[10px] font-semibold tracking-widest text-slate-400 uppercase mt-1 flex items-center gap-1">
-                  <span>3D TECH CATALOG</span>
-                  <span className="w-1 h-1 rounded-full bg-blue-500"></span>
-                </span>
-              </div>
-            </Link>
-          </div>
-
-          {/* Desktop Category Menu trigger */}
-          <div className="hidden lg:block relative flex-shrink-0" ref={dropdownRef}>
+      {/* MAIN HEADER (Screen 4 Retail Standard) */}
+      <header className="bg-white border-b border-[#E5E7EB] sticky top-0 z-40">
+        <div className="max-w-[1240px] mx-auto px-4 py-2.5 flex items-center justify-between gap-3">
+          {/* Logo & Category Button */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {/* Mobile Hamburger Button */}
             <button
               type="button"
-              onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
-              className={`px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold flex items-center gap-2.5 transition-all duration-200 border ${
-                categoryDropdownOpen
-                  ? 'bg-blue-50/80 text-blue-700 border-blue-200/80 shadow-xs'
-                  : 'bg-slate-50 hover:bg-slate-100/90 text-slate-700 border-slate-200/70 hover:border-slate-300'
-              }`}
+              onClick={() => setMobileMenuOpen(true)}
+              className="lg:hidden p-2 text-gray-700 hover:text-[#1D4ED8] hover:bg-gray-100 rounded-md"
+              aria-label="Mở menu"
             >
-              <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" />
-              </svg>
-              <span>Danh mục</span>
-              <svg
-                className={`w-3.5 h-3.5 transition-transform duration-200 ${categoryDropdownOpen ? 'rotate-180 text-blue-600' : 'text-slate-400'}`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-              </svg>
+              <span className="material-symbols-outlined text-2xl">menu</span>
             </button>
 
-            {/* Dropdown mega menu */}
-            {categoryDropdownOpen && (
-              <div className="absolute top-full left-0 mt-2.5 w-80 backdrop-blur-2xl bg-white/95 rounded-3xl shadow-2xl shadow-slate-900/10 border border-slate-200/80 p-3 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-3 py-1.5 mb-1 flex items-center justify-between">
-                  <span>Khám phá công nghệ</span>
-                  <span className="text-[10px] text-blue-600 font-semibold lowercase">3D catalog</span>
-                </div>
-                <div className="space-y-1">
-                  <Link
-                    to="/categories"
-                    onClick={() => setCategoryDropdownOpen(false)}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold text-blue-600 hover:bg-blue-50 transition-colors"
-                  >
-                    <span className="w-7 h-7 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xs">⚡</span>
-                    <span>Tất cả sản phẩm</span>
-                  </Link>
-                  {categories.map((cat) => (
-                    <div key={cat.id} className="group/item relative">
-                      <Link
-                        to={`/categories/${cat.slug}`}
-                        onClick={() => setCategoryDropdownOpen(false)}
-                        className="flex items-center justify-between px-3 py-2.5 rounded-2xl text-xs sm:text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors"
-                      >
-                        <div className="flex items-center gap-2.5 truncate">
-                          {cat.iconUrl ? (
-                            <img src={cat.iconUrl} alt="" className="w-5 h-5 rounded-lg object-cover" />
-                          ) : (
-                            <span className="w-5 h-5 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center text-xs">📦</span>
-                          )}
-                          <span className="truncate">{cat.name}</span>
-                        </div>
-                        {cat.children && cat.children.length > 0 && (
-                          <span className="text-xs text-slate-400 group-hover/item:text-blue-600 transition-colors">&rsaquo;</span>
-                        )}
-                      </Link>
-
-                      {/* Sub-categories tooltip/panel */}
-                      {cat.children && cat.children.length > 0 && (
-                        <div className="hidden group-hover/item:block absolute left-full top-0 ml-2 w-64 backdrop-blur-2xl bg-white/95 rounded-3xl shadow-xl shadow-slate-900/10 border border-slate-200/80 p-3 z-50">
-                          <div className="text-xs font-bold text-slate-400 px-3 py-1 mb-1">
-                            {cat.name}
-                          </div>
-                          {cat.children.map((sub) => (
-                            <Link
-                              key={sub.id}
-                              to={`/categories/${sub.slug}`}
-                              onClick={() => setCategoryDropdownOpen(false)}
-                              className="block px-3 py-2 rounded-xl text-xs sm:text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
-                            >
-                              {sub.name}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
+            <Link to="/" className="flex items-center gap-2 group">
+              <div className="w-8 h-8 bg-[#1D4ED8] rounded flex items-center justify-center text-white font-bold text-base shadow-sm group-hover:bg-[#1E40AF] transition-colors">
+                M
               </div>
-            )}
+              <span className="text-xl font-bold leading-tight text-[#111827] tracking-tight group-hover:text-[#1D4ED8] transition-colors">
+                MadK Store
+              </span>
+            </Link>
+
+            {/* Desktop Category Dropdown Trigger */}
+            <div className="hidden lg:block relative ml-2" ref={dropdownRef}>
+              <button
+                type="button"
+                onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded text-xs font-semibold border transition-colors ${
+                  categoryDropdownOpen
+                    ? 'bg-[#EFF6FF] text-[#1D4ED8] border-[#BFDBFE]'
+                    : 'bg-[#F3F4F6] hover:bg-[#E5E7EB] text-[#111827] border-[#E5E7EB]'
+                }`}
+              >
+                <span className="material-symbols-outlined text-base text-gray-700">menu</span>
+                <span>Danh mục</span>
+                <span className={`material-symbols-outlined text-sm text-gray-400 transition-transform ${categoryDropdownOpen ? 'rotate-180' : ''}`}>
+                  expand_more
+                </span>
+              </button>
+
+              {/* Flyout Mega Menu */}
+              {categoryDropdownOpen && (
+                <div className="absolute top-full left-0 mt-2 w-72 bg-white border border-[#E5E7EB] rounded-lg shadow-xl p-2 z-50 divide-y divide-[#F3F4F6]">
+                  <div className="pb-1.5">
+                    <Link
+                      to="/categories"
+                      onClick={() => setCategoryDropdownOpen(false)}
+                      className="flex items-center gap-2.5 px-3 py-2 rounded text-xs font-semibold text-[#1D4ED8] hover:bg-[#EFF6FF] transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-base">apps</span>
+                      <span>Tất cả sản phẩm & Danh mục</span>
+                    </Link>
+                  </div>
+                  <div className="pt-1.5 space-y-0.5">
+                    {categories.map((cat) => (
+                      <div key={cat.id} className="group/item relative">
+                        <Link
+                          to={`/categories/${cat.slug}`}
+                          onClick={() => setCategoryDropdownOpen(false)}
+                          className="flex items-center justify-between px-3 py-2 rounded text-xs font-medium text-gray-700 hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors"
+                        >
+                          <div className="flex items-center gap-2.5 truncate">
+                            <span className="material-symbols-outlined text-base text-gray-500 group-hover/item:text-[#1D4ED8]">
+                              {cat.slug.includes('laptop') ? 'laptop_mac' : cat.slug.includes('dien-thoai') || cat.slug.includes('phone') ? 'smartphone' : cat.slug.includes('pc') ? 'desktop_windows' : cat.slug.includes('man-hinh') ? 'tv' : cat.slug.includes('linh-kien') ? 'developer_board' : 'devices'}
+                            </span>
+                            <span className="truncate">{cat.name}</span>
+                          </div>
+                          {cat.children && cat.children.length > 0 && (
+                            <span className="material-symbols-outlined text-sm text-gray-400 group-hover/item:text-[#1D4ED8]">
+                              chevron_right
+                            </span>
+                          )}
+                        </Link>
+
+                        {/* Nested Subcategories Drawer */}
+                        {cat.children && cat.children.length > 0 && (
+                          <div className="hidden group-hover/item:block absolute left-full top-0 ml-1.5 w-60 bg-white border border-[#E5E7EB] rounded-lg shadow-xl p-2.5 z-50">
+                            <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-2 py-1 mb-1 border-b border-gray-100">
+                              {cat.name}
+                            </div>
+                            {cat.children.map((sub) => (
+                              <Link
+                                key={sub.id}
+                                to={`/categories/${sub.slug}`}
+                                onClick={() => setCategoryDropdownOpen(false)}
+                                className="block px-2.5 py-1.5 rounded text-xs text-gray-600 hover:text-[#1D4ED8] hover:bg-[#EFF6FF] transition-colors"
+                              >
+                                {sub.name}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* PC Builder Quick CTA Button (Desktop) */}
-          <Link
-            to="/pc-builder"
-            className="hidden xl:inline-flex items-center gap-2 px-3.5 py-2.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs shadow-sm hover:scale-102 transition-all flex-shrink-0"
-            title="Xây dựng cấu hình PC"
-          >
-            <span>🖥️</span>
-            <span>Xây dựng PC</span>
-          </Link>
-
-          {/* Search bar with Recommendation Dropdown (Desktop & Tablet) */}
-          <div className="hidden md:flex flex-1 max-w-3xl lg:max-w-4xl xl:max-w-5xl mx-3 sm:mx-6 min-w-[340px]">
+          {/* Search Box Component */}
+          <div className="flex-1 max-w-xl mx-2">
             <SearchBox />
           </div>
 
-          {/* Action buttons (Wishlist, Cart, Auth) */}
-          <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
-            {/* Compare Icon */}
+          {/* Quick Action Items */}
+          <div className="flex items-center gap-2.5 shrink-0">
+            {/* Hotline (Desktop) */}
+            <a href="tel:18006868" className="hidden xl:flex items-center gap-1.5 text-xs text-[#111827] hover:text-[#1D4ED8] transition-colors">
+              <span className="material-symbols-outlined text-lg text-gray-600">call</span>
+              <div className="leading-tight text-left">
+                <span className="text-[10px] text-gray-500 block">Hotline:</span>
+                <span className="font-bold text-[#D70018]">1800 6868</span>
+              </div>
+            </a>
+
+            {/* Tra cứu đơn hàng */}
+            <Link
+              to="/tracking"
+              className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 hover:bg-[#F3F4F6] rounded text-xs text-[#111827] transition-colors"
+            >
+              <span className="material-symbols-outlined text-lg text-gray-600">receipt_long</span>
+              <span className="font-medium">Tra cứu đơn</span>
+            </Link>
+
+            {/* So sánh sản phẩm */}
             <Link
               to="/compare"
-              className="p-2 sm:px-3 sm:py-2 rounded-2xl text-slate-700 hover:text-cyan-600 hover:bg-cyan-50 transition-colors relative flex items-center gap-1.5 border border-transparent hover:border-cyan-100"
-              title="So sánh sản phẩm"
+              className="relative hidden sm:flex items-center gap-1 px-2 py-1.5 hover:bg-[#F3F4F6] rounded text-xs text-[#111827] transition-colors"
+              title="So sánh chi tiết sản phẩm"
             >
-              <div className="relative">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 sm:w-5 sm:h-5 text-slate-700 hover:text-cyan-600 transition-colors"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-                {compareItems.length > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
-                    {compareItems.length}
-                  </span>
-                )}
-              </div>
-              <span className="hidden 2xl:inline text-xs font-semibold">So sánh</span>
+              <span className="material-symbols-outlined text-xl text-gray-600">compare_arrows</span>
+              <span className="font-medium hidden 2xl:inline">So sánh</span>
+              {compareItems.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-cyan-600 text-white text-[10px] font-bold px-1 rounded-full h-4 min-w-[16px] flex items-center justify-center">
+                  {compareItems.length}
+                </span>
+              )}
             </Link>
 
-            {/* Wishlist Icon */}
+            {/* Yêu thích */}
             <Link
               to="/account?tab=wishlist"
-              className="p-2 sm:px-3 sm:py-2 rounded-2xl text-slate-700 hover:text-rose-600 hover:bg-rose-50 transition-colors relative flex items-center gap-1.5 border border-transparent hover:border-rose-100"
+              className="relative hidden md:flex items-center gap-1 px-2 py-1.5 hover:bg-[#F3F4F6] rounded text-xs text-[#111827] transition-colors"
               title="Danh sách yêu thích"
             >
-              <div className="relative">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 sm:w-5 sm:h-5 text-slate-700 hover:text-rose-600 transition-colors"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                  />
-                </svg>
-                {wishlistCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
-                    {wishlistCount > 99 ? '99+' : wishlistCount}
+              <span className="material-symbols-outlined text-xl text-gray-600">favorite_border</span>
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-rose-600 text-white text-[10px] font-bold px-1 rounded-full h-4 min-w-[16px] flex items-center justify-center">
+                  {wishlistCount > 99 ? '99+' : wishlistCount}
+                </span>
+              )}
+            </Link>
+
+            {/* Giỏ hàng */}
+            <Link
+              to="/cart"
+              className="flex items-center gap-2 px-3 py-1.5 bg-[#F3F4F6] hover:bg-[#E5E7EB] border border-[#E5E7EB] rounded text-xs text-[#111827] transition-colors"
+            >
+              <div className="relative flex items-center justify-center">
+                <span className="material-symbols-outlined text-xl text-[#1D4ED8]">shopping_cart</span>
+                {itemCount > 0 && (
+                  <span className="absolute -top-1.5 -right-2 bg-[#D70018] text-white text-[10px] font-bold px-1 rounded h-4 min-w-[16px] flex items-center justify-center">
+                    {itemCount > 99 ? '99+' : itemCount}
                   </span>
                 )}
               </div>
-              <span className="hidden 2xl:inline text-xs font-semibold">Yêu thích</span>
+              <span className="font-semibold hidden sm:inline ml-1">Giỏ hàng</span>
             </Link>
 
-            {/* Cart Icon */}
-            <Link
-              to="/cart"
-              className="p-2 sm:px-3 sm:py-2 rounded-2xl text-slate-700 hover:text-blue-600 hover:bg-blue-50 transition-colors relative flex items-center gap-1.5 border border-transparent hover:border-blue-100"
-              title="Giỏ hàng"
-            >
-              <div className="relative">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 sm:w-5 sm:h-5 text-slate-700 hover:text-blue-600 transition-colors"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                  />
-                </svg>
-                <span className="absolute -top-2 -right-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
-                  {itemCount > 99 ? '99+' : itemCount}
-                </span>
-              </div>
-              <span className="hidden 2xl:inline text-xs font-semibold">Giỏ hàng</span>
-            </Link>
-
-            {/* Quick Admin Portal shortcut button on Desktop */}
-            {isAuthenticated && user?.roles?.includes('Admin') && (
-              <Link
-                to="/admin"
-                className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold text-xs shadow-sm shadow-indigo-600/25 transition-all hover:scale-105"
-              >
-                <span>🛡️ Admin</span>
-              </Link>
-            )}
-
-            {/* Auth button / User Dropdown */}
+            {/* Tài khoản Dropdown / Đăng nhập */}
             {isAuthenticated && user ? (
-              <div className="hidden sm:block relative" ref={userMenuRef}>
+              <div className="relative" ref={userMenuRef}>
                 <button
                   type="button"
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center gap-2.5 px-3 py-1.5 rounded-2xl hover:bg-slate-100/80 transition-colors border border-slate-200/70"
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 hover:bg-[#F3F4F6] rounded text-xs text-[#111827] transition-colors border border-transparent hover:border-[#E5E7EB]"
                 >
-                  <span className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-700 to-indigo-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">
+                  <div className="w-6 h-6 rounded bg-[#1D4ED8] text-white font-bold text-xs flex items-center justify-center">
                     {user.fullName ? user.fullName.charAt(0).toUpperCase() : 'U'}
-                  </span>
-                  <div className="hidden md:flex flex-col text-left">
-                    <span className="text-xs font-bold text-slate-800 leading-tight truncate max-w-[120px]">
-                      {user.fullName}
-                    </span>
-                    <span className="text-[10px] text-slate-400 font-medium leading-tight">
-                      {user.roles?.[0] || 'Khách hàng'}
-                    </span>
                   </div>
-                  <svg
-                    className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${userMenuOpen ? 'rotate-180 text-blue-600' : ''}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                  </svg>
+                  <span className="font-semibold hidden sm:inline max-w-[100px] truncate">{user.fullName}</span>
+                  <span className="material-symbols-outlined text-sm text-gray-400">expand_more</span>
                 </button>
 
                 {userMenuOpen && (
-                  <div className="absolute right-0 mt-2.5 w-64 rounded-3xl backdrop-blur-2xl bg-white/95 shadow-2xl shadow-slate-900/10 border border-slate-200/80 p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                    <div className="px-3 py-2.5 border-b border-slate-100">
-                      <p className="text-xs font-bold text-slate-900 truncate">{user.fullName}</p>
-                      <p className="text-[11px] text-slate-500 truncate">{user.email}</p>
+                  <div className="absolute right-0 mt-2 w-64 bg-white border border-[#E5E7EB] rounded-lg shadow-xl p-2 z-50">
+                    <div className="px-3 py-2 border-b border-[#F3F4F6]">
+                      <p className="text-xs font-semibold text-[#111827] truncate">{user.fullName}</p>
+                      <p className="text-[11px] text-gray-500 truncate">{user.email}</p>
                     </div>
-                    <div className="py-1">
+
+                    <div className="py-1 divide-y divide-[#F3F4F6]">
                       {user.roles?.includes('Admin') && (
-                        <Link
-                          to="/admin"
-                          onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-2xl transition-colors mb-1"
-                        >
-                          <span>🛡️ Quản trị hệ thống (Admin)</span>
-                        </Link>
+                        <div className="py-1">
+                          <Link
+                            to="/admin"
+                            onClick={() => setUserMenuOpen(false)}
+                            className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 rounded transition-colors"
+                          >
+                            <span className="material-symbols-outlined text-base">admin_panel_settings</span>
+                            <span>Quản trị hệ thống (Admin)</span>
+                          </Link>
+                        </div>
                       )}
-                      <Link
-                        to="/account"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-2xl transition-colors"
-                      >
-                        <span>👤 Hồ sơ & Tích điểm hội viên</span>
-                      </Link>
-                      <Link
-                        to="/account?tab=orders"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-2xl transition-colors"
-                      >
-                        <span>📦 Đơn hàng & Vận đơn GHN</span>
-                      </Link>
-                      <Link
-                        to="/account?tab=loyalty"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-amber-600 hover:bg-amber-50 rounded-2xl transition-colors"
-                      >
-                        <span>⭐ MadK Rewards</span>
-                      </Link>
-                    </div>
-                    <div className="pt-1 border-t border-slate-100">
-                      <button
-                        type="button"
-                        onClick={async () => {
-                          setUserMenuOpen(false);
-                          await logout();
-                          window.location.href = '/';
-                        }}
-                        className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-2xl transition-colors text-left"
-                      >
-                        <span>🚪 Đăng xuất</span>
-                      </button>
+
+                      <div className="py-1 space-y-0.5">
+                        <Link
+                          to="/account"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-3 py-1.5 text-xs text-gray-700 hover:bg-[#F3F4F6] hover:text-[#1D4ED8] rounded transition-colors"
+                        >
+                          <span className="material-symbols-outlined text-base text-gray-500">person</span>
+                          <span>Hồ sơ & Điểm thưởng</span>
+                        </Link>
+                        <Link
+                          to="/account?tab=orders"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-3 py-1.5 text-xs text-gray-700 hover:bg-[#F3F4F6] hover:text-[#1D4ED8] rounded transition-colors"
+                        >
+                          <span className="material-symbols-outlined text-base text-gray-500">package_2</span>
+                          <span>Đơn hàng đã đặt</span>
+                        </Link>
+                        <Link
+                          to="/account?tab=loyalty"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-3 py-1.5 text-xs text-gray-700 hover:bg-[#F3F4F6] hover:text-[#1D4ED8] rounded transition-colors"
+                        >
+                          <span className="material-symbols-outlined text-base text-amber-500">star</span>
+                          <span>MadK Rewards</span>
+                        </Link>
+                      </div>
+
+                      <div className="pt-1">
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            setUserMenuOpen(false);
+                            await logout();
+                            window.location.href = '/';
+                          }}
+                          className="w-full flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50 rounded transition-colors text-left"
+                        >
+                          <span className="material-symbols-outlined text-base">logout</span>
+                          <span>Đăng xuất</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -398,129 +346,126 @@ export const Header: React.FC = () => {
             ) : (
               <Link
                 to="/auth/login"
-                className="hidden sm:inline-flex items-center justify-center px-4 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-blue-600 rounded-2xl transition-all shadow-xs hover:shadow-glow-sm hover:scale-102"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 hover:bg-[#F3F4F6] rounded text-xs text-[#111827] transition-colors"
               >
-                Đăng nhập
+                <span className="material-symbols-outlined text-xl text-gray-600">person</span>
+                <span className="font-semibold hidden sm:inline">Đăng nhập</span>
               </Link>
             )}
-
-            {/* Mobile hamburger button */}
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 sm:hidden rounded-2xl text-slate-700 hover:bg-slate-100 transition-colors"
-              aria-label="Toggle mobile menu"
-            >
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                {mobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
           </div>
         </div>
 
-        {/* Mobile & Small Screens Dedicated Full-Width Search Bar */}
-        <div className="md:hidden pb-3 pt-0.5">
-          <SearchBox isMobile />
-        </div>
-      </div>
-
-      {/* Mobile Drawer Navigation */}
-      {mobileMenuOpen && (
-        <div className="sm:hidden border-t border-slate-200/80 bg-white/95 backdrop-blur-2xl px-4 pt-3 pb-8 space-y-4 max-h-[80vh] overflow-y-auto">
-          {/* Mobile search bar */}
-          <SearchBox isMobile onNavigate={() => setMobileMenuOpen(false)} />
-
-          {/* Quick links */}
-          <div className="grid grid-cols-2 gap-2 text-center text-xs font-bold">
-            <Link
-              to="/pc-builder"
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm flex items-center justify-center gap-1.5"
-            >
-              <span>🖥️</span>
+        {/* Plain Clean Category Navigation Strip (Screen 4 Retail Standard) */}
+        <div className="border-t border-[#E5E7EB] bg-white hidden sm:block">
+          <div className="max-w-[1240px] mx-auto px-4 py-2 flex items-center gap-6 overflow-x-auto text-xs text-gray-700 scrollbar-none whitespace-nowrap font-medium">
+            <Link to="/categories/laptop" className="text-[#1D4ED8] font-semibold hover:text-[#1D4ED8] pb-0.5">Laptop</Link>
+            <Link to="/categories/dien-thoai" className="hover:text-[#1D4ED8] transition-colors">Điện thoại & Tablet</Link>
+            <Link to="/categories/pc-gaming" className="hover:text-[#1D4ED8] transition-colors">Máy tính & PC</Link>
+            <Link to="/categories/man-hinh" className="hover:text-[#1D4ED8] transition-colors">Màn hình</Link>
+            <Link to="/categories/linh-kien-pc" className="hover:text-[#1D4ED8] transition-colors">Linh kiện PC</Link>
+            <Link to="/categories/ban-phim-co" className="hover:text-[#1D4ED8] transition-colors">Phụ kiện Gaming</Link>
+            <Link to="/#flash-sale" className="hover:text-[#D70018] text-[#D70018] font-semibold transition-colors flex items-center gap-1">
+              <span>Khuyến mãi</span>
+            </Link>
+            <Link to="/pc-builder" className="hover:text-[#1D4ED8] transition-colors text-emerald-600 font-semibold flex items-center gap-1">
+              <span className="material-symbols-outlined text-sm">build</span>
               <span>Xây dựng PC</span>
             </Link>
-            <Link
-              to="/tracking"
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-3 rounded-2xl bg-slate-100 text-slate-800 flex items-center justify-center gap-1.5"
-            >
-              <span>🔍</span>
-              <span>Tra cứu đơn hàng</span>
-            </Link>
           </div>
-          <div className="grid grid-cols-2 gap-2 text-center text-xs font-bold">
-            <Link
-              to="/"
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2.5 rounded-2xl bg-slate-100 text-slate-800"
-            >
-              Trang chủ
-            </Link>
-            <Link
-              to="/categories"
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2.5 rounded-2xl bg-blue-50 text-blue-700 border border-blue-200/50"
-            >
-              Tất cả sản phẩm
-            </Link>
-          </div>
+        </div>
+      </header>
 
-          {/* Category Accordion */}
-          <div>
-            <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
-              Danh mục công nghệ
+      {/* MOBILE DRAWER (Screen 3: 390px Mobile Spec) */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 flex lg:hidden">
+          <div
+            className="fixed inset-0 bg-black/50 transition-opacity"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          <div className="relative w-4/5 max-w-sm bg-white h-full shadow-2xl flex flex-col z-10 overflow-y-auto">
+            {/* Header */}
+            <div className="p-4 border-b border-[#E5E7EB] flex items-center justify-between bg-[#F9FAFB]">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 bg-[#1D4ED8] rounded flex items-center justify-center text-white font-bold text-sm">
+                  M
+                </div>
+                <span className="font-bold text-base text-[#111827]">MadK Store</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-1 text-gray-500 hover:text-gray-900"
+              >
+                <span className="material-symbols-outlined text-2xl">close</span>
+              </button>
             </div>
-            <div className="space-y-1">
-              {categories.map((cat) => {
-                const isExpanded = !!expandedMobileCats[cat.id];
-                const hasChildren = cat.children && cat.children.length > 0;
 
+            {/* Quick Mobile Links */}
+            <div className="p-3 border-b border-[#E5E7EB] grid grid-cols-2 gap-2 text-xs">
+              <Link
+                to="/pc-builder"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 p-2 rounded bg-[#EFF6FF] text-[#1D4ED8] font-semibold border border-[#BFDBFE]"
+              >
+                <span className="material-symbols-outlined text-base">construction</span>
+                <span>Xây PC</span>
+              </Link>
+              <Link
+                to="/tracking"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 p-2 rounded bg-gray-50 text-gray-700 font-semibold border border-gray-200"
+              >
+                <span className="material-symbols-outlined text-base">receipt_long</span>
+                <span>Tra cứu đơn</span>
+              </Link>
+            </div>
+
+            {/* Categories List */}
+            <div className="flex-1 p-3 space-y-1">
+              <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-2 py-1">
+                Danh mục sản phẩm
+              </div>
+              <Link
+                to="/categories"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2.5 px-3 py-2 rounded text-xs font-semibold text-[#1D4ED8] hover:bg-[#EFF6FF]"
+              >
+                <span className="material-symbols-outlined text-base">apps</span>
+                <span>Tất cả sản phẩm</span>
+              </Link>
+              {categories.map((cat) => {
+                const isExpanded = expandedMobileCats[cat.id];
+                const hasChildren = cat.children && cat.children.length > 0;
                 return (
-                  <div key={cat.id} className="border border-slate-100 rounded-2xl overflow-hidden">
-                    <div className="flex items-center justify-between p-2.5 bg-slate-50/50">
+                  <div key={cat.id} className="border-b border-gray-100 last:border-0">
+                    <div className="flex items-center justify-between py-2 px-2 hover:bg-gray-50 rounded">
                       <Link
                         to={`/categories/${cat.slug}`}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="text-xs font-semibold text-slate-800 hover:text-blue-600 flex items-center gap-2 truncate"
+                        className="text-xs font-medium text-gray-800 hover:text-[#1D4ED8] flex-1"
                       >
-                        {cat.iconUrl && (
-                          <img src={cat.iconUrl} alt="" className="w-4 h-4 rounded object-cover" />
-                        )}
-                        <span className="truncate">{cat.name}</span>
+                        {cat.name}
                       </Link>
-
                       {hasChildren && (
                         <button
                           type="button"
                           onClick={() => toggleMobileCat(cat.id)}
-                          className="p-1 text-slate-400 hover:text-slate-600"
-                          aria-label="Expand category"
+                          className="p-1 text-gray-400"
                         >
-                          <svg
-                            className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                          </svg>
+                          <span className={`material-symbols-outlined text-base transition-transform ${isExpanded ? 'rotate-180' : ''}`}>
+                            expand_more
+                          </span>
                         </button>
                       )}
                     </div>
-
                     {hasChildren && isExpanded && (
-                      <div className="bg-white px-3 py-2 space-y-1.5 border-t border-slate-100">
+                      <div className="pl-4 pr-2 pb-2 space-y-1 bg-gray-50 rounded">
                         {cat.children.map((sub) => (
                           <Link
                             key={sub.id}
                             to={`/categories/${sub.slug}`}
                             onClick={() => setMobileMenuOpen(false)}
-                            className="block text-xs font-medium text-slate-600 hover:text-blue-600 py-1 pl-4 border-l-2 border-blue-200"
+                            className="block py-1 text-xs text-gray-600 hover:text-[#1D4ED8]"
                           >
                             {sub.name}
                           </Link>
@@ -531,80 +476,82 @@ export const Header: React.FC = () => {
                 );
               })}
             </div>
-          </div>
 
-          {/* User links */}
-          <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-            <Link
-              to="/account?tab=wishlist"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-slate-700 font-semibold flex items-center gap-1.5"
-            >
-              <span>❤️ Yêu thích</span>
-              {wishlistCount > 0 && (
-                <span className="px-1.5 py-0.5 rounded-full bg-rose-500 text-white font-bold text-[10px]">
-                  {wishlistCount}
-                </span>
-              )}
-            </Link>
-
-            <Link
-              to="/cart"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-slate-700 font-semibold flex items-center gap-2"
-            >
-              <span>🛒 Giỏ hàng</span>
-              {itemCount > 0 && (
-                <span className="px-1.5 py-0.5 rounded-full bg-blue-600 text-white font-bold text-[10px]">
-                  {itemCount}
-                </span>
-              )}
-            </Link>
-            {isAuthenticated && user ? (
-              <div className="flex flex-col gap-2 w-full pt-1">
-                <div className="flex items-center justify-between">
-                  <Link
-                    to="/account"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-blue-600 font-bold"
-                  >
-                    👤 {user.fullName}
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={async () => {
-                      setMobileMenuOpen(false);
-                      await logout();
-                      window.location.href = '/';
-                    }}
-                    className="text-xs text-rose-600 font-semibold hover:underline"
-                  >
-                    Đăng xuất
-                  </button>
+            {/* Footer auth links */}
+            <div className="p-4 border-t border-[#E5E7EB] bg-gray-50">
+              {isAuthenticated && user ? (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-semibold text-gray-900">{user.fullName}</span>
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        setMobileMenuOpen(false);
+                        await logout();
+                        window.location.href = '/';
+                      }}
+                      className="text-xs text-rose-600 font-semibold"
+                    >
+                      Đăng xuất
+                    </button>
+                  </div>
+                  {user.roles?.includes('Admin') && (
+                    <Link
+                      to="/admin"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block text-center py-2 bg-purple-600 text-white rounded text-xs font-bold"
+                    >
+                      🛡️ Trang Quản Trị Admin
+                    </Link>
+                  )}
                 </div>
-                {user.roles?.includes('Admin') && (
-                  <Link
-                    to="/admin"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-xs font-bold text-purple-700 bg-purple-50 px-3 py-2 rounded-2xl flex items-center justify-center gap-1.5"
-                  >
-                    🛡️ Vào Trang Quản Trị Hệ Thống (Admin)
-                  </Link>
-                )}
-              </div>
-            ) : (
-              <Link
-                to="/auth/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-blue-600 font-bold"
-              >
-                Đăng nhập / Đăng ký &rarr;
-              </Link>
-            )}
+              ) : (
+                <Link
+                  to="/auth/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block text-center py-2.5 bg-[#1D4ED8] text-white rounded text-xs font-semibold"
+                >
+                  Đăng nhập / Đăng ký
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       )}
-    </header>
+
+      {/* MOBILE BOTTOM NAVIGATION BAR (Screen 3: 390px Mobile Spec) */}
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E5E7EB] py-1.5 px-3 flex items-center justify-around text-xs shadow-lg">
+        <Link to="/" className="flex flex-col items-center gap-0.5 text-[#1D4ED8]">
+          <span className="material-symbols-outlined text-xl">home</span>
+          <span className="text-[10px] font-semibold">Trang chủ</span>
+        </Link>
+        <button
+          type="button"
+          onClick={() => setMobileMenuOpen(true)}
+          className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-[#1D4ED8]"
+        >
+          <span className="material-symbols-outlined text-xl">menu</span>
+          <span className="text-[10px]">Danh mục</span>
+        </button>
+        <Link to="/pc-builder" className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-[#1D4ED8]">
+          <span className="material-symbols-outlined text-xl">construction</span>
+          <span className="text-[10px]">Xây PC</span>
+        </Link>
+        <Link to="/tracking" className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-[#1D4ED8]">
+          <span className="material-symbols-outlined text-xl">receipt_long</span>
+          <span className="text-[10px]">Tra cứu</span>
+        </Link>
+        <Link to="/cart" className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-[#1D4ED8] relative">
+          <span className="material-symbols-outlined text-xl">shopping_cart</span>
+          <span className="text-[10px]">Giỏ hàng</span>
+          {itemCount > 0 && (
+            <span className="absolute -top-1 right-2 bg-[#D70018] text-white text-[9px] font-bold px-1 rounded-full h-3.5 min-w-[14px] flex items-center justify-center">
+              {itemCount}
+            </span>
+          )}
+        </Link>
+      </div>
+    </>
   );
 };
 

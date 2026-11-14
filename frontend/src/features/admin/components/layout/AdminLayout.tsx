@@ -6,7 +6,6 @@ import AdminHeader from './AdminHeader';
 export const AdminLayout: React.FC = () => {
   const [isMobileOpen, setIsMobileOpen] = useState<boolean>(false);
 
-  // Dọn dẹp trạng thái thu nhỏ cũ nếu có trong localStorage
   useEffect(() => {
     try {
       localStorage.removeItem('madk_admin_sidebar_collapsed');
@@ -16,8 +15,8 @@ export const AdminLayout: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-100/70 flex text-slate-800">
-      {/* Sidebar - Cố định toàn phần, không thu nhỏ */}
+    <div className="min-h-screen bg-[#F8F9FA] flex text-gray-900 font-sans text-[13px]">
+      {/* Sidebar - Solid Charcoal 240px */}
       <AdminSidebar
         isCollapsed={false}
         isMobileOpen={isMobileOpen}
@@ -30,7 +29,7 @@ export const AdminLayout: React.FC = () => {
         <AdminHeader onOpenMobileSidebar={() => setIsMobileOpen(true)} />
 
         {/* Dynamic Page Content */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        <main className="flex-1 p-4 sm:p-5 lg:p-6 overflow-y-auto">
           <Outlet />
         </main>
       </div>

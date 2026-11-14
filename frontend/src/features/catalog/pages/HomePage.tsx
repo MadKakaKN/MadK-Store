@@ -1,32 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import catalogApi from '../../../api/catalogApi';
-import { CategoryTreeDto, ProductListDto } from '../../../types/catalog';
+import { ProductListDto } from '../../../types/catalog';
 import ProductCard from '../components/ProductCard';
 import Hero3DShowcase from '../components/Hero3DShowcase';
 import FlashSaleSection from '../components/FlashSaleSection';
 import RecentlyViewedBar from '../components/RecentlyViewedBar';
 import LoadingSpinner from '../../../components/common/LoadingSpinner';
 import SEOHead, { buildOrganizationSchema, buildWebSiteSchema } from '../../../components/common/SEOHead';
-import { IconShield, IconTruck, IconStar, IconCube3D, IconLaptop } from '../../../components/common/Icons';
 
 export const HomePage: React.FC = () => {
-  const [categories, setCategories] = useState<CategoryTreeDto[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<ProductListDto[]>([]);
+  const [activeTab, setActiveTab] = useState<'all' | 'laptop' | 'phone' | 'pc'>('all');
+  const [trackingCode, setTrackingCode] = useState('');
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let isMounted = true;
     async function loadData() {
       try {
         setLoading(true);
-        const [cats, productsRes] = await Promise.all([
-          catalogApi.getCategoryTree(),
-          catalogApi.getProducts({ isFeatured: true, pageSize: 8 }),
-        ]);
+        const productsRes = await catalogApi.getProducts({ isFeatured: true, pageSize: 12 });
 
         if (isMounted) {
-          setCategories(cats);
           setFeaturedProducts(productsRes.items || []);
         }
       } catch (err) {
@@ -44,241 +41,411 @@ export const HomePage: React.FC = () => {
     };
   }, []);
 
+  const handleTrackingSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (trackingCode.trim()) {
+      navigate(`/tracking?q=${encodeURIComponent(trackingCode.trim())}`);
+    } else {
+      navigate('/tracking');
+    }
+  };
+
+  const filteredProducts = featuredProducts.filter((p) => {
+    if (activeTab === 'all') return true;
+    const cat = p.categorySlug.toLowerCase();
+    if (activeTab === 'laptop') return cat.includes('laptop');
+    if (activeTab === 'phone') return cat.includes('dien-thoai') || cat.includes('phone') || cat.includes('tablet');
+    if (activeTab === 'pc') return cat.includes('pc') || cat.includes('linh-kien') || cat.includes('vga');
+    return true;
+  });
+
   return (
-    <div className="py-6 sm:py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-14 sm:space-y-20">
+    <div className="max-w-[1240px] mx-auto px-4 py-4 space-y-4">
       <SEOHead
-        title="MadK Store - Thiết bị công nghệ chính hãng & Trải nghiệm 3D"
+        title="MadK Store | Hệ Thống Bán Lẻ Công Nghệ Chính Hãng Hàng Đầu Việt Nam"
         description="MadK Store phân phối điện thoại thông minh, laptop gaming, linh kiện PC và phụ kiện công nghệ chính hãng với trải nghiệm tương tác mô hình 3D trực quan."
         canonicalUrl="https://madk.store/"
         keywords="madk store, điện thoại chính hãng, laptop gaming, linh kiện pc, trải nghiệm 3d, mua hàng công nghệ"
         structuredData={[buildOrganizationSchema(), buildWebSiteSchema()]}
       />
 
-      {/* Hero Section Banner - Sapphire Luxury Tech Style */}
-      <section className="relative rounded-3.5xl bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-white p-6 sm:p-10 lg:p-14 overflow-hidden shadow-2xl border border-slate-800/80">
-        {/* Ambient radial glow */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none" />
+      {/* SECTION 1: HERO SECTION (Retail 3-Column Grid - Stitch Screen 2 & Screen 4) */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
+        {/* Col 1: Vertical Category Menu (3 cols) */}
+        <aside className="hidden lg:block lg:col-span-3 bg-white border border-[#E5E7EB] rounded-lg overflow-hidden shadow-none divide-y divide-[#E5E7EB]">
+          <Link
+            to="/categories/laptop"
+            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group"
+          >
+            <div className="flex items-center gap-2.5">
+              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">laptop_mac</span>
+              <span className="font-medium">Laptop Chính Hãng & Gaming</span>
+            </div>
+            <span className="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
+          </Link>
 
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          {/* Left Column: Hero Text & Primary CTAs */}
-          <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full text-xs font-bold tracking-wider uppercase bg-blue-500/15 text-blue-300 border border-blue-400/30 backdrop-blur-md">
-              <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
-              <span>MADK NEXT-GEN 3D COMMERCE</span>
+          <Link
+            to="/categories/dien-thoai"
+            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group"
+          >
+            <div className="flex items-center gap-2.5">
+              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">smartphone</span>
+              <span className="font-medium">Điện thoại & Tablet Flagship</span>
+            </div>
+            <span className="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
+          </Link>
+
+          <Link
+            to="/categories/pc-gaming"
+            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group"
+          >
+            <div className="flex items-center gap-2.5">
+              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">desktop_windows</span>
+              <span className="font-medium">Máy tính để bàn & PC</span>
+            </div>
+            <span className="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
+          </Link>
+
+          <Link
+            to="/categories/man-hinh"
+            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group"
+          >
+            <div className="flex items-center gap-2.5">
+              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">tv</span>
+              <span className="font-medium">Màn hình máy tính 2K/4K</span>
+            </div>
+            <span className="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
+          </Link>
+
+          <Link
+            to="/categories/linh-kien-pc"
+            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group"
+          >
+            <div className="flex items-center gap-2.5">
+              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">developer_board</span>
+              <span className="font-medium">Linh kiện PC & VGA</span>
+            </div>
+            <span className="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
+          </Link>
+
+          <Link
+            to="/categories/ban-phim-co"
+            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group"
+          >
+            <div className="flex items-center gap-2.5">
+              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">keyboard</span>
+              <span className="font-medium">Chuột & Bàn phím cơ Custom</span>
+            </div>
+            <span className="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
+          </Link>
+
+          <Link
+            to="/categories/tai-nghe"
+            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group"
+          >
+            <div className="flex items-center gap-2.5">
+              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">headphones</span>
+              <span className="font-medium">Tai nghe & Loa Hi-Res</span>
+            </div>
+            <span className="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
+          </Link>
+
+          <Link
+            to="/pc-builder"
+            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#1D4ED8] bg-[#EFF6FF] hover:bg-[#DBEAFE] font-semibold transition-colors"
+          >
+            <div className="flex items-center gap-2.5">
+              <span className="material-symbols-outlined text-lg text-[#1D4ED8]">construction</span>
+              <span>Xây Dựng Cấu Hình PC</span>
+            </div>
+            <span className="material-symbols-outlined text-sm text-[#1D4ED8]">arrow_forward</span>
+          </Link>
+        </aside>
+
+        {/* Col 2: Main Promotional Banner (6 cols) */}
+        <div className="lg:col-span-6 bg-white border border-[#E5E7EB] rounded-lg p-5 flex flex-col justify-between relative shadow-none overflow-hidden">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="space-y-2 max-w-xs">
+              <span className="inline-block bg-[#FEF2F2] text-[#D70018] border border-[#FECACA] text-xs font-semibold px-2 py-0.5 rounded">
+                SIÊU SALE CÔNG NGHỆ 2026
+              </span>
+              <h2 className="text-xl font-bold text-[#111827] leading-snug">
+                Đại Tiệc Laptop & Gaming Gear Mùa Mới
+              </h2>
+              <p className="text-xs text-gray-600 leading-relaxed">
+                Giảm đến <strong className="text-[#D70018] font-bold">5.000.000₫</strong> & tặng Balo Gaming cao cấp. Trải nghiệm tương tác 3D 360° trực quan.
+              </p>
+              <div className="flex items-center gap-2 pt-1 text-xs text-gray-500">
+                <span className="bg-[#F3F4F6] px-2 py-0.5 rounded border border-[#E5E7EB]">Intel Core Ultra / i9</span>
+                <span className="bg-[#F3F4F6] px-2 py-0.5 rounded border border-[#E5E7EB]">RTX 4070 / 4080</span>
+              </div>
+              <div className="pt-2">
+                <Link
+                  to="/categories/laptop"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded text-xs font-semibold transition-colors"
+                >
+                  <span>Khám phá ngay</span>
+                  <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                </Link>
+              </div>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-5xl xl:text-6xl font-black tracking-tight leading-[1.1]">
-              Khám phá thiết bị công nghệ đỉnh cao cùng{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-sky-300">
-                MadK Store
-              </span>
-            </h1>
-
-            <p className="text-sm sm:text-base lg:text-lg text-slate-300/90 leading-relaxed max-w-xl">
-              Hệ thống phân phối điện thoại thông minh, laptop cao cấp, linh kiện PC và gaming gear chính hãng. 
-              Trải nghiệm xoay 360° tương tác mô hình 3D chân thực trước khi quyết định sở hữu.
-            </p>
-
-            <div className="flex flex-wrap items-center gap-3.5 pt-2">
-              <Link
-                to="/categories"
-                className="inline-flex items-center justify-center px-7 py-4 rounded-2.5xl font-bold text-sm sm:text-base text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 transition-all shadow-lg shadow-blue-600/30 hover:scale-102 active:scale-98"
-              >
-                <span>Khám phá ngay</span>
-                <span className="ml-2">&rarr;</span>
-              </Link>
-              <Link
-                to="/categories/laptop"
-                className="inline-flex items-center justify-center px-6 py-4 rounded-2.5xl font-bold text-sm sm:text-base text-slate-200 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/80 hover:text-white transition-all backdrop-blur-md"
-              >
-                Xem Laptop Gaming
-              </Link>
+            <div className="shrink-0 flex items-center justify-center p-2">
+              <img
+                alt="Laptop Gaming ASUS ROG"
+                className="w-56 h-40 object-contain hover:scale-105 transition-transform duration-300"
+                src="/images/products/laptop-asus-rog-strix-scar-16.png"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (!target.dataset.fallback) {
+                    target.dataset.fallback = '1';
+                    target.src = 'https://lh3.googleusercontent.com/aida-public/AB6AXuBW7LkbSNfKhe31jizmkkaPmmzysigmJqhq46ycjebbsF4V4Hnd7g6m4ex8jo22zgKmBPXN-JpvB7yE5KKoUmIYQYxKidvKarCj4OewYYpuEE3ncIKDnrJ_cJ3h0i0gPu_DailrHd6D4lZ649eEogrIJq8WwkSJUqbeQfApGBJSGC_L_hcxbLU1jXdwKKdCVWy4MlhKU00f3CgZzfF9YSPZvmT-QCPdFI97JEmDGKlj';
+                  }
+                }}
+              />
             </div>
           </div>
 
-          {/* Right Column: 3D Video Showcase & Spotlight Devices */}
-          <div className="lg:col-span-5">
-            <Hero3DShowcase />
+          {/* Dots Indicator */}
+          <div className="flex items-center justify-center gap-1.5 pt-4">
+            <span className="w-5 h-1.5 rounded-full bg-[#1D4ED8]"></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-gray-300"></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-gray-300"></span>
           </div>
         </div>
 
-        {/* Feature badges row */}
-        <div className="relative z-10 mt-10 pt-8 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm text-slate-300 font-semibold">
-          <div className="flex items-center gap-2.5">
-            <span className="w-8 h-8 rounded-xl bg-blue-500/15 border border-blue-400/20 text-blue-400 flex items-center justify-center"><IconShield className="w-4 h-4" /></span>
-            <span>100% Chính hãng</span>
+        {/* Col 3: Two Sub-Banners (3 cols) */}
+        <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3.5">
+          {/* Sub-banner 1: Thu cũ đổi mới */}
+          <div className="bg-white border border-[#E5E7EB] rounded-lg p-3.5 flex flex-col justify-between shadow-none hover:border-[#1D4ED8] transition-colors">
+            <div className="space-y-1">
+              <span className="text-[10px] bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] font-bold px-1.5 py-0.5 rounded">
+                TRỢ GIÁ THU CŨ
+              </span>
+              <h3 className="text-xs font-bold text-[#111827] mt-1">Thu Cũ Đổi Mới Trợ Giá 3.000.000₫</h3>
+              <p className="text-[11px] text-gray-500">Áp dụng cho iPhone, MacBook, Laptop Gaming toàn quốc.</p>
+            </div>
+            <div className="pt-2">
+              <Link to="/categories" className="text-xs font-semibold text-[#1D4ED8] hover:underline flex items-center gap-1">
+                <span>Xem bảng giá thu</span>
+                <span className="material-symbols-outlined text-sm">chevron_right</span>
+              </Link>
+            </div>
           </div>
-          <div className="flex items-center gap-2.5">
-            <span className="w-8 h-8 rounded-xl bg-blue-500/15 border border-blue-400/20 text-blue-400 flex items-center justify-center"><IconTruck className="w-4 h-4" /></span>
-            <span>Giao nhanh GHN</span>
-          </div>
-          <div className="flex items-center gap-2.5">
-            <span className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-400/20 text-amber-400 flex items-center justify-center"><IconStar className="w-4 h-4" /></span>
-            <span>Tích điểm tới 5%</span>
-          </div>
-          <div className="flex items-center gap-2.5">
-            <span className="w-8 h-8 rounded-xl bg-indigo-500/15 border border-indigo-400/20 text-indigo-400 flex items-center justify-center"><IconCube3D className="w-4 h-4" /></span>
-            <span>Mô hình 3D xoay 360°</span>
+
+          {/* Sub-banner 2: Trả góp 0% */}
+          <div className="bg-white border border-[#E5E7EB] rounded-lg p-3.5 flex flex-col justify-between shadow-none hover:border-[#1D4ED8] transition-colors">
+            <div className="space-y-1">
+              <span className="text-[10px] bg-[#FEF2F2] text-[#D70018] border border-[#FECACA] font-bold px-1.5 py-0.5 rounded">
+                LÃI SUẤT 0%
+              </span>
+              <h3 className="text-xs font-bold text-[#111827] mt-1">Trả Góp 0% Duyệt Nhanh 5 Phút</h3>
+              <p className="text-[11px] text-gray-500">Qua thẻ tín dụng hoặc CCCD gắn chip, không giữ giấy tờ.</p>
+            </div>
+            <div className="pt-2">
+              <Link to="/categories" className="text-xs font-semibold text-[#1D4ED8] hover:underline flex items-center gap-1">
+                <span>Xem chi tiết điều kiện</span>
+                <span className="material-symbols-outlined text-sm">chevron_right</span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Flash Sale Giờ Vàng Section */}
+      {/* SECTION 2: 4 TRUST BADGES STRIP (Screen 4 Retail Standard) */}
+      <section className="bg-white border border-[#E5E7EB] rounded-lg p-3.5 shadow-none">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+          <div className="flex items-center gap-2.5">
+            <span className="material-symbols-outlined text-2xl text-[#1D4ED8]">verified</span>
+            <div>
+              <div className="font-semibold text-[#111827]">100% Chính Hãng</div>
+              <div className="text-[11px] text-gray-500">Bảo hành chính hãng 24 tháng</div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2.5">
+            <span className="material-symbols-outlined text-2xl text-[#1D4ED8]">local_shipping</span>
+            <div>
+              <div className="font-semibold text-[#111827]">Giao Hàng GHN 2h</div>
+              <div className="text-[11px] text-gray-500">Miễn phí ship đơn từ 1.000.000₫</div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2.5">
+            <span className="material-symbols-outlined text-2xl text-[#1D4ED8]">published_with_changes</span>
+            <div>
+              <div className="font-semibold text-[#111827]">Đổi Mới 30 Ngày</div>
+              <div className="text-[11px] text-gray-500">Lỗi 1 đổi 1 tận nơi nhanh chóng</div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2.5">
+            <span className="material-symbols-outlined text-2xl text-[#1D4ED8]">credit_card</span>
+            <div>
+              <div className="font-semibold text-[#111827]">Trả Góp 0% Lãi Suất</div>
+              <div className="text-[11px] text-gray-500">Duyệt hồ sơ online trong 5 phút</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 3: FLASH SALE GIỜ VÀNG */}
       <FlashSaleSection />
 
-      {/* Featured Categories Grid */}
-      <section>
-        <div className="flex items-end justify-between mb-8">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-600 block mb-1">
-              Hệ sinh thái sản phẩm
-            </span>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
-              Danh mục công nghệ
-            </h2>
+      {/* SECTION 4: 3D INTERACTIVE SPOTLIGHT SHOWCASE */}
+      <section className="bg-white border border-[#E5E7EB] rounded-lg p-4 shadow-none">
+        <div className="flex items-center justify-between mb-3 border-b border-[#E5E7EB] pb-2">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-xl text-[#1D4ED8]">view_in_ar</span>
+            <h3 className="text-sm font-bold text-[#111827]">Trải Nghiệm Tương Tác Mô Hình 3D Xoay 360°</h3>
           </div>
-          <Link
-            to="/categories"
-            className="text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-blue-50 hover:bg-blue-100 transition-colors"
-          >
-            <span>Tất cả danh mục</span>
-            <span>&rarr;</span>
-          </Link>
+          <span className="text-[11px] text-gray-500 hidden sm:inline">Dùng chuột hoặc ngón tay để xoay đa chiều</span>
         </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
-          {categories.map((cat) => (
-            <Link
-              key={cat.id}
-              to={`/categories/${cat.slug}`}
-              className="group p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-card-hover hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between"
-            >
-              <div>
-                <div className="w-14 h-14 rounded-2.5xl bg-gradient-to-tr from-blue-50 to-indigo-50 group-hover:from-blue-600 group-hover:to-indigo-600 text-blue-600 group-hover:text-white flex items-center justify-center transition-all duration-300 overflow-hidden shadow-xs">
-                  {cat.iconUrl ? (
-                    <img src={cat.iconUrl} alt={cat.name} className="w-full h-full object-cover" />
-                  ) : (
-                    <IconLaptop className="w-7 h-7" />
-                  )}
-                </div>
-                <h3 className="mt-4 font-bold text-slate-900 group-hover:text-blue-600 text-base sm:text-lg transition-colors">
-                  {cat.name}
-                </h3>
-                {cat.description && (
-                  <p className="mt-1 text-xs text-slate-500 line-clamp-2 leading-relaxed">
-                    {cat.description}
-                  </p>
-                )}
-              </div>
-
-              {cat.children && cat.children.length > 0 && (
-                <div className="mt-4 pt-3.5 border-t border-slate-100 flex flex-wrap gap-1.5">
-                  {cat.children.slice(0, 2).map((sub) => (
-                    <span
-                      key={sub.id}
-                      className="text-[11px] font-semibold px-2.5 py-1 rounded-xl bg-slate-50 text-slate-600 group-hover:bg-blue-50 group-hover:text-blue-700 transition-colors"
-                    >
-                      {sub.name}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </Link>
-          ))}
-        </div>
+        <Hero3DShowcase />
       </section>
 
-      {/* Featured Products Grid */}
-      <section>
-        <div className="flex items-end justify-between mb-8">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
-              <span className="text-xs font-bold uppercase tracking-wider text-rose-600">
-                Hot Deal & Trend 3D
-              </span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
-              Sản phẩm nổi bật
-            </h2>
+      {/* SECTION 5: FEATURED PRODUCTS WITH CATEGORY TABS */}
+      <section className="bg-white border border-[#E5E7EB] rounded-lg p-4 shadow-none space-y-3.5">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[#E5E7EB] pb-2.5">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-xl text-[#D70018]">local_fire_department</span>
+            <h2 className="text-base font-bold text-[#111827]">Sản Phẩm Nổi Bật & Bán Chạy</h2>
           </div>
-          <Link
-            to="/categories"
-            className="text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-blue-50 hover:bg-blue-100 transition-colors"
-          >
-            <span>Xem tất cả</span>
-            <span>&rarr;</span>
-          </Link>
+
+          {/* Category Tabs */}
+          <div className="flex items-center gap-1.5 text-xs overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
+            <button
+              type="button"
+              onClick={() => setActiveTab('all')}
+              className={`px-3 py-1 rounded text-xs font-semibold transition-colors ${
+                activeTab === 'all'
+                  ? 'bg-[#1D4ED8] text-white'
+                  : 'bg-[#F3F4F6] text-gray-700 hover:bg-[#E5E7EB]'
+              }`}
+            >
+              Tất cả
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('laptop')}
+              className={`px-3 py-1 rounded text-xs font-semibold transition-colors ${
+                activeTab === 'laptop'
+                  ? 'bg-[#1D4ED8] text-white'
+                  : 'bg-[#F3F4F6] text-gray-700 hover:bg-[#E5E7EB]'
+              }`}
+            >
+              Laptop
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('phone')}
+              className={`px-3 py-1 rounded text-xs font-semibold transition-colors ${
+                activeTab === 'phone'
+                  ? 'bg-[#1D4ED8] text-white'
+                  : 'bg-[#F3F4F6] text-gray-700 hover:bg-[#E5E7EB]'
+              }`}
+            >
+              Điện thoại
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('pc')}
+              className={`px-3 py-1 rounded text-xs font-semibold transition-colors ${
+                activeTab === 'pc'
+                  ? 'bg-[#1D4ED8] text-white'
+                  : 'bg-[#F3F4F6] text-gray-700 hover:bg-[#E5E7EB]'
+              }`}
+            >
+              PC & Linh kiện
+            </button>
+          </div>
         </div>
 
         {loading ? (
           <LoadingSpinner message="Đang nạp danh sách sản phẩm nổi bật..." />
-        ) : featuredProducts.length === 0 ? (
-          <div className="py-16 text-center bg-white rounded-3xl border border-slate-200">
-            <p className="text-slate-500 font-medium">Chưa có sản phẩm nổi bật nào.</p>
+        ) : filteredProducts.length === 0 ? (
+          <div className="py-12 text-center text-gray-500 text-xs">
+            Chưa có sản phẩm nào trong mục này.
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {featuredProducts.map((product) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+            {filteredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
         )}
       </section>
 
-      {/* 3D Interactive Feature Callout Banner */}
-      <section className="rounded-3.5xl bg-gradient-to-r from-slate-950 via-blue-950 to-indigo-950 text-white p-8 sm:p-12 shadow-2xl border border-blue-900/40 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="max-w-xl relative z-10 space-y-3">
-          <span className="px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-400/30 backdrop-blur-md">
-            ĐỘC QUYỀN MADK STORE
-          </span>
-          <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
-            Trải nghiệm tương tác 3D WebGL xoay 360°
-          </h3>
-          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-            Xem cận cảnh từng đường nét, xoay đa chiều, khám phá chân thực thiết kế vỏ máy và linh kiện trước khi đặt hàng. 
-            Tất cả sản phẩm đều được kiểm định chất lượng và hỗ trợ giao hàng hỏa tốc GHN.
-          </p>
-        </div>
-
-        <Link
-          to="/categories"
-          className="relative z-10 px-7 py-3.5 rounded-2.5xl font-bold text-xs sm:text-sm bg-white text-slate-950 hover:bg-blue-50 transition-all shadow-xl shadow-black/20 hover:scale-105 flex-shrink-0"
-        >
-          Trải nghiệm ngay &rarr;
-        </Link>
-      </section>
-
-      {/* PC Builder Callout Banner */}
-      <section className="rounded-3.5xl bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-950 text-white p-8 sm:p-12 shadow-2xl border border-blue-700/40 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
-        <div className="absolute top-0 right-1/4 w-72 h-72 bg-blue-400/15 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="max-w-xl relative z-10 space-y-3">
-          <div className="inline-flex items-center gap-2 py-1 px-3.5 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-400/30">
-            <span>⚡</span>
-            <span>MADK PC BUILDER PRO</span>
+      {/* SECTION 6: TWO UTILITY BANNERS (PC Builder & Order Tracking - Screen 4 Retail Standard) */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+        {/* Banner 1: Build PC */}
+        <div className="bg-white border border-[#E5E7EB] rounded-lg p-5 shadow-none flex flex-col justify-between" id="pc-builder">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-2xl text-[#1D4ED8]">construction</span>
+              <h3 className="text-base font-bold text-[#111827]">Xây dựng cấu hình PC</h3>
+            </div>
+            <p className="text-xs text-gray-600 leading-relaxed">
+              Tự do phối ghép linh kiện máy tính, hệ thống tự động kiểm tra tương thích giữa CPU, Mainboard, RAM, Nguồn và vỏ Case. Đảm bảo cấu hình tối ưu chi phí và hiệu năng.
+            </p>
+            <div className="flex items-center gap-3 text-xs text-gray-500 pt-1">
+              <span className="flex items-center gap-1">
+                <span className="material-symbols-outlined text-sm text-[#15803D]">check_circle</span>
+                Tự động tính công suất nguồn (W)
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="material-symbols-outlined text-sm text-[#15803D]">check_circle</span>
+                Dự đoán FPS Gaming AI
+              </span>
+            </div>
           </div>
-          <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
-            Tự tay xây dựng dàn PC trong mơ của bạn
-          </h3>
-          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-            Công cụ lựa chọn linh kiện theo chuẩn socket, tự động tính công suất nguồn nguồn (Watt), kiểm tra độ tương thích phần cứng và in bảng báo giá chỉ trong 1 phút.
-          </p>
+          <div className="pt-4">
+            <Link
+              to="/pc-builder"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded text-xs font-semibold transition-colors"
+            >
+              <span>Bắt đầu ráp PC ngay</span>
+              <span className="material-symbols-outlined text-sm">arrow_forward</span>
+            </Link>
+          </div>
         </div>
 
-        <Link
-          to="/pc-builder"
-          className="relative z-10 px-8 py-4 rounded-2.5xl font-bold text-sm bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-400 hover:to-indigo-400 text-white shadow-xl shadow-blue-500/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 flex-shrink-0"
-        >
-          <span>Bắt đầu Build PC ngay</span>
-          <span>&rarr;</span>
-        </Link>
+        {/* Banner 2: Order & Warranty Tracking */}
+        <div className="bg-white border border-[#E5E7EB] rounded-lg p-5 shadow-none flex flex-col justify-between" id="tracking">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-2xl text-[#1D4ED8]">manage_search</span>
+              <h3 className="text-base font-bold text-[#111827]">Tra cứu đơn hàng & Bảo hành</h3>
+            </div>
+            <p className="text-xs text-gray-600 leading-relaxed">
+              Kiểm tra chi tiết lộ trình vận chuyển GHN thời gian thực và tra cứu thông tin bảo hành điện tử e-Warranty theo mã đơn hàng, số điện thoại hoặc số Serial/IMEI thiết bị.
+            </p>
+            <form onSubmit={handleTrackingSubmit} className="pt-1">
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={trackingCode}
+                  onChange={(e) => setTrackingCode(e.target.value)}
+                  placeholder="Nhập mã đơn hàng hoặc SĐT..."
+                  className="flex-1 h-9 px-3 bg-white border border-[#D1D5DB] rounded text-xs text-[#111827] focus:outline-none focus:border-[#1D4ED8]"
+                />
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded text-xs font-semibold transition-colors shrink-0"
+                >
+                  Tra cứu ngay
+                </button>
+              </div>
+            </form>
+          </div>
+          <div className="pt-3 text-[11px] text-gray-500 flex items-center gap-2">
+            <span className="material-symbols-outlined text-sm text-gray-400">info</span>
+            <span>Bảo hành chính hãng 1 đổi 1 trong 30 ngày đầu tiên nếu phát sinh lỗi</span>
+          </div>
+        </div>
       </section>
 
-      {/* Recently Viewed Products Bar */}
+      {/* SECTION 7: SẢN PHẨM ĐÃ XEM GẦN ĐÂY */}
       <RecentlyViewedBar />
     </div>
   );

@@ -1,0 +1,18 @@
+{
+  "name": "projects/15376973039181247916/screens/6e6ce29c836d4280813a696620f4e04f",
+  "title": "MadK Store - Chi Tiết Sản Phẩm ASUS ROG Strix SCAR 16 Chuẩn Bán Lẻ (Desktop)",
+  "screenshot": {
+    "name": "projects/15376973039181247916/screens/6e6ce29c836d4280813a696620f4e04f/fileEntries/screenshot",
+    "downloadUrl": "https://stitch.googleapis.com/v1/projects/15376973039181247916/files/screenshot_0006601314b5ca4b01a63ec38a1e5938:download",
+    "mimeType": "image/png"
+  },
+  "htmlCode": {
+    "name": "projects/15376973039181247916/screens/6e6ce29c836d4280813a696620f4e04f/fileEntries/html",
+    "downloadUrl": "https://stitch.googleapis.com/v1/projects/15376973039181247916/files/6e6ce29c836d4280813a696620f4e04f:download",
+    "mimeType": "text/html"
+  },
+  "width": "2560",
+  "height": "7542",
+  "deviceType": "DESKTOP",
+  "screenType": "DESIGN"
+}

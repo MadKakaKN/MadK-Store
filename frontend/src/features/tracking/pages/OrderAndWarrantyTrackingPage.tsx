@@ -131,7 +131,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
   };
 
   return (
-    <div className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-10">
+    <div className="py-4 sm:py-6 px-4 md:px-6 max-w-[1200px] mx-auto space-y-6">
       <SEOHead
         title="Tra Cứu Đơn Hàng & Bảo Hành Điện Tử - MadK Store"
         description="Tra cứu tiến độ hành trình giao hàng GHN Express và kiểm tra thời hạn bảo hành điện tử chính hãng theo số điện thoại, mã đơn hàng hoặc Serial/IMEI tại MadK Store."
@@ -139,124 +139,126 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
         keywords="tra cứu đơn hàng, tra cứu bảo hành, ghn tracking, check serial madk, bảo hành điện tử"
       />
 
-      {/* Header Banner */}
-      <div className="text-center max-w-2xl mx-auto space-y-3">
-        <div className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
-          <span>🔍</span>
-          <span>CỔNG THÔNG TIN KHÁCH HÀNG 24/7</span>
-        </div>
-        <h1 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-          Tra cứu Đơn hàng & Bảo hành Điện tử
+      {/* Breadcrumb */}
+      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-gray-500">
+        <a className="hover:text-[#1D4ED8] flex items-center gap-1" href="/">
+          <span className="material-symbols-outlined text-[14px]">home</span>
+          <span>Trang chủ</span>
+        </a>
+        <span className="text-gray-300">/</span>
+        <span>Dịch vụ khách hàng</span>
+        <span className="text-gray-300">/</span>
+        <span className="text-[#111827] font-semibold">Tra cứu đơn hàng &amp; Bảo hành</span>
+      </nav>
+
+      {/* Page Title */}
+      <div className="text-center max-w-xl mx-auto mb-6">
+        <h1 className="text-xl md:text-2xl font-bold text-[#111827] tracking-tight">
+          Tra Cứu Đơn Hàng &amp; Bảo Hành
         </h1>
-        <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-          Nhập số điện thoại, mã đơn hàng hoặc số Serial/IMEI để kiểm tra lộ trình giao hàng GHN và hạn bảo hành sản phẩm tức thì.
+        <p className="text-xs text-gray-500 mt-1">
+          Nhập thông tin mã đơn hàng hoặc số điện thoại để kiểm tra hành trình vận chuyển và kích hoạt bảo hành điện tử.
         </p>
       </div>
 
-      {/* Tabs */}
-      <div className="flex justify-center">
-        <div className="inline-flex p-1.5 rounded-2.5xl bg-slate-100 border border-slate-200">
+      {/* Form Card (Screen 11 Retail Spec) */}
+      <div className="max-w-3xl mx-auto bg-white border border-[#E5E7EB] p-5 sm:p-6 rounded-lg">
+        {/* Quick lookup tabs */}
+        <div className="flex border-b border-[#E5E7EB] mb-5">
           <button
             type="button"
             onClick={() => {
               setActiveTab('order');
               setHasSearched(false);
             }}
-            className={`px-6 py-3 rounded-2xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 ${
+            className={`flex items-center gap-1.5 py-2 px-4 text-xs font-semibold border-b-2 -mb-px transition-colors ${
               activeTab === 'order'
-                ? 'bg-white text-blue-700 shadow-sm'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'text-[#1D4ED8] border-[#1D4ED8]'
+                : 'text-gray-500 hover:text-gray-800 border-transparent'
             }`}
           >
-            <span>🚚</span>
-            <span>Tra cứu đơn hàng (GHN)</span>
+            <span className="material-symbols-outlined text-[18px]">local_shipping</span>
+            <span>Đơn mua online</span>
           </button>
-
           <button
             type="button"
             onClick={() => {
               setActiveTab('warranty');
               setHasSearched(false);
             }}
-            className={`px-6 py-3 rounded-2xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 ${
+            className={`flex items-center gap-1.5 py-2 px-4 text-xs font-semibold border-b-2 -mb-px transition-colors ${
               activeTab === 'warranty'
-                ? 'bg-white text-blue-700 shadow-sm'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'text-[#1D4ED8] border-[#1D4ED8]'
+                : 'text-gray-500 hover:text-gray-800 border-transparent'
             }`}
           >
-            <span>🛡️</span>
-            <span>Tra cứu bảo hành (Serial)</span>
+            <span className="material-symbols-outlined text-[18px]">qr_code_scanner</span>
+            <span>Bảo hành thiết bị / IMEI</span>
           </button>
         </div>
+
+        {/* Search Input Box */}
+        <form onSubmit={handleSearch} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-700 mb-1">
+                {activeTab === 'order' ? 'Mã đơn hàng / SĐT đặt hàng' : 'Số Serial / IMEI máy'}{' '}
+                <span className="text-[#D70018]">*</span>
+              </label>
+              <input
+                type="text"
+                required
+                placeholder={
+                  activeTab === 'order'
+                    ? 'Ví dụ: ORD-889922 hoặc 0987654321'
+                    : 'Ví dụ: SN-ROG-SCAR-8899'
+                }
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full h-10 px-3 bg-white border border-[#E5E7EB] rounded-lg text-xs text-gray-900 focus:border-[#1D4ED8] focus:ring-0 outline-none transition-colors"
+              />
+            </div>
+            <div className="flex items-end">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full h-10 bg-[#1D4ED8] hover:bg-[#1E40AF] disabled:opacity-50 text-white font-semibold text-xs rounded-lg transition-colors flex items-center justify-center gap-2"
+              >
+                <span className="material-symbols-outlined text-[18px]">search</span>
+                <span>{loading ? 'Đang tra cứu...' : 'Tra cứu ngay'}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Example query chips */}
+          <div className="flex items-center gap-2 text-xs text-gray-400 pt-1">
+            <span>Gợi ý tra cứu nhanh:</span>
+            <button
+              type="button"
+              onClick={() => setQuery('0987654321')}
+              className="text-[#1D4ED8] hover:underline font-medium"
+            >
+              0987654321
+            </button>
+            <span>•</span>
+            <button
+              type="button"
+              onClick={() => setQuery('ORD-889922')}
+              className="text-[#1D4ED8] hover:underline font-medium"
+            >
+              ORD-889922
+            </button>
+            <span>•</span>
+            <button
+              type="button"
+              onClick={() => setQuery('SN-ROG-SCAR-8899')}
+              className="text-[#1D4ED8] hover:underline font-medium"
+            >
+              SN-ROG-SCAR-8899
+            </button>
+          </div>
+        </form>
       </div>
-
-      {/* Search Input Box */}
-      <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
-        <div className="relative flex items-center shadow-lg rounded-2.5xl bg-white border border-slate-200/80 p-2 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all">
-          <svg
-            className="w-5 h-5 text-slate-400 ml-3 mr-2"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-          <input
-            type="text"
-            required
-            placeholder={
-              activeTab === 'order'
-                ? 'Nhập mã đơn (VD: ORD-123456) hoặc Số điện thoại đặt hàng...'
-                : 'Nhập số Serial / IMEI thiết bị (VD: SN-ASUS-9988, IMEI-7788)...'
-            }
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="flex-1 px-2 py-3 bg-transparent text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm shadow-md shadow-blue-600/30 transition-all hover:scale-102 flex items-center gap-2 flex-shrink-0"
-          >
-            <span>{loading ? 'Đang kiểm tra...' : 'Tra cứu ngay'}</span>
-            <span>&rarr;</span>
-          </button>
-        </div>
-
-        {/* Example query chips */}
-        <div className="flex items-center justify-center gap-2 mt-3 text-xs text-slate-400">
-          <span>Gợi ý thử nghiệm:</span>
-          <button
-            type="button"
-            onClick={() => {
-              setQuery('0987654321');
-            }}
-            className="underline hover:text-blue-600 font-medium"
-          >
-            0987654321
-          </button>
-          <span>•</span>
-          <button
-            type="button"
-            onClick={() => {
-              setQuery('ORD-889922');
-            }}
-            className="underline hover:text-blue-600 font-medium"
-          >
-            ORD-889922
-          </button>
-          <span>•</span>
-          <button
-            type="button"
-            onClick={() => {
-              setQuery('SN-ASUS-VG249');
-            }}
-            className="underline hover:text-blue-600 font-medium"
-          >
-            SN-ASUS-VG249
-          </button>
-        </div>
-      </form>
 
       {/* Results Section */}
       {hasSearched && (

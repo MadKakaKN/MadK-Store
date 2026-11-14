@@ -510,31 +510,47 @@ export const CheckoutPage: React.FC = () => {
   }
 
   return (
-    <div className="py-6 sm:py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8 animate-fade-in">
-      {/* Breadcrumbs */}
-      <nav className="flex items-center text-xs sm:text-sm text-slate-500 gap-2">
-        <Link to="/" className="hover:text-blue-600 transition-colors">
-          Trang chủ
-        </Link>
-        <span>&rsaquo;</span>
-        <Link to="/cart" className="hover:text-blue-600 transition-colors">
-          Giỏ hàng
-        </Link>
-        <span>&rsaquo;</span>
-        <span className="font-semibold text-slate-900">Thanh toán & Đặt hàng</span>
+    <div className="py-4 sm:py-6 px-4 md:px-6 max-w-[1200px] mx-auto space-y-6">
+      {/* Breadcrumb */}
+      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-gray-500">
+        <Link to="/" className="hover:text-[#1D4ED8] hover:underline">Trang chủ</Link>
+        <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+        <Link to="/cart" className="hover:text-[#1D4ED8] hover:underline">Giỏ hàng</Link>
+        <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+        <span className="text-[#111827] font-semibold">Thanh toán &amp; Đặt hàng</span>
       </nav>
 
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight flex items-center gap-3">
-          <span>Xác nhận thông tin & Đặt hàng</span>
-          <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-            Thanh toán COD
-          </span>
-        </h1>
-        <p className="mt-1 text-xs sm:text-sm text-slate-500">
-          Vui lòng kiểm tra địa chỉ giao hàng và danh sách sản phẩm trước khi xác nhận đơn.
-        </p>
+      {/* STEP PROGRESSION BAR (Screen 7 Retail Stepper) */}
+      <div className="bg-white border border-[#E5E7EB] rounded-lg p-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+          {/* Step 1: Clickable Back */}
+          <Link
+            to="/cart"
+            className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-white border border-[#E5E7EB] hover:bg-gray-50 text-left transition-colors"
+          >
+            <div className="w-7 h-7 rounded-lg bg-gray-100 text-gray-700 border border-gray-300 flex items-center justify-center font-bold text-xs">1</div>
+            <div className="leading-tight">
+              <span className="text-[13px] font-semibold text-gray-800 block">1. Giỏ hàng ({itemCount} sản phẩm)</span>
+              <span className="text-[11px] text-gray-500 block">Xem lại cấu hình &amp; số lượng</span>
+            </div>
+          </Link>
+          {/* Step 2: Active */}
+          <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-[#EFF6FF] border border-[#1D4ED8] text-left">
+            <div className="w-7 h-7 rounded-lg bg-[#1D4ED8] text-white flex items-center justify-center font-bold text-xs">2</div>
+            <div className="leading-tight">
+              <span className="text-[13px] font-bold text-[#1D4ED8] block">2. Thông tin thanh toán &amp; Đặt hàng</span>
+              <span className="text-[11px] text-blue-700 block">Địa chỉ giao GHN &amp; VietQR / COD</span>
+            </div>
+          </div>
+          {/* Step 3: Inactive */}
+          <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-white border border-[#E5E7EB] text-left opacity-70">
+            <div className="w-7 h-7 rounded-lg bg-gray-100 text-gray-500 border border-gray-300 flex items-center justify-center font-bold text-xs">3</div>
+            <div className="leading-tight">
+              <span className="text-[13px] font-semibold text-gray-700 block">3. Đặt hàng thành công</span>
+              <span className="text-[11px] text-gray-500 block">Mã đơn &amp; hướng dẫn nhận máy</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Error Banners */}

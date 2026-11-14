@@ -1,0 +1,18 @@
+{
+  "name": "projects/15376973039181247916/screens/d6d5d52f6a904483850c01445896a31d",
+  "title": "MadK Store - Danh Mục Laptop & Bộ Lọc Filter Sheet (Mobile 390px)",
+  "screenshot": {
+    "name": "projects/15376973039181247916/screens/d6d5d52f6a904483850c01445896a31d/fileEntries/screenshot",
+    "downloadUrl": "https://stitch.googleapis.com/v1/projects/15376973039181247916/files/screenshot_00066013027c75ed09104f5aa4398e7d:download",
+    "mimeType": "image/png"
+  },
+  "htmlCode": {
+    "name": "projects/15376973039181247916/screens/d6d5d52f6a904483850c01445896a31d/fileEntries/html",
+    "downloadUrl": "https://stitch.googleapis.com/v1/projects/15376973039181247916/files/d6d5d52f6a904483850c01445896a31d:download",
+    "mimeType": "text/html"
+  },
+  "width": "780",
+  "height": "1826",
+  "deviceType": "MOBILE",
+  "screenType": "DESIGN"
+}

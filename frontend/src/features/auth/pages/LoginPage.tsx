@@ -92,214 +92,170 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[80vh] flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-slate-50/50">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="text-center">
-          <Link to="/" className="inline-flex items-center gap-2 mb-4 group">
-            <span className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-black text-2xl shadow-lg shadow-blue-600/30 group-hover:scale-105 transition-transform">
-              M
-            </span>
+    <div className="min-h-[75vh] flex flex-col justify-center py-10 px-4 bg-[#F3F4F6]">
+      <div className="w-full max-w-[420px] mx-auto bg-white border border-[#E5E7EB] rounded-lg p-6 sm:p-8">
+        {/* Top Flat Border Tabs */}
+        <div className="flex border-b border-[#E5E7EB] mb-6">
+          <button
+            type="button"
+            className="flex-1 pb-3 text-sm font-semibold text-[#1D4ED8] border-b-2 border-[#1D4ED8] text-center"
+          >
+            Đăng nhập
+          </button>
+          <Link
+            to={`/auth/register${explicitRedirect ? `?redirect=${encodeURIComponent(explicitRedirect)}` : ''}`}
+            className="flex-1 pb-3 text-sm font-semibold text-gray-500 hover:text-gray-800 border-b-2 border-transparent text-center transition-colors"
+          >
+            Đăng ký
           </Link>
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Đăng nhập tài khoản</h1>
-          <p className="mt-2 text-sm text-slate-600">
+        </div>
+
+        {/* Quick Demo Fill Helper */}
+        <div className="mb-4 p-2.5 bg-blue-50/70 border border-blue-200 rounded-lg flex items-center justify-between text-xs">
+          <span className="text-gray-600">Tài khoản thử nghiệm:</span>
+          <button
+            type="button"
+            onClick={() => {
+              handleFillDemo('customer@madkstore.vn', 'CustomerPassword123!');
+              setIsStaffAttempt(false);
+            }}
+            className="font-semibold text-[#1D4ED8] hover:underline"
+          >
+            Điền nhanh mẫu &rarr;
+          </button>
+        </div>
+
+        {/* Social Auth Buttons */}
+        <div className="mb-4">
+          <SocialAuthButtons />
+        </div>
+
+        {/* Divider */}
+        <div className="relative py-2 flex items-center justify-center mb-4">
+          <div className="w-full border-t border-[#E5E7EB]"></div>
+          <span className="bg-white px-2.5 text-xs text-gray-400 absolute">
+            hoặc đăng nhập bằng email
+          </span>
+        </div>
+
+        {/* Server Error Alert */}
+        {serverError && (
+          <div className="mb-4 p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2">
+            <span className="material-symbols-outlined text-[18px] text-rose-600 flex-shrink-0">warning</span>
+            <div className="flex-1">
+              <p className="font-semibold">{isStaffAttempt ? 'Khu vực dành cho Khách hàng' : 'Đăng nhập thất bại'}</p>
+              <p className="mt-0.5 leading-relaxed">{serverError}</p>
+              {isStaffAttempt && (
+                <div className="mt-2">
+                  <Link
+                    to="/admin/login"
+                    className="inline-flex items-center gap-1 text-[#1D4ED8] font-semibold hover:underline"
+                  >
+                    Chuyển sang Cổng Quản Trị &rarr;
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+          {/* Email Field */}
+          <div>
+            <label htmlFor="email" className="block text-xs font-semibold text-gray-700 mb-1">
+              Email hoặc Số điện thoại <span className="text-[#D70018]">*</span>
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
+              }}
+              placeholder="vidu@madkstore.vn"
+              className={`w-full h-10 px-3 text-sm bg-white border rounded-lg focus:border-[#1D4ED8] focus:ring-0 outline-none transition-colors ${
+                errors.email ? 'border-rose-400 text-rose-900' : 'border-[#E5E7EB]'
+              }`}
+            />
+            {errors.email && <p className="mt-1 text-xs text-rose-600">{errors.email}</p>}
+          </div>
+
+          {/* Password Field */}
+          <div>
+            <label htmlFor="password" className="block text-xs font-semibold text-gray-700 mb-1">
+              Mật khẩu <span className="text-[#D70018]">*</span>
+            </label>
+            <div className="relative">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (errors.password) setErrors((prev) => ({ ...prev, password: undefined }));
+                }}
+                placeholder="Nhập mật khẩu"
+                className={`w-full h-10 pl-3 pr-10 text-sm bg-white border rounded-lg focus:border-[#1D4ED8] focus:ring-0 outline-none transition-colors ${
+                  errors.password ? 'border-rose-400 text-rose-900' : 'border-[#E5E7EB]'
+                }`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
+                title={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+              >
+                <span className="material-symbols-outlined text-[18px]">
+                  {showPassword ? 'visibility_off' : 'visibility'}
+                </span>
+              </button>
+            </div>
+            {errors.password && <p className="mt-1 text-xs text-rose-600">{errors.password}</p>}
+          </div>
+
+          {/* Remember me & forgot password */}
+          <div className="flex items-center justify-between pt-0.5">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="w-4 h-4 rounded text-[#1D4ED8] focus:ring-0 border-gray-300"
+              />
+              <span className="text-xs text-gray-600">Ghi nhớ đăng nhập</span>
+            </label>
+            <Link
+              to="/auth/forgot-password"
+              className="text-xs text-[#1D4ED8] hover:underline font-medium"
+            >
+              Quên mật khẩu?
+            </Link>
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full h-10 bg-[#1D4ED8] hover:bg-[#1E40AF] disabled:opacity-50 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
+          >
+            {isSubmitting ? 'Đang xác thực...' : 'Đăng nhập'}
+          </button>
+
+          <p className="text-center text-xs text-gray-500 pt-2">
             Chưa có tài khoản?{' '}
             <Link
               to={`/auth/register${explicitRedirect ? `?redirect=${encodeURIComponent(explicitRedirect)}` : ''}`}
-              className="font-bold text-blue-600 hover:text-blue-500 hover:underline"
+              className="text-[#1D4ED8] font-semibold hover:underline"
             >
               Đăng ký ngay
             </Link>
           </p>
-        </div>
-      </div>
-
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md px-4 sm:px-0">
-        <div className="bg-white py-8 px-6 sm:px-10 shadow-xl shadow-slate-200/50 rounded-3xl border border-slate-100">
-          {/* Quick Demo Pill Helper */}
-          <div className="mb-6 p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
-            <p className="text-xs font-semibold text-slate-500 mb-2">Tài khoản khách hàng mẫu:</p>
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  handleFillDemo('customer@madkstore.vn', 'CustomerPassword123!');
-                  setIsStaffAttempt(false);
-                }}
-                className="text-xs font-medium px-2.5 py-1.5 bg-white hover:bg-blue-50 hover:text-blue-700 text-slate-700 rounded-lg border border-slate-200 shadow-2xs transition-colors"
-              >
-                👤 Điền tài khoản Khách hàng
-              </button>
-            </div>
-          </div>
-
-          {/* Server Error Alert */}
-          {serverError && (
-            <div className="mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-200/80 text-rose-800 text-sm flex items-start gap-3 animate-shake">
-              <span className="text-lg leading-none mt-0.5">⚠️</span>
-              <div className="flex-1">
-                <p className="font-semibold">{isStaffAttempt ? 'Khu vực dành riêng cho Khách hàng' : 'Đăng nhập thất bại'}</p>
-                <p className="text-xs text-rose-700 mt-0.5 leading-relaxed">{serverError}</p>
-                {isStaffAttempt && (
-                  <div className="mt-3">
-                    <Link
-                      to="/admin/login"
-                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors"
-                    >
-                      Chuyển sang Cổng Quản Trị &rarr;
-                    </Link>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-            {/* Email Field */}
-            <div>
-              <label htmlFor="email" className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Địa chỉ Email <span className="text-rose-500">*</span>
-              </label>
-              <div className="mt-1.5 relative">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
-                  }}
-                  placeholder="vidu@madkstore.vn"
-                  className={`w-full px-4 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${errors.email
-                      ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10'
-                      : 'border-slate-200 bg-white hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
-                    }`}
-                />
-              </div>
-              {errors.email && <p className="mt-1.5 text-xs text-rose-600 font-medium">{errors.email}</p>}
-            </div>
-
-            {/* Password Field */}
-            <div>
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                  Mật khẩu <span className="text-rose-500">*</span>
-                </label>
-                <Link
-                  to="/auth/forgot-password"
-                  className="text-xs font-semibold text-blue-600 hover:text-blue-500 hover:underline"
-                >
-                  Quên mật khẩu?
-                </Link>
-              </div>
-              <div className="mt-1.5 relative">
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? 'text' : 'password'}
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    if (errors.password) setErrors((prev) => ({ ...prev, password: undefined }));
-                  }}
-                  placeholder="Nhập mật khẩu"
-                  className={`w-full pl-4 pr-11 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${errors.password
-                      ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10'
-                      : 'border-slate-200 bg-white hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
-                    }`}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
-                  title={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
-                >
-                  {showPassword ? (
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"
-                      />
-                    </svg>
-                  ) : (
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                      />
-                    </svg>
-                  )}
-                </button>
-              </div>
-              {errors.password && <p className="mt-1.5 text-xs text-rose-600 font-medium">{errors.password}</p>}
-            </div>
-
-            {/* Remember Me Checkbox */}
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300 rounded"
-              />
-              <label htmlFor="remember-me" className="ml-2 block text-xs font-medium text-slate-600">
-                Ghi nhớ phiên đăng nhập trên thiết bị này
-              </label>
-            </div>
-
-            {/* Submit Button */}
-            <div>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-2xl shadow-md shadow-blue-600/20 text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
-              >
-                {isSubmitting ? (
-                  <span className="flex items-center gap-2">
-                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                    Đang đăng nhập...
-                  </span>
-                ) : (
-                  'Đăng nhập'
-                )}
-              </button>
-            </div>
-          </form>
-
-          {/* Social Logins */}
-          <SocialAuthButtons
-            layout="full"
-            onSuccess={handleLoginSuccess}
-            onError={(err) => setServerError(err)}
-          />
-
-          {/* Discreet Internal Staff Portal Entry */}
-          <div className="mt-6 pt-5 border-t border-slate-100 text-center">
-            <p className="text-xs text-slate-500">
-              Bạn là cán bộ, nhân viên cửa hàng?{' '}
-              <Link
-                to="/admin/login"
-                className="font-semibold text-blue-600 hover:text-blue-700 hover:underline inline-flex items-center gap-1 transition-colors"
-              >
-                Cổng quản trị nội bộ <span>→</span>
-              </Link>
-            </p>
-          </div>
-        </div>
+        </form>
       </div>
     </div>
   );

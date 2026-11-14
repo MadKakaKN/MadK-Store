@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Laptop Gaming &amp; Doanh Nhân - MadK Store</title>
+<!-- Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#1D4ED8",
+            "primary-hover": "#1E40AF",
+            "primary-light": "#EFF6FF",
+            secondary: "#D70018",
+            "secondary-light": "#FEE2E2",
+            dark: "#111827",
+            "dark-muted": "#374151",
+            gray: {
+              50: "#F9FAFB",
+              100: "#F3F4F6",
+              200: "#E5E7EB",
+              300: "#D1D5DB",
+              400: "#9CA3AF",
+              500: "#6B7280",
+              600: "#4B5563",
+              700: "#374151",
+              800: "#1F2937",
+              900: "#111827"
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          },
+          borderRadius: {
+            DEFAULT: "4px",
+            sm: "2px",
+            md: "6px",
+            lg: "8px",
+            xl: "8px"
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      background-color: #F3F4F6;
+      min-height: max(884px, 100dvh);
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-[#F3F4F6] text-[#111827] antialiased flex justify-center min-h-screen text-[14px]">
+<!-- Mobile Viewport Container (390px centered) -->
+<div class="w-full max-w-[390px] min-h-screen bg-[#F3F4F6] flex flex-col relative pb-20 border-x border-[#E5E7EB] overflow-x-hidden">
+<!-- 1. TOP ANNOUNCEMENT BAR -->
+<aside class="bg-[#111827] text-white px-3 py-1.5 flex items-center justify-between text-[11px] font-medium shrink-0">
+<div class="flex items-center gap-1.5 truncate">
+<span class="material-symbols-outlined text-[15px] text-[#9CA3AF]">local_shipping</span>
+<span class="truncate">Miễn phí giao hàng GHN từ 1.000.000₫</span>
+</div>
+<a class="flex items-center gap-1 font-semibold text-[#E5E7EB] shrink-0 pl-2" href="tel:18006868">
+<span class="material-symbols-outlined text-[14px]">call</span>
+<span>1800 6868</span>
+</a>
+</aside>
+<!-- 2. STICKY WHITE HEADER -->
+<header class="sticky top-0 z-40 bg-white border-b border-[#E5E7EB]">
+<!-- Search Bar & Actions -->
+<div class="px-3 py-2 flex items-center gap-2">
+<button aria-label="Quay lại" class="w-8 h-8 flex items-center justify-center rounded border border-[#E5E7EB] bg-white text-[#111827] hover:bg-gray-50 shrink-0" type="button">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<div class="flex-1 relative flex items-center">
+<span class="material-symbols-outlined absolute left-2.5 text-[#9CA3AF] text-[18px]">search</span>
+<input class="w-full h-8 pl-8 pr-7 bg-[#F9FAFB] border border-[#E5E7EB] rounded text-[13px] text-[#111827] placeholder-[#9CA3AF] focus:outline-none focus:border-[#1D4ED8]" placeholder="Nhập tên laptop, mã chip..." type="text" value="Laptop"/>
+<button class="absolute right-2 text-[#9CA3AF] hover:text-[#111827]" type="button">
+<span class="material-symbols-outlined text-[15px]">cancel</span>
+</button>
+</div>
+<a aria-label="Giỏ hàng" class="relative w-8 h-8 rounded border border-[#E5E7EB] bg-white flex items-center justify-center text-[#111827] shrink-0" href="#">
+<span class="material-symbols-outlined text-[18px]">shopping_cart</span>
+<span class="absolute -top-1 -right-1 w-4 h-4 bg-[#D70018] text-white rounded-[4px] text-[10px] font-bold flex items-center justify-center">3</span>
+</a>
+</div>
+<!-- Category Title & Total count badge -->
+<div class="px-3 pb-2 flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<h1 class="text-[15px] font-semibold text-[#111827]">Laptop</h1>
+<span class="px-1.5 py-0.5 rounded-[4px] bg-[#EFF6FF] border border-[#BFDBFE] text-[#1D4ED8] text-[11px] font-medium">
+          128 sản phẩm
+        </span>
+</div>
+<button class="flex items-center gap-1 text-[#1D4ED8] text-[12px] font-medium" type="button">
+<span class="material-symbols-outlined text-[15px]">balance</span>
+<span>So sánh (2)</span>
+</button>
+</div>
+<!-- Quick Toolbar: Filter Button + Sort Chips -->
+<div class="px-3 py-2 border-t border-[#E5E7EB] bg-[#F9FAFB] flex items-center gap-2">
+<!-- Filter Sheet Trigger Button -->
+<button class="h-7 px-2.5 rounded-[6px] bg-[#1D4ED8] text-white text-[12px] font-medium flex items-center gap-1 shrink-0" id="openFilterBtn" type="button">
+<span class="material-symbols-outlined text-[15px]">tune</span>
+<span>Bộ lọc</span>
+<span class="w-4 h-4 rounded-[4px] bg-white text-[#1D4ED8] text-[10px] font-bold flex items-center justify-center ml-0.5">3</span>
+</button>
+<!-- Sort and Filter Pills -->
+<div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar flex-1">
+<button class="h-7 px-2 rounded-[6px] bg-white border border-[#1D4ED8] text-[#1D4ED8] text-[12px] font-medium flex items-center gap-0.5 whitespace-nowrap">
+<span>Bán chạy</span>
+<span class="material-symbols-outlined text-[14px]">arrow_drop_down</span>
+</button>
+<button class="h-7 px-2 rounded-[6px] bg-white border border-[#E5E7EB] text-[#4B5563] text-[12px] font-medium whitespace-nowrap">
+          Mới nhất
+        </button>
+<button class="h-7 px-2 rounded-[6px] bg-white border border-[#E5E7EB] text-[#4B5563] text-[12px] font-medium flex items-center gap-0.5 whitespace-nowrap">
+<span>Giá</span>
+<span class="material-symbols-outlined text-[14px]">swap_vert</span>
+</button>
+</div>
+<button class="h-7 w-7 rounded-[6px] bg-white border border-[#E5E7EB] text-[#4B5563] flex items-center justify-center shrink-0" type="button">
+<span class="material-symbols-outlined text-[16px]">grid_view</span>
+</button>
+</div>
+<!-- Active Filter Chips Bar -->
+<div class="px-3 py-1.5 bg-white border-t border-[#E5E7EB] flex items-center gap-1.5 overflow-x-auto no-scrollbar text-[11px]">
+<div class="inline-flex items-center gap-1 pl-2 pr-1 py-0.5 rounded-[4px] bg-[#EFF6FF] border border-[#BFDBFE] text-[#1D4ED8] font-medium shrink-0">
+<span>ASUS</span>
+<span class="material-symbols-outlined text-[13px] cursor-pointer">close</span>
+</div>
+<div class="inline-flex items-center gap-1 pl-2 pr-1 py-0.5 rounded-[4px] bg-[#EFF6FF] border border-[#BFDBFE] text-[#1D4ED8] font-medium shrink-0">
+<span>30 - 50tr</span>
+<span class="material-symbols-outlined text-[13px] cursor-pointer">close</span>
+</div>
+<div class="inline-flex items-center gap-1 pl-2 pr-1 py-0.5 rounded-[4px] bg-[#EFF6FF] border border-[#BFDBFE] text-[#1D4ED8] font-medium shrink-0">
+<span>RTX 4080</span>
+<span class="material-symbols-outlined text-[13px] cursor-pointer">close</span>
+</div>
+<button class="text-[#D70018] font-medium underline shrink-0 px-1 text-[11px]" type="button">
+        Xóa tất cả
+      </button>
+</div>
+</header>
+<!-- 3. BACKGROUND PRODUCT GRID -->
+<main class="flex-1 px-3 py-3 flex flex-col gap-3">
+<!-- 2-Column Product Grid -->
+<div class="grid grid-cols-2 gap-2">
+<!-- Card 1: ASUS ROG Strix SCAR 16 -->
+<article class="bg-white border border-[#E5E7EB] rounded-lg p-2.5 flex flex-col justify-between">
+<div>
+<!-- Badges Bar -->
+<div class="flex items-center justify-between mb-1">
+<span class="px-1.5 py-0.5 rounded-[4px] bg-[#EFF6FF] border border-[#BFDBFE] text-[#1D4ED8] text-[10px] font-semibold">
+              Trả góp 0%
+            </span>
+<span class="px-1.5 py-0.5 rounded-[4px] bg-[#F3F4F6] border border-[#E5E7EB] text-[#4B5563] text-[10px] font-medium flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">view_in_ar</span> 3D
+            </span>
+</div>
+<!-- Product Image -->
+<div class="w-full h-28 flex items-center justify-center my-1">
+<img alt="ROG Strix SCAR 16" class="max-w-full max-h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHYBrer6ZAKrBxRVKyT023cXej-01vYh_ewyQNS9vk0focnkZjHQ0H4wdPrnaOrqB1mOxE-1ampBa80MJaO37zdiW_mizN9zebgwqYfiC4ouT4PtvC_EYiD6X-RozZFlXWqgrtusim5L1tyV7mM1I8DkWMdG7_1nXYFceMXN9GZ8jqOtKI5efOLiMT010ae3beFxYfOhke_3Ny7MRxdLijTnSqiUrJCpSMIv_Q5-nE"/>
+</div>
+<!-- Product Info -->
+<div>
+<div class="flex items-center gap-1 mb-0.5 text-[11px] text-[#6B7280]">
+<span class="material-symbols-outlined text-[#F59E0B] text-[13px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-semibold text-[#111827]">4.9</span>
+<span>(48)</span>
+<span>•</span>
+<span class="text-[#374151]">ASUS</span>
+</div>
+<h2 class="text-[13px] font-medium text-[#111827] line-clamp-2 leading-snug">
+              ROG Strix SCAR 16 G634JZ i9 13980HX / 32GB / RTX 4080
+            </h2>
+<div class="mt-1.5">
+<div class="flex items-baseline gap-1.5">
+<span class="text-[14px] font-bold text-[#D70018]">68.990.000₫</span>
+<span class="bg-[#FEE2E2] text-[#D70018] text-[10px] font-bold px-1 rounded-[2px]">-8%</span>
+</div>
+<div class="text-[11px] text-[#9CA3AF] line-through">74.990.000₫</div>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="mt-2.5 pt-2 border-t border-[#E5E7EB] grid grid-cols-2 gap-1.5">
+<button class="py-1 rounded border border-[#E5E7EB] text-[#374151] hover:border-[#1D4ED8] hover:text-[#1D4ED8] text-[11px] font-medium flex items-center justify-center gap-0.5">
+<span class="material-symbols-outlined text-[13px]">view_in_ar</span> Xem 3D
+          </button>
+<button class="py-1 rounded bg-[#1D4ED8] hover:bg-[#1E40AF] text-white text-[11px] font-semibold flex items-center justify-center">
+            Thêm giỏ
+          </button>
+</div>
+</article>
+<!-- Card 2: Apple MacBook Pro 16 M3 Max -->
+<article class="bg-white border border-[#E5E7EB] rounded-lg p-2.5 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="px-1.5 py-0.5 rounded-[4px] bg-[#EFF6FF] border border-[#BFDBFE] text-[#1D4ED8] text-[10px] font-semibold">
+              Bảo hành 24T
+            </span>
+<span class="px-1.5 py-0.5 rounded-[4px] bg-[#F3F4F6] border border-[#E5E7EB] text-[#4B5563] text-[10px] font-medium flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">view_in_ar</span> 3D
+            </span>
+</div>
+<div class="w-full h-28 flex items-center justify-center my-1">
+<img alt="MacBook Pro 16 M3 Max" class="max-w-full max-h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIMJqUzmTCR2N6HxIXw2ZkGp8D5AbOLC7GtLLVF-3vqgLcB5CbjQhcy9Wsbsok2zIB6KR3nFoxeukQbZJTuzjowxQ38wwzwTD9pZni6KsCgtgJAKbruLmnmt8yfXAn1eWBQ615nA0YNb0O6OeyHn-E8l05m6PV7B_2rqoi48OSm0saZzSGRm_39mlY-gtL9LHJJjtUt3N4rSoHChNK3K0FiSnfiIF2X9quBg_npMrx"/>
+</div>
+<div>
+<div class="flex items-center gap-1 mb-0.5 text-[11px] text-[#6B7280]">
+<span class="material-symbols-outlined text-[#F59E0B] text-[13px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-semibold text-[#111827]">5.0</span>
+<span>(112)</span>
+<span>•</span>
+<span class="text-[#374151]">Apple</span>
+</div>
+<h2 class="text-[13px] font-medium text-[#111827] line-clamp-2 leading-snug">
+              MacBook Pro 16 inch M3 Max (36GB Unified / 1TB SSD)
+            </h2>
+<div class="mt-1.5">
+<div class="flex items-baseline gap-1.5">
+<span class="text-[14px] font-bold text-[#D70018]">89.490.000₫</span>
+<span class="bg-[#FEE2E2] text-[#D70018] text-[10px] font-bold px-1 rounded-[2px]">-4%</span>
+</div>
+<div class="text-[11px] text-[#9CA3AF] line-through">92.990.000₫</div>
+</div>
+</div>
+</div>
+<div class="mt-2.5 pt-2 border-t border-[#E5E7EB] grid grid-cols-2 gap-1.5">
+<button class="py-1 rounded border border-[#E5E7EB] text-[#374151] hover:border-[#1D4ED8] hover:text-[#1D4ED8] text-[11px] font-medium flex items-center justify-center gap-0.5">
+<span class="material-symbols-outlined text-[13px]">view_in_ar</span> Xem 3D
+          </button>
+<button class="py-1 rounded bg-[#1D4ED8] hover:bg-[#1E40AF] text-white text-[11px] font-semibold flex items-center justify-center">
+            Thêm giỏ
+          </button>
+</div>
+</article>
+<!-- Card 3: Lenovo Legion Pro 7i -->
+<article class="bg-white border border-[#E5E7EB] rounded-lg p-2.5 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="px-1.5 py-0.5 rounded-[4px] bg-[#EFF6FF] border border-[#BFDBFE] text-[#1D4ED8] text-[10px] font-semibold">
+              Trả góp 0%
+            </span>
+<span class="px-1.5 py-0.5 rounded-[4px] bg-[#F3F4F6] border border-[#E5E7EB] text-[#4B5563] text-[10px] font-medium flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">view_in_ar</span> 3D
+            </span>
+</div>
+<div class="w-full h-28 flex items-center justify-center my-1">
+<img alt="Lenovo Legion Pro 7i" class="max-w-full max-h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiITNGkDJEDof9MxUvGuHGjV6QC1or3-H19GwssKiEIxOdlZrIkMn89oyI40zAhMqi8dzK-sAx7oivlhimr7-qHTz4CGNYq8RlqgPgMXEZff6epkKibMlYuNVoiZ2_G1Q7Iboi202Ev0CPuPSUffdEGlbOqo2qCnMJR7SJ6I4ga0KDVLEs1TqHLyLqQ51NDpdW_uSabb4ANFmfsZJZfQ6zCPptT81VABg6j0Anbw8Z"/>
+</div>
+<div>
+<div class="flex items-center gap-1 mb-0.5 text-[11px] text-[#6B7280]">
+<span class="material-symbols-outlined text-[#F59E0B] text-[13px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-semibold text-[#111827]">4.8</span>
+<span>(34)</span>
+<span>•</span>
+<span class="text-[#374151]">Lenovo</span>
+</div>
+<h2 class="text-[13px] font-medium text-[#111827] line-clamp-2 leading-snug">
+              Legion Pro 7i Gen 8 i9 13900HX / 32GB / RTX 4080
+            </h2>
+<div class="mt-1.5">
+<div class="flex items-baseline gap-1.5">
+<span class="text-[14px] font-bold text-[#D70018]">63.500.000₫</span>
+<span class="bg-[#FEE2E2] text-[#D70018] text-[10px] font-bold px-1 rounded-[2px]">-7%</span>
+</div>
+<div class="text-[11px] text-[#9CA3AF] line-through">67.990.000₫</div>
+</div>
+</div>
+</div>
+<div class="mt-2.5 pt-2 border-t border-[#E5E7EB] grid grid-cols-2 gap-1.5">
+<button class="py-1 rounded border border-[#E5E7EB] text-[#374151] hover:border-[#1D4ED8] hover:text-[#1D4ED8] text-[11px] font-medium flex items-center justify-center gap-0.5">
+<span class="material-symbols-outlined text-[13px]">view_in_ar</span> Xem 3D
+          </button>
+<button class="py-1 rounded bg-[#1D4ED8] hover:bg-[#1E40AF] text-white text-[11px] font-semibold flex items-center justify-center">
+            Thêm giỏ
+          </button>
+</div>
+</article>
+<!-- Card 4: Dell XPS 16 9640 -->
+<article class="bg-white border border-[#E5E7EB] rounded-lg p-2.5 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="px-1.5 py-0.5 rounded-[4px] bg-[#EFF6FF] border border-[#BFDBFE] text-[#1D4ED8] text-[10px] font-semibold">
+              Trả góp 0%
+            </span>
+<span class="px-1.5 py-0.5 rounded-[4px] bg-[#F3F4F6] border border-[#E5E7EB] text-[#4B5563] text-[10px] font-medium flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">view_in_ar</span> 3D
+            </span>
+</div>
+<div class="w-full h-28 flex items-center justify-center my-1">
+<img alt="Dell XPS 16" class="max-w-full max-h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4CTvbjAp4HHdHDKMd2BHLKlReZeI8DMsSJnmTl_TqqwBx1eF5ELsi0aHiYkoKLYwQNDF_LlhlQqJ7UnVJhHBOBdaLR29EEGC7MXQDB-dMXLQXjae8LDt4YSECPDO5y89pO43lVqa999oYDK9Qp6MfIJ-Z2zYRbvOAJnU-2S9FTpLnrkhyebKuzmNKEXxIAKM4lHK3UzHlTUlqptOVXR8vamXRuF4KbItN5UNruLm3"/>
+</div>
+<div>
+<div class="flex items-center gap-1 mb-0.5 text-[11px] text-[#6B7280]">
+<span class="material-symbols-outlined text-[#F59E0B] text-[13px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-semibold text-[#111827]">4.7</span>
+<span>(19)</span>
+<span>•</span>
+<span class="text-[#374151]">Dell</span>
+</div>
+<h2 class="text-[13px] font-medium text-[#111827] line-clamp-2 leading-snug">
+              XPS 16 9640 Core Ultra 7 155H / 32GB / RTX 4070 OLED
+            </h2>
+<div class="mt-1.5">
+<div class="flex items-baseline gap-1.5">
+<span class="text-[14px] font-bold text-[#D70018]">71.990.000₫</span>
+<span class="bg-[#FEE2E2] text-[#D70018] text-[10px] font-bold px-1 rounded-[2px]">-5%</span>
+</div>
+<div class="text-[11px] text-[#9CA3AF] line-through">76.000.000₫</div>
+</div>
+</div>
+</div>
+<div class="mt-2.5 pt-2 border-t border-[#E5E7EB] grid grid-cols-2 gap-1.5">
+<button class="py-1 rounded border border-[#E5E7EB] text-[#374151] hover:border-[#1D4ED8] hover:text-[#1D4ED8] text-[11px] font-medium flex items-center justify-center gap-0.5">
+<span class="material-symbols-outlined text-[13px]">view_in_ar</span> Xem 3D
+          </button>
+<button class="py-1 rounded bg-[#1D4ED8] hover:bg-[#1E40AF] text-white text-[11px] font-semibold flex items-center justify-center">
+            Thêm giỏ
+          </button>
+</div>
+</article>
+</div>
+</main>
+<!-- 4. MOBILE FILTER BOTTOM SHEET (Modal) -->
+<div class="fixed inset-0 bg-[#111827]/50 z-50 transition-opacity" id="filterBackdrop">
+<div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[390px] max-h-[82vh] bg-white rounded-t-lg border-t border-x border-[#E5E7EB] flex flex-col overflow-hidden">
+<!-- Drag Handle -->
+<div class="pt-2 pb-1 flex justify-center cursor-grab">
+<div class="w-10 h-1 bg-[#D1D5DB] rounded"></div>
+</div>
+<!-- Sheet Header -->
+<div class="px-3 py-2 border-b border-[#E5E7EB] flex items-center justify-between">
+<div>
+<h2 class="text-[15px] font-semibold text-[#111827]">Bộ lọc tìm kiếm</h2>
+<p class="text-[11px] text-[#6B7280]">128 sản phẩm phù hợp</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="text-[12px] font-medium text-[#D70018] hover:underline" type="button">Thiết lập lại</button>
+<button aria-label="Đóng" class="w-7 h-7 rounded border border-[#E5E7EB] bg-white flex items-center justify-center text-[#111827]" id="closeFilterBtn" type="button">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+</div>
+<!-- Scrollable Filter Content -->
+<div class="flex-1 overflow-y-auto px-3 py-3 space-y-4 no-scrollbar">
+<!-- Group 1: Thương hiệu -->
+<div>
+<span class="block text-[13px] font-semibold text-[#111827] mb-2">Thương hiệu</span>
+<div class="grid grid-cols-4 gap-1.5">
+<button class="h-8 rounded-lg border border-[#1D4ED8] bg-[#EFF6FF] text-[#1D4ED8] font-semibold text-[12px]" type="button">ASUS</button>
+<button class="h-8 rounded-lg border border-[#E5E7EB] bg-white text-[#374151] hover:border-[#1D4ED8] text-[12px]" type="button">Apple</button>
+<button class="h-8 rounded-lg border border-[#E5E7EB] bg-white text-[#374151] hover:border-[#1D4ED8] text-[12px]" type="button">Lenovo</button>
+<button class="h-8 rounded-lg border border-[#E5E7EB] bg-white text-[#374151] hover:border-[#1D4ED8] text-[12px]" type="button">Dell</button>
+<button class="h-8 rounded-lg border border-[#E5E7EB] bg-white text-[#374151] hover:border-[#1D4ED8] text-[12px]" type="button">Acer</button>
+<button class="h-8 rounded-lg border border-[#E5E7EB] bg-white text-[#374151] hover:border-[#1D4ED8] text-[12px]" type="button">MSI</button>
+<button class="h-8 rounded-lg border border-[#E5E7EB] bg-white text-[#374151] hover:border-[#1D4ED8] text-[12px]" type="button">HP</button>
+<button class="h-8 rounded-lg border border-[#E5E7EB] bg-white text-[#374151] hover:border-[#1D4ED8] text-[12px]" type="button">Razer</button>
+</div>
+</div>
+<!-- Group 2: Khoảng giá -->
+<div>
+<span class="block text-[13px] font-semibold text-[#111827] mb-2">Khoảng giá (triệu VNĐ)</span>
+<div class="grid grid-cols-2 gap-2 mb-2">
+<div class="relative">
+<span class="absolute left-2.5 top-2 text-[12px] text-[#6B7280]">Từ:</span>
+<input class="w-full h-8 pl-9 pr-2 rounded-lg border border-[#E5E7EB] text-[12px] font-semibold text-[#111827] focus:border-[#1D4ED8] focus:outline-none" type="text" value="30.000.000"/>
+</div>
+<div class="relative">
+<span class="absolute left-2.5 top-2 text-[12px] text-[#6B7280]">Đến:</span>
+<input class="w-full h-8 pl-11 pr-2 rounded-lg border border-[#E5E7EB] text-[12px] font-semibold text-[#111827] focus:border-[#1D4ED8] focus:outline-none" type="text" value="50.000.000"/>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-1.5">
+<button class="h-7 rounded-lg border border-[#E5E7EB] bg-white text-[#374151] text-[11px]" type="button">Dưới 10tr</button>
+<button class="h-7 rounded-lg border border-[#E5E7EB] bg-white text-[#374151] text-[11px]" type="button">10 - 20tr</button>
+<button class="h-7 rounded-lg border border-[#1D4ED8] bg-[#EFF6FF] text-[#1D4ED8] font-semibold text-[11px]" type="button">30 - 50tr</button>
+<button class="h-7 rounded-lg border border-[#E5E7EB] bg-white text-[#374151] text-[11px]" type="button">Trên 50tr</button>
+</div>
+</div>
+<!-- Group 3: CPU -->
+<div>
+<span class="block text-[13px] font-semibold text-[#111827] mb-2">Bộ vi xử lý (CPU)</span>
+<div class="grid grid-cols-3 gap-1.5">
+<button class="h-7 rounded-lg border border-[#E5E7EB] bg-white text-[#374151] text-[11px]" type="button">Core i5</button>
+<button class="h-7 rounded-lg border border-[#E5E7EB] bg-white text-[#374151] text-[11px]" type="button">Core i7</button>
+<button class="h-7 rounded-lg border border-[#1D4ED8] bg-[#EFF6FF] text-[#1D4ED8] font-semibold text-[11px]" type="button">Core i9 / Ultra</button>
+<button class="h-7 rounded-lg border border-[#E5E7EB] bg-white text-[#374151] text-[11px]" type="button">Apple M-Series</button>
+<button class="h-7 rounded-lg border border-[#E5E7EB] bg-white text-[#374151] text-[11px]" type="button">Ryzen 7</button>
+<button class="h-7 rounded-lg border border-[#E5E7EB] bg-white text-[#374151] text-[11px]" type="button">Ryzen 9</button>
+</div>
+</div>
+<!-- Group 4: Bộ nhớ RAM -->
+<div>
+<span class="block text-[13px] font-semibold text-[#111827] mb-2">Bộ nhớ RAM</span>
+<div class="grid grid-cols-3 gap-1.5">
+<button class="h-7 rounded-lg border border-[#E5E7EB] bg-white text-[#374151] text-[11px]" type="button">16 GB</button>
+<button class="h-7 rounded-lg border border-[#1D4ED8] bg-[#EFF6FF] text-[#1D4ED8] font-semibold text-[11px]" type="button">32 GB</button>
+<button class="h-7 rounded-lg border border-[#E5E7EB] bg-white text-[#374151] text-[11px]" type="button">64 GB+</button>
+</div>
+</div>
+<!-- Group 5: Ổ cứng -->
+<div>
+<span class="block text-[13px] font-semibold text-[#111827] mb-2">Dung lượng ổ cứng</span>
+<div class="grid grid-cols-3 gap-1.5">
+<button class="h-7 rounded-lg border border-[#E5E7EB] bg-white text-[#374151] text-[11px]" type="button">512 GB SSD</button>
+<button class="h-7 rounded-lg border border-[#1D4ED8] bg-[#EFF6FF] text-[#1D4ED8] font-semibold text-[11px]" type="button">1 TB SSD</button>
+<button class="h-7 rounded-lg border border-[#E5E7EB] bg-white text-[#374151] text-[11px]" type="button">2 TB SSD</button>
+</div>
+</div>
+<!-- Group 6: Tiêu chí dịch vụ -->
+<div>
+<span class="block text-[13px] font-semibold text-[#111827] mb-2">Tiêu chí dịch vụ</span>
+<div class="space-y-1.5">
+<label class="flex items-center justify-between p-2 rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] cursor-pointer">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#1D4ED8] text-[18px]">bolt</span>
+<span class="text-[12px] font-medium text-[#111827]">Giao hỏa tốc GHN 2h</span>
+</div>
+<input checked="" class="w-4 h-4 rounded text-[#1D4ED8] border-[#D1D5DB] focus:ring-0 focus:outline-none" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between p-2 rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] cursor-pointer">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#1D4ED8] text-[18px]">view_in_ar</span>
+<span class="text-[12px] font-medium text-[#111827]">Có mô hình 3D xoay 360°</span>
+</div>
+<input checked="" class="w-4 h-4 rounded text-[#1D4ED8] border-[#D1D5DB] focus:ring-0 focus:outline-none" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between p-2 rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] cursor-pointer">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#1D4ED8] text-[18px]">verified</span>
+<span class="text-[12px] font-medium text-[#111827]">Chính sách bảo hành 24T</span>
+</div>
+<input class="w-4 h-4 rounded text-[#1D4ED8] border-[#D1D5DB] focus:ring-0 focus:outline-none" type="checkbox"/>
+</label>
+</div>
+</div>
+</div>
+<!-- Sticky Bottom Action Bar inside Sheet -->
+<div class="p-3 bg-white border-t border-[#E5E7EB] shrink-0">
+<button class="w-full h-10 rounded-lg bg-[#1D4ED8] hover:bg-[#1E40AF] text-white font-semibold text-[13px] flex items-center justify-center gap-1.5 transition-colors" id="applyFilterBtn" type="button">
+<span>Xem 128 sản phẩm</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- 5. FLAT 4-TAB BOTTOM NAVIGATION BAR -->
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[390px] bg-white border-t border-[#E5E7EB] z-40 flex items-center justify-around h-14">
+<!-- Trang chủ -->
+<a class="flex flex-col items-center justify-center w-1/4 h-full text-[#6B7280] hover:text-[#111827]" href="#">
+<span class="material-symbols-outlined text-[20px]">home</span>
+<span class="text-[10px] font-medium mt-0.5">Trang chủ</span>
+</a>
+<!-- Danh mục (Active) -->
+<a class="flex flex-col items-center justify-center w-1/4 h-full text-[#1D4ED8] font-semibold" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">category</span>
+<span class="text-[10px] font-semibold mt-0.5">Danh mục</span>
+</a>
+<!-- Giỏ hàng -->
+<a class="relative flex flex-col items-center justify-center w-1/4 h-full text-[#6B7280] hover:text-[#111827]" href="#">
+<div class="relative">
+<span class="material-symbols-outlined text-[20px]">shopping_cart</span>
+<span class="absolute -top-1 -right-2 bg-[#D70018] text-white text-[9px] font-bold px-1 rounded-full border border-white">3</span>
+</div>
+<span class="text-[10px] font-medium mt-0.5">Giỏ hàng</span>
+</a>
+<!-- Tài khoản -->
+<a class="flex flex-col items-center justify-center w-1/4 h-full text-[#6B7280] hover:text-[#111827]" href="#">
+<span class="material-symbols-outlined text-[20px]">person</span>
+<span class="text-[10px] font-medium mt-0.5">Tài khoản</span>
+</a>
+</nav>
+</div>
+<!-- Interactive script for Filter Sheet toggle -->
+<script>
+  const filterBackdrop = document.getElementById('filterBackdrop');
+  const openFilterBtn = document.getElementById('openFilterBtn');
+  const closeFilterBtn = document.getElementById('closeFilterBtn');
+  const applyFilterBtn = document.getElementById('applyFilterBtn');
+
+  function toggleFilter(show) {
+    if (show) {
+      filterBackdrop.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    } else {
+      filterBackdrop.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  }
+
+  openFilterBtn.addEventListener('click', () => toggleFilter(true));
+  closeFilterBtn.addEventListener('click', () => toggleFilter(false));
+  applyFilterBtn.addEventListener('click', () => toggleFilter(false));
+
+  filterBackdrop.addEventListener('click', (e) => {
+    if (e.target === filterBackdrop) {
+      toggleFilter(false);
+    }
+  });
+</script>
+</body></html>

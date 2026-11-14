@@ -222,7 +222,10 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
 
   return (
     <div ref={containerRef} className="relative w-full">
-      <form onSubmit={handleSubmit} className="relative w-full">
+      <form onSubmit={handleSubmit} className="relative w-full flex items-center">
+        <span className="material-symbols-outlined absolute left-3 text-gray-400 text-lg pointer-events-none">
+          search
+        </span>
         <input
           ref={inputRef}
           type="text"
@@ -230,33 +233,13 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
             placeholder ||
             (isMobile
               ? 'Tìm kiếm sản phẩm tại MadK...'
-              : 'Tìm kiếm điện thoại, laptop, linh kiện, phụ kiện gaming...')
+              : 'Nhập tên laptop, điện thoại, linh kiện cần tìm...')
           }
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsOpen(true)}
-          className={`w-full bg-slate-100 hover:bg-slate-200/60 focus:bg-white text-slate-900 placeholder-slate-400 text-sm transition-all border border-transparent focus:border-brand-500 focus:outline-none focus:ring-4 focus:ring-brand-500/10 ${
-            isMobile
-              ? 'rounded-xl pl-9 pr-14 py-2 border-slate-200'
-              : 'rounded-2xl pl-11 pr-20 py-2.5 sm:py-3'
-          }`}
+          className={`w-full h-10 pl-9 pr-20 bg-white border border-[#D1D5DB] rounded text-sm text-[#111827] placeholder:text-gray-400 focus:outline-none focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] transition-colors`}
         />
-
-        {/* Search Icon */}
-        <div
-          className={`absolute pointer-events-none text-slate-400 top-1/2 -translate-y-1/2 ${
-            isMobile ? 'left-3' : 'left-3.5'
-          }`}
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-        </div>
 
         {/* Clear query button */}
         {query && (
@@ -266,26 +249,18 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
               setQuery('');
               inputRef.current?.focus();
             }}
-            className={`absolute top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 ${
-              isMobile ? 'right-12' : 'right-14'
-            }`}
+            className="absolute right-16 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
           >
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <span className="material-symbols-outlined text-base">close</span>
           </button>
         )}
 
         {/* Search Action Button */}
         <button
           type="submit"
-          className={`absolute top-1/2 -translate-y-1/2 bg-brand-600 hover:bg-brand-700 text-white font-semibold transition-colors shadow-sm active:scale-95 ${
-            isMobile
-              ? 'right-1 text-xs px-2.5 py-1 rounded-lg'
-              : 'right-1.5 text-xs px-3.5 py-1.5 sm:py-2 rounded-xl'
-          }`}
+          className="absolute right-1 top-1 bottom-1 px-4 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded text-xs font-semibold flex items-center gap-1 transition-colors"
         >
-          Tìm
+          <span>Tìm</span>
         </button>
       </form>
 

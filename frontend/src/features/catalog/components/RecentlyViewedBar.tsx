@@ -18,18 +18,11 @@ export const RecentlyViewedBar: React.FC<RecentlyViewedBarProps> = ({ currentPro
   if (items.length === 0) return null;
 
   return (
-    <section className="bg-slate-50 rounded-3.5xl p-6 sm:p-8 border border-slate-200/80 shadow-2xs">
-      <div className="flex items-center justify-between mb-5">
-        <div className="flex items-center gap-2.5">
-          <span className="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm">
-            🕒
-          </span>
-          <div>
-            <h3 className="font-extrabold text-base sm:text-lg text-slate-900 tracking-tight">
-              Sản phẩm bạn vừa xem
-            </h3>
-            <p className="text-xs text-slate-500">Tiếp tục tham khảo các thiết bị bạn đang cân nhắc</p>
-          </div>
+    <section className="bg-white border border-[#E5E7EB] rounded-lg p-3.5 shadow-none space-y-3">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1.5">
+          <span className="material-symbols-outlined text-base text-gray-500">history</span>
+          <h4 className="text-xs font-semibold text-[#111827]">Sản phẩm đã xem gần đây</h4>
         </div>
 
         <button
@@ -38,36 +31,39 @@ export const RecentlyViewedBar: React.FC<RecentlyViewedBarProps> = ({ currentPro
             clearRecentlyViewed();
             setItems([]);
           }}
-          className="text-xs text-slate-400 hover:text-rose-500 transition-colors"
+          className="text-[11px] text-gray-400 hover:text-red-600 transition-colors"
         >
-          Xóa lịch sử xem
+          Xóa lịch sử
         </button>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3.5">
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2.5">
         {items.slice(0, 6).map((item) => (
           <Link
             key={item.id}
             to={`/products/${item.slug}`}
-            className="group p-3 rounded-2xl bg-white border border-slate-200/80 hover:border-blue-400 hover:shadow-card-hover transition-all flex flex-col justify-between"
+            className="border border-[#E5E7EB] rounded-lg p-2 flex items-center gap-2.5 hover:border-[#1D4ED8] transition-colors bg-white group"
           >
-            <div>
-              <div className="aspect-square rounded-xl bg-slate-100 overflow-hidden mb-2.5">
-                <img
-                  src={item.thumbnailUrl || 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=300'}
-                  alt={item.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                />
-              </div>
-              <h4 className="font-bold text-slate-900 text-xs line-clamp-2 group-hover:text-blue-600 transition-colors">
+            <img
+              src={item.thumbnailUrl || `/images/products/${item.slug}.png`}
+              alt={item.name}
+              className="w-12 h-12 object-contain shrink-0 group-hover:scale-105 transition-transform"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                if (!target.dataset.fallback) {
+                  target.dataset.fallback = '1';
+                  target.src = `/images/products/${item.slug}.png`;
+                }
+              }}
+            />
+            <div className="min-w-0 flex-1">
+              <h5 className="text-xs text-[#111827] font-medium line-clamp-1 group-hover:text-[#1D4ED8] transition-colors">
                 {item.name}
-              </h4>
-            </div>
-
-            <div className="mt-2 pt-2 border-t border-slate-100">
-              <span className="text-xs font-black text-blue-700 block">
+              </h5>
+              <div className="text-[#D70018] text-xs font-bold mt-0.5">
                 {formatVND(item.price)}
-              </span>
+              </div>
+              <span className="text-[10px] text-[#1D4ED8] font-medium">Xem lại</span>
             </div>
           </Link>
         ))}

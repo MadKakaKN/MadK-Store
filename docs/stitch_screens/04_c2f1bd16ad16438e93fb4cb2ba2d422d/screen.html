@@ -1,0 +1,955 @@
+<!DOCTYPE html><html class="light" lang="vi"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>MadK Store | Hệ Thống Bán Lẻ Công Nghệ Chính Hãng Hàng Đầu Việt Nam</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            brand: '#1D4ED8',
+            brandDark: '#1E40AF',
+            price: '#D70018',
+            neutralBg: '#F3F4F6',
+            cardBorder: '#E5E7EB',
+            textMain: '#111827',
+            textMuted: '#6B7280',
+            success: '#15803D'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif']
+          },
+          borderRadius: {
+            DEFAULT: '4px',
+            'sm': '2px',
+            'md': '4px',
+            'lg': '8px',
+            'xl': '8px'
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #F3F4F6;
+      color: #111827;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 20;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+<!-- TOP ANNOUNCEMENT BAR -->
+<div class="bg-[#111827] text-white text-xs border-b border-[#374151]"><div class="max-w-[1240px] mx-auto px-4 h-8 flex items-center justify-between">
+<div class="flex items-center gap-2 text-gray-300 text-xs">
+<span class="material-symbols-outlined text-sm text-gray-400">local_shipping</span>
+<span>Miễn phí giao hàng GHN cho đơn từ 1.000.000₫</span>
+</div>
+<div class="flex items-center gap-4 text-xs text-gray-300">
+<a class="hover:text-white flex items-center gap-1 transition-colors" href="#pc-builder">
+<span class="material-symbols-outlined text-sm text-gray-400">construction</span>
+<span>Xây dựng PC</span>
+</a>
+<span class="text-gray-600">|</span>
+<a class="hover:text-white flex items-center gap-1 transition-colors" href="#tracking">
+<span class="material-symbols-outlined text-sm text-gray-400">receipt_long</span>
+<span>Tra cứu đơn &amp; Bảo hành</span>
+</a>
+</div>
+</div></div>
+<!-- MAIN HEADER -->
+<header class="bg-white border-b border-[#E5E7EB] sticky top-0 z-40"><div class="max-w-[1240px] mx-auto px-4 py-3 flex items-center justify-between gap-4">
+<!-- Logo & Wordmark -->
+<div class="flex items-center gap-3 shrink-0">
+<a class="flex items-center gap-2" href="#">
+<div class="w-8 h-8 bg-[#1D4ED8] rounded flex items-center justify-center text-white font-bold text-base">
+M
+</div>
+<span class="text-xl font-semibold leading-tight text-[#111827] tracking-tight">MadK Store</span>
+</a>
+<button class="flex items-center gap-1.5 px-3 py-2 bg-[#F3F4F6] hover:bg-[#E5E7EB] text-[#111827] rounded text-xs font-semibold border border-[#E5E7EB] transition-colors ml-2">
+<span class="material-symbols-outlined text-base text-gray-700">menu</span>
+<span>Danh mục</span>
+</button>
+</div>
+<!-- Search Input -->
+<div class="flex-1 max-w-xl mx-2">
+<form class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-gray-400 text-lg pointer-events-none">search</span>
+<input class="w-full h-10 pl-9 pr-20 bg-white border border-[#D1D5DB] rounded text-sm text-[#111827] placeholder:text-gray-400 focus:outline-none focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8]" placeholder="Nhập tên laptop, điện thoại, linh kiện cần tìm..." type="text">
+<button class="absolute right-1 top-1 bottom-1 px-4 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded text-xs font-semibold flex items-center gap-1 transition-colors" type="button">
+<span>Tìm</span>
+</button>
+</form>
+</div>
+<!-- Quick Action Items -->
+<div class="flex items-center gap-3 shrink-0">
+<!-- Hotline -->
+<div class="hidden lg:flex items-center gap-1.5 text-xs text-[#111827]">
+<span class="material-symbols-outlined text-lg text-gray-600">call</span>
+<div class="leading-tight">
+<span class="text-[11px] text-gray-500 block">Hotline:</span>
+<span class="font-semibold text-[#D70018]">1800 6868 <span class="text-gray-500 font-normal">(Miễn phí)</span></span>
+</div>
+</div>
+<!-- Tra cứu đơn hàng -->
+<a class="hidden md:flex items-center gap-1.5 px-2 py-1.5 hover:bg-[#F3F4F6] rounded text-xs text-[#111827] transition-colors" href="#tracking">
+<span class="material-symbols-outlined text-lg text-gray-600">local_shipping</span>
+<span class="font-medium">Tra cứu đơn hàng</span>
+</a>
+<!-- Giỏ hàng -->
+<a class="flex items-center gap-2 px-3 py-1.5 bg-[#F3F4F6] hover:bg-[#E5E7EB] border border-[#E5E7EB] rounded text-xs text-[#111827] transition-colors" href="#">
+<div class="relative flex items-center justify-center">
+<span class="material-symbols-outlined text-xl text-[#1D4ED8]">shopping_cart</span>
+<span class="absolute -top-1.5 -right-2 bg-[#D70018] text-white text-[10px] font-bold px-1 rounded h-4 min-w-[16px] flex items-center justify-center">3</span>
+</div>
+<span class="font-semibold hidden sm:inline ml-1">Giỏ hàng</span>
+</a>
+<!-- Tài khoản -->
+<a class="flex items-center gap-1.5 px-2.5 py-1.5 hover:bg-[#F3F4F6] rounded text-xs text-[#111827] transition-colors" href="#">
+<span class="material-symbols-outlined text-xl text-gray-600">person</span>
+<span class="font-semibold hidden sm:inline">Tài khoản</span>
+</a>
+</div>
+</div>
+<!-- Plain Clean Category Navigation Strip -->
+<div class="border-t border-[#E5E7EB] bg-white">
+<div class="max-w-[1240px] mx-auto px-4 py-2 flex items-center gap-6 overflow-x-auto text-xs text-gray-700 scrollbar-none whitespace-nowrap font-medium">
+<a class="text-[#1D4ED8] font-semibold hover:text-[#1D4ED8] pb-0.5" href="#">Laptop</a>
+<a class="hover:text-[#1D4ED8] transition-colors" href="#">Điện thoại &amp; Tablet</a>
+<a class="hover:text-[#1D4ED8] transition-colors" href="#">Máy tính &amp; PC</a>
+<a class="hover:text-[#1D4ED8] transition-colors" href="#">Màn hình</a>
+<a class="hover:text-[#1D4ED8] transition-colors" href="#">Linh kiện PC</a>
+<a class="hover:text-[#1D4ED8] transition-colors" href="#">Phụ kiện Gaming</a>
+<a class="hover:text-[#D70018] text-[#D70018] font-semibold transition-colors flex items-center gap-1" href="#flash-sale">
+<span>Khuyến mãi</span>
+</a>
+<a class="hover:text-[#1D4ED8] transition-colors" href="#">Thu cũ đổi mới</a>
+</div>
+</div></header>
+<main class="flex-1 max-w-[1240px] w-full mx-auto px-4 py-4 space-y-4">
+<!-- SECTION 2: HERO SECTION (Retail 3-Column Grid) -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
+<!-- Col 1: Vertical Category Menu (3 cols) -->
+<aside class="hidden lg:block lg:col-span-3 bg-white border border-[#E5E7EB] rounded-lg overflow-hidden shadow-none divide-y divide-[#E5E7EB]">
+<a class="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group" href="#categories">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">laptop_mac</span>
+<span class="font-medium">Laptop</span>
+</div>
+<span class="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
+</a>
+<a class="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group" href="#categories">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">smartphone</span>
+<span class="font-medium">Điện thoại &amp; Tablet</span>
+</div>
+<span class="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
+</a>
+<a class="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group" href="#categories">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">desktop_windows</span>
+<span class="font-medium">Máy tính để bàn &amp; PC</span>
+</div>
+<span class="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
+</a>
+<a class="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group" href="#categories">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">tv</span>
+<span class="font-medium">Màn hình máy tính</span>
+</div>
+<span class="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
+</a>
+<a class="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group" href="#categories">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">developer_board</span>
+<span class="font-medium">Linh kiện máy tính</span>
+</div>
+<span class="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
+</a>
+<a class="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group" href="#categories">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">keyboard</span>
+<span class="font-medium">Chuột &amp; Bàn phím</span>
+</div>
+<span class="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
+</a>
+<a class="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group" href="#categories">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">headphones</span>
+<span class="font-medium">Tai nghe &amp; Loa</span>
+</div>
+<span class="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
+</a>
+<a class="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group" href="#categories">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">router</span>
+<span class="font-medium">Phụ kiện &amp; Thiết bị mạng</span>
+</div>
+<span class="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
+</a>
+</aside>
+<!-- Col 2: Main Banner Carousel Container (6 cols) -->
+<div class="lg:col-span-6 bg-white border border-[#E5E7EB] rounded-lg p-5 flex flex-col justify-between relative shadow-none">
+<div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="space-y-2 max-w-xs">
+<span class="inline-block bg-[#FEF2F2] text-[#D70018] border border-[#FECACA] text-xs font-semibold px-2 py-0.5 rounded">
+              SIÊU SALE MÙA TỰU TRƯỜNG
+            </span>
+<h2 class="text-xl font-semibold text-[#111827] leading-snug">
+              Đại Tiệc Laptop Mùa Tựu Trường
+            </h2>
+<p class="text-xs text-gray-600">
+              Giảm đến <strong class="text-[#D70018] font-semibold">5.000.000₫</strong> &amp; tặng Balo Gaming cao cấp. Áp dụng toàn bộ ASUS, MSI, Lenovo, Acer.
+            </p>
+<div class="flex items-center gap-2 pt-1 text-xs text-gray-500">
+<span class="bg-[#F3F4F6] px-2 py-0.5 rounded border border-[#E5E7EB]">Intel Core i5/i7/i9</span>
+<span class="bg-[#F3F4F6] px-2 py-0.5 rounded border border-[#E5E7EB]">RTX 4050/4060</span>
+</div>
+<div class="pt-2">
+<a class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded-lg text-xs font-semibold transition-colors" href="#featured-products">
+<span>Mua ngay</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+<div class="shrink-0 flex items-center justify-center">
+<img alt="Laptop Gaming ASUS ROG" class="w-56 h-40 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBW7LkbSNfKhe31jizmkkaPmmzysigmJqhq46ycjebbsF4V4Hnd7g6m4ex8jo22zgKmBPXN-JpvB7yE5KKoUmIYQYxKidvKarCj4OewYYpuEE3ncIKDnrJ_cJ3h0i0gPu_DailrHd6D4lZ649eEogrIJq8WwkSJUqbeQfApGBJSGC_L_hcxbLU1jXdwKKdCVWy4MlhKU00f3CgZzfF9YSPZvmT-QCPdFI97JEmDGKlj">
+</div>
+</div>
+<!-- Carousel dots indicator -->
+<div class="flex items-center justify-center gap-1.5 pt-4">
+<span class="w-6 h-1.5 bg-[#1D4ED8] rounded"></span>
+<span class="w-1.5 h-1.5 bg-gray-300 rounded"></span>
+<span class="w-1.5 h-1.5 bg-gray-300 rounded"></span>
+<span class="w-1.5 h-1.5 bg-gray-300 rounded"></span>
+</div>
+</div>
+<!-- Col 3: Two Stacked Promo Banners (3 cols) -->
+<div class="lg:col-span-3 flex flex-col gap-3.5">
+<!-- Top Small Banner -->
+<div class="bg-white border border-[#E5E7EB] rounded-lg p-3.5 flex items-center justify-between gap-2 shadow-none flex-1">
+<div class="space-y-1">
+<span class="bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] text-[10px] font-semibold px-1.5 py-0.5 rounded">
+              TRADE-IN
+            </span>
+<h3 class="text-xs font-semibold text-[#111827] leading-snug">
+              Thu Cũ Đổi Mới Lên Đời
+            </h3>
+<p class="text-[11px] text-gray-500">Trợ giá thêm đến 3 Triệu đồng</p>
+<a class="inline-block text-xs font-semibold text-[#1D4ED8] hover:underline pt-0.5" href="#">Khám phá &gt;</a>
+</div>
+<img alt="Điện thoại flagship" class="w-20 h-20 object-contain shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCL9XRMkE7qfGpvW3nJSLHNz7EVeT1xI4KOa6JRHkVvBLhiLPF6txcoKiOZ7o_n1fjcqdDEhx9nwxEQVq23F7leyLLmLH7N02lyyT8eOAldFurpLMB8IoJXadjiquZZu9LE0yB73WZlyDS_D-IRF1kfrSoz7B2S0CjDX-L6r9iYFsyzUAwsTFGFNweiJntbtMtIYrvJV6kFujRwYBtMWBwEGb8S_21eBRQUd5FCBK2q">
+</div>
+<!-- Bottom Small Banner -->
+<div class="bg-white border border-[#E5E7EB] rounded-lg p-3.5 flex items-center justify-between gap-2 shadow-none flex-1">
+<div class="space-y-1">
+<span class="bg-[#F0FDF4] text-[#15803D] border border-[#BBF7D0] text-[10px] font-semibold px-1.5 py-0.5 rounded">
+              LINH KIỆN PC
+            </span>
+<h3 class="text-xs font-semibold text-[#111827] leading-snug">
+              Linh Kiện &amp; Gaming Gear
+            </h3>
+<p class="text-[11px] text-gray-500">Trả Góp 0% duyệt nhanh 5 phút</p>
+<a class="inline-block text-xs font-semibold text-[#1D4ED8] hover:underline pt-0.5" href="#pc-builder">Ráp máy ngay &gt;</a>
+</div>
+<img alt="VGA RTX" class="w-20 h-20 object-contain shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcq-c4z06kkrt0AIwCjO7wA4iTQO533ss3zp5ilWSbDQohJG_6-d_6cXF7ZE8PRYWOZ2I_lM9vqLf5LvuV5L1yKEn2inlISt2_AnC03cRKjF93VeNjh1fPI_XNv_QZXmzIVE9a-Jtzs67NR2KhAXGB5gV5KLcZh088JRu5wrXEnB6731KKVNxnUnij8047q2ereyFDeA6ZP4p71UVvWRjw0hZIeBi00pkAXAhPF8E0">
+</div>
+</div>
+</section>
+<!-- SECTION 3: TRUST STRIP (Thin single bordered row) -->
+<section class="bg-white border border-[#E5E7EB] rounded-lg py-3 px-4 shadow-none">
+<div class="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-[#E5E7EB]">
+<!-- Pillar 1 -->
+<div class="flex items-center gap-2.5 px-3 py-1">
+<span class="material-symbols-outlined text-2xl text-gray-500 shrink-0">verified_user</span>
+<div class="text-xs leading-tight">
+<span class="font-semibold text-[#111827] block">Hàng chính hãng 100%</span>
+<span class="text-gray-500 text-[11px]">Xuất hóa đơn VAT đầy đủ</span>
+</div>
+</div>
+<!-- Pillar 2 -->
+<div class="flex items-center gap-2.5 px-3 py-1">
+<span class="material-symbols-outlined text-2xl text-gray-500 shrink-0">local_shipping</span>
+<div class="text-xs leading-tight">
+<span class="font-semibold text-[#111827] block">Giao nhanh GHN 2 giờ</span>
+<span class="text-gray-500 text-[11px]">Hỏa tốc khu vực nội thành</span>
+</div>
+</div>
+<!-- Pillar 3 -->
+<div class="flex items-center gap-2.5 px-3 py-1">
+<span class="material-symbols-outlined text-2xl text-gray-500 shrink-0">autorenew</span>
+<div class="text-xs leading-tight">
+<span class="font-semibold text-[#111827] block">Đổi trả 7 ngày</span>
+<span class="text-gray-500 text-[11px]">Lỗi 1 đổi 1 tận nơi tiện lợi</span>
+</div>
+</div>
+<!-- Pillar 4 -->
+<div class="flex items-center gap-2.5 px-3 py-1">
+<span class="material-symbols-outlined text-2xl text-gray-500 shrink-0">credit_card</span>
+<div class="text-xs leading-tight">
+<span class="font-semibold text-[#111827] block">Trả góp 0% lãi suất</span>
+<span class="text-gray-500 text-[11px]">Qua thẻ &amp; công ty tài chính</span>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 4: FLASH SALE GIỜ VÀNG (Flat Solid Red Banner + 5-Col Grid) -->
+<section class="space-y-2.5" id="flash-sale">
+<!-- Flash Sale Header -->
+<div class="bg-[#D70018] rounded-lg px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-white">
+<div class="flex items-center gap-3">
+<span class="font-bold text-base tracking-wide uppercase">FLASH SALE GIỜ VÀNG</span>
+<!-- Countdown Boxed -->
+<div class="flex items-center gap-1 text-xs font-semibold">
+<span class="text-[11px] text-red-100 mr-1">Kết thúc sau:</span>
+<span class="w-6 h-6 bg-white text-[#D70018] rounded flex items-center justify-center font-bold">02</span>
+<span>:</span>
+<span class="w-6 h-6 bg-white text-[#D70018] rounded flex items-center justify-center font-bold">45</span>
+<span>:</span>
+<span class="w-6 h-6 bg-white text-[#D70018] rounded flex items-center justify-center font-bold">18</span>
+</div>
+</div>
+<a class="text-xs text-white hover:underline flex items-center gap-0.5 font-medium" href="#">
+<span>Xem tất cả deal</span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</a>
+</div>
+<!-- 5-Column Product Grid -->
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+<!-- Card 1 -->
+<div class="bg-white border border-[#E5E7EB] rounded-lg p-2.5 flex flex-col justify-between hover:border-[#1D4ED8] transition-colors relative">
+<div>
+<div class="relative bg-white aspect-square flex items-center justify-center mb-2">
+<span class="absolute top-0 left-0 bg-[#FEF2F2] text-[#D70018] border border-[#FECACA] text-[10px] font-bold px-1.5 py-0.5 rounded">
+                -20%
+              </span>
+<img alt="Laptop ASUS TUF Gaming" class="max-h-36 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCa6LorilKR9ReVue2BtfZj30H0gdyjyJQ46T1nvWI9mJwDbBdonWZGoSDE5mxm-M3lwLHFas7oQC5mzsUvJFL57bXMSFii9CcXerGh9a-8HGTKHOoTyRPVe_e7p3L2oNwOUE0IT4qtKbHWuzqUnMHUR_J-9IiUXv3jWwS1GhnPyLemOGK40qV5_PDmbj2RR7l6OI3m0RJFPkpuVLurMj6r1mXoccOC8zgrCtpYZTSh">
+</div>
+<h4 class="text-xs font-semibold text-[#111827] line-clamp-2 hover:text-[#1D4ED8]">
+              Laptop ASUS TUF Gaming A15 R7 7735HS / RTX 4050 / 144Hz
+            </h4>
+<div class="mt-2">
+<div class="text-[#D70018] text-base font-bold leading-none">18.490.000₫</div>
+<div class="text-gray-400 text-xs line-through mt-0.5">22.990.000₫</div>
+</div>
+</div>
+<!-- Progress bar -->
+<div class="mt-3 space-y-1">
+<div class="flex justify-between items-center text-xs text-gray-500 font-medium">
+<span>Đã bán</span>
+<span class="text-[#D70018] font-semibold">42/60</span>
+</div>
+<div class="w-full bg-[#E5E7EB] h-2 rounded overflow-hidden">
+<div class="bg-[#D70018] h-full rounded" style="width: 70%;"></div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white border border-[#E5E7EB] rounded-lg p-2.5 flex flex-col justify-between hover:border-[#1D4ED8] transition-colors relative">
+<div>
+<div class="relative bg-white aspect-square flex items-center justify-center mb-2">
+<span class="absolute top-0 left-0 bg-[#FEF2F2] text-[#D70018] border border-[#FECACA] text-[10px] font-bold px-1.5 py-0.5 rounded">
+                -31%
+              </span>
+<img alt="Chuột Logitech G304" class="max-h-36 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCQaT6RhCw07egusXYxlDgEekQcWK8dpey0FNmQkQAa13eu6W7hsJdhpMCwg8CajVV0w9kmmi0grpisyepM_g6EXXNUTk-sIvg0JOf-KwodML0iB3obtHoQEytiiKp7rJmhGN2sQ5yCAjeJj_TkqCOTmGJ2FmCLoQ47aqQ93lqoBYwzDA_jXI4n0bd0Ccri99LIpoOa28LNO67d_TYLMvwmTLRAunRdD4K3EZVfgEu">
+</div>
+<h4 class="text-xs font-semibold text-[#111827] line-clamp-2 hover:text-[#1D4ED8]">
+              Chuột Gaming Không Dây Logitech G304 Lightspeed 12.000 DPI
+            </h4>
+<div class="mt-2">
+<div class="text-[#D70018] text-base font-bold leading-none">680.000₫</div>
+<div class="text-gray-400 text-xs line-through mt-0.5">990.000₫</div>
+</div>
+</div>
+<div class="mt-3 space-y-1">
+<div class="flex justify-between items-center text-xs text-gray-500 font-medium">
+<span>Đã bán</span>
+<span class="text-[#D70018] font-semibold">51/60</span>
+</div>
+<div class="w-full bg-[#E5E7EB] h-2 rounded overflow-hidden">
+<div class="bg-[#D70018] h-full rounded" style="width: 85%;"></div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white border border-[#E5E7EB] rounded-lg p-2.5 flex flex-col justify-between hover:border-[#1D4ED8] transition-colors relative">
+<div>
+<div class="relative bg-white aspect-square flex items-center justify-center mb-2">
+<span class="absolute top-0 left-0 bg-[#FEF2F2] text-[#D70018] border border-[#FECACA] text-[10px] font-bold px-1.5 py-0.5 rounded">
+                -22%
+              </span>
+<img alt="Màn hình ASUS ROG Swift" class="max-h-36 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOiR_Yn7BzREtHqHFsh6kdy6tH6BHmL-Z5NPDkVRcceOzvZ_EpI__LqzWW9F4bOpo2_zoQTnZmr1w7nUNhNtyYp1BhjK2l-WdrUqjqcLcBJdSQBKxojwFUeBBtJMhCdBZ2nQKvG-GDw52pOI-53b1UoeZ2VMwA5SyMGkLTW0ZVj1gbwzHpBGbiIb-VaiNMFa4PmuoT3LlhqzT3lLT3fCVmdAcVWScXdUKMlc_oIxSj">
+</div>
+<h4 class="text-xs font-semibold text-[#111827] line-clamp-2 hover:text-[#1D4ED8]">
+              Màn Hình ASUS ROG Swift 27 Inch 2K IPS 180Hz 1ms
+            </h4>
+<div class="mt-2">
+<div class="text-[#D70018] text-base font-bold leading-none">6.490.000₫</div>
+<div class="text-gray-400 text-xs line-through mt-0.5">8.290.000₫</div>
+</div>
+</div>
+<div class="mt-3 space-y-1">
+<div class="flex justify-between items-center text-xs text-gray-500 font-medium">
+<span>Đã bán</span>
+<span class="text-[#D70018] font-semibold">29/50</span>
+</div>
+<div class="w-full bg-[#E5E7EB] h-2 rounded overflow-hidden">
+<div class="bg-[#D70018] h-full rounded" style="width: 58%;"></div>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-white border border-[#E5E7EB] rounded-lg p-2.5 flex flex-col justify-between hover:border-[#1D4ED8] transition-colors relative">
+<div>
+<div class="relative bg-white aspect-square flex items-center justify-center mb-2">
+<span class="absolute top-0 left-0 bg-[#FEF2F2] text-[#D70018] border border-[#FECACA] text-[10px] font-bold px-1.5 py-0.5 rounded">
+                -21%
+              </span>
+<img alt="Bàn phím cơ Keychron" class="max-h-36 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXKWjfDAZmipRT5e-TwgxPP4wEzjwB2EQWaiGHv88ORQs5Sc-eVdSmmiieRqUX9f06ZAqvA2tZHdcq2hxKRjJ0UaPi2uv6IWpNltxPwifpu00zaYj6uvsfJ4tlLYAfv-t1Z9_foJLROKHXKjPQnv9F95KyUw6DlQkUDeQFhb3sUlor1FXeaZuPciNp26bGOYQz4AXcD3SRvKKIeYru9CucbMbC6ZpWGxJknpp3BS5J">
+</div>
+<h4 class="text-xs font-semibold text-[#111827] line-clamp-2 hover:text-[#1D4ED8]">
+              Bàn Phím Cơ Không Dây Keychron K8 Pro QMK/VIA Hot-swap
+            </h4>
+<div class="mt-2">
+<div class="text-[#D70018] text-base font-bold leading-none">1.890.000₫</div>
+<div class="text-gray-400 text-xs line-through mt-0.5">2.390.000₫</div>
+</div>
+</div>
+<div class="mt-3 space-y-1">
+<div class="flex justify-between items-center text-xs text-gray-500 font-medium">
+<span>Đã bán</span>
+<span class="text-[#D70018] font-semibold">39/50</span>
+</div>
+<div class="w-full bg-[#E5E7EB] h-2 rounded overflow-hidden">
+<div class="bg-[#D70018] h-full rounded" style="width: 78%;"></div>
+</div>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="bg-white border border-[#E5E7EB] rounded-lg p-2.5 flex flex-col justify-between hover:border-[#1D4ED8] transition-colors relative">
+<div>
+<div class="relative bg-white aspect-square flex items-center justify-center mb-2">
+<span class="absolute top-0 left-0 bg-[#FEF2F2] text-[#D70018] border border-[#FECACA] text-[10px] font-bold px-1.5 py-0.5 rounded">
+                -26%
+              </span>
+<img alt="Tai nghe Sony WH-1000XM5" class="max-h-36 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYbXbox4oIr9TH70tdHMzxfVs7LejUBrAMDkhtFq6tmf7_jT6s6scJTwHZMsBwI2X21UtzOUGoDUW7Dt9j_QIK_sJfWjV1Hi5ahJZLiEGO-or6BXM35jwUrQzWXgeZ1FeZOBA8CzUeH6pOA8i8tXfxdSNuW44eQep4SgY-CAnGz1KWZokNZ1mveBKGnvXzwVwiRqzS6A_ptm6vpvZgAn1gOKHiNjan1UvjzqlHnKj1">
+</div>
+<h4 class="text-xs font-semibold text-[#111827] line-clamp-2 hover:text-[#1D4ED8]">
+              Tai Nghe Chống Ồn Cao Cấp Sony WH-1000XM5 Hi-Res Wireless
+            </h4>
+<div class="mt-2">
+<div class="text-[#D70018] text-base font-bold leading-none">6.290.000₫</div>
+<div class="text-gray-400 text-xs line-through mt-0.5">8.490.000₫</div>
+</div>
+</div>
+<div class="mt-3 space-y-1">
+<div class="flex justify-between items-center text-xs text-gray-500 font-medium">
+<span>Đã bán</span>
+<span class="text-[#D70018] font-semibold">45/50</span>
+</div>
+<div class="w-full bg-[#E5E7EB] h-2 rounded overflow-hidden">
+<div class="bg-[#D70018] h-full rounded" style="width: 90%;"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 5: DANH MỤC CÔNG NGHỆ (8 Equal Columns Grid) -->
+<section class="space-y-2.5" id="categories">
+<div class="flex items-center justify-between">
+<h3 class="text-base font-semibold text-[#111827]">Danh mục công nghệ</h3>
+</div>
+<div class="bg-white border border-[#E5E7EB] rounded-lg grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 divide-x divide-y lg:divide-y-0 divide-[#E5E7EB] shadow-none">
+<!-- Item 1 -->
+<a class="p-3 flex flex-col items-center text-center hover:bg-[#F9FAFB] transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl text-gray-600 group-hover:text-[#1D4ED8] mb-1.5">laptop</span>
+<span class="text-xs font-medium text-[#111827] group-hover:text-[#1D4ED8]">Laptop</span>
+</a>
+<!-- Item 2 -->
+<a class="p-3 flex flex-col items-center text-center hover:bg-[#F9FAFB] transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl text-gray-600 group-hover:text-[#1D4ED8] mb-1.5">smartphone</span>
+<span class="text-xs font-medium text-[#111827] group-hover:text-[#1D4ED8]">Điện thoại</span>
+</a>
+<!-- Item 3 -->
+<a class="p-3 flex flex-col items-center text-center hover:bg-[#F9FAFB] transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl text-gray-600 group-hover:text-[#1D4ED8] mb-1.5">tablet_mac</span>
+<span class="text-xs font-medium text-[#111827] group-hover:text-[#1D4ED8]">Máy tính bảng</span>
+</a>
+<!-- Item 4 -->
+<a class="p-3 flex flex-col items-center text-center hover:bg-[#F9FAFB] transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl text-gray-600 group-hover:text-[#1D4ED8] mb-1.5">desktop_windows</span>
+<span class="text-xs font-medium text-[#111827] group-hover:text-[#1D4ED8]">Màn hình</span>
+</a>
+<!-- Item 5 -->
+<a class="p-3 flex flex-col items-center text-center hover:bg-[#F9FAFB] transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl text-gray-600 group-hover:text-[#1D4ED8] mb-1.5">sports_esports</span>
+<span class="text-xs font-medium text-[#111827] group-hover:text-[#1D4ED8]">PC Gaming</span>
+</a>
+<!-- Item 6 -->
+<a class="p-3 flex flex-col items-center text-center hover:bg-[#F9FAFB] transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl text-gray-600 group-hover:text-[#1D4ED8] mb-1.5">memory</span>
+<span class="text-xs font-medium text-[#111827] group-hover:text-[#1D4ED8]">CPU &amp; VGA</span>
+</a>
+<!-- Item 7 -->
+<a class="p-3 flex flex-col items-center text-center hover:bg-[#F9FAFB] transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl text-gray-600 group-hover:text-[#1D4ED8] mb-1.5">headphones</span>
+<span class="text-xs font-medium text-[#111827] group-hover:text-[#1D4ED8]">Phụ kiện</span>
+</a>
+<!-- Item 8 -->
+<a class="p-3 flex flex-col items-center text-center hover:bg-[#F9FAFB] transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl text-gray-600 group-hover:text-[#1D4ED8] mb-1.5">keyboard</span>
+<span class="text-xs font-medium text-[#111827] group-hover:text-[#1D4ED8]">Bàn phím cơ</span>
+</a>
+</div>
+</section>
+<!-- SECTION 6: SẢN PHẨM NỔI BẬT (Featured Products with Tabs) -->
+<section class="space-y-3" id="featured-products">
+<div class="flex items-center justify-between border-b border-[#E5E7EB] pb-2">
+<h3 class="text-base font-semibold text-[#111827]">Sản phẩm nổi bật</h3>
+<!-- Filter Tabs -->
+<div class="flex items-center gap-4 text-xs">
+<button class="text-gray-500 hover:text-[#111827] pb-2 font-medium">Mới nhất</button>
+<button class="text-[#1D4ED8] font-semibold border-b-2 border-[#1D4ED8] pb-2">Bán chạy</button>
+<button class="text-gray-500 hover:text-[#111827] pb-2 font-medium">Giảm giá sâu</button>
+</div>
+</div>
+<!-- 5-Column Product Grid -->
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5"><!-- Product Card 1 -->
+<div class="bg-white border border-[#E5E7EB] rounded-lg p-3 flex flex-col justify-between hover:border-[#1D4ED8] transition-colors">
+<div>
+<div class="relative bg-white aspect-square flex items-center justify-center mb-2">
+<span class="absolute top-0 left-0 bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] text-[10px] font-semibold px-1.5 py-0.5 rounded">
+Trả góp 0%
+</span>
+<span class="absolute top-0 right-0 border border-[#D1D5DB] text-gray-600 bg-white text-[10px] font-medium px-1.5 py-0.5 rounded">
+3D
+</span>
+<img alt="Laptop ASUS ROG Strix SCAR 16" class="max-h-36 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBW7LkbSNfKhe31jizmkkaPmmzysigmJqhq46ycjebbsF4V4Hnd7g6m4ex8jo22zgKmBPXN-JpvB7yE5KKoUmIYQYxKidvKarCj4OewYYpuEE3ncIKDnrJ_cJ3h0i0gPu_DailrHd6D4lZ649eEogrIJq8WwkSJUqbeQfApGBJSGC_L_hcxbLU1jXdwKKdCVWy4MlhKU00f3CgZzfF9YSPZvmT-QCPdFI97JEmDGKlj">
+</div>
+<h4 class="text-xs font-semibold text-[#111827] line-clamp-2 hover:text-[#1D4ED8] leading-snug">
+Laptop ASUS ROG Strix SCAR 16 G634JYR - Core i9 14900HX • 32GB • 1TB • RTX 4090 16GB
+</h4>
+<div class="text-[11px] text-gray-500 mt-1 line-clamp-1">
+Màn 16 inch Mini LED 2.5K 240Hz • 2.5kg
+</div>
+<div class="mt-2">
+<div class="flex items-center gap-1.5">
+<span class="text-[#D70018] text-base font-bold leading-none">76.990.000₫</span>
+<span class="bg-[#FEF2F2] text-[#D70018] border border-[#FECACA] text-[10px] font-bold px-1 py-0.2 rounded">-7%</span>
+</div>
+<div class="text-gray-400 text-xs line-through mt-0.5">82.990.000₫</div>
+</div>
+<div class="text-[11px] text-gray-600 mt-1.5 line-clamp-1">
+Quà tặng: Chuột Gaming + Balo trị giá 1.200.000₫
+</div>
+<div class="flex items-center gap-1 mt-1 text-[11px] text-gray-500">
+<span class="material-symbols-outlined text-xs text-amber-500" style="font-variation-settings: 'FILL' 0;">star</span>
+<span class="font-medium text-[#111827]">4.8</span>
+<span>(126 đánh giá)</span>
+</div>
+</div>
+<div class="mt-3 pt-2 border-t border-[#E5E7EB] grid grid-cols-2 gap-1.5">
+<button class="px-2 py-1.5 bg-white border border-[#D1D5DB] hover:bg-[#F3F4F6] text-[#374151] rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-sm">view_in_ar</span>
+<span>Xem 3D</span>
+</button>
+<button class="px-2 py-1.5 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+<span>Thêm giỏ</span>
+</button>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-white border border-[#E5E7EB] rounded-lg p-3 flex flex-col justify-between hover:border-[#1D4ED8] transition-colors">
+<div>
+<div class="relative bg-white aspect-square flex items-center justify-center mb-2">
+<span class="absolute top-0 left-0 bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] text-[10px] font-semibold px-1.5 py-0.5 rounded">
+Trả góp 0%
+</span>
+<span class="absolute top-0 right-0 border border-[#D1D5DB] text-gray-600 bg-white text-[10px] font-medium px-1.5 py-0.5 rounded">
+3D
+</span>
+<img alt="iPhone 15 Pro Max 256GB" class="max-h-36 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCL9XRMkE7qfGpvW3nJSLHNz7EVeT1xI4KOa6JRHkVvBLhiLPF6txcoKiOZ7o_n1fjcqdDEhx9nwxEQVq23F7leyLLmLH7N02lyyT8eOAldFurpLMB8IoJXadjiquZZu9LE0yB73WZlyDS_D-IRF1kfrSoz7B2S0CjDX-L6r9iYFsyzUAwsTFGFNweiJntbtMtIYrvJV6kFujRwYBtMWBwEGb8S_21eBRQUd5FCBK2q">
+</div>
+<h4 class="text-xs font-semibold text-[#111827] line-clamp-2 hover:text-[#1D4ED8] leading-snug">
+iPhone 15 Pro Max 256GB - Chip Apple A17 Pro Titan Tự Nhiên VN/A
+</h4>
+<div class="text-[11px] text-gray-500 mt-1 line-clamp-1">
+Màn OLED 6.7 inch Super Retina XDR 120Hz
+</div>
+<div class="mt-2">
+<div class="flex items-center gap-1.5">
+<span class="text-[#D70018] text-base font-bold leading-none">29.990.000₫</span>
+<span class="bg-[#FEF2F2] text-[#D70018] border border-[#FECACA] text-[10px] font-bold px-1 py-0.2 rounded">-14%</span>
+</div>
+<div class="text-gray-400 text-xs line-through mt-0.5">34.990.000₫</div>
+</div>
+<div class="text-[11px] text-gray-600 mt-1.5 line-clamp-1">
+Quà tặng: Củ sạc nhanh Type-C 20W trị giá 590.000₫
+</div>
+<div class="flex items-center gap-1 mt-1 text-[11px] text-gray-500">
+<span class="material-symbols-outlined text-xs text-amber-500" style="font-variation-settings: 'FILL' 0;">star</span>
+<span class="font-medium text-[#111827]">4.9</span>
+<span>(289 đánh giá)</span>
+</div>
+</div>
+<div class="mt-3 pt-2 border-t border-[#E5E7EB] grid grid-cols-2 gap-1.5">
+<button class="px-2 py-1.5 bg-white border border-[#D1D5DB] hover:bg-[#F3F4F6] text-[#374151] rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-sm">view_in_ar</span>
+<span>Xem 3D</span>
+</button>
+<button class="px-2 py-1.5 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+<span>Thêm giỏ</span>
+</button>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-white border border-[#E5E7EB] rounded-lg p-3 flex flex-col justify-between hover:border-[#1D4ED8] transition-colors">
+<div>
+<div class="relative bg-white aspect-square flex items-center justify-center mb-2">
+<span class="absolute top-0 left-0 bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] text-[10px] font-semibold px-1.5 py-0.5 rounded">
+Trả góp 0%
+</span>
+<span class="absolute top-0 right-0 border border-[#D1D5DB] text-gray-600 bg-white text-[10px] font-medium px-1.5 py-0.5 rounded">
+3D
+</span>
+<img alt="Samsung Galaxy S24 Ultra" class="max-h-36 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRbpkEXFEERd9Nw65g6EJ80_MubuLHKtYtRGK-Jk8D3K9kxtWRw5vLx9So5XM_Wg2nZk_Id0Mh59lVLF4c3WyJ9YHMkQHm1A6nV5MwiaQgJwbaxWaO2mimCzq6kVnItYSx1j0pV5DSw1xL2a3tnDMbFYlOcDVFuxZmx7X971x55QmOWzv-hNch8Xr4-y6VW4GPBiQXNSUCV7vjM52ldASjJDrGFfe3DtgcRiJq496m">
+</div>
+<h4 class="text-xs font-semibold text-[#111827] line-clamp-2 hover:text-[#1D4ED8] leading-snug">
+Samsung Galaxy S24 Ultra 5G - Snapdragon 8 Gen 3 • 12GB • 256GB Titan Xám
+</h4>
+<div class="text-[11px] text-gray-500 mt-1 line-clamp-1">
+Màn Dynamic AMOLED 2X 6.8 inch 120Hz • Bút S-Pen
+</div>
+<div class="mt-2">
+<div class="flex items-center gap-1.5">
+<span class="text-[#D70018] text-base font-bold leading-none">26.890.000₫</span>
+<span class="bg-[#FEF2F2] text-[#D70018] border border-[#FECACA] text-[10px] font-bold px-1 py-0.2 rounded">-16%</span>
+</div>
+<div class="text-gray-400 text-xs line-through mt-0.5">31.990.000₫</div>
+</div>
+<div class="text-[11px] text-gray-600 mt-1.5 line-clamp-1">
+Quà tặng: Bao da Smart View + Bảo hành Samsung Care+ 12T
+</div>
+<div class="flex items-center gap-1 mt-1 text-[11px] text-gray-500">
+<span class="material-symbols-outlined text-xs text-amber-500" style="font-variation-settings: 'FILL' 0;">star</span>
+<span class="font-medium text-[#111827]">4.8</span>
+<span>(96 đánh giá)</span>
+</div>
+</div>
+<div class="mt-3 pt-2 border-t border-[#E5E7EB] grid grid-cols-2 gap-1.5">
+<button class="px-2 py-1.5 bg-white border border-[#D1D5DB] hover:bg-[#F3F4F6] text-[#374151] rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-sm">view_in_ar</span>
+<span>Xem 3D</span>
+</button>
+<button class="px-2 py-1.5 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+<span>Thêm giỏ</span>
+</button>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="bg-white border border-[#E5E7EB] rounded-lg p-3 flex flex-col justify-between hover:border-[#1D4ED8] transition-colors">
+<div>
+<div class="relative bg-white aspect-square flex items-center justify-center mb-2">
+<span class="absolute top-0 left-0 bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] text-[10px] font-semibold px-1.5 py-0.5 rounded">
+Trả góp 0%
+</span>
+<span class="absolute top-0 right-0 border border-[#D1D5DB] text-gray-600 bg-white text-[10px] font-medium px-1.5 py-0.5 rounded">
+3D
+</span>
+<img alt="MSI GeForce RTX 4070 Ti Super" class="max-h-36 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcq-c4z06kkrt0AIwCjO7wA4iTQO533ss3zp5ilWSbDQohJG_6-d_6cXF7ZE8PRYWOZ2I_lM9vqLf5LvuV5L1yKEn2inlISt2_AnC03cRKjF93VeNjh1fPI_XNv_QZXmzIVE9a-Jtzs67NR2KhAXGB5gV5KLcZh088JRu5wrXEnB6731KKVNxnUnij8047q2ereyFDeA6ZP4p71UVvWRjw0hZIeBi00pkAXAhPF8E0">
+</div>
+<h4 class="text-xs font-semibold text-[#111827] line-clamp-2 hover:text-[#1D4ED8] leading-snug">
+Card Màn Hình MSI GeForce RTX 4070 Ti Super 16GB Gaming X Slim
+</h4>
+<div class="text-[11px] text-gray-500 mt-1 line-clamp-1">
+16GB GDDR6X 256-bit • 8448 CUDA Cores • Tri Frozr 3
+</div>
+<div class="mt-2">
+<div class="flex items-center gap-1.5">
+<span class="text-[#D70018] text-base font-bold leading-none">22.490.000₫</span>
+<span class="bg-[#FEF2F2] text-[#D70018] border border-[#FECACA] text-[10px] font-bold px-1 py-0.2 rounded">-10%</span>
+</div>
+<div class="text-gray-400 text-xs line-through mt-0.5">24.990.000₫</div>
+</div>
+<div class="text-[11px] text-gray-600 mt-1.5 line-clamp-1">
+Quà tặng: Giá đỡ VGA MSI Anti-Sag + Code Game Steam
+</div>
+<div class="flex items-center gap-1 mt-1 text-[11px] text-gray-500">
+<span class="material-symbols-outlined text-xs text-amber-500" style="font-variation-settings: 'FILL' 0;">star</span>
+<span class="font-medium text-[#111827]">4.9</span>
+<span>(67 đánh giá)</span>
+</div>
+</div>
+<div class="mt-3 pt-2 border-t border-[#E5E7EB] grid grid-cols-2 gap-1.5">
+<button class="px-2 py-1.5 bg-white border border-[#D1D5DB] hover:bg-[#F3F4F6] text-[#374151] rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-sm">view_in_ar</span>
+<span>Xem 3D</span>
+</button>
+<button class="px-2 py-1.5 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+<span>Thêm giỏ</span>
+</button>
+</div>
+</div>
+<!-- Product Card 5 -->
+<div class="bg-white border border-[#E5E7EB] rounded-lg p-3 flex flex-col justify-between hover:border-[#1D4ED8] transition-colors">
+<div>
+<div class="relative bg-white aspect-square flex items-center justify-center mb-2">
+<span class="absolute top-0 left-0 bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] text-[10px] font-semibold px-1.5 py-0.5 rounded">
+Trả góp 0%
+</span>
+<span class="absolute top-0 right-0 border border-[#D1D5DB] text-gray-600 bg-white text-[10px] font-medium px-1.5 py-0.5 rounded">
+3D
+</span>
+<img alt="Apple MacBook Air 13 M3" class="max-h-36 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAN5w4yqbMw99DBZX0GJgksVQHbQMreH0zsfGUVnlQlXRp8TUqRFzKcXH3BMfqf3DerS_fhG72r-c3WQE3vVCQBNxQjyD2tVzFxHdzBRg9C4Ct7sv4H-WXRG3OvM45jy3qOcz6_11FAIEBrrE-k2rX-_qifFyOTUvpnVTk95Bx3d-y_f5yalgaCdchRwIqD6B537lexvTCa0hW89dxup7mm2kwvAuLTDA5KIQNXBWqi">
+</div>
+<h4 class="text-xs font-semibold text-[#111827] line-clamp-2 hover:text-[#1D4ED8] leading-snug">
+Apple MacBook Air 13 inch M3 - 8-Core CPU • 10-Core GPU • 8GB • 256GB SSD
+</h4>
+<div class="text-[11px] text-gray-500 mt-1 line-clamp-1">
+Màn Liquid Retina 13.6 inch • Pin 18 giờ • 1.24kg
+</div>
+<div class="mt-2">
+<div class="flex items-center gap-1.5">
+<span class="text-[#D70018] text-base font-bold leading-none">24.490.000₫</span>
+<span class="bg-[#FEF2F2] text-[#D70018] border border-[#FECACA] text-[10px] font-bold px-1 py-0.2 rounded">-12%</span>
+</div>
+<div class="text-gray-400 text-xs line-through mt-0.5">27.990.000₫</div>
+</div>
+<div class="text-[11px] text-gray-600 mt-1.5 line-clamp-1">
+Quà tặng: Túi chống sốc Tomtoc cao cấp trị giá 450.000₫
+</div>
+<div class="flex items-center gap-1 mt-1 text-[11px] text-gray-500">
+<span class="material-symbols-outlined text-xs text-amber-500" style="font-variation-settings: 'FILL' 0;">star</span>
+<span class="font-medium text-[#111827]">4.9</span>
+<span>(124 đánh giá)</span>
+</div>
+</div>
+<div class="mt-3 pt-2 border-t border-[#E5E7EB] grid grid-cols-2 gap-1.5">
+<button class="px-2 py-1.5 bg-white border border-[#D1D5DB] hover:bg-[#F3F4F6] text-[#374151] rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-sm">view_in_ar</span>
+<span>Xem 3D</span>
+</button>
+<button class="px-2 py-1.5 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+<span>Thêm giỏ</span>
+</button>
+</div>
+</div></div>
+</section>
+<!-- SECTION 7: TWO BOTTOM UTILITY BANNERS (PC Builder & Order Tracking) -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+<!-- Banner 1: Build PC -->
+<div class="bg-white border border-[#E5E7EB] rounded-lg p-5 shadow-none flex flex-col justify-between" id="pc-builder">
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-2xl text-[#1D4ED8]">construction</span>
+<h3 class="text-base font-semibold text-[#111827]">Xây dựng cấu hình PC</h3>
+</div>
+<p class="text-xs text-gray-600 leading-relaxed">
+            Tự do phối ghép linh kiện máy tính, hệ thống tự động kiểm tra tương thích giữa CPU, Mainboard, RAM, Nguồn và vỏ Case. Đảm bảo cấu hình tối ưu chi phí và hiệu năng.
+          </p>
+<div class="flex items-center gap-3 text-xs text-gray-500 pt-1">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-[#15803D]">check_circle</span>
+              Tự động tính công suất nguồn (W)
+            </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-[#15803D]">check_circle</span>
+              Hỗ trợ lắp ráp &amp; cài win miễn phí
+            </span>
+</div>
+</div>
+<div class="pt-4">
+<a class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded-lg text-xs font-semibold transition-colors" href="#">
+<span>Bắt đầu ráp PC ngay</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Banner 2: Order & Warranty Tracking -->
+<div class="bg-white border border-[#E5E7EB] rounded-lg p-5 shadow-none flex flex-col justify-between" id="tracking">
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-2xl text-[#1D4ED8]">manage_search</span>
+<h3 class="text-base font-semibold text-[#111827]">Tra cứu đơn hàng &amp; Bảo hành</h3>
+</div>
+<p class="text-xs text-gray-600 leading-relaxed">
+            Kiểm tra chi tiết lộ trình vận chuyển GHN thời gian thực và tra cứu thông tin bảo hành điện tử e-Warranty theo mã đơn hàng, số điện thoại hoặc số Serial/IMEI thiết bị.
+          </p>
+<div class="pt-1">
+<div class="flex items-center gap-2">
+<input class="flex-1 h-9 px-3 bg-white border border-[#D1D5DB] rounded-lg text-xs text-[#111827] focus:outline-none focus:border-[#1D4ED8]" placeholder="Nhập mã vận đơn GHN hoặc số điện thoại..." type="text">
+<button class="px-4 py-2 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded-lg text-xs font-semibold transition-colors shrink-0">
+                Tra cứu ngay
+              </button>
+</div>
+</div>
+</div>
+<div class="pt-3 text-[11px] text-gray-500 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-gray-400">info</span>
+<span>Bảo hành chính hãng 1 đổi 1 trong 30 ngày đầu tiên nếu phát sinh lỗi phần cứng</span>
+</div>
+</div>
+</section>
+<!-- SECTION 8: SẢN PHẨM ĐÃ XEM GẦN ĐÂY (Compact Bordered Row) -->
+<section class="bg-white border border-[#E5E7EB] rounded-lg p-3.5 shadow-none space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-gray-500">history</span>
+<h4 class="text-xs font-semibold text-[#111827]">Sản phẩm đã xem gần đây</h4>
+</div>
+<button class="text-[11px] text-gray-400 hover:text-red-600 transition-colors">Xóa lịch sử</button>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+<!-- Item 1 -->
+<div class="border border-[#E5E7EB] rounded-lg p-2 flex items-center gap-2.5 hover:border-[#1D4ED8] transition-colors">
+<img alt="SSD Samsung T9" class="w-12 h-12 object-contain shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBh82hB8pFwsO3TNNPMYRiVYpZXZt9imTyZR7Gn0mlmlSP5e9OKUg3DJmGM3mFbwLgYFdcgwtR06IVwcbPQTs6MFs3OALx7i_LFgD1uf2_gAF1162_t7Uf8qGWLD6vOSL7VCgcQaWB5TFDgQLVRdtXEdSd5IF361oZ76bkQtHCpyGJ0ebDJUdiG420Qc7QLMKGvf9ZckTGSCjP0tyDhFy470xIvDkXh9kv2v9ez_FGU">
+<div class="min-w-0 flex-1">
+<h5 class="text-xs text-[#111827] font-medium line-clamp-1">Samsung T9 Portable SSD 2TB</h5>
+<div class="text-[#D70018] text-xs font-bold mt-0.5">5.290.000₫</div>
+<a class="text-[10px] text-[#1D4ED8] hover:underline font-medium" href="#">Mua lại</a>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="border border-[#E5E7EB] rounded-lg p-2 flex items-center gap-2.5 hover:border-[#1D4ED8] transition-colors">
+<img alt="Màn hình Dell UltraSharp" class="w-12 h-12 object-contain shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOiR_Yn7BzREtHqHFsh6kdy6tH6BHmL-Z5NPDkVRcceOzvZ_EpI__LqzWW9F4bOpo2_zoQTnZmr1w7nUNhNtyYp1BhjK2l-WdrUqjqcLcBJdSQBKxojwFUeBBtJMhCdBZ2nQKvG-GDw52pOI-53b1UoeZ2VMwA5SyMGkLTW0ZVj1gbwzHpBGbiIb-VaiNMFa4PmuoT3LlhqzT3lLT3fCVmdAcVWScXdUKMlc_oIxSj">
+<div class="min-w-0 flex-1">
+<h5 class="text-xs text-[#111827] font-medium line-clamp-1">Màn Hình Dell UltraSharp 27" 4K</h5>
+<div class="text-[#D70018] text-xs font-bold mt-0.5">14.890.000₫</div>
+<a class="text-[10px] text-[#1D4ED8] hover:underline font-medium" href="#">Mua lại</a>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="border border-[#E5E7EB] rounded-lg p-2 flex items-center gap-2.5 hover:border-[#1D4ED8] transition-colors">
+<img alt="Logitech MX Master 3S" class="w-12 h-12 object-contain shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRbpkEXFEERd9Nw65g6EJ80_MubuLHKtYtRGK-Jk8D3K9kxtWRw5vLx9So5XM_Wg2nZk_Id0Mh59lVLF4c3WyJ9YHMkQHm1A6nV5MwiaQgJwbaxWaO2mimCzq6kVnItYSx1j0pV5DSw1xL2a3tnDMbFYlOcDVFuxZmx7X971x55QmOWzv-hNch8Xr4-y6VW4GPBiQXNSUCV7vjM52ldASjJDrGFfe3DtgcRiJq496m">
+<div class="min-w-0 flex-1">
+<h5 class="text-xs text-[#111827] font-medium line-clamp-1">Logitech MX Master 3S Grey</h5>
+<div class="text-[#D70018] text-xs font-bold mt-0.5">2.490.000₫</div>
+<a class="text-[10px] text-[#1D4ED8] hover:underline font-medium" href="#">Mua lại</a>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="border border-[#E5E7EB] rounded-lg p-2 flex items-center gap-2.5 hover:border-[#1D4ED8] transition-colors">
+<img alt="iPad Pro 13 M4" class="w-12 h-12 object-contain shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBK2ZP9Cfky7cLb6WWKpSZnI3PjnIU2wUqccvrF6rsRw2W4HWDm8c2fXXFyuD3g1F1kVyyWo2_ve44-SCWbJdvD-RDAnRpyD8LTRaD0LGFxyEaAc3h1x48xjj6b8NGrS_C1TakRQlU2iujEdnINomH9nbWF2_D7jyqyRlUUlwyH4jIFOetaRD0LeVJ6q-Vxp2QBxdORBMQl05IRPWtmUlDXeQBFYg3daM4PcGgokC4M">
+<div class="min-w-0 flex-1">
+<h5 class="text-xs text-[#111827] font-medium line-clamp-1">iPad Pro 13" M4 Ultra Retina</h5>
+<div class="text-[#D70018] text-xs font-bold mt-0.5">36.990.000₫</div>
+<a class="text-[10px] text-[#1D4ED8] hover:underline font-medium" href="#">Mua lại</a>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- SECTION 9: FOOTER (Vietnamese Electronics Retail Dense Footer) -->
+<footer class="bg-[#111827] border-t border-[#374151] text-gray-300 mt-6 py-12">
+<div class="max-w-[1240px] mx-auto px-4">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-xs">
+<!-- Col 1: Về MadK Store -->
+<div class="space-y-3">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 bg-[#1D4ED8] rounded flex items-center justify-center text-white font-bold text-sm">
+M
+</div>
+<span class="font-bold text-base text-white">MadK Store</span>
+</div>
+<p class="text-gray-400 text-xs leading-relaxed">
+Hệ thống bán lẻ thiết bị số, laptop gaming, máy tính PC và linh kiện công nghệ chính hãng hàng đầu Việt Nam.
+</p>
+<div class="space-y-1.5 text-gray-300 pt-1 text-xs">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-gray-400">storefront</span>
+<span>Hệ thống 45 showroom toàn quốc</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-gray-400">call</span>
+<span>Hotline: <strong class="text-white font-semibold">1800 6868</strong> (Miễn phí)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-gray-400">mail</span>
+<span>Email: support@madkstore.vn</span>
+</div>
+</div>
+</div>
+<!-- Col 2: Chính sách -->
+<div class="space-y-3">
+<h4 class="font-semibold text-sm text-white">Chính sách</h4>
+<ul class="space-y-2 text-gray-400 text-xs">
+<li><a class="hover:text-white transition-colors" href="#">Chính sách bảo hành chính hãng 24T</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Đổi trả 1 - 1 trong 30 ngày</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Giao hàng hỏa tốc GHN 2h</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Chính sách bảo mật thông tin</a></li>
+</ul>
+</div>
+<!-- Col 3: Hỗ trợ khách hàng -->
+<div class="space-y-3">
+<h4 class="font-semibold text-sm text-white">Hỗ trợ khách hàng</h4>
+<ul class="space-y-2 text-gray-400 text-xs">
+<li><a class="hover:text-white transition-colors" href="#">Hướng dẫn mua hàng trả góp 0%</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Tra cứu hóa đơn điện tử e-VAT</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Gửi yêu cầu bảo hành tận nơi</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Liên hệ hợp tác doanh nghiệp</a></li>
+</ul>
+</div>
+<!-- Col 4: Thanh toán & Vận chuyển -->
+<div class="space-y-3">
+<h4 class="font-semibold text-sm text-white">Thanh toán &amp; Vận chuyển</h4>
+<p class="text-gray-400 text-xs leading-relaxed">
+Chấp nhận thanh toán VNPay, MoMo, chuyển khoản Napas247, COD.
+</p>
+<div class="flex flex-wrap gap-1.5 pt-1">
+<span class="px-2 py-1 bg-[#1F2937] border border-[#374151] rounded text-[10px] text-gray-200 font-medium">VNPay</span>
+<span class="px-2 py-1 bg-[#1F2937] border border-[#374151] rounded text-[10px] text-gray-200 font-medium">MoMo</span>
+<span class="px-2 py-1 bg-[#1F2937] border border-[#374151] rounded text-[10px] text-gray-200 font-medium">Napas247</span>
+<span class="px-2 py-1 bg-[#1F2937] border border-[#374151] rounded text-[10px] text-gray-200 font-medium">COD</span>
+</div>
+<div class="pt-2 text-xs text-gray-400 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-gray-400">local_shipping</span>
+<span>Đối tác vận chuyển chính thức: GHN Express</span>
+</div>
+</div>
+</div>
+<!-- Bottom Copyright & Strict Text Regulatory -->
+<div class="mt-10 pt-6 border-t border-[#374151] flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-gray-400">
+<div>
+<div>© 2025 MadK Store Vietnam. Giấy phép ĐKKD số 0102030405 do Sở KH&amp;ĐT TP.HCM cấp.</div>
+<div class="text-[11px] text-gray-400 mt-0.5">Đã đăng ký Bộ Công Thương - Chứng nhận TMĐT uy tín</div>
+</div>
+<div class="flex items-center gap-4 text-xs">
+<a class="hover:text-white transition-colors" href="#">Điều khoản dịch vụ</a>
+<span>•</span>
+<a class="hover:text-white transition-colors" href="#">Quy chế hoạt động</a>
+<span>•</span>
+<a class="hover:text-white transition-colors" href="#">Hợp tác kinh doanh</a>
+</div>
+</div>
+</div>
+</footer>
+<!-- FLOATING AI ASSISTANT -->
+<button class="fixed bottom-6 right-6 z-40 px-4 py-2.5 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded-lg text-xs font-semibold flex items-center gap-2 border border-[#1D4ED8] transition-colors shadow-none" type="button">
+<span class="material-symbols-outlined text-base">chat</span>
+<span>Trợ lý AI</span>
+</button>
+
+</body></html>

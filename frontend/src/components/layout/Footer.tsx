@@ -1,234 +1,138 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 export const Footer: React.FC = () => {
-  const [subscribed, setSubscribed] = useState(false);
-  const [email, setEmail] = useState('');
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email.trim()) {
-      setSubscribed(true);
-      setEmail('');
-    }
-  };
-
   return (
-    <footer className="bg-slate-950 text-slate-400 pt-16 pb-12 border-t border-slate-800/80 relative overflow-hidden">
-      {/* Subtle top ambient glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-gradient-to-b from-blue-600/10 to-transparent blur-3xl pointer-events-none"></div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Top Newsletter Card */}
-        <div className="mb-14 p-6 sm:p-8 rounded-3.5xl bg-gradient-to-r from-slate-900/90 via-slate-900 to-blue-950/60 border border-slate-800/80 shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-6">
-          <div className="max-w-lg">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-400 font-semibold text-xs mb-3">
-              <span>⭐</span>
-              <span>ĐẶC QUYỀN MADK REWARDS</span>
-            </span>
-            <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-              Nhận voucher 200.000₫ và thông tin sản phẩm mới
-            </h3>
-            <p className="mt-1.5 text-xs sm:text-sm text-slate-400 leading-relaxed">
-              Đăng ký nhận bản tin để đón đầu xu hướng công nghệ 3D, ưu đãi độc quyền dành riêng cho thành viên hội viên.
-            </p>
-          </div>
-
-          <div className="w-full lg:w-auto">
-            {subscribed ? (
-              <div className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-emerald-950/80 border border-emerald-500/30 text-emerald-300 text-xs sm:text-sm font-semibold animate-fade-in">
-                <span>✓</span>
-                <span>Cảm ơn bạn! Mã voucher đã được gửi vào hòm thư.</span>
-              </div>
-            ) : (
-              <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row items-center gap-2.5 w-full">
-                <input
-                  type="email"
-                  required
-                  placeholder="Nhập địa chỉ email của bạn..."
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full sm:w-80 px-4 py-3 rounded-2xl bg-slate-950/80 border border-slate-700/80 text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
-                />
-                <button
-                  type="submit"
-                  className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs sm:text-sm transition-all shadow-md shadow-blue-600/30 hover:scale-102 flex-shrink-0"
-                >
-                  Đăng ký ngay
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
-
-        {/* Main Footer Columns */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
-          {/* Shop Brand & Mission */}
-          <div className="lg:col-span-2 space-y-4">
-            <Link to="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-blue-500 text-white flex items-center justify-center font-black text-xl shadow-md shadow-blue-600/30">
+    <footer className="bg-[#111827] border-t border-[#374151] text-gray-300 mt-10 py-10 pb-20 sm:pb-10">
+      <div className="max-w-[1240px] mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-xs">
+          {/* Col 1: Về MadK Store */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 bg-[#1D4ED8] rounded flex items-center justify-center text-white font-bold text-sm">
                 M
               </div>
-              <span className="font-extrabold text-2xl tracking-tight text-white">
-                MadK<span className="text-gradient-sapphire font-black">Store</span>
-              </span>
-            </Link>
-            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-sm">
-              Hệ sinh thái thiết bị công nghệ chính hãng hàng đầu với trải nghiệm tương tác mô hình 3D trực quan xoay 360°. Tận hưởng mua sắm thông minh, giao hàng hỏa tốc và tích lũy điểm thưởng không giới hạn.
+              <span className="font-bold text-base text-white">MadK Store</span>
+            </div>
+            <p className="text-gray-400 text-xs leading-relaxed">
+              Hệ thống bán lẻ thiết bị số, laptop gaming, máy tính PC và linh kiện công nghệ chính hãng hàng đầu Việt Nam. Tích hợp trải nghiệm tương tác 3D 360° trực quan.
             </p>
-
-            <div className="flex flex-wrap items-center gap-2.5 pt-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-semibold text-slate-300">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                Hệ thống trực tuyến 24/7
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-semibold text-slate-300">
-                🛡️ 100% Chính hãng
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-semibold text-amber-300">
-                ⭐ MadK Rewards
-              </span>
+            <div className="space-y-1.5 text-gray-300 pt-1 text-xs">
+              <div className="flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-sm text-gray-400">storefront</span>
+                <span>Hệ thống 45 showroom toàn quốc</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-sm text-gray-400">call</span>
+                <span>Hotline: <strong className="text-white font-semibold">1800 6868</strong> (Miễn phí 8h00 - 21h30)</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-sm text-gray-400">mail</span>
+                <span>Email: support@madkstore.vn</span>
+              </div>
             </div>
           </div>
 
-          {/* Catalog shortcuts */}
-          <div>
-            <h4 className="text-white font-bold text-xs tracking-wider uppercase mb-4 flex items-center gap-2">
-              <span>Danh mục sản phẩm</span>
-            </h4>
-            <ul className="space-y-2.5 text-xs sm:text-sm">
+          {/* Col 2: Chính sách */}
+          <div className="space-y-3">
+            <h4 className="font-semibold text-sm text-white">Chính sách bán hàng</h4>
+            <ul className="space-y-2 text-gray-400 text-xs">
               <li>
-                <Link to="/categories/dien-thoai" className="hover:text-blue-400 transition-colors">
-                  Điện thoại & Tablet
+                <Link to="/policies/warranty" className="hover:text-white transition-colors">
+                  Chính sách bảo hành chính hãng 24 tháng
                 </Link>
               </li>
               <li>
-                <Link to="/categories/laptop" className="hover:text-blue-400 transition-colors">
-                  Laptop & Máy tính
+                <Link to="/policies/returns" className="hover:text-white transition-colors">
+                  Chính sách đổi mới 1 - 1 trong 30 ngày
                 </Link>
               </li>
               <li>
-                <Link to="/categories/phu-kien" className="hover:text-blue-400 transition-colors">
-                  Gaming Gear & Phụ kiện
+                <Link to="/policies/shipping" className="hover:text-white transition-colors">
+                  Giao hàng hỏa tốc nội thành qua GHN 2h
                 </Link>
               </li>
               <li>
-                <Link to="/categories/linh-kien" className="hover:text-blue-400 transition-colors">
-                  Linh kiện PC & VGA
-                </Link>
-              </li>
-              <li>
-                <Link to="/pc-builder" className="text-amber-400 hover:text-amber-300 font-bold transition-colors flex items-center gap-1">
-                  <span>🖥️</span>
-                  <span>Xây dựng cấu hình PC</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/categories" className="text-blue-400 hover:text-blue-300 font-semibold transition-colors flex items-center gap-1">
-                  <span>Tất cả sản phẩm</span>
-                  <span>&rarr;</span>
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Customer policies */}
-          <div>
-            <h4 className="text-white font-bold text-xs tracking-wider uppercase mb-4">
-              Chính sách & Hỗ trợ
-            </h4>
-            <ul className="space-y-2.5 text-xs sm:text-sm">
-              <li>
-                <Link to="/policies/warranty" className="hover:text-slate-200 transition-colors">
-                  Chính sách bảo hành 12-24 tháng
-                </Link>
-              </li>
-              <li>
-                <Link to="/policies/returns" className="hover:text-slate-200 transition-colors">
-                  Chính sách đổi trả trong 7 ngày
-                </Link>
-              </li>
-              <li>
-                <Link to="/policies/shipping" className="hover:text-slate-200 transition-colors">
-                  Vận chuyển GHN hỏa tốc
-                </Link>
-              </li>
-              <li>
-                <Link to="/policies/privacy" className="hover:text-slate-200 transition-colors">
-                  Bảo mật thông tin khách hàng
+                <Link to="/policies/privacy" className="hover:text-white transition-colors">
+                  Chính sách bảo mật thông tin khách hàng
                 </Link>
               </li>
               <li>
                 <Link to="/tracking" className="text-blue-400 hover:text-blue-300 transition-colors font-medium flex items-center gap-1">
-                  <span>🔍</span>
-                  <span>Tra cứu đơn hàng & Bảo hành</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/account?tab=loyalty" className="text-amber-400 hover:text-amber-300 transition-colors font-medium">
-                  Chương trình MadK Rewards &rarr;
+                  <span className="material-symbols-outlined text-sm">receipt_long</span>
+                  <span>Tra cứu đơn hàng & Bảo hành điện tử</span>
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Contact, Delivery & Payments */}
-          <div>
-            <h4 className="text-white font-bold text-xs tracking-wider uppercase mb-4">
-              Thanh toán & Vận chuyển
-            </h4>
-            <div className="space-y-3.5 text-xs sm:text-sm">
-              <div>
-                <span className="text-[11px] uppercase tracking-wider font-semibold text-slate-500 block mb-1.5">
-                  Đối tác giao hàng:
-                </span>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-orange-950/40 border border-orange-500/30 text-orange-300 rounded-xl font-bold text-xs">
-                  <span>🚚</span>
-                  <span>Giao Hàng Nhanh (GHN)</span>
-                </div>
-              </div>
+          {/* Col 3: Hỗ trợ khách hàng */}
+          <div className="space-y-3">
+            <h4 className="font-semibold text-sm text-white">Hỗ trợ khách hàng</h4>
+            <ul className="space-y-2 text-gray-400 text-xs">
+              <li>
+                <Link to="/pc-builder" className="hover:text-white transition-colors flex items-center gap-1">
+                  <span className="material-symbols-outlined text-sm text-blue-400">construction</span>
+                  <span>Công cụ Xây dựng cấu hình PC</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/account?tab=loyalty" className="hover:text-white transition-colors flex items-center gap-1">
+                  <span className="material-symbols-outlined text-sm text-amber-400">star</span>
+                  <span>Chương trình tích điểm MadK Rewards</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/categories" className="hover:text-white transition-colors">
+                  Hướng dẫn mua hàng trả góp 0%
+                </Link>
+              </li>
+              <li>
+                <Link to="/tracking" className="hover:text-white transition-colors">
+                  Tra cứu hóa đơn điện tử e-VAT
+                </Link>
+              </li>
+              <li>
+                <a href="mailto:support@madkstore.vn" className="hover:text-white transition-colors">
+                  Liên hệ hợp tác & Bán hàng doanh nghiệp (B2B)
+                </a>
+              </li>
+            </ul>
+          </div>
 
-              <div>
-                <span className="text-[11px] uppercase tracking-wider font-semibold text-slate-500 block mb-1.5">
-                  Phương thức thanh toán:
-                </span>
-                <div className="flex flex-wrap gap-1.5">
-                  <span className="px-2.5 py-1 bg-pink-950/60 text-pink-300 rounded-lg text-[11px] font-bold border border-pink-500/30 flex items-center gap-1">
-                    <span>📱</span>
-                    <span>Ví MoMo / QR</span>
-                  </span>
-                  <span className="px-2.5 py-1 bg-slate-900 text-slate-300 rounded-lg text-[11px] font-bold border border-slate-700">
-                    💵 COD
-                  </span>
-                  <span className="px-2.5 py-1 bg-blue-950/60 text-blue-300 rounded-lg text-[11px] font-bold border border-blue-500/30">
-                    ⭐ Đổi điểm thưởng
-                  </span>
-                </div>
-              </div>
-
-              <div className="pt-2 border-t border-slate-900 text-xs">
-                <p className="text-slate-400">
-                  Hotline hỗ trợ: <a href="tel:19008888" className="text-blue-400 font-bold hover:underline font-mono">1900 8888</a>
-                </p>
-                <p className="text-slate-400 mt-1">
-                  Email: <span className="text-slate-300 font-mono">support@madkstore.vn</span>
-                </p>
-              </div>
+          {/* Col 4: Thanh toán & Vận chuyển */}
+          <div className="space-y-3">
+            <h4 className="font-semibold text-sm text-white">Thanh toán & Vận chuyển</h4>
+            <p className="text-gray-400 text-xs leading-relaxed">
+              Hỗ trợ đa dạng phương thức thanh toán an toàn, bảo mật cao:
+            </p>
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              <span className="px-2 py-1 bg-[#1F2937] border border-[#374151] rounded text-[10px] text-gray-200 font-medium">VNPay</span>
+              <span className="px-2 py-1 bg-[#1F2937] border border-[#374151] rounded text-[10px] text-gray-200 font-medium">Ví MoMo</span>
+              <span className="px-2 py-1 bg-[#1F2937] border border-[#374151] rounded text-[10px] text-gray-200 font-medium">VietQR Napas247</span>
+              <span className="px-2 py-1 bg-[#1F2937] border border-[#374151] rounded text-[10px] text-gray-200 font-medium">COD (Giao nhận thu tiền)</span>
+            </div>
+            <div className="pt-2 text-xs text-gray-400 flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-sm text-gray-400">local_shipping</span>
+              <span>Đối tác vận chuyển chính thức: <strong>Giao Hàng Nhanh (GHN)</strong></span>
             </div>
           </div>
         </div>
 
-        {/* Bottom copyright & tech stack */}
-        <div className="mt-14 pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>&copy; {new Date().getFullYear()} MadK Store. Bản quyền thiết kế thương mại thuộc về MadK.</p>
-          <div className="flex items-center gap-3 text-[11px]">
-            <span className="px-2 py-0.5 rounded-full bg-slate-900 border border-slate-800 text-slate-400 font-mono">
-              ASP.NET Core 8 Clean Architecture
-            </span>
-            <span>&bull;</span>
-            <span className="px-2 py-0.5 rounded-full bg-slate-900 border border-slate-800 text-slate-400 font-mono">
-              React 18 & Three.js 3D
-            </span>
+        {/* Bottom Copyright & Strict Text Regulatory */}
+        <div className="mt-8 pt-6 border-t border-[#374151] flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-gray-400">
+          <div>
+            <div>© {new Date().getFullYear()} MadK Store Vietnam. Giấy phép ĐKKD số 0102030405 do Sở KH&ĐT TP.HCM cấp.</div>
+            <div className="text-[11px] text-gray-400 mt-0.5">
+              Đã đăng ký Bộ Công Thương &bull; Chứng nhận Sàn Thương Mại Điện Tử uy tín
+            </div>
+          </div>
+          <div className="flex items-center gap-4 text-xs text-gray-400">
+            <Link to="/policies/privacy" className="hover:text-white transition-colors">Điều khoản dịch vụ</Link>
+            <span>•</span>
+            <Link to="/policies/warranty" className="hover:text-white transition-colors">Quy chế hoạt động</Link>
+            <span>•</span>
+            <span className="text-gray-500">React 18 & Three.js 3D & ASP.NET Core 8</span>
           </div>
         </div>
       </div>

@@ -124,226 +124,208 @@ export const RegisterPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-[80vh] flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-slate-50/50">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="text-center">
-          <Link to="/" className="inline-flex items-center gap-2 mb-4 group">
-            <span className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-black text-2xl shadow-lg shadow-blue-600/30 group-hover:scale-105 transition-transform">
-              M
-            </span>
+    <div className="min-h-[75vh] flex flex-col justify-center py-10 px-4 bg-[#F3F4F6]">
+      <div className="w-full max-w-[420px] mx-auto bg-white border border-[#E5E7EB] rounded-lg p-6 sm:p-8">
+        {/* Top Flat Border Tabs */}
+        <div className="flex border-b border-[#E5E7EB] mb-6">
+          <Link
+            to={`/auth/login${explicitRedirect ? `?redirect=${encodeURIComponent(explicitRedirect)}` : ''}`}
+            className="flex-1 pb-3 text-sm font-semibold text-gray-500 hover:text-gray-800 border-b-2 border-transparent text-center transition-colors"
+          >
+            Đăng nhập
           </Link>
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Tạo tài khoản mới</h1>
-          <p className="mt-2 text-sm text-slate-600">
+          <button
+            type="button"
+            className="flex-1 pb-3 text-sm font-semibold text-[#1D4ED8] border-b-2 border-[#1D4ED8] text-center"
+          >
+            Đăng ký
+          </button>
+        </div>
+
+        {/* Social Auth Buttons */}
+        <div className="mb-4">
+          <SocialAuthButtons />
+        </div>
+
+        {/* Divider */}
+        <div className="relative py-2 flex items-center justify-center mb-4">
+          <div className="w-full border-t border-[#E5E7EB]"></div>
+          <span className="bg-white px-2.5 text-xs text-gray-400 absolute">
+            hoặc đăng ký bằng email
+          </span>
+        </div>
+
+        {/* Server Error Alert */}
+        {serverError && (
+          <div className="mb-4 p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2">
+            <span className="material-symbols-outlined text-[18px] text-rose-600 flex-shrink-0">warning</span>
+            <div className="flex-1">
+              <p className="font-semibold">Đăng ký không thành công</p>
+              <p className="mt-0.5 leading-relaxed">{serverError}</p>
+            </div>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+          {/* Full Name */}
+          <div>
+            <label htmlFor="fullName" className="block text-xs font-semibold text-gray-700 mb-1">
+              Họ và tên <span className="text-[#D70018]">*</span>
+            </label>
+            <input
+              id="fullName"
+              name="fullName"
+              type="text"
+              autoComplete="name"
+              value={fullName}
+              onChange={(e) => {
+                setFullName(e.target.value);
+                if (errors.fullName) setErrors((prev) => ({ ...prev, fullName: '' }));
+              }}
+              placeholder="Nguyễn Văn A"
+              className={`w-full h-10 px-3 text-sm bg-white border rounded-lg focus:border-[#1D4ED8] focus:ring-0 outline-none transition-colors ${
+                errors.fullName ? 'border-rose-400 text-rose-900' : 'border-[#E5E7EB]'
+              }`}
+            />
+            {errors.fullName && <p className="mt-1 text-xs text-rose-600">{errors.fullName}</p>}
+          </div>
+
+          {/* Email */}
+          <div>
+            <label htmlFor="email" className="block text-xs font-semibold text-gray-700 mb-1">
+              Địa chỉ Email <span className="text-[#D70018]">*</span>
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (errors.email) setErrors((prev) => ({ ...prev, email: '' }));
+              }}
+              placeholder="vidu@madkstore.vn"
+              className={`w-full h-10 px-3 text-sm bg-white border rounded-lg focus:border-[#1D4ED8] focus:ring-0 outline-none transition-colors ${
+                errors.email ? 'border-rose-400 text-rose-900' : 'border-[#E5E7EB]'
+              }`}
+            />
+            {errors.email && <p className="mt-1 text-xs text-rose-600">{errors.email}</p>}
+          </div>
+
+          {/* Phone */}
+          <div>
+            <label htmlFor="phoneNumber" className="block text-xs font-semibold text-gray-700 mb-1">
+              Số điện thoại <span className="text-gray-400 font-normal">(tùy chọn)</span>
+            </label>
+            <input
+              id="phoneNumber"
+              name="phoneNumber"
+              type="tel"
+              autoComplete="tel"
+              value={phoneNumber}
+              onChange={(e) => {
+                setPhoneNumber(e.target.value);
+                if (errors.phoneNumber) setErrors((prev) => ({ ...prev, phoneNumber: '' }));
+              }}
+              placeholder="0912 345 678"
+              className="w-full h-10 px-3 text-sm bg-white border border-[#E5E7EB] rounded-lg focus:border-[#1D4ED8] focus:ring-0 outline-none transition-colors"
+            />
+            {errors.phoneNumber && <p className="mt-1 text-xs text-rose-600">{errors.phoneNumber}</p>}
+          </div>
+
+          {/* Password */}
+          <div>
+            <label htmlFor="password" className="block text-xs font-semibold text-gray-700 mb-1">
+              Mật khẩu <span className="text-[#D70018]">*</span>
+            </label>
+            <div className="relative">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="new-password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (errors.password) setErrors((prev) => ({ ...prev, password: '' }));
+                }}
+                placeholder="Tối thiểu 6 ký tự"
+                className={`w-full h-10 pl-3 pr-10 text-sm bg-white border rounded-lg focus:border-[#1D4ED8] focus:ring-0 outline-none transition-colors ${
+                  errors.password ? 'border-rose-400 text-rose-900' : 'border-[#E5E7EB]'
+                }`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
+                title={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+              >
+                <span className="material-symbols-outlined text-[18px]">
+                  {showPassword ? 'visibility_off' : 'visibility'}
+                </span>
+              </button>
+            </div>
+            {errors.password && <p className="mt-1 text-xs text-rose-600">{errors.password}</p>}
+          </div>
+
+          {/* Confirm Password */}
+          <div>
+            <label htmlFor="confirmPassword" className="block text-xs font-semibold text-gray-700 mb-1">
+              Xác nhận mật khẩu <span className="text-[#D70018]">*</span>
+            </label>
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              autoComplete="new-password"
+              value={confirmPassword}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+                if (errors.confirmPassword) setErrors((prev) => ({ ...prev, confirmPassword: '' }));
+              }}
+              placeholder="Nhập lại mật khẩu"
+              className={`w-full h-10 px-3 text-sm bg-white border rounded-lg focus:border-[#1D4ED8] focus:ring-0 outline-none transition-colors ${
+                errors.confirmPassword ? 'border-rose-400 text-rose-900' : 'border-[#E5E7EB]'
+              }`}
+            />
+            {errors.confirmPassword && <p className="mt-1 text-xs text-rose-600">{errors.confirmPassword}</p>}
+          </div>
+
+          {/* Terms checkbox */}
+          <label className="flex items-start gap-2 cursor-pointer pt-0.5">
+            <input
+              type="checkbox"
+              checked={acceptTerms}
+              onChange={(e) => setAcceptTerms(e.target.checked)}
+              className="w-4 h-4 mt-0.5 rounded text-[#1D4ED8] focus:ring-0 border-gray-300"
+            />
+            <span className="text-xs text-gray-600">
+              Tôi đồng ý với <a href="#" className="text-[#1D4ED8] hover:underline">Điều khoản dịch vụ</a> và{' '}
+              <a href="#" className="text-[#1D4ED8] hover:underline">Chính sách bảo mật</a>
+            </span>
+          </label>
+          {errors.acceptTerms && <p className="text-xs text-rose-600">{errors.acceptTerms}</p>}
+
+          {/* Submit button */}
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full h-10 bg-[#1D4ED8] hover:bg-[#1E40AF] disabled:opacity-50 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
+          >
+            {isSubmitting ? 'Đang tạo tài khoản...' : 'Đăng ký tài khoản'}
+          </button>
+
+          <p className="text-center text-xs text-gray-500 pt-2">
             Đã có tài khoản?{' '}
             <Link
               to={`/auth/login${explicitRedirect ? `?redirect=${encodeURIComponent(explicitRedirect)}` : ''}`}
-              className="font-bold text-blue-600 hover:text-blue-500 hover:underline"
+              className="text-[#1D4ED8] font-semibold hover:underline"
             >
-              Đăng nhập tại đây
+              Đăng nhập ngay
             </Link>
           </p>
-        </div>
-      </div>
-
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-lg px-4 sm:px-0">
-        <div className="bg-white py-8 px-6 sm:px-10 shadow-xl shadow-slate-200/50 rounded-3xl border border-slate-100">
-          {/* Server Error Alert */}
-          {serverError && (
-            <div className="mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-200/80 text-rose-800 text-sm flex items-start gap-3 animate-shake">
-              <span className="text-lg leading-none mt-0.5">⚠️</span>
-              <div className="flex-1">
-                <p className="font-semibold">Đăng ký thất bại</p>
-                <p className="text-xs text-rose-700 mt-0.5">{serverError}</p>
-              </div>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-            {/* Full Name */}
-            <div>
-              <label htmlFor="fullName" className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Họ và tên <span className="text-rose-500">*</span>
-              </label>
-              <input
-                id="fullName"
-                name="fullName"
-                type="text"
-                autoComplete="name"
-                value={fullName}
-                onChange={(e) => {
-                  setFullName(e.target.value);
-                  if (errors.fullName) setErrors((prev) => ({ ...prev, fullName: '' }));
-                }}
-                placeholder="Nguyễn Văn A"
-                className={`mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${
-                  errors.fullName
-                    ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500'
-                    : 'border-slate-200 bg-white hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
-                }`}
-              />
-              {errors.fullName && <p className="mt-1 text-xs text-rose-600 font-medium">{errors.fullName}</p>}
-            </div>
-
-            {/* Email & Phone grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="email" className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                  Địa chỉ Email <span className="text-rose-500">*</span>
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    if (errors.email) setErrors((prev) => ({ ...prev, email: '' }));
-                  }}
-                  placeholder="vidu@madkstore.vn"
-                  className={`mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${
-                    errors.email
-                      ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500'
-                      : 'border-slate-200 bg-white hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
-                  }`}
-                />
-                {errors.email && <p className="mt-1 text-xs text-rose-600 font-medium">{errors.email}</p>}
-              </div>
-
-              <div>
-                <label htmlFor="phoneNumber" className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                  Số điện thoại <span className="text-slate-400 font-normal lowercase">(tùy chọn)</span>
-                </label>
-                <input
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  type="tel"
-                  autoComplete="tel"
-                  value={phoneNumber}
-                  onChange={(e) => {
-                    setPhoneNumber(e.target.value);
-                    if (errors.phoneNumber) setErrors((prev) => ({ ...prev, phoneNumber: '' }));
-                  }}
-                  placeholder="0912345678"
-                  className={`mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${
-                    errors.phoneNumber
-                      ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500'
-                      : 'border-slate-200 bg-white hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
-                  }`}
-                />
-                {errors.phoneNumber && <p className="mt-1 text-xs text-rose-600 font-medium">{errors.phoneNumber}</p>}
-              </div>
-            </div>
-
-            {/* Password & Confirm Password grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="password" className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                  Mật khẩu <span className="text-rose-500">*</span>
-                </label>
-                <div className="mt-1.5 relative">
-                  <input
-                    id="password"
-                    name="password"
-                    type={showPassword ? 'text' : 'password'}
-                    autoComplete="new-password"
-                    value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                      if (errors.password) setErrors((prev) => ({ ...prev, password: '' }));
-                    }}
-                    placeholder="Tối thiểu 6 ký tự"
-                    className={`w-full pl-4 pr-10 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${
-                      errors.password
-                        ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500'
-                        : 'border-slate-200 bg-white hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
-                    }`}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
-                  >
-                    {showPassword ? '🙈' : '👁️'}
-                  </button>
-                </div>
-                {errors.password && <p className="mt-1 text-xs text-rose-600 font-medium">{errors.password}</p>}
-              </div>
-
-              <div>
-                <label htmlFor="confirmPassword" className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                  Xác nhận mật khẩu <span className="text-rose-500">*</span>
-                </label>
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type={showPassword ? 'text' : 'password'}
-                  autoComplete="new-password"
-                  value={confirmPassword}
-                  onChange={(e) => {
-                    setConfirmPassword(e.target.value);
-                    if (errors.confirmPassword) setErrors((prev) => ({ ...prev, confirmPassword: '' }));
-                  }}
-                  placeholder="Nhập lại mật khẩu"
-                  className={`mt-1.5 w-full px-4 py-3 rounded-2xl text-sm border focus:outline-none transition-all ${
-                    errors.confirmPassword
-                      ? 'border-rose-300 bg-rose-50/30 text-rose-900 focus:border-rose-500'
-                      : 'border-slate-200 bg-white hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
-                  }`}
-                />
-                {errors.confirmPassword && (
-                  <p className="mt-1 text-xs text-rose-600 font-medium">{errors.confirmPassword}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Accept Terms */}
-            <div className="pt-2">
-              <label className="flex items-start cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={acceptTerms}
-                  onChange={(e) => {
-                    setAcceptTerms(e.target.checked);
-                    if (errors.acceptTerms) setErrors((prev) => ({ ...prev, acceptTerms: '' }));
-                  }}
-                  className="mt-0.5 h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300 rounded"
-                />
-                <span className="ml-2 text-xs text-slate-600">
-                  Tôi đồng ý với{' '}
-                  <span className="text-blue-600 font-medium underline">Điều khoản dịch vụ</span> và{' '}
-                  <span className="text-blue-600 font-medium underline">Chính sách bảo mật</span> của MadK Store.
-                </span>
-              </label>
-              {errors.acceptTerms && <p className="mt-1 text-xs text-rose-600 font-medium">{errors.acceptTerms}</p>}
-            </div>
-
-            {/* Submit Button */}
-            <div className="pt-3">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-2xl shadow-md shadow-blue-600/20 text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
-              >
-                {isSubmitting ? (
-                  <span className="flex items-center gap-2">
-                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                    Đang tạo tài khoản...
-                  </span>
-                ) : (
-                  'Đăng ký tài khoản'
-                )}
-              </button>
-            </div>
-          </form>
-
-          {/* Social Sign Up */}
-          <SocialAuthButtons
-            layout="full"
-            onSuccess={() => navigate(redirectUrl, { replace: true })}
-            onError={(err) => setServerError(err)}
-          />
-        </div>
+        </form>
       </div>
     </div>
   );

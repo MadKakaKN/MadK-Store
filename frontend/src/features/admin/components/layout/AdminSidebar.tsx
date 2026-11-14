@@ -3,23 +3,6 @@ import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '../../../auth/context/AuthContext';
 import { getVisibleAdminNavItems } from '../../navigation/adminNavItems';
 import Badge from '../common/Badge';
-import {
-  IconBarChart,
-  IconPackage,
-  IconRotateCcw,
-  IconWarehouse,
-  IconTag,
-  IconStar,
-  IconMoney,
-  IconTicket,
-  IconUsers,
-  IconShield,
-  IconTrendingUp,
-  IconStore,
-  IconLogout,
-  IconReceipt,
-  IconActivity,
-} from '../../../../components/common/Icons';
 
 export interface AdminSidebarProps {
   isCollapsed?: boolean;
@@ -28,36 +11,36 @@ export interface AdminSidebarProps {
   onCloseMobile: () => void;
 }
 
-const renderNavIcon = (id: string, className = 'w-4 h-4 shrink-0') => {
+const getMaterialIcon = (id: string): string => {
   switch (id) {
     case 'dashboard':
-      return <IconBarChart className={className} />;
+      return 'dashboard';
     case 'pos':
-      return <IconReceipt className={className} />;
+      return 'point_of_sale';
     case 'orders':
-      return <IconPackage className={className} />;
+      return 'shopping_cart';
     case 'returns':
-      return <IconRotateCcw className={className} />;
+      return 'assignment_return';
     case 'inventory':
-      return <IconWarehouse className={className} />;
+      return 'inventory_2';
     case 'catalog':
-      return <IconTag className={className} />;
+      return 'category';
     case 'reviews':
-      return <IconStar className={className} />;
+      return 'rate_review';
     case 'pricing':
-      return <IconMoney className={className} />;
+      return 'price_change';
     case 'discounts':
-      return <IconTicket className={className} />;
+      return 'confirmation_number';
     case 'users':
-      return <IconUsers className={className} />;
+      return 'manage_accounts';
     case 'audit-logs':
-      return <IconShield className={className} />;
+      return 'verified_user';
     case 'reports':
-      return <IconTrendingUp className={className} />;
+      return 'analytics';
     case 'system':
-      return <IconActivity className={className} />;
+      return 'monitor_heart';
     default:
-      return <IconTag className={className} />;
+      return 'label';
   }
 };
 
@@ -67,7 +50,6 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
   onCloseMobile,
 }) => {
   const { user, logout } = useAuth();
-
   const visibleItems = getVisibleAdminNavItems(user);
 
   const handleLogout = async () => {
@@ -93,47 +75,57 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           : 'neutral';
 
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-white border-r border-slate-200 select-none">
-      {/* 1. Brand Logo Header */}
-      <div className="h-16 flex items-center justify-between px-4 border-b border-slate-200 shrink-0">
-        <Link to="/admin" className="flex items-center gap-2.5 overflow-hidden">
-          <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-lg shadow-xs shrink-0">
-            M
+    <div className="flex flex-col h-full bg-[#111827] text-gray-300 border-r border-gray-800 select-none text-[13px]">
+      {/* 1. Brand / Header */}
+      <div className="h-14 flex items-center justify-between px-4 border-b border-gray-800 shrink-0">
+        <Link to="/admin" className="flex flex-col">
+          <div className="flex items-center gap-1.5">
+            <span className="font-bold text-white text-[15px] tracking-tight">MadK Console</span>
+            <span className="text-[10px] font-semibold text-gray-400 bg-gray-800 px-1.5 py-0.5 rounded border border-gray-700">
+              PRO
+            </span>
           </div>
-          {!isCollapsed && (
-            <div className="flex items-center gap-2 truncate">
-              <span className="font-extrabold text-slate-900 text-base tracking-tight">MadK</span>
-              <span className="px-1.5 py-0.5 text-[10px] font-bold bg-slate-900 text-white rounded-md tracking-wider">
-                ADMIN
-              </span>
-            </div>
-          )}
+          <span className="text-[11px] text-gray-400">Hệ thống Quản trị Bán lẻ</span>
         </Link>
       </div>
 
-      {/* 2. Navigation Items */}
-      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+      {/* 2. POS Quick Launch Action */}
+      <div className="p-3 shrink-0">
+        <Link
+          to="/admin/pos"
+          onClick={onCloseMobile}
+          className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded bg-blue-700 text-white font-medium text-[12px] hover:bg-blue-600 transition-colors shadow-xs"
+        >
+          <span className="material-symbols-outlined text-[18px]">point_of_sale</span>
+          <span>Bán tại quầy (POS)</span>
+        </Link>
+      </div>
+
+      {/* 3. Navigation Links */}
+      <nav className="flex-1 px-2 space-y-0.5 overflow-y-auto">
         {visibleItems.map((item) => (
           <NavLink
             key={item.id}
             to={item.path}
             end={item.path === '/admin'}
             onClick={onCloseMobile}
-            title={isCollapsed ? item.label : undefined}
+            title={item.label}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
+              `flex items-center justify-between px-2.5 py-2 rounded transition-colors text-[13px] ${
                 isActive
-                  ? 'bg-blue-50 text-blue-700 font-semibold border-r-4 border-blue-600 shadow-xs'
-                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-              } ${isCollapsed ? 'justify-center px-2' : ''}`
+                  ? 'bg-[#374151] text-white font-semibold'
+                  : 'text-gray-300 hover:bg-[#1F2937] hover:text-white'
+              }`
             }
           >
-            <span className="shrink-0">{renderNavIcon(item.id)}</span>
-            {!isCollapsed && (
-              <span className="truncate flex-1">{item.label}</span>
-            )}
-            {!isCollapsed && item.badge && (
-              <span className="px-1.5 py-0.5 text-[10px] font-bold bg-blue-100 text-blue-700 rounded-full">
+            <div className="flex items-center gap-2.5 truncate">
+              <span className="material-symbols-outlined text-[18px] shrink-0 text-gray-400">
+                {getMaterialIcon(item.id)}
+              </span>
+              <span className="truncate">{item.label}</span>
+            </div>
+            {item.badge && (
+              <span className="px-1.5 py-0.2 text-[11px] font-bold bg-blue-600 text-white rounded">
                 {item.badge}
               </span>
             )}
@@ -141,52 +133,57 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
         ))}
 
         {/* Divider & Storefront Link */}
-        <div className="pt-3 my-2 border-t border-slate-100">
+        <div className="pt-2 my-2 border-t border-gray-800">
           <Link
             to="/"
-            title={isCollapsed ? 'Về cửa hàng' : undefined}
-            className={`flex items-center gap-3 px-3 py-2 text-xs font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-900 rounded-xl transition-colors ${
-              isCollapsed ? 'justify-center px-2' : ''
-            }`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2.5 px-2.5 py-2 rounded text-gray-400 hover:bg-[#1F2937] hover:text-white transition-colors text-xs"
           >
-            <IconStore className="w-4 h-4 shrink-0 text-slate-500" />
-            {!isCollapsed && <span className="truncate">Về trang bán hàng</span>}
+            <span className="material-symbols-outlined text-[18px] text-gray-400">storefront</span>
+            <span className="truncate">Về trang bán lẻ khách hàng</span>
           </Link>
         </div>
-      </div>
+      </nav>
 
-      {/* 3. User Profile Widget at Bottom */}
-      <div className="p-3 border-t border-slate-200 bg-slate-50/70 shrink-0">
-        <div className={`flex items-center gap-3 ${isCollapsed ? 'justify-center' : ''}`}>
+      {/* 4. Store Selector & User Profile Widget at Bottom */}
+      <div className="p-3 border-t border-gray-800 bg-[#0F172A] shrink-0">
+        <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-800 text-[11px] text-gray-400">
+          <span className="flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            Kho Q.1 Flagship
+          </span>
+          <span className="text-[10px] bg-gray-800 text-gray-300 px-1.5 py-0.2 rounded border border-gray-700">
+            v3.2 Retail
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2.5">
           {/* Avatar / Initials */}
-          <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold text-sm shrink-0">
+          <div className="w-8 h-8 rounded bg-blue-700 text-white flex items-center justify-center font-bold text-xs shrink-0">
             {user?.fullName ? user.fullName[0].toUpperCase() : 'U'}
           </div>
 
-          {!isCollapsed && (
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs font-bold text-slate-900 truncate">
-                  {user?.fullName || 'Nhân viên'}
-                </span>
-                <Badge variant={roleBadgeVariant} size="sm">
-                  {primaryRole}
-                </Badge>
-              </div>
-              <p className="text-[11px] text-slate-500 truncate mt-0.5">{user?.email}</p>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-white truncate">
+                {user?.fullName || 'Nam Nguyễn'}
+              </span>
+              <Badge variant={roleBadgeVariant} size="sm">
+                {primaryRole}
+              </Badge>
             </div>
-          )}
+            <p className="text-[11px] text-gray-400 truncate">{user?.email}</p>
+          </div>
 
-          {!isCollapsed && (
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="text-slate-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition-colors shrink-0"
-              title="Đăng xuất"
-            >
-              <IconLogout className="w-4 h-4" />
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="text-gray-400 hover:text-red-400 p-1.5 rounded hover:bg-gray-800 transition-colors shrink-0"
+            title="Đăng xuất"
+          >
+            <span className="material-symbols-outlined text-[18px]">logout</span>
+          </button>
         </div>
       </div>
     </div>
@@ -197,12 +194,14 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
       {/* Desktop Sidebar */}
       <aside
         className={`hidden lg:block shrink-0 transition-all duration-200 ease-in-out ${
-          isCollapsed ? 'w-20' : 'w-64'
+          isCollapsed ? 'w-20' : 'w-60'
         }`}
       >
-        <div className={`fixed top-0 bottom-0 left-0 z-30 transition-all duration-200 ${
-          isCollapsed ? 'w-20' : 'w-64'
-        }`}>
+        <div
+          className={`fixed top-0 bottom-0 left-0 z-30 transition-all duration-200 ${
+            isCollapsed ? 'w-20' : 'w-60'
+          }`}
+        >
           {sidebarContent}
         </div>
       </aside>
@@ -210,14 +209,14 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
       {/* Mobile Drawer Backdrop */}
       {isMobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-xs transition-opacity animate-in fade-in"
+          className="lg:hidden fixed inset-0 z-40 bg-gray-900/60 backdrop-blur-xs transition-opacity"
           onClick={onCloseMobile}
         />
       )}
 
       {/* Mobile Drawer Panel */}
       <aside
-        className={`lg:hidden fixed top-0 bottom-0 left-0 z-50 w-72 max-w-[85vw] transform transition-transform duration-200 ease-in-out shadow-2xl ${
+        className={`lg:hidden fixed top-0 bottom-0 left-0 z-50 w-64 max-w-[85vw] transform transition-transform duration-200 ease-in-out shadow-2xl ${
           isMobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >

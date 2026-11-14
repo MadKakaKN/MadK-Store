@@ -1,0 +1,620 @@
+<!DOCTYPE html><html class="light" lang="vi"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Tra Cứu Đơn Hàng &amp; Bảo Hành | MadK Store</title>
+<!-- Google Fonts Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#1D4ED8",
+            "primary-hover": "#1e40af",
+            "price-red": "#D70018",
+            "dark-top": "#111827",
+            "dark-footer": "#111827",
+            "border-light": "#E5E7EB",
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          borderRadius: {
+            'none': '0',
+            'sm': '2px',
+            'DEFAULT': '4px',
+            'md': '6px',
+            'lg': '8px',
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="bg-[#F9FAFB] text-gray-900 font-sans text-sm antialiased min-h-screen flex flex-col">
+<!-- TOP STRIP (Flat Dark #111827) -->
+<div class="bg-[#111827] text-gray-300 text-xs py-1.5 px-4 border-b border-gray-800">
+<div class="max-w-7xl mx-auto flex items-center justify-between">
+<div class="flex items-center gap-6">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-gray-400">call</span>
+          Hotline hỗ trợ: <strong class="text-white font-medium">1800 6868</strong> (8:30 - 21:30)
+        </span>
+<span class="hidden md:inline-flex items-center gap-1.5 text-gray-400">
+<span class="material-symbols-outlined text-sm">verified</span>
+          Cam kết 100% hàng chính hãng - Bảo hành 24 tháng
+        </span>
+</div>
+<div class="flex items-center gap-4 text-gray-300">
+<a class="hover:text-white transition-colors" href="#">Hệ thống showroom</a>
+<span class="text-gray-600">|</span>
+<a class="hover:text-white transition-colors" href="#">Tin công nghệ</a>
+<span class="text-gray-600">|</span>
+<a class="text-white font-medium flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-sm">person</span>
+          Tài khoản
+        </a>
+</div>
+</div>
+</div>
+<!-- MAIN HEADER (Flat White Retail Style) -->
+<header class="bg-white border-b border-[#E5E7EB] sticky top-0 z-40">
+<div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-6">
+<!-- Brand Logo -->
+<a class="flex items-center gap-2" href="#">
+<div class="w-8 h-8 rounded bg-[#1D4ED8] flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-xl">view_in_ar</span>
+</div>
+<div class="flex flex-col">
+<span class="text-lg font-bold tracking-tight text-gray-900 leading-none">MadK Store</span>
+<span class="text-[10px] text-gray-500 font-normal leading-tight tracking-wider uppercase mt-0.5">Retail Tech 3D</span>
+</div>
+</a>
+<!-- Search Input in Header -->
+<div class="flex-1 max-w-xl hidden md:block">
+<div class="relative flex items-center">
+<input class="w-full h-9 pl-9 pr-24 bg-gray-50 border border-[#E5E7EB] rounded text-xs text-gray-900 placeholder-gray-400 focus:bg-white focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] outline-none" placeholder="Tìm kiếm laptop, phụ kiện, số serial..." type="text">
+<span class="material-symbols-outlined absolute left-2.5 text-gray-400 text-base">search</span>
+<button class="absolute right-1 px-3 h-7 bg-[#1D4ED8] hover:bg-[#1e40af] text-white text-xs font-medium rounded transition-colors">
+            Tìm kiếm
+          </button>
+</div>
+</div>
+<!-- Navigation & Utility -->
+<nav class="flex items-center gap-5">
+<a class="hidden lg:flex items-center gap-1 text-gray-700 hover:text-[#1D4ED8] font-medium text-xs" href="#">
+<span class="material-symbols-outlined text-base">laptop_mac</span>
+          Sản phẩm
+        </a>
+<a class="hidden lg:flex items-center gap-1 text-[#1D4ED8] font-semibold text-xs border-b-2 border-[#1D4ED8] pb-0.5" href="#">
+<span class="material-symbols-outlined text-base">inventory_2</span>
+          Tra cứu đơn &amp; BH
+        </a>
+<a class="flex items-center gap-2 text-gray-700 hover:text-[#1D4ED8] text-xs" href="#">
+<div class="relative">
+<span class="material-symbols-outlined text-xl">shopping_cart</span>
+<span class="absolute -top-1.5 -right-2 bg-[#D70018] text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded">2</span>
+</div>
+<span class="hidden sm:inline font-medium">Giỏ hàng</span>
+</a>
+</nav>
+</div>
+</header>
+<!-- BREADCRUMB -->
+<div class="bg-white border-b border-[#E5E7EB] py-2 px-4">
+<div class="max-w-7xl mx-auto flex items-center gap-2 text-xs text-gray-500">
+<a class="hover:text-[#1D4ED8] flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-sm">home</span>
+        Trang chủ
+      </a>
+<span class="text-gray-300">/</span>
+<span class="hover:text-[#1D4ED8]">Dịch vụ khách hàng</span>
+<span class="text-gray-300">/</span>
+<span class="text-gray-900 font-medium">Tra cứu đơn hàng &amp; Bảo hành</span>
+</div>
+</div>
+<!-- MAIN CONTENT CONTAINER -->
+<main class="flex-grow max-w-7xl mx-auto px-4 py-6 w-full">
+<!-- PAGE TITLE -->
+<div class="text-center max-w-xl mx-auto mb-6">
+<h1 class="text-xl md:text-2xl font-semibold text-gray-900 tracking-tight">Tra Cứu Đơn Hàng &amp; Bảo Hành</h1>
+<p class="text-xs text-gray-500 mt-1">Nhập thông tin mã đơn hàng hoặc số điện thoại để kiểm tra hành trình vận chuyển và kích hoạt bảo hành điện tử.</p>
+</div>
+<!-- ONE BORDERED FORM CARD (max-w-3xl, bg-white, border #E5E7EB, rounded-lg, p-6) -->
+<div class="max-w-3xl mx-auto bg-white border border-[#E5E7EB] p-6 mb-8 rounded">
+<!-- Quick lookup tabs: "Đơn mua online" and "Bảo hành thiết bị / IMEI" -->
+<div class="flex border-b border-[#E5E7EB] mb-5">
+<button class="flex items-center gap-1.5 py-2 px-4 text-xs font-semibold text-[#1D4ED8] border-b-2 border-[#1D4ED8] -mb-px" id="tab-order" onclick="switchTab('order')">
+<span class="material-symbols-outlined text-base">local_shipping</span>
+          Đơn mua online
+        </button>
+<button class="flex items-center gap-1.5 py-2 px-4 text-xs font-medium text-gray-500 hover:text-gray-800 -mb-px" id="tab-imei" onclick="switchTab('imei')">
+<span class="material-symbols-outlined text-base">qr_code_scanner</span>
+          Bảo hành thiết bị / IMEI
+        </button>
+</div>
+<!-- Form with Two inputs and Solid Blue Button -->
+<form class="space-y-4" onsubmit="event.preventDefault(); simulateLookup();">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Input 1 -->
+<div>
+<label class="block text-xs font-medium text-gray-700 mb-1" for="order_code" id="label-field-1">
+              Mã đơn hàng <span class="text-red-500">*</span>
+</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-gray-400 text-base pointer-events-none">tag</span>
+<input class="w-full h-9 pl-9 pr-3 bg-white border border-[#E5E7EB] rounded text-xs text-gray-900 focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] outline-none" id="order_code" placeholder="VD: MADK-2025-89412" required="" type="text" value="MADK-2025-89412">
+</div>
+</div>
+<!-- Input 2 -->
+<div>
+<label class="block text-xs font-medium text-gray-700 mb-1" for="phone_number" id="label-field-2">
+              Số điện thoại đặt hàng <span class="text-red-500">*</span>
+</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-gray-400 text-base pointer-events-none">call</span>
+<input class="w-full h-9 pl-9 pr-3 bg-white border border-[#E5E7EB] rounded text-xs text-gray-900 focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] outline-none" id="phone_number" placeholder="VD: 0912345678" required="" type="tel" value="0912345678">
+</div>
+</div>
+</div>
+<div class="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
+<span class="text-[11px] text-gray-500 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-gray-400">info</span>
+            Quên mã đơn? Kiểm tra SMS/Email xác nhận hoặc liên hệ tổng đài 1800 6868.
+          </span>
+<button class="w-full sm:w-auto px-6 h-9 bg-[#1D4ED8] hover:bg-[#1e40af] text-white text-xs font-medium rounded transition-colors flex items-center justify-center gap-1.5" type="submit">
+<span class="material-symbols-outlined text-base">search</span>
+<span>Tra cứu đơn hàng</span>
+</button>
+</div>
+</form>
+</div>
+<!-- ORDER LOOKUP RESULT -->
+<div class="max-w-5xl mx-auto space-y-5" id="lookup-result-section">
+<!-- 1. ORDER INFO HEADER BAR -->
+<div class="bg-white border border-[#E5E7EB] p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 rounded">
+<div class="flex flex-col sm:flex-row sm:items-center gap-3">
+<div class="w-9 h-9 rounded bg-blue-50 border border-blue-200 text-[#1D4ED8] flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-xl">inventory_2</span>
+</div>
+<div>
+<div class="flex items-center gap-2 flex-wrap">
+<span class="text-sm font-semibold text-gray-900">Mã đơn #MADK-2025-89412</span>
+<!-- Flat Badge: Status Blue/Amber -->
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-blue-50 text-[#1D4ED8] border border-blue-200">
+<span class="w-1.5 h-1.5 rounded-full bg-[#1D4ED8]"></span>
+                Đang giao hàng (GHN Hỏa tốc)
+              </span>
+<span class="px-2 py-0.5 rounded text-[11px] font-medium bg-gray-100 text-gray-700 border border-gray-200">
+                Đã thanh toán (VNPAY-QR)
+              </span>
+</div>
+<p class="text-xs text-gray-500 mt-0.5">Ngày đặt: 24/10/2025 (14:15) • Đơn vị: Giao Hàng Nhanh (Mã vận đơn: GHN889234VN)</p>
+</div>
+</div>
+<div class="flex items-center gap-2 self-start md:self-auto flex-shrink-0">
+<button class="px-3 h-8 border border-[#E5E7EB] bg-white hover:bg-gray-50 text-gray-700 text-xs font-medium rounded flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-sm">print</span>
+            In đơn
+          </button>
+<button class="px-3 h-8 border border-[#E5E7EB] bg-white hover:bg-gray-50 text-gray-700 text-xs font-medium rounded flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-sm">receipt_long</span>
+            Xuất hóa đơn VAT
+          </button>
+</div>
+</div>
+<!-- 2. PLAIN HORIZONTAL & VERTICAL TRACKING TIMELINE -->
+<div class="bg-white border border-[#E5E7EB] p-5 rounded">
+<h2 class="text-xs font-semibold text-gray-900 uppercase tracking-wider mb-6 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-[#1D4ED8]">alt_route</span>
+          Tiến trình xử lý &amp; Vận chuyển
+        </h2>
+<!-- Horizontal Step Progress (5 Stages) -->
+<div class="relative mb-8 pb-4 border-b border-[#E5E7EB]">
+<div class="grid grid-cols-5 text-center relative z-10">
+<!-- Step 1: Đặt hàng thành công (Completed) -->
+<div class="flex flex-col items-center">
+<div class="w-7 h-7 rounded-full bg-[#1D4ED8] text-white flex items-center justify-center text-xs font-bold mb-1.5">
+<span class="material-symbols-outlined text-sm">check</span>
+</div>
+<span class="text-xs font-medium text-gray-900">Đặt hàng thành công</span>
+<span class="text-[11px] text-gray-500 mt-0.5">14:15 24/10</span>
+</div>
+<!-- Step 2: Đã xác nhận (Completed) -->
+<div class="flex flex-col items-center">
+<div class="w-7 h-7 rounded-full bg-[#1D4ED8] text-white flex items-center justify-center text-xs font-bold mb-1.5">
+<span class="material-symbols-outlined text-sm">check</span>
+</div>
+<span class="text-xs font-medium text-gray-900">Đã xác nhận</span>
+<span class="text-[11px] text-gray-500 mt-0.5">14:20 24/10</span>
+</div>
+<!-- Step 3: Đang xuất kho (Completed) -->
+<div class="flex flex-col items-center">
+<div class="w-7 h-7 rounded-full bg-[#1D4ED8] text-white flex items-center justify-center text-xs font-bold mb-1.5">
+<span class="material-symbols-outlined text-sm">check</span>
+</div>
+<span class="text-xs font-medium text-gray-900">Đang xuất kho</span>
+<span class="text-[11px] text-gray-500 mt-0.5">14:40 24/10</span>
+</div>
+<!-- Step 4: Đang giao hàng (Current) -->
+<div class="flex flex-col items-center">
+<div class="w-7 h-7 rounded-full bg-white border-2 border-[#1D4ED8] text-[#1D4ED8] flex items-center justify-center text-xs font-bold mb-1.5">
+<span class="w-2.5 h-2.5 bg-[#1D4ED8] rounded-full"></span>
+</div>
+<span class="text-xs font-semibold text-[#1D4ED8]">Đang giao hàng</span>
+<span class="text-[11px] text-[#1D4ED8] mt-0.5 font-medium">Dự kiến 16:30</span>
+</div>
+<!-- Step 5: Đã giao hàng (Pending) -->
+<div class="flex flex-col items-center">
+<div class="w-7 h-7 rounded-full bg-white border border-[#E5E7EB] text-gray-400 flex items-center justify-center text-xs font-normal mb-1.5">
+                5
+              </div>
+<span class="text-xs font-normal text-gray-400">Đã giao hàng</span>
+<span class="text-[11px] text-gray-400 mt-0.5">Chưa giao</span>
+</div>
+</div>
+<!-- Plain connecting line behind circles -->
+<div class="absolute top-3.5 left-0 right-0 h-0.5 bg-gray-200 z-0">
+<div class="h-full bg-[#1D4ED8]" style="width: 70%;"></div>
+</div>
+</div>
+<!-- Detailed Event Logs with Timestamps -->
+<div>
+<h3 class="text-xs font-medium text-gray-700 mb-3">Nhật ký chi tiết:</h3>
+<div class="relative pl-6 space-y-4 border-l border-gray-200 ml-3">
+<!-- Event 1 (Active) -->
+<div class="relative">
+<div class="absolute -left-[31px] top-0.5 w-3 h-3 rounded-full bg-[#1D4ED8] border-2 border-white"></div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+<span class="text-xs font-semibold text-gray-900">15:10 - Đang giao hàng hỏa tốc đến địa chỉ người nhận</span>
+<span class="text-[11px] text-gray-500">Tài xế GHN: Nguyễn Văn B (0909.112.233)</span>
+</div>
+<p class="text-xs text-gray-600 mt-0.5">Shipper đang trên đường giao, cách địa chỉ nhận khoảng 1.8km. Quý khách vui lòng để ý điện thoại.</p>
+</div>
+<!-- Event 2 -->
+<div class="relative">
+<div class="absolute -left-[31px] top-0.5 w-3 h-3 rounded-full bg-gray-400 border-2 border-white"></div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+<span class="text-xs font-medium text-gray-800">14:40 - Bàn giao thành công cho bưu cục GHN Quận 1</span>
+<span class="text-[11px] text-gray-500">Kho Flagship MadK Store</span>
+</div>
+<p class="text-xs text-gray-500 mt-0.5">Đã dán tem niêm phong và kích hoạt bảo hành điện tử e-Warranty cho các sản phẩm trong đơn.</p>
+</div>
+<!-- Event 3 -->
+<div class="relative">
+<div class="absolute -left-[31px] top-0.5 w-3 h-3 rounded-full bg-gray-400 border-2 border-white"></div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+<span class="text-xs font-medium text-gray-800">14:20 - Đã xác nhận đơn hàng</span>
+<span class="text-[11px] text-gray-500">Hệ thống xử lý tự động</span>
+</div>
+<p class="text-xs text-gray-500 mt-0.5">Xác nhận đơn thanh toán qua cổng VNPAY-QR thành công. ID giao dịch: TX-902189.</p>
+</div>
+<!-- Event 4 -->
+<div class="relative">
+<div class="absolute -left-[31px] top-0.5 w-3 h-3 rounded-full bg-gray-400 border-2 border-white"></div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+<span class="text-xs font-medium text-gray-800">14:15 - Khách hàng đặt đơn thành công</span>
+<span class="text-[11px] text-gray-500">madkstore.vn</span>
+</div>
+<p class="text-xs text-gray-500 mt-0.5">Người nhận: Nguyễn Hữu Nam - 0912.345.678 - Tòa nhà Bitexco, 2 Hải Triều, Q.1, TP.HCM.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- 3. ITEM BREAKDOWN TABLE & SERIAL/IMEI TRACKING -->
+<div class="bg-white border border-[#E5E7EB] overflow-hidden rounded">
+<div class="p-4 border-b border-[#E5E7EB] flex items-center justify-between">
+<h2 class="text-xs font-semibold text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-[#1D4ED8]">devices</span>
+            Danh sách thiết bị &amp; Quản lý Serial / IMEI
+          </h2>
+<span class="text-xs text-gray-500">2 sản phẩm</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-xs border-collapse">
+<thead>
+<tr class="bg-gray-50 border-b border-[#E5E7EB] text-gray-600 font-medium">
+<th class="py-2.5 px-4 w-12 text-center">STT</th>
+<th class="py-2.5 px-4">Sản phẩm</th>
+<th class="py-2.5 px-4">Serial / IMEI Bảo hành</th>
+<th class="py-2.5 px-4 text-center">SL</th>
+<th class="py-2.5 px-4 text-right">Đơn giá</th>
+<th class="py-2.5 px-4 text-right">Thành tiền</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#E5E7EB]">
+<!-- Product 1: ASUS ROG Strix SCAR 16 -->
+<tr class="hover:bg-gray-50">
+<td class="py-3 px-4 text-center text-gray-500">1</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded border border-[#E5E7EB] bg-white p-1 flex-shrink-0 flex items-center justify-center">
+<img alt="ASUS ROG Strix SCAR 16" class="max-h-full max-w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTBC8M5H7u37XoszsmP_NDsZCEef-TdvbMnw5sydbZxycSXz-9pRHHpmbHUbPxWbIIX6ZRSRGDNZeJqXGtA5Bp-00KGOqGeZCf0-vP_YzmURlSYT-uCltc5n4u4iSJNZwHZSdYJmNW65L7wntc1xPV2IKbBF9j1PgPQkdZCm9pBWnH2eo5_aeYk9lGyUWfd0nNKsUNAvgX3o1zNQSuFP-IxD-hUaQ9D0lHihu1fNRS">
+</div>
+<div>
+<p class="font-semibold text-gray-900 hover:text-[#1D4ED8] cursor-pointer">ASUS ROG Strix SCAR 16 (2024)</p>
+<p class="text-[11px] text-gray-500">i9-14900HX • RTX 4090 • 32GB • 1TB • Đen Titanium</p>
+<div class="mt-1 flex items-center gap-2">
+<span class="inline-flex items-center gap-1 text-[11px] text-green-700 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded">
+<span class="material-symbols-outlined text-xs">verified</span>
+                          e-Warranty kích hoạt
+                        </span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="space-y-0.5 font-mono text-[11px]">
+<div class="flex items-center gap-1">
+<span class="text-gray-500">SN:</span>
+<strong class="text-gray-800">SN-ASUS-99281-VN</strong>
+<button class="text-gray-400 hover:text-gray-700" onclick="navigator.clipboard?.writeText('SN-ASUS-99281-VN')" title="Sao chép">
+<span class="material-symbols-outlined text-xs">content_copy</span>
+</button>
+</div>
+<p class="text-[10px] text-gray-500 font-sans">Thời hạn: 24/10/2024 - 24/10/2026</p>
+</div>
+</td>
+<td class="py-3 px-4 text-center font-medium">1</td>
+<td class="py-3 px-4 text-right text-gray-700">89.990.000₫</td>
+<td class="py-3 px-4 text-right font-semibold text-[#D70018]">89.990.000₫</td>
+</tr>
+<!-- Product 2: Logitech G304 (or Logitech G Pro X Superlight) -->
+<tr class="hover:bg-gray-50">
+<td class="py-3 px-4 text-center text-gray-500">2</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded border border-[#E5E7EB] bg-white p-1 flex-shrink-0 flex items-center justify-center">
+<img alt="Logitech G304 Lightspeed" class="max-h-full max-w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgR_5P8YpmIaRtXgSz3taiw_zC9hf3ntaKNKuFMuMi_taYUolk3FVPEjB8qa6ukZ5zinfiq7Xm1ytCKxK9CZ_lGP-84yv2eUdjNA_TeSrgdYcfuwIcHEcjHPK45WQ-P3SDa9S12gd-J0-M4St5w9GdKrG5TTI5cBWUDWbLwpLnYMofNFxi0VkuZ0hIaAnnKTdmVNy_SlSL5ZhSmEPpnpiOg79HxZcQxIMDVnDgU3th">
+</div>
+<div>
+<p class="font-semibold text-gray-900 hover:text-[#1D4ED8] cursor-pointer">Chuột Không Dây Logitech G304 Lightspeed (White)</p>
+<p class="text-[11px] text-gray-500">Cảm biến HERO 12K DPI • Trắng</p>
+<div class="mt-1 flex items-center gap-2">
+<span class="inline-flex items-center gap-1 text-[11px] text-green-700 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded">
+<span class="material-symbols-outlined text-xs">verified</span>
+                          e-Warranty kích hoạt
+                        </span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="space-y-0.5 font-mono text-[11px]">
+<div class="flex items-center gap-1">
+<span class="text-gray-500">SN:</span>
+<strong class="text-gray-800">SN-LOGI-88210</strong>
+<button class="text-gray-400 hover:text-gray-700" onclick="navigator.clipboard?.writeText('SN-LOGI-88210')" title="Sao chép">
+<span class="material-symbols-outlined text-xs">content_copy</span>
+</button>
+</div>
+<p class="text-[10px] text-gray-500 font-sans">Thời hạn: 24/10/2024 - 24/10/2026</p>
+</div>
+</td>
+<td class="py-3 px-4 text-center font-medium">1</td>
+<td class="py-3 px-4 text-right text-gray-700">890.000₫</td>
+<td class="py-3 px-4 text-right font-semibold text-[#D70018]">890.000₫</td>
+</tr>
+</tbody>
+<tfoot>
+<tr class="bg-gray-50 border-t border-[#E5E7EB]">
+<td class="py-2.5 px-4 text-right text-gray-600 font-medium" colspan="4">Tổng tiền sản phẩm:</td>
+<td class="py-2.5 px-4 text-right text-gray-900 font-semibold" colspan="2">90.880.000₫</td>
+</tr>
+<tr class="bg-gray-50">
+<td class="py-2.5 px-4 text-right text-gray-600 font-medium" colspan="4">Phí vận chuyển hỏa tốc:</td>
+<td class="py-2.5 px-4 text-right text-green-600 font-medium" colspan="2">Miễn phí (0₫)</td>
+</tr>
+<tr class="bg-gray-50 border-t border-[#E5E7EB]">
+<td class="py-3 px-4 text-right text-gray-900 font-bold" colspan="4">Tổng thanh toán:</td>
+<td class="py-3 px-4 text-right font-bold text-base text-[#D70018]" colspan="2">90.880.000₫</td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+<!-- 4. WARRANTY STATUS CARD & SUPPORT HOTLINE BOX -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+<!-- Warranty status card (Span 2) -->
+<div class="md:col-span-2 bg-white border border-[#E5E7EB] p-5 rounded">
+<div class="flex items-center justify-between pb-3 mb-3 border-b border-[#E5E7EB]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#1D4ED8] text-xl">verified_user</span>
+<h3 class="text-xs font-semibold text-gray-900 uppercase tracking-wider">Thông Tin Bảo Hành Chính Hãng</h3>
+</div>
+<span class="text-[11px] font-medium text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded">
+              Hiệu lực toàn quốc
+            </span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+<div class="space-y-1">
+<span class="text-gray-500">Chính sách áp dụng:</span>
+<p class="font-semibold text-gray-800">Thời hạn bảo hành 24 tháng chính hãng, bảo hành tận nhà</p>
+<p class="text-[11px] text-gray-500">Áp dụng đổi mới 1-1 trong 30 ngày đầu nếu phát sinh lỗi nhà sản xuất.</p>
+</div>
+<div class="space-y-1">
+<span class="text-gray-500">Phương thức bảo hành:</span>
+<p class="font-semibold text-gray-800">Bảo hành điện tử qua Serial / Số điện thoại</p>
+<p class="text-[11px] text-gray-500">Không cần giữ lại phiếu bảo hành giấy. Đội ngũ tiếp nhận tận nơi.</p>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-[#E5E7EB] flex flex-wrap gap-2">
+<button class="px-3 py-1.5 bg-[#1D4ED8] hover:bg-[#1e40af] text-white text-xs font-medium rounded transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">home_repair_service</span>
+              Yêu cầu bảo hành tận nhà
+            </button>
+<button class="px-3 py-1.5 border border-[#E5E7EB] hover:bg-gray-50 text-gray-700 text-xs font-medium rounded transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">description</span>
+              Xem chính sách chi tiết
+            </button>
+</div>
+</div>
+<!-- Support hotline box (Span 1) -->
+<div class="bg-white border border-[#E5E7EB] p-5 flex flex-col justify-between rounded">
+<div>
+<div class="flex items-center gap-2 mb-3">
+<div class="w-8 h-8 rounded bg-red-50 text-[#D70018] flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-lg">support_agent</span>
+</div>
+<div>
+<h3 class="text-xs font-semibold text-gray-900 uppercase tracking-wider">Hỗ Trợ Nhanh</h3>
+<p class="text-[11px] text-gray-500">Kỹ thuật &amp; Tiến độ đơn</p>
+</div>
+</div>
+<div class="bg-gray-50 border border-[#E5E7EB] rounded p-3 mb-3 text-center">
+<span class="text-[11px] text-gray-500 block mb-0.5">Tổng đài tiếp nhận miễn phí</span>
+<a class="text-lg font-bold text-[#D70018] tracking-tight block hover:underline" href="tel:18006868">
+                1800 6868 (Miễn phí)
+              </a>
+<span class="text-[10px] text-gray-400 block mt-0.5">Thời gian trực: 08:30 - 21:30 hàng ngày</span>
+</div>
+<ul class="text-[11px] text-gray-600 space-y-1 mb-4">
+<li class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-xs text-gray-400">check</span>
+                Hỗ trợ hủy / đổi lịch hẹn giao hàng
+              </li>
+<li class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-xs text-gray-400">check</span>
+                Hỗ trợ kỹ thuật phần cứng 24/7
+              </li>
+</ul>
+</div>
+<a class="w-full h-8 border border-[#1D4ED8] text-[#1D4ED8] hover:bg-blue-50 text-xs font-medium rounded flex items-center justify-center gap-1 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">chat</span>
+            Chat với CSKH Zalo OA
+          </a>
+</div>
+</div>
+</div>
+</main>
+<!-- 4-COLUMN FOOTER (Dark #111827) -->
+<footer class="bg-[#111827] text-gray-300 text-xs border-t border-gray-800 mt-12">
+<div class="max-w-7xl mx-auto px-4 py-10">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<!-- Column 1: Brand Info -->
+<div class="space-y-3">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded bg-[#1D4ED8] flex items-center justify-center text-white font-bold text-sm">
+<span class="material-symbols-outlined text-base">view_in_ar</span>
+</div>
+<span class="text-sm font-bold text-white tracking-tight">MadK Store Vietnam</span>
+</div>
+<p class="text-gray-400 text-xs leading-relaxed">
+            Hệ thống bán lẻ thiết bị công nghệ, laptop gaming và phụ kiện chính hãng. Tiên phong giải pháp trải nghiệm 3D và bảo hành tận nơi chuẩn quốc tế.
+          </p>
+<div class="pt-1 text-gray-400 space-y-1">
+<p><strong class="text-gray-300">Showroom chính:</strong> 02 Hải Triều, P. Bến Nghé, Quận 1, TP. HCM</p>
+<p><strong class="text-gray-300">Hotline:</strong> 1800 6868 (Miễn phí)</p>
+<p><strong class="text-gray-300">Email:</strong> cskh@madkstore.vn</p>
+</div>
+</div>
+<!-- Column 2: Thông tin chính sách -->
+<div class="space-y-2.5">
+<h4 class="text-xs font-semibold text-white uppercase tracking-wider">Chính Sách Bán Hàng</h4>
+<ul class="space-y-1.5 text-gray-400">
+<li><a class="hover:text-white transition-colors" href="#">Chính sách bảo hành 24 tháng</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Chính sách đổi trả 1-1 trong 30 ngày</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Giao hàng nhanh GHN Hỏa tốc</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Chính sách bảo mật thông tin</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Quy chế hoạt động sàn TMĐT</a></li>
+</ul>
+</div>
+<!-- Column 3: Hỗ trợ khách hàng -->
+<div class="space-y-2.5">
+<h4 class="text-xs font-semibold text-white uppercase tracking-wider">Dịch Vụ &amp; Trợ Giúp</h4>
+<ul class="space-y-1.5 text-gray-400">
+<li><a class="text-[#1D4ED8] hover:underline font-medium" href="#">Tra cứu tiến độ đơn hàng</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Tra cứu kích hoạt e-Warranty</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Đăng ký mượn máy bảo hành</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Hướng dẫn thanh toán &amp; Trả góp 0%</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Tra cứu hóa đơn VAT điện tử</a></li>
+</ul>
+</div>
+<!-- Column 4: Thanh toán & Chứng nhận -->
+<div class="space-y-3">
+<h4 class="text-xs font-semibold text-white uppercase tracking-wider">Thanh Toán &amp; Chứng Nhận</h4>
+<p class="text-gray-400 text-[11px]">Hỗ trợ đa dạng phương thức thanh toán an toàn, bảo mật cao:</p>
+<div class="flex flex-wrap gap-2 text-gray-300">
+<span class="px-2 py-1 bg-gray-800 border border-gray-700 rounded text-[10px] font-medium">VNPAY-QR</span>
+<span class="px-2 py-1 bg-gray-800 border border-gray-700 rounded text-[10px] font-medium">VISA / Master</span>
+<span class="px-2 py-1 bg-gray-800 border border-gray-700 rounded text-[10px] font-medium">MoMo</span>
+<span class="px-2 py-1 bg-gray-800 border border-gray-700 rounded text-[10px] font-medium">COD Toàn Quốc</span>
+</div>
+<div class="pt-2">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-gray-800 border border-gray-700 rounded text-[11px] text-green-400">
+<span class="material-symbols-outlined text-sm">verified</span>
+              Đã thông báo Bộ Công Thương
+            </span>
+</div>
+</div>
+</div>
+<!-- Copyright Bottom Bar -->
+<div class="mt-8 pt-6 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between text-gray-500 text-[11px] gap-2">
+<p>© 2025 MadK Store Vietnam. Giấy phép ĐKKD số 0102030405 do Sở KH&amp;ĐT TP.HCM cấp.</p>
+<div class="flex items-center gap-4">
+<a class="hover:text-gray-400" href="#">Điều khoản sử dụng</a>
+<a class="hover:text-gray-400" href="#">Bảo mật thông tin</a>
+<a class="hover:text-gray-400" href="#">Sitemap</a>
+</div>
+</div>
+</div>
+</footer>
+<!-- SCRIPT FOR TAB INTERACTION -->
+<script>
+    function switchTab(type) {
+      const tabOrder = document.getElementById('tab-order');
+      const tabImei = document.getElementById('tab-imei');
+      const label1 = document.getElementById('label-field-1');
+      const label2 = document.getElementById('label-field-2');
+      const input1 = document.getElementById('order_code');
+      const input2 = document.getElementById('phone_number');
+
+      if (type === 'imei') {
+        tabImei.className = 'flex items-center gap-1.5 py-2 px-4 text-xs font-semibold text-[#1D4ED8] border-b-2 border-[#1D4ED8] -mb-px';
+        tabOrder.className = 'flex items-center gap-1.5 py-2 px-4 text-xs font-medium text-gray-500 hover:text-gray-800 -mb-px';
+        
+        label1.innerHTML = 'Số Serial / Mã IMEI thiết bị <span class="text-red-500">*</span>';
+        label2.innerHTML = 'Số điện thoại đăng ký bảo hành <span class="text-red-500">*</span>';
+        input1.placeholder = 'VD: SN-ASUS-99281-VN';
+        input1.value = 'SN-ASUS-99281-VN';
+      } else {
+        tabOrder.className = 'flex items-center gap-1.5 py-2 px-4 text-xs font-semibold text-[#1D4ED8] border-b-2 border-[#1D4ED8] -mb-px';
+        tabImei.className = 'flex items-center gap-1.5 py-2 px-4 text-xs font-medium text-gray-500 hover:text-gray-800 -mb-px';
+        
+        label1.innerHTML = 'Mã đơn hàng <span class="text-red-500">*</span>';
+        label2.innerHTML = 'Số điện thoại đặt hàng <span class="text-red-500">*</span>';
+        input1.placeholder = 'VD: MADK-2025-89412';
+        input1.value = 'MADK-2025-89412';
+      }
+    }
+
+    function simulateLookup() {
+      const section = document.getElementById('lookup-result-section');
+      section.classList.add('opacity-50');
+      setTimeout(() => {
+        section.classList.remove('opacity-50');
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 200);
+    }
+  </script>
+
+
+</body></html>

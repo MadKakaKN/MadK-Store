@@ -41,6 +41,16 @@ export default {
           card: '#ffffff',
           glass: 'rgba(255, 255, 255, 0.82)',
         },
+        retail: {
+          brand: '#1D4ED8',
+          brandDark: '#1E40AF',
+          price: '#D70018',
+          neutralBg: '#F3F4F6',
+          cardBorder: '#E5E7EB',
+          textMain: '#111827',
+          textMuted: '#6B7280',
+          success: '#15803D',
+        },
       },
       boxShadow: {
         '2xs': '0 1px 2px 0 rgba(0, 0, 0, 0.03)',
