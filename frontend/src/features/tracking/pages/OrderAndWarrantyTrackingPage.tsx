@@ -19,7 +19,6 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<'order' | 'warranty'>(initialTab);
   const [query, setQuery] = useState(initialQuery);
-  const [phone, setPhone] = useState('0912345678');
   const [hasSearched, setHasSearched] = useState(false);
   const [loading, setLoading] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
@@ -37,8 +36,8 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
   };
 
   const executeSearch = useCallback(
-    async (searchQuery: string, searchPhone: string, tab: 'order' | 'warranty') => {
-      if (!searchQuery.trim() && !searchPhone.trim()) return;
+    async (searchQuery: string, tab: 'order' | 'warranty') => {
+      if (!searchQuery.trim()) return;
 
       setLoading(true);
       setHasSearched(true);
@@ -46,7 +45,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
 
       try {
         if (tab === 'order') {
-          const order = await findOrderForTracking(searchQuery, searchPhone);
+          const order = await findOrderForTracking(searchQuery);
           if (order) {
             const display = buildOrderTrackingDisplay(order);
             setOrderResult(display);
@@ -54,7 +53,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
             setOrderResult(null);
           }
         } else {
-          const warranty = await findWarrantyForTracking(searchQuery, searchPhone);
+          const warranty = await findWarrantyForTracking(searchQuery);
           if (warranty) {
             setWarrantyResult(warranty);
           } else {
@@ -73,21 +72,15 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    executeSearch(query, phone, activeTab);
+    executeSearch(query, activeTab);
   };
 
   // Auto-search if q is provided in URL params
   useEffect(() => {
     if (initialQuery.trim()) {
-      executeSearch(initialQuery, phone, initialTab);
+      executeSearch(initialQuery, initialTab);
     }
   }, [initialQuery, initialTab, executeSearch]);
-
-  const handleQuickChipClick = (tab: 'order' | 'warranty', chipQuery: string) => {
-    setActiveTab(tab);
-    setQuery(chipQuery);
-    executeSearch(chipQuery, phone, tab);
-  };
 
   return (
     <div className="bg-[#F9FAFB] text-gray-900 font-sans text-sm antialiased min-h-screen pb-12">
@@ -162,14 +155,14 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
           </div>
 
           {/* Search Input Box */}
-          <form onSubmit={handleSearch} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  {activeTab === 'order' ? 'Mã đơn hàng' : 'Số Serial / Mã IMEI thiết bị'}{' '}
-                  <span className="text-[#D70018]">*</span>
-                </label>
-                <div className="relative">
+          <form onSubmit={handleSearch} className="space-y-3">
+            <div>
+              <label className="block text-xs font-medium text-gray-700 mb-1.5">
+                {activeTab === 'order' ? 'Mã đơn hàng cần tra cứu' : 'Số Serial / Mã IMEI hoặc Mã đơn hàng'}{' '}
+                <span className="text-[#D70018]">*</span>
+              </label>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <div className="relative flex-1">
                   <span className="material-symbols-outlined absolute left-3 top-2.5 text-gray-400 text-base pointer-events-none">
                     {activeTab === 'order' ? 'tag' : 'qr_code'}
                   </span>
@@ -178,95 +171,32 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                     required
                     placeholder={
                       activeTab === 'order'
-                        ? 'Ví dụ: #MK-20261114-BF7A52'
-                        : 'Ví dụ: #MK-20261114-BF7A52 hoặc SN-...'
+                        ? 'Nhập mã đơn hàng của bạn (Ví dụ: #MK-20261114-XXXXXX)'
+                        : 'Nhập số Serial / IMEI thiết bị hoặc mã đơn hàng'
                     }
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    className="w-full h-9 pl-9 pr-3 bg-white border border-[#E5E7EB] rounded text-xs text-gray-900 placeholder-gray-400 focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] outline-none transition-colors"
+                    className="w-full h-10 pl-9 pr-3 bg-white border border-[#E5E7EB] rounded text-xs text-gray-900 placeholder-gray-400 focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] outline-none transition-colors shadow-sm"
                   />
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  {activeTab === 'order' ? 'Số điện thoại đặt hàng' : 'Số điện thoại đăng ký bảo hành'}
-                </label>
-                <div className="relative">
-                  <span className="material-symbols-outlined absolute left-3 top-2.5 text-gray-400 text-base pointer-events-none">
-                    call
-                  </span>
-                  <input
-                    type="tel"
-                    placeholder="Ví dụ: 0912345678"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="w-full h-9 pl-9 pr-3 bg-white border border-[#E5E7EB] rounded text-xs text-gray-900 placeholder-gray-400 focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] outline-none transition-colors"
-                  />
-                </div>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-6 h-10 bg-[#1D4ED8] hover:bg-[#1e40af] disabled:opacity-50 text-white text-xs font-medium rounded transition-colors flex items-center justify-center gap-1.5 flex-shrink-0 shadow-sm"
+                >
+                  <span className="material-symbols-outlined text-base">search</span>
+                  <span>{loading ? 'Đang tra cứu...' : activeTab === 'order' ? 'Tra cứu đơn hàng' : 'Tra cứu bảo hành'}</span>
+                </button>
               </div>
             </div>
 
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
-              <span className="text-[11px] text-gray-500 flex items-center gap-1">
+            <div className="flex items-center justify-between text-[11px] text-gray-500 pt-1">
+              <span className="flex items-center gap-1">
                 <span className="material-symbols-outlined text-sm text-gray-400">info</span>
                 {activeTab === 'order'
-                  ? 'Quên mã đơn? Kiểm tra SMS/Email xác nhận hoặc xem tại mục Đơn mua trong tài khoản.'
-                  : 'Có thể tra cứu bằng mã đơn hàng (ví dụ: #MK-20261114-BF7A52) hoặc mã Serial trên thân máy.'}
+                  ? 'Quên mã đơn? Kiểm tra email/tin nhắn xác nhận hoặc xem tại mục Đơn mua trong trang tài khoản của bạn.'
+                  : 'Kiểm tra mã Serial/IMEI in trên tem sản phẩm, vỏ hộp hoặc tra cứu nhanh bằng mã đơn hàng đã mua.'}
               </span>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full sm:w-auto px-6 h-9 bg-[#1D4ED8] hover:bg-[#1e40af] disabled:opacity-50 text-white text-xs font-medium rounded transition-colors flex items-center justify-center gap-1.5 flex-shrink-0"
-              >
-                <span className="material-symbols-outlined text-base">search</span>
-                <span>{loading ? 'Đang tra cứu...' : activeTab === 'order' ? 'Tra cứu đơn hàng' : 'Tra cứu bảo hành'}</span>
-              </button>
-            </div>
-
-            {/* Example query chips */}
-            <div className="flex items-center gap-2 text-xs text-gray-400 pt-1 border-t border-gray-100 flex-wrap">
-              <span>Gợi ý tra cứu nhanh:</span>
-              <button
-                type="button"
-                onClick={() => handleQuickChipClick('order', '#MK-20261114-BF7A52')}
-                className="text-[#1D4ED8] hover:underline font-medium"
-              >
-                #MK-20261114-BF7A52 (ThinkPad X1)
-              </button>
-              <span>•</span>
-              <button
-                type="button"
-                onClick={() => handleQuickChipClick('order', 'MADK-2025-89412')}
-                className="text-[#1D4ED8] hover:underline font-medium"
-              >
-                MADK-2025-89412
-              </button>
-              <span>•</span>
-              <button
-                type="button"
-                onClick={() => handleQuickChipClick('warranty', '#MK-20261114-BF7A52')}
-                className="text-[#1D4ED8] hover:underline font-medium"
-              >
-                Bảo hành #MK-20261114-BF7A52
-              </button>
-              <span>•</span>
-              <button
-                type="button"
-                onClick={() => handleQuickChipClick('warranty', '#MK-20261102-FA4449')}
-                className="text-[#1D4ED8] hover:underline font-medium"
-              >
-                #MK-20261102-FA4449
-              </button>
-              <span>•</span>
-              <button
-                type="button"
-                onClick={() => handleQuickChipClick('warranty', 'SN-ASUS-99281-VN')}
-                className="text-[#1D4ED8] hover:underline font-medium"
-              >
-                SN-ASUS-99281-VN
-              </button>
             </div>
           </form>
         </div>
@@ -292,7 +222,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                   Không tìm thấy đơn hàng {query ? `"${query}"` : ''}
                 </h3>
                 <p className="text-xs text-gray-500 max-w-md mx-auto leading-relaxed">
-                  Hệ thống chưa tìm thấy thông tin đơn hàng phù hợp với mã hoặc số điện thoại bạn vừa nhập. Quý khách vui lòng kiểm tra lại mã đơn (trong email hoặc SMS xác nhận) hoặc đăng nhập để xem danh sách đơn hàng đã mua.
+                  Hệ thống chưa tìm thấy thông tin đơn hàng phù hợp với mã bạn vừa nhập. Quý khách vui lòng kiểm tra lại mã đơn (trong email hoặc SMS xác nhận) hoặc đăng nhập để xem danh sách đơn mua trong tài khoản của bạn.
                 </p>
                 <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
                   <Link
@@ -302,20 +232,12 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                     <span className="material-symbols-outlined text-sm">receipt_long</span>
                     <span>Xem đơn mua của tôi</span>
                   </Link>
-                  <button
-                    type="button"
-                    onClick={() => handleQuickChipClick('order', '#MK-20261114-BF7A52')}
-                    className="px-4 h-9 border border-[#E5E7EB] bg-white text-gray-700 hover:bg-gray-50 text-xs font-medium rounded flex items-center gap-1.5 transition-colors"
-                  >
-                    <span className="material-symbols-outlined text-sm text-[#1D4ED8]">refresh</span>
-                    <span>Thử mã #MK-20261114-BF7A52</span>
-                  </button>
                   <a
                     href="tel:18006868"
                     className="px-4 h-9 border border-[#E5E7EB] bg-white text-gray-700 hover:bg-gray-50 text-xs font-medium rounded flex items-center gap-1.5 transition-colors"
                   >
                     <span className="material-symbols-outlined text-sm text-[#D70018]">call</span>
-                    <span>Tổng đài 1800 6868</span>
+                    <span>Tổng đài hỗ trợ 1800 6868</span>
                   </a>
                 </div>
               </div>
@@ -334,14 +256,13 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                   Số Serial hoặc mã đơn hàng chưa được tìm thấy trên cổng tra cứu bảo hành điện tử e-Warranty. Quý khách có thể kiểm tra lại số Serial in trên hóa đơn, vỏ hộp hoặc tem bảo hành phía sau thân máy.
                 </p>
                 <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
-                  <button
-                    type="button"
-                    onClick={() => handleQuickChipClick('warranty', '#MK-20261114-BF7A52')}
+                  <Link
+                    to="/account/orders"
                     className="px-4 h-9 bg-[#1D4ED8] text-white hover:bg-[#1e40af] text-xs font-medium rounded flex items-center gap-1.5 transition-colors"
                   >
-                    <span className="material-symbols-outlined text-sm">check</span>
-                    <span>Thử với #MK-20261114-BF7A52</span>
-                  </button>
+                    <span className="material-symbols-outlined text-sm">receipt_long</span>
+                    <span>Xem lịch sử mua hàng</span>
+                  </Link>
                   <a
                     href="tel:18006868"
                     className="px-4 h-9 border border-[#E5E7EB] bg-white text-gray-700 hover:bg-gray-50 text-xs font-medium rounded flex items-center gap-1.5 transition-colors"
