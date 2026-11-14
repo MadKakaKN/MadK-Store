@@ -54,7 +54,7 @@ export const AiShoppingAssistantWidget: React.FC = () => {
         id: 'welcome',
         role: 'assistant',
         content:
-          'Xin chào! Tôi là **MadK AI Tech Assistant** 🤖\n\nTôi có thể giúp bạn phân tích thông số phần cứng, đối chiếu các mẫu Laptop, PC Đồ họa/Gaming, linh kiện máy tính, hoặc đề xuất thiết bị tối ưu theo mức ngân sách của bạn.\n\nBạn đang quan tâm đến sản phẩm hoặc phân khúc nào?',
+          'Xin chào! Tôi là **MadK AI Tech Assistant** 🤖\n\nTôi có thể giúp bạn tìm kiếm, so sánh thông số và tư vấn các mẫu **Điện thoại thông minh (iPhone, Samsung Galaxy)**, **Laptop Gaming & Đồ họa**, **PC & Linh kiện máy tính**, hoặc **Gaming Gear (Bàn phím cơ, Chuột, Tai nghe)** tối ưu nhất theo ngân sách của bạn.\n\nBạn đang quan tâm đến sản phẩm hoặc phân khúc nào?',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       },
     ];
@@ -62,10 +62,10 @@ export const AiShoppingAssistantWidget: React.FC = () => {
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [prompts, setPrompts] = useState<string[]>([
+    'Tất cả mẫu điện thoại iPhone & Samsung',
     'Tư vấn laptop gaming dưới 25 triệu',
-    'Cấu hình PC thiết kế đồ họa & 3D',
-    'Chuột không dây gaming siêu nhẹ',
     'Bàn phím cơ văn phòng gõ êm',
+    'Chuột không dây gaming siêu nhẹ',
   ]);
   const [addedProductId, setAddedProductId] = useState<string | null>(null);
 
