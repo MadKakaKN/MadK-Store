@@ -77,3 +77,6 @@ frontend/test-results/
 *.tsbuildinfo
 cloudflared.exe
 
+# Uploads
+backend/src/MadK.API/wwwroot/uploads/
+

@@ -69,12 +69,18 @@ function generateClientFallbackRecommendation(request: AiChatRequest): AiChatRes
 
   // Phân tích hội thoại tự nhiên
   const isGreeting =
-    /\b(chào|chao|xin chào|xin chao|hello|hi|hey|alo|good morning|shop ơi|shop oi|ad ơi|ad oi|bot ơi|bot oi)\b/i.test(normMsg) ||
-    /\b(chao|xin chao|hello|hi|hey|alo|shop oi|ad oi|bot oi)\b/i.test(asciiMsg);
+    /\b(chào|chao|xin chào|xin chao|hello|hi|hey|alo|good morning|shop ơi|shop oi|ad ơi|ad oi|admin ơi|admin oi|bot ơi|bot oi|bạn ơi|ban oi|em ơi|em oi|anh ơi|anh oi|hé lô|helo|halo)\b/i.test(normMsg) ||
+    /\b(chao|xin chao|hello|hi|hey|alo|shop oi|ad oi|admin oi|bot oi|ban oi|em oi|anh oi|helo|halo)\b/i.test(asciiMsg) ||
+    normMsg.includes('có ai không') ||
+    asciiMsg.includes('co ai khong') ||
+    normMsg.includes('có ai trực không') ||
+    asciiMsg.includes('co ai truc khong') ||
+    normMsg.includes('có ai ở đây không') ||
+    asciiMsg.includes('co ai o day khong');
 
   const isThanks =
-    /\b(cảm ơn|cam on|cám ơn|thanks|thank you|thx|tuyệt vời|tuyet voi|hay quá|hay qua|ok shop|oke shop|ok bạn|ok ban)\b/i.test(normMsg) ||
-    /\b(cam on|thanks|thank you|thx|tuyet voi|hay qua|ok shop|oke shop|ok ban)\b/i.test(asciiMsg);
+    /\b(cảm ơn|cam on|cám ơn|thanks|thank you|thx|tuyệt vời|tuyet voi|hay quá|hay qua|ok shop|oke shop|ok bạn|ok ban|ok em|oke em|oki|okie)\b/i.test(normMsg) ||
+    /\b(cam on|thanks|thank you|thx|tuyet voi|hay qua|ok shop|oke shop|ok ban|ok em|oke em|oki|okie)\b/i.test(asciiMsg);
 
   const isBotInfo =
     normMsg.includes('bạn là ai') ||

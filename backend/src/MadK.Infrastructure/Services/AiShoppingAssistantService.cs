@@ -94,8 +94,14 @@ public static class VietnameseTextNormalizer
     /// </summary>
     public static bool IsGreeting(string normMsg, string asciiMsg)
     {
-        return Regex.IsMatch(normMsg, @"\b(chào|chao|xin chào|xin chao|hello|hi|hey|alo|good morning|good afternoon|good evening|shop ơi|shop oi|ad ơi|ad oi|bot ơi|bot oi)\b", RegexOptions.IgnoreCase)
-            || Regex.IsMatch(asciiMsg, @"\b(chao|xin chao|hello|hi|hey|alo|shop oi|ad oi|bot oi)\b", RegexOptions.IgnoreCase);
+        return Regex.IsMatch(normMsg, @"\b(chào|chao|xin chào|xin chao|hello|hi|hey|alo|good morning|good afternoon|good evening|shop ơi|shop oi|ad ơi|ad oi|admin ơi|admin oi|bot ơi|bot oi|bạn ơi|ban oi|em ơi|em oi|anh ơi|anh oi|hé lô|helo|halo)\b", RegexOptions.IgnoreCase)
+            || Regex.IsMatch(asciiMsg, @"\b(chao|xin chao|hello|hi|hey|alo|shop oi|ad oi|admin oi|bot oi|ban oi|em oi|anh oi|helo|halo)\b", RegexOptions.IgnoreCase)
+            || normMsg.Contains("có ai không")
+            || asciiMsg.Contains("co ai khong")
+            || normMsg.Contains("có ai trực không")
+            || asciiMsg.Contains("co ai truc khong")
+            || normMsg.Contains("có ai ở đây không")
+            || asciiMsg.Contains("co ai o day khong");
     }
 
     /// <summary>
@@ -103,8 +109,8 @@ public static class VietnameseTextNormalizer
     /// </summary>
     public static bool IsThanks(string normMsg, string asciiMsg)
     {
-        return Regex.IsMatch(normMsg, @"\b(cảm ơn|cam on|cám ơn|thanks|thank you|thx|tuyệt vời|tuyet voi|hay quá|hay qua|ok shop|oke shop|ok bạn|ok ban)\b", RegexOptions.IgnoreCase)
-            || Regex.IsMatch(asciiMsg, @"\b(cam on|thanks|thank you|thx|tuyet voi|hay qua|ok shop|oke shop|ok ban)\b", RegexOptions.IgnoreCase);
+        return Regex.IsMatch(normMsg, @"\b(cảm ơn|cam on|cám ơn|thanks|thank you|thx|tuyệt vời|tuyet voi|hay quá|hay qua|ok shop|oke shop|ok bạn|ok ban|ok em|oke em|oki|okie)\b", RegexOptions.IgnoreCase)
+            || Regex.IsMatch(asciiMsg, @"\b(cam on|thanks|thank you|thx|tuyet voi|hay qua|ok shop|oke shop|ok ban|ok em|oke em|oki|okie)\b", RegexOptions.IgnoreCase);
     }
 
     /// <summary>

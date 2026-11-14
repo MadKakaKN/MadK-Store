@@ -369,4 +369,34 @@ public class AiShoppingAssistantTests
         result.Reply.Should().Contain("xin chào");
         result.Reply.Should().Contain("Bàn phím");
     }
+
+    [Fact]
+    public async Task ChatAsync_WithBanOi_ShouldGreetBackNaturallyWithoutProducts()
+    {
+        var dbName = "AiTestDb_" + Guid.NewGuid();
+        using var context = await CreateSeededInMemoryDbContextAsync(dbName);
+        var service = CreateAssistantService(context);
+
+        var request = new AiChatRequestDto("bạn ơi");
+
+        var result = await service.ChatAsync(request);
+
+        result.RecommendedProducts.Should().BeEmpty();
+        result.Reply.Should().Contain("xin chào");
+    }
+
+    [Fact]
+    public async Task ChatAsync_WithCoAiKhong_ShouldGreetBackNaturallyWithoutProducts()
+    {
+        var dbName = "AiTestDb_" + Guid.NewGuid();
+        using var context = await CreateSeededInMemoryDbContextAsync(dbName);
+        var service = CreateAssistantService(context);
+
+        var request = new AiChatRequestDto("có ai ở đây không");
+
+        var result = await service.ChatAsync(request);
+
+        result.RecommendedProducts.Should().BeEmpty();
+        result.Reply.Should().Contain("xin chào");
+    }
 }
