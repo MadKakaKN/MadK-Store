@@ -78,34 +78,7 @@ export const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({
    * Directly triggers official Google OAuth 2.0 without any mock page
    */
   const handleGoogleLogin = async () => {
-    // Automated test detection (Playwright)
-    if (typeof window !== 'undefined' && window.navigator && window.navigator.webdriver) {
-      setIsVerifying(true);
-      setActiveProvider('Google');
-      try {
-        const res = await socialLogin({
-          provider: 'Google',
-          email: 'minh.nguyen@gmail.com',
-          fullName: 'Nguyễn Văn Minh',
-          avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face',
-          idToken: `playwright_verified_token_${Date.now()}`,
-        });
-        if (res.success) {
-          if (onSuccess) {
-            onSuccess();
-          } else {
-            window.location.href = '/';
-          }
-        }
-      } catch (err: unknown) {
-        if (onError) onError(err instanceof Error ? err.message : 'Lỗi đăng nhập kiểm thử.');
-      } finally {
-        setIsVerifying(false);
-        setActiveProvider(null);
-      }
-      return;
-    }
-
+    setLocalError(null);
     setIsVerifying(true);
     setActiveProvider('Google');
 
@@ -120,7 +93,7 @@ export const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({
               setIsVerifying(false);
               setActiveProvider(null);
               if (tokenResponse.error && tokenResponse.error !== 'popup_closed_by_user') {
-                if (onError) onError(tokenResponse.error_description || 'Đăng nhập Google bị hủy hoặc gặp sự cố.');
+                showError(tokenResponse.error_description || 'Đăng nhập Google bị hủy hoặc gặp sự cố.');
               }
               return;
             }
@@ -149,11 +122,11 @@ export const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({
                   window.location.href = isAdmin ? '/admin' : '/';
                 }
               } else {
-                if (onError) onError(res.error || 'Đăng nhập Google không thành công.');
+                showError(res.error || 'Đăng nhập Google không thành công.');
               }
             } catch (fetchErr: unknown) {
               const msg = fetchErr instanceof Error ? fetchErr.message : 'Lỗi lấy thông tin Google.';
-              if (onError) onError(msg);
+              showError(msg);
             } finally {
               setIsVerifying(false);
               setActiveProvider(null);
@@ -192,31 +165,6 @@ export const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({
    */
   const handleFacebookLogin = async () => {
     setLocalError(null);
-
-    // Automated test detection (Playwright)
-    if (typeof window !== 'undefined' && window.navigator && window.navigator.webdriver) {
-      setIsVerifying(true);
-      setActiveProvider('Facebook');
-      try {
-        const res = await socialLogin({
-          provider: 'Facebook',
-          email: 'facebook.user@madkstore.vn',
-          fullName: 'Khách hàng Facebook',
-          avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face',
-          idToken: `playwright_facebook_token_${Date.now()}`,
-        });
-        if (res.success) {
-          if (onSuccess) onSuccess();
-          else window.location.href = '/';
-        }
-      } catch (err: unknown) {
-        showError(err instanceof Error ? err.message : 'Lỗi đăng nhập kiểm thử Facebook.');
-      } finally {
-        setIsVerifying(false);
-        setActiveProvider(null);
-      }
-      return;
-    }
 
     // If Facebook App ID is configured, trigger official Facebook OAuth
     if (FACEBOOK_APP_ID) {
