@@ -185,7 +185,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onOpenMobileSidebar })
                       key={n.id}
                       onClick={() => markAsRead(n.id)}
                       className={`p-3.5 hover:bg-slate-50 transition-colors flex items-start gap-3 cursor-pointer ${
-                        !n.read ? 'bg-blue-50/40' : ''
+                        !n.read ? 'bg-zinc-100/40' : ''
                       }`}
                     >
                       <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 text-sm">

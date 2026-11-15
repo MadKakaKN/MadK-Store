@@ -223,7 +223,7 @@ export const OrderList: React.FC = () => {
           <button
             type="button"
             onClick={fetchOrders}
-            className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 transition-colors"
+            className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-zinc-1000 transition-colors"
           >
             Thử lại
           </button>
@@ -249,7 +249,7 @@ export const OrderList: React.FC = () => {
           {!searchQuery && (
             <a
               href="/catalog"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 shadow-md shadow-blue-600/20 transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-bold text-white bg-blue-600 hover:bg-zinc-1000 shadow-md shadow-blue-600/20 transition-all"
             >
               <span>🛒</span>
               <span>Khám phá sản phẩm ngay</span>

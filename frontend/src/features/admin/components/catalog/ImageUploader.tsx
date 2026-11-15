@@ -108,7 +108,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
         onClick={() => !disabled && !isUploading && fileInputRef.current?.click()}
         className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-colors ${
           dragOver
-            ? 'border-blue-500 bg-blue-50/50'
+            ? 'border-blue-500 bg-zinc-100/50'
             : 'border-slate-300 hover:border-blue-400 hover:bg-slate-50/60'
         } ${disabled || isUploading ? 'opacity-60 cursor-not-allowed' : ''}`}
       >
@@ -130,7 +130,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
             </div>
           ) : (
             <>
-              <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-zinc-100 text-blue-600 flex items-center justify-center">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
@@ -195,7 +195,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
                   <button
                     type="button"
                     onClick={() => handleSetPrimary(idx)}
-                    className="w-full text-[11px] font-semibold text-blue-700 hover:bg-blue-50 py-1 rounded transition-colors"
+                    className="w-full text-[11px] font-semibold text-blue-700 hover:bg-zinc-100 py-1 rounded transition-colors"
                   >
                     Đặt làm ảnh đại diện
                   </button>

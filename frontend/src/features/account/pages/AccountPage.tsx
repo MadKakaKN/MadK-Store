@@ -84,7 +84,7 @@ export const AccountPage: React.FC = () => {
     <div className="py-4 sm:py-6 px-4 md:px-6 max-w-[1200px] mx-auto space-y-5">
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-gray-500">
-        <a className="hover:text-[#1D4ED8]" href="/">Trang chủ</a>
+        <a className="hover:text-[#18181B]" href="/">Trang chủ</a>
         <span className="text-gray-300">/</span>
         <span className="text-gray-600">Tài khoản</span>
         <span className="text-gray-300">/</span>
@@ -105,7 +105,7 @@ export const AccountPage: React.FC = () => {
           <div className="bg-white border border-[#E5E7EB] rounded-lg p-4 space-y-4">
             {/* Profile Header */}
             <div className="flex items-center gap-3 pb-3 border-b border-[#E5E7EB]">
-              <div className="w-11 h-11 rounded-lg bg-[#1D4ED8] text-white flex items-center justify-center font-bold text-base flex-shrink-0">
+              <div className="w-11 h-11 rounded-lg bg-[#18181B] text-white flex items-center justify-center font-bold text-base flex-shrink-0">
                 {user?.fullName ? user.fullName.charAt(0).toUpperCase() : 'U'}
               </div>
               <div className="min-w-0">
@@ -113,7 +113,7 @@ export const AccountPage: React.FC = () => {
                   {user?.fullName || 'Khách hàng'}
                 </h2>
                 <p className="text-[11px] text-gray-500 truncate">{user?.email}</p>
-                <span className="inline-block mt-0.5 px-1.5 py-0.2 bg-blue-50 text-[#1D4ED8] text-[10px] font-semibold rounded border border-blue-100">
+                <span className="inline-block mt-0.5 px-1.5 py-0.2 bg-zinc-100 text-[#18181B] text-[10px] font-semibold rounded border border-blue-100">
                   {user?.roles?.includes('Admin') ? 'Quản trị viên' : 'Diamond Member'}
                 </span>
               </div>
@@ -126,7 +126,7 @@ export const AccountPage: React.FC = () => {
                 onClick={() => setActiveTab('profile')}
                 className={`w-full flex items-center gap-2.5 px-3 py-2 rounded transition-colors text-left ${
                   activeTab === 'profile'
-                    ? 'bg-blue-50 text-[#1D4ED8] font-semibold border border-blue-100'
+                    ? 'bg-zinc-100 text-[#18181B] font-semibold border border-blue-100'
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}
               >
@@ -139,7 +139,7 @@ export const AccountPage: React.FC = () => {
                 onClick={() => setActiveTab('orders')}
                 className={`w-full flex items-center justify-between px-3 py-2 rounded transition-colors text-left ${
                   activeTab === 'orders'
-                    ? 'bg-blue-50 text-[#1D4ED8] font-semibold border border-blue-100'
+                    ? 'bg-zinc-100 text-[#18181B] font-semibold border border-blue-100'
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}
               >
@@ -154,7 +154,7 @@ export const AccountPage: React.FC = () => {
                 onClick={() => setActiveTab('addresses')}
                 className={`w-full flex items-center gap-2.5 px-3 py-2 rounded transition-colors text-left ${
                   activeTab === 'addresses'
-                    ? 'bg-blue-50 text-[#1D4ED8] font-semibold border border-blue-100'
+                    ? 'bg-zinc-100 text-[#18181B] font-semibold border border-blue-100'
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}
               >
@@ -167,7 +167,7 @@ export const AccountPage: React.FC = () => {
                 onClick={() => setActiveTab('loyalty')}
                 className={`w-full flex items-center gap-2.5 px-3 py-2 rounded transition-colors text-left ${
                   activeTab === 'loyalty'
-                    ? 'bg-blue-50 text-[#1D4ED8] font-semibold border border-blue-100'
+                    ? 'bg-zinc-100 text-[#18181B] font-semibold border border-blue-100'
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}
               >
@@ -180,7 +180,7 @@ export const AccountPage: React.FC = () => {
                 onClick={() => setActiveTab('wishlist')}
                 className={`w-full flex items-center gap-2.5 px-3 py-2 rounded transition-colors text-left ${
                   activeTab === 'wishlist'
-                    ? 'bg-blue-50 text-[#1D4ED8] font-semibold border border-blue-100'
+                    ? 'bg-zinc-100 text-[#18181B] font-semibold border border-blue-100'
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}
               >
@@ -193,7 +193,7 @@ export const AccountPage: React.FC = () => {
                 onClick={() => setActiveTab('security')}
                 className={`w-full flex items-center gap-2.5 px-3 py-2 rounded transition-colors text-left ${
                   activeTab === 'security'
-                    ? 'bg-blue-50 text-[#1D4ED8] font-semibold border border-blue-100'
+                    ? 'bg-zinc-100 text-[#18181B] font-semibold border border-blue-100'
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}
               >
@@ -217,11 +217,11 @@ export const AccountPage: React.FC = () => {
           {/* Help box */}
           <div className="mt-3 bg-white border border-[#E5E7EB] rounded-lg p-3 text-xs text-gray-600">
             <div className="flex items-center gap-2 text-gray-900 font-medium mb-1">
-              <span className="material-symbols-outlined text-[16px] text-[#1D4ED8]">support_agent</span>
+              <span className="material-symbols-outlined text-[16px] text-[#18181B]">support_agent</span>
               <span>Hỗ trợ khách hàng</span>
             </div>
             <p className="text-gray-500 mb-1">Tổng đài giải đáp khiếu nại đơn hàng:</p>
-            <a className="text-sm font-semibold text-[#1D4ED8] hover:underline" href="tel:18006868">1800 6868</a>
+            <a className="text-sm font-semibold text-[#18181B] hover:underline" href="tel:18006868">1800 6868</a>
           </div>
         </aside>
 
@@ -232,9 +232,9 @@ export const AccountPage: React.FC = () => {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#E5E7EB]">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#1D4ED8] text-[20px]">diamond</span>
+                  <span className="material-symbols-outlined text-[#18181B] text-[20px]">diamond</span>
                   <h3 className="text-sm sm:text-base font-semibold text-gray-900">Thành viên Diamond</h3>
-                  <span className="px-2 py-0.5 bg-blue-50 text-[#1D4ED8] text-[10px] font-semibold rounded border border-blue-200">
+                  <span className="px-2 py-0.5 bg-zinc-100 text-[#18181B] text-[10px] font-semibold rounded border border-zinc-200">
                     Hạng cao cấp
                   </span>
                 </div>
@@ -244,7 +244,7 @@ export const AccountPage: React.FC = () => {
               </div>
               <div className="text-left sm:text-right">
                 <span className="text-[11px] text-gray-500">Quyền lợi thành viên</span>
-                <div className="text-sm font-bold text-[#1D4ED8]">
+                <div className="text-sm font-bold text-[#18181B]">
                   Chiết khấu 2% • Miễn phí GHN 2h
                 </div>
               </div>
@@ -253,21 +253,21 @@ export const AccountPage: React.FC = () => {
             {/* Perks Summary Grid */}
             <div className="pt-3 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
               <div className="flex items-start gap-2 bg-gray-50 p-2.5 rounded border border-gray-200">
-                <span className="material-symbols-outlined text-[18px] text-[#1D4ED8] flex-shrink-0">percent</span>
+                <span className="material-symbols-outlined text-[18px] text-[#18181B] flex-shrink-0">percent</span>
                 <div>
                   <p className="font-medium text-gray-900">Chiết khấu 2%</p>
                   <p className="text-gray-500 text-[11px]">Trừ trực tiếp vào mỗi đơn</p>
                 </div>
               </div>
               <div className="flex items-start gap-2 bg-gray-50 p-2.5 rounded border border-gray-200">
-                <span className="material-symbols-outlined text-[18px] text-[#1D4ED8] flex-shrink-0">local_shipping</span>
+                <span className="material-symbols-outlined text-[18px] text-[#18181B] flex-shrink-0">local_shipping</span>
                 <div>
                   <p className="font-medium text-gray-900">Freeship GHN 2h</p>
                   <p className="text-gray-500 text-[11px]">Miễn phí vận chuyển hỏa tốc</p>
                 </div>
               </div>
               <div className="flex items-start gap-2 bg-gray-50 p-2.5 rounded border border-gray-200">
-                <span className="material-symbols-outlined text-[18px] text-[#1D4ED8] flex-shrink-0">cake</span>
+                <span className="material-symbols-outlined text-[18px] text-[#18181B] flex-shrink-0">cake</span>
                 <div>
                   <p className="font-medium text-gray-900">Quà sinh nhật VIP</p>
                   <p className="text-gray-500 text-[11px]">Voucher áp dụng tháng sinh</p>
@@ -396,7 +396,7 @@ export const AccountPage: React.FC = () => {
                   <button
                     type="submit"
                     disabled={pwdSubmitting}
-                    className="px-6 py-3.5 rounded-2xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 shadow-md shadow-blue-600/20 disabled:opacity-50 transition-all"
+                    className="px-6 py-3.5 rounded-2xl text-sm font-bold text-white bg-blue-600 hover:bg-zinc-1000 shadow-md shadow-blue-600/20 disabled:opacity-50 transition-all"
                   >
                     {pwdSubmitting ? 'Đang cập nhật...' : 'Cập nhật mật khẩu'}
                   </button>

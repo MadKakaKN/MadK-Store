@@ -345,7 +345,7 @@ export const AdminReviewsPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => handleOpenModeration(rev)}
-                          className="px-2.5 py-1.5 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 hover:bg-blue-100 font-bold transition-colors"
+                          className="px-2.5 py-1.5 rounded-lg bg-zinc-100 border border-zinc-200 text-blue-700 hover:bg-blue-100 font-bold transition-colors"
                         >
                           Phản hồi
                         </button>

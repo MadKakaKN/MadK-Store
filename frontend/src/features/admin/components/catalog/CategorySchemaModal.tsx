@@ -229,7 +229,7 @@ export const CategorySchemaModal: React.FC<CategorySchemaModalProps> = ({
                   key={key}
                   type="button"
                   onClick={() => handleApplyPreset(key)}
-                  className="px-2.5 py-1 text-xs font-medium rounded-md bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 border border-slate-200 transition-colors"
+                  className="px-2.5 py-1 text-xs font-medium rounded-md bg-slate-100 hover:bg-zinc-100 hover:text-blue-700 hover:border-blue-300 border border-slate-200 transition-colors"
                 >
                   {item.label}
                 </button>

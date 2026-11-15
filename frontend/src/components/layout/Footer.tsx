@@ -9,7 +9,7 @@ export const Footer: React.FC = () => {
           {/* Col 1: Về MadK Store */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 bg-[#1D4ED8] rounded flex items-center justify-center text-white font-bold text-sm">
+              <div className="w-7 h-7 bg-[#18181B] rounded flex items-center justify-center text-white font-bold text-sm">
                 M
               </div>
               <span className="font-bold text-base text-white">MadK Store</span>

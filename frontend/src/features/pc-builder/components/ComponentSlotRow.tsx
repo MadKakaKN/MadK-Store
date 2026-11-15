@@ -52,7 +52,7 @@ export const ComponentSlotRow: React.FC<ComponentSlotRowProps> = ({
                 className="w-12 h-12 rounded object-contain bg-gray-50 border border-[#E5E7EB] flex-shrink-0 p-0.5"
               />
               <div className="min-w-0">
-                <h4 className="font-semibold text-gray-900 text-xs line-clamp-1 hover:text-[#1D4ED8] transition-colors">
+                <h4 className="font-semibold text-gray-900 text-xs line-clamp-1 hover:text-[#18181B] transition-colors">
                   {selectedPart.name}
                 </h4>
                 <div className="flex flex-wrap items-center gap-2 mt-0.5 text-[11px] text-gray-500">
@@ -111,7 +111,7 @@ export const ComponentSlotRow: React.FC<ComponentSlotRowProps> = ({
                 <button
                   type="button"
                   onClick={() => onOpenModal(slot)}
-                  className="h-7 px-2.5 bg-white border border-[#1D4ED8] text-[#1D4ED8] hover:bg-blue-50 text-[11px] font-semibold rounded transition-colors"
+                  className="h-7 px-2.5 bg-white border border-[#18181B] text-[#18181B] hover:bg-zinc-100 text-[11px] font-semibold rounded transition-colors"
                   title="Đổi linh kiện khác"
                 >
                   Thay đổi
@@ -133,7 +133,7 @@ export const ComponentSlotRow: React.FC<ComponentSlotRowProps> = ({
             <button
               type="button"
               onClick={() => onOpenModal(slot)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1D4ED8] hover:bg-[#1E40AF] text-white font-semibold text-xs transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#18181B] hover:bg-[#09090B] text-white font-semibold text-xs transition-colors"
             >
               <span className="material-symbols-outlined text-[16px]">add</span>
               <span>Chọn linh kiện</span>

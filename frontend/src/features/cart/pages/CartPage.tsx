@@ -79,7 +79,7 @@ export const CartPage: React.FC = () => {
     return (
       <div className="py-6 sm:py-10 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
         <nav className="flex items-center text-xs text-gray-500 mb-6 gap-2">
-          <Link to="/" className="hover:text-[#1D4ED8] transition-colors">
+          <Link to="/" className="hover:text-[#18181B] transition-colors">
             Trang chủ
           </Link>
           <span className="material-symbols-outlined text-[14px]">chevron_right</span>
@@ -87,7 +87,7 @@ export const CartPage: React.FC = () => {
         </nav>
 
         <div className="bg-white rounded-lg p-8 sm:p-12 border border-[#E5E7EB] text-center space-y-5">
-          <div className="w-16 h-16 mx-auto rounded-full bg-blue-50 text-[#1D4ED8] flex items-center justify-center">
+          <div className="w-16 h-16 mx-auto rounded-full bg-zinc-100 text-[#18181B] flex items-center justify-center">
             <span className="material-symbols-outlined text-3xl">lock</span>
           </div>
 
@@ -103,7 +103,7 @@ export const CartPage: React.FC = () => {
           <div className="pt-2 flex flex-wrap justify-center gap-3">
             <Link
               to="/auth/login?redirect=/cart"
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-[#1D4ED8] hover:bg-[#1E40AF] text-white font-semibold text-sm transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-[#18181B] hover:bg-[#09090B] text-white font-semibold text-sm transition-colors"
             >
               <span>Đăng nhập ngay</span>
               <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
@@ -125,7 +125,7 @@ export const CartPage: React.FC = () => {
     return (
       <div className="py-6 sm:py-10 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
         <nav className="flex items-center text-xs text-gray-500 mb-6 gap-2">
-          <Link to="/" className="hover:text-[#1D4ED8] transition-colors">
+          <Link to="/" className="hover:text-[#18181B] transition-colors">
             Trang chủ
           </Link>
           <span className="material-symbols-outlined text-[14px]">chevron_right</span>
@@ -133,7 +133,7 @@ export const CartPage: React.FC = () => {
         </nav>
 
         <div className="bg-white rounded-lg p-8 sm:p-12 border border-[#E5E7EB] text-center space-y-5">
-          <div className="w-16 h-16 mx-auto rounded-full bg-blue-50 text-[#1D4ED8] flex items-center justify-center">
+          <div className="w-16 h-16 mx-auto rounded-full bg-zinc-100 text-[#18181B] flex items-center justify-center">
             <span className="material-symbols-outlined text-3xl">shopping_cart</span>
           </div>
 
@@ -149,7 +149,7 @@ export const CartPage: React.FC = () => {
           <div className="pt-2 flex flex-wrap justify-center gap-3">
             <Link
               to="/categories"
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-[#1D4ED8] hover:bg-[#1E40AF] text-white font-semibold text-sm transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-[#18181B] hover:bg-[#09090B] text-white font-semibold text-sm transition-colors"
             >
               <span>Khám phá sản phẩm ngay</span>
               <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
@@ -203,7 +203,7 @@ export const CartPage: React.FC = () => {
 
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-gray-500">
-        <Link to="/" className="hover:text-[#1D4ED8] hover:underline">Trang chủ</Link>
+        <Link to="/" className="hover:text-[#18181B] hover:underline">Trang chủ</Link>
         <span className="material-symbols-outlined text-[14px]">chevron_right</span>
         <span className="text-[#111827] font-semibold">Giỏ hàng &amp; Thanh toán</span>
       </nav>
@@ -212,10 +212,10 @@ export const CartPage: React.FC = () => {
       <div className="bg-white border border-[#E5E7EB] rounded-lg p-2">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
           {/* Step 1: Active */}
-          <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-[#EFF6FF] border border-[#1D4ED8] text-left">
-            <div className="w-7 h-7 rounded-lg bg-[#1D4ED8] text-white flex items-center justify-center font-bold text-xs">1</div>
+          <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-[#F4F4F5] border border-[#18181B] text-left">
+            <div className="w-7 h-7 rounded-lg bg-[#18181B] text-white flex items-center justify-center font-bold text-xs">1</div>
             <div className="leading-tight">
-              <span className="text-[13px] font-bold text-[#1D4ED8] block">1. Giỏ hàng ({itemCount} sản phẩm)</span>
+              <span className="text-[13px] font-bold text-[#18181B] block">1. Giỏ hàng ({itemCount} sản phẩm)</span>
               <span className="text-[11px] text-blue-700 block">Xem lại cấu hình &amp; số lượng</span>
             </div>
           </div>
@@ -298,7 +298,7 @@ export const CartPage: React.FC = () => {
                       <div className="flex items-start justify-between gap-2">
                         <Link
                           to={`/products/${item.productSlug}`}
-                          className="text-sm font-semibold text-[#111827] hover:text-[#1D4ED8] transition-colors leading-snug line-clamp-2"
+                          className="text-sm font-semibold text-[#111827] hover:text-[#18181B] transition-colors leading-snug line-clamp-2"
                         >
                           {item.productName}
                         </Link>
@@ -397,7 +397,7 @@ export const CartPage: React.FC = () => {
           <div className="flex items-center justify-between">
             <Link
               to="/categories"
-              className="inline-flex items-center gap-1 text-[#1D4ED8] hover:underline text-xs font-semibold"
+              className="inline-flex items-center gap-1 text-[#18181B] hover:underline text-xs font-semibold"
             >
               <span className="material-symbols-outlined text-[16px]">arrow_back</span>
               <span>Tiếp tục chọn thêm sản phẩm khác</span>
@@ -444,7 +444,7 @@ export const CartPage: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate('/checkout')}
-              className="w-full h-11 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white font-semibold rounded-lg text-sm transition-colors flex items-center justify-center gap-2"
+              className="w-full h-11 bg-[#18181B] hover:bg-[#09090B] text-white font-semibold rounded-lg text-sm transition-colors flex items-center justify-center gap-2"
             >
               <span>Tiến hành đặt hàng ngay</span>
               <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
@@ -457,7 +457,7 @@ export const CartPage: React.FC = () => {
                 <span>Kiểm tra hàng đồng kiểm trước khi thanh toán</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#1D4ED8] text-[16px]">history</span>
+                <span className="material-symbols-outlined text-[#18181B] text-[16px]">history</span>
                 <span>Đổi mới trong 7 ngày nếu có lỗi phần cứng</span>
               </div>
               <div className="flex items-center gap-2">

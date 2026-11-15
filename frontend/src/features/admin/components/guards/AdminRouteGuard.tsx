@@ -21,7 +21,7 @@ export const AdminRouteGuard: React.FC<AdminRouteGuardProps> = ({
   if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
-        <div className="w-10 h-10 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+        <div className="w-10 h-10 border-4 border-zinc-200 border-t-blue-600 rounded-full animate-spin" />
         <p className="mt-4 text-sm font-medium text-slate-600">Đang xác thực quyền truy cập quản trị...</p>
       </div>
     );

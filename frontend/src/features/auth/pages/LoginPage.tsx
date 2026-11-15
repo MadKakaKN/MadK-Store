@@ -98,7 +98,7 @@ export const LoginPage: React.FC = () => {
         <div className="flex border-b border-[#E5E7EB] mb-6">
           <button
             type="button"
-            className="flex-1 pb-3 text-sm font-semibold text-[#1D4ED8] border-b-2 border-[#1D4ED8] text-center"
+            className="flex-1 pb-3 text-sm font-semibold text-[#18181B] border-b-2 border-[#18181B] text-center"
           >
             Đăng nhập
           </button>
@@ -111,7 +111,7 @@ export const LoginPage: React.FC = () => {
         </div>
 
         {/* Quick Demo Fill Helper */}
-        <div className="mb-4 p-2.5 bg-blue-50/70 border border-blue-200 rounded-lg flex items-center justify-between text-xs">
+        <div className="mb-4 p-2.5 bg-zinc-100/70 border border-zinc-200 rounded-lg flex items-center justify-between text-xs">
           <span className="text-gray-600">Tài khoản thử nghiệm:</span>
           <button
             type="button"
@@ -119,7 +119,7 @@ export const LoginPage: React.FC = () => {
               handleFillDemo('customer@madkstore.vn', 'CustomerPassword123!');
               setIsStaffAttempt(false);
             }}
-            className="font-semibold text-[#1D4ED8] hover:underline"
+            className="font-semibold text-[#18181B] hover:underline"
           >
             Điền nhanh mẫu &rarr;
           </button>
@@ -149,7 +149,7 @@ export const LoginPage: React.FC = () => {
                 <div className="mt-2">
                   <Link
                     to="/admin/login"
-                    className="inline-flex items-center gap-1 text-[#1D4ED8] font-semibold hover:underline"
+                    className="inline-flex items-center gap-1 text-[#18181B] font-semibold hover:underline"
                   >
                     Chuyển sang Cổng Quản Trị &rarr;
                   </Link>
@@ -176,7 +176,7 @@ export const LoginPage: React.FC = () => {
                 if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
               }}
               placeholder="vidu@madkstore.vn"
-              className={`w-full h-10 px-3 text-sm bg-white border rounded-lg focus:border-[#1D4ED8] focus:ring-0 outline-none transition-colors ${
+              className={`w-full h-10 px-3 text-sm bg-white border rounded-lg focus:border-[#18181B] focus:ring-0 outline-none transition-colors ${
                 errors.email ? 'border-rose-400 text-rose-900' : 'border-[#E5E7EB]'
               }`}
             />
@@ -200,7 +200,7 @@ export const LoginPage: React.FC = () => {
                   if (errors.password) setErrors((prev) => ({ ...prev, password: undefined }));
                 }}
                 placeholder="Nhập mật khẩu"
-                className={`w-full h-10 pl-3 pr-10 text-sm bg-white border rounded-lg focus:border-[#1D4ED8] focus:ring-0 outline-none transition-colors ${
+                className={`w-full h-10 pl-3 pr-10 text-sm bg-white border rounded-lg focus:border-[#18181B] focus:ring-0 outline-none transition-colors ${
                   errors.password ? 'border-rose-400 text-rose-900' : 'border-[#E5E7EB]'
                 }`}
               />
@@ -225,13 +225,13 @@ export const LoginPage: React.FC = () => {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4 rounded text-[#1D4ED8] focus:ring-0 border-gray-300"
+                className="w-4 h-4 rounded text-[#18181B] focus:ring-0 border-gray-300"
               />
               <span className="text-xs text-gray-600">Ghi nhớ đăng nhập</span>
             </label>
             <Link
               to="/auth/forgot-password"
-              className="text-xs text-[#1D4ED8] hover:underline font-medium"
+              className="text-xs text-[#18181B] hover:underline font-medium"
             >
               Quên mật khẩu?
             </Link>
@@ -241,7 +241,7 @@ export const LoginPage: React.FC = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full h-10 bg-[#1D4ED8] hover:bg-[#1E40AF] disabled:opacity-50 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
+            className="w-full h-10 bg-[#18181B] hover:bg-[#09090B] disabled:opacity-50 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
           >
             {isSubmitting ? 'Đang xác thực...' : 'Đăng nhập'}
           </button>
@@ -250,7 +250,7 @@ export const LoginPage: React.FC = () => {
             Chưa có tài khoản?{' '}
             <Link
               to={`/auth/register${explicitRedirect ? `?redirect=${encodeURIComponent(explicitRedirect)}` : ''}`}
-              className="text-[#1D4ED8] font-semibold hover:underline"
+              className="text-[#18181B] font-semibold hover:underline"
             >
               Đăng ký ngay
             </Link>

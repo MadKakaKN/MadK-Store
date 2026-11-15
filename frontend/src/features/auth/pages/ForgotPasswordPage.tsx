@@ -52,7 +52,7 @@ export const ForgotPasswordPage: React.FC = () => {
         <div className="bg-white py-8 px-6 sm:px-10 shadow-xl shadow-slate-200/50 rounded-3xl border border-slate-100">
           {submittedMessage ? (
             <div className="text-center py-4">
-              <div className="w-16 h-16 mx-auto rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center text-3xl mb-4">
+              <div className="w-16 h-16 mx-auto rounded-3xl bg-zinc-100 text-blue-600 flex items-center justify-center text-3xl mb-4">
                 📬
               </div>
               <h3 className="text-xl font-extrabold text-slate-900">Kiểm tra hộp thư của bạn</h3>
@@ -65,7 +65,7 @@ export const ForgotPasswordPage: React.FC = () => {
               <div className="mt-6 flex flex-col gap-3">
                 <Link
                   to={`/auth/reset-password?email=${encodeURIComponent(email)}`}
-                  className="py-3.5 px-4 rounded-2xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 shadow-sm transition-colors text-center"
+                  className="py-3.5 px-4 rounded-2xl text-sm font-bold text-white bg-blue-600 hover:bg-zinc-1000 shadow-sm transition-colors text-center"
                 >
                   Tôi đã có mã đặt lại mật khẩu &rarr;
                 </Link>

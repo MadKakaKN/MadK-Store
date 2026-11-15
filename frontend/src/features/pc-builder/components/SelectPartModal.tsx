@@ -168,7 +168,7 @@ export const SelectPartModal: React.FC<SelectPartModalProps> = ({
                         {part.sku}
                       </span>
                       {part.specs?.socket && (
-                        <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-md font-semibold">
+                        <span className="bg-zinc-100 text-blue-700 px-2 py-0.5 rounded-md font-semibold">
                           Socket {part.specs.socket}
                         </span>
                       )}
@@ -205,7 +205,7 @@ export const SelectPartModal: React.FC<SelectPartModalProps> = ({
                       onSelectPart(slot.id, part);
                       onClose();
                     }}
-                    className="px-5 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md shadow-blue-600/20 hover:scale-105 active:scale-95 transition-all"
+                    className="px-5 py-2.5 rounded-2xl bg-blue-600 hover:bg-zinc-1000 text-white font-bold text-xs shadow-md shadow-blue-600/20 hover:scale-105 active:scale-95 transition-all"
                   >
                     Chọn
                   </button>

@@ -237,7 +237,7 @@ export const CreatePurchaseOrderModal: React.FC<CreatePurchaseOrderModalProps> =
               <button
                 type="button"
                 onClick={handleAddItem}
-                className="px-2.5 py-1 text-xs font-bold bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg transition-colors"
+                className="px-2.5 py-1 text-xs font-bold bg-zinc-100 text-blue-700 hover:bg-blue-100 rounded-lg transition-colors"
               >
                 + Thêm sản phẩm
               </button>

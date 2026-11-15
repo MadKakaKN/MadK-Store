@@ -164,9 +164,9 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatus, OrderStatusMeta> = {
   },
   Confirmed: {
     label: 'Đã xác nhận',
-    badgeBg: 'bg-blue-50',
+    badgeBg: 'bg-zinc-100',
     badgeText: 'text-blue-700',
-    badgeBorder: 'border-blue-200',
+    badgeBorder: 'border-zinc-200',
     icon: '✓',
     description: 'Đơn hàng đã được xác nhận thông tin, chuẩn bị xuất kho',
     cancellableByCustomer: true,

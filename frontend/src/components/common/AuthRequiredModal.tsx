@@ -67,7 +67,7 @@ export const AuthRequiredModal: React.FC<AuthRequiredModalProps> = ({
         </button>
 
         {/* Clean Retail Lock Badge */}
-        <div className="w-11 h-11 mx-auto rounded-full bg-blue-50 text-[#1D4ED8] flex items-center justify-center mb-3">
+        <div className="w-11 h-11 mx-auto rounded-full bg-zinc-100 text-[#18181B] flex items-center justify-center mb-3">
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               strokeLinecap="round"
@@ -92,7 +92,7 @@ export const AuthRequiredModal: React.FC<AuthRequiredModalProps> = ({
           <Link
             to={loginUrl}
             onClick={onClose}
-            className="w-full h-10 px-4 rounded bg-[#1D4ED8] hover:bg-[#1e40af] text-white font-semibold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5"
+            className="w-full h-10 px-4 rounded bg-[#18181B] hover:bg-[#09090B] text-white font-semibold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5"
           >
             <span>Đăng nhập ngay</span>
             <svg

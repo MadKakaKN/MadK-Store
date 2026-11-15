@@ -127,7 +127,7 @@ export const OrderSuccessPage: React.FC = () => {
     <div className="py-4 sm:py-6 px-4 md:px-6 max-w-[1200px] mx-auto space-y-6">
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-gray-500">
-        <Link to="/" className="hover:text-[#1D4ED8] hover:underline">Trang chủ</Link>
+        <Link to="/" className="hover:text-[#18181B] hover:underline">Trang chủ</Link>
         <span className="material-symbols-outlined text-[14px]">chevron_right</span>
         <span className="text-[#111827] font-semibold">Đặt hàng thành công</span>
       </nav>
@@ -152,10 +152,10 @@ export const OrderSuccessPage: React.FC = () => {
             </div>
           </div>
           {/* Step 3: Active */}
-          <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-[#EFF6FF] border border-[#1D4ED8] text-left">
-            <div className="w-7 h-7 rounded-lg bg-[#1D4ED8] text-white flex items-center justify-center font-bold text-xs">3</div>
+          <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-[#F4F4F5] border border-[#18181B] text-left">
+            <div className="w-7 h-7 rounded-lg bg-[#18181B] text-white flex items-center justify-center font-bold text-xs">3</div>
             <div className="leading-tight">
-              <span className="text-[13px] font-bold text-[#1D4ED8] block">3. Đặt hàng thành công</span>
+              <span className="text-[13px] font-bold text-[#18181B] block">3. Đặt hàng thành công</span>
               <span className="text-[11px] text-blue-700 block">Mã đơn &amp; hướng dẫn nhận máy</span>
             </div>
           </div>

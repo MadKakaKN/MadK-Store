@@ -42,7 +42,7 @@ export const RecentlyViewedBar: React.FC<RecentlyViewedBarProps> = ({ currentPro
           <Link
             key={item.id}
             to={`/products/${item.slug}`}
-            className="border border-[#E5E7EB] rounded-lg p-2 flex items-center gap-2.5 hover:border-[#1D4ED8] transition-colors bg-white group"
+            className="border border-[#E5E7EB] rounded-lg p-2 flex items-center gap-2.5 hover:border-[#18181B] transition-colors bg-white group"
           >
             <img
               src={item.thumbnailUrl || `/images/products/${item.slug}.png`}
@@ -57,13 +57,13 @@ export const RecentlyViewedBar: React.FC<RecentlyViewedBarProps> = ({ currentPro
               }}
             />
             <div className="min-w-0 flex-1">
-              <h5 className="text-xs text-[#111827] font-medium line-clamp-1 group-hover:text-[#1D4ED8] transition-colors">
+              <h5 className="text-xs text-[#111827] font-medium line-clamp-1 group-hover:text-[#18181B] transition-colors">
                 {item.name}
               </h5>
               <div className="text-[#D70018] text-xs font-bold mt-0.5">
                 {formatVND(item.price)}
               </div>
-              <span className="text-[10px] text-[#1D4ED8] font-medium">Xem lại</span>
+              <span className="text-[10px] text-[#18181B] font-medium">Xem lại</span>
             </div>
           </Link>
         ))}

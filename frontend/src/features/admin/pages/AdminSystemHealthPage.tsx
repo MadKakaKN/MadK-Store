@@ -135,7 +135,7 @@ export const AdminSystemHealthPage: React.FC = () => {
               Giám sát Hạ tầng & Webhook IPN
             </h1>
             {healthData && (
-              <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200">
+              <span className="px-3 py-1 rounded-full text-xs font-bold bg-zinc-100 text-blue-700 border border-zinc-200">
                 Uptime: {healthData.serverUptime}
               </span>
             )}
@@ -286,7 +286,7 @@ export const AdminSystemHealthPage: React.FC = () => {
                   {healthData?.services.map((svc, idx) => (
                     <tr key={idx} className="hover:bg-slate-50/60 transition-colors">
                       <td className="p-3.5 pl-5 font-bold text-slate-900 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-blue-500" />
+                        <span className="w-2 h-2 rounded-full bg-zinc-1000" />
                         {svc.serviceName}
                       </td>
                       <td className="p-3.5">{getStatusBadge(svc.status)}</td>
@@ -323,7 +323,7 @@ export const AdminSystemHealthPage: React.FC = () => {
       {activeTab === 'webhooks' && (
         <div className="space-y-6">
           {/* IPN Simulator Card */}
-          <div className="bg-gradient-to-r from-blue-50/60 via-indigo-50/30 to-purple-50/40 rounded-3xl border border-blue-200/80 p-5 shadow-xs">
+          <div className="bg-gradient-to-r from-blue-50/60 via-indigo-50/30 to-purple-50/40 rounded-3xl border border-zinc-200/80 p-5 shadow-xs">
             <div className="mb-4">
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-base">🧪</span>
@@ -436,7 +436,7 @@ export const AdminSystemHealthPage: React.FC = () => {
             </form>
 
             {simResult && (
-              <div className="mt-3 p-3 rounded-xl bg-white border border-blue-200 text-xs font-mono text-slate-800 shadow-2xs">
+              <div className="mt-3 p-3 rounded-xl bg-white border border-zinc-200 text-xs font-mono text-slate-800 shadow-2xs">
                 <strong>Phản hồi từ cổng:</strong> {simResult}
               </div>
             )}

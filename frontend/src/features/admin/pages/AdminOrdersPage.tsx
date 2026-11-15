@@ -256,7 +256,7 @@ export const AdminOrdersPage: React.FC = () => {
         {[
           { key: 'ALL', label: 'Tất cả', count: totalCount || 1428, color: 'bg-blue-100 text-blue-800' },
           { key: 'Pending', label: 'Chờ xác nhận', count: 12, color: 'bg-amber-100 text-amber-800' },
-          { key: 'Confirmed', label: 'Đã duyệt & Xuất kho', count: 34, color: 'bg-blue-50 text-blue-700' },
+          { key: 'Confirmed', label: 'Đã duyệt & Xuất kho', count: 34, color: 'bg-zinc-100 text-blue-700' },
           { key: 'Shipping', label: 'Đang giao GHN', count: 48, color: 'bg-purple-100 text-purple-700' },
           { key: 'Completed', label: 'Đã giao', count: 1310, color: 'bg-emerald-100 text-emerald-800' },
           { key: 'Cancelled', label: 'Đã hủy', count: 18, color: 'bg-rose-100 text-rose-800' },
@@ -367,7 +367,7 @@ export const AdminOrdersPage: React.FC = () => {
       {/* Bulk Action Bar (Screen 09)                                               */}
       {/* ========================================================================= */}
       {selectedOrderIds.length > 0 && (
-        <div className="bg-blue-50 border border-blue-200 rounded p-2 mb-3 flex items-center justify-between text-[12px]">
+        <div className="bg-zinc-100 border border-zinc-200 rounded p-2 mb-3 flex items-center justify-between text-[12px]">
           <div className="flex items-center gap-2 pl-1">
             <input
               type="checkbox"
@@ -473,7 +473,7 @@ export const AdminOrdersPage: React.FC = () => {
                       }}
                       className={`cursor-pointer transition-colors ${
                         isDrawerActive
-                          ? 'bg-blue-50/50 hover:bg-blue-50/70'
+                          ? 'bg-zinc-100/50 hover:bg-zinc-100/70'
                           : 'hover:bg-gray-50'
                       }`}
                     >
@@ -543,7 +543,7 @@ export const AdminOrdersPage: React.FC = () => {
                             order.status === 'Completed'
                               ? 'bg-emerald-100 text-emerald-800 border-emerald-200'
                               : order.status === 'Shipping'
-                              ? 'bg-blue-100 text-blue-800 border-blue-200'
+                              ? 'bg-blue-100 text-blue-800 border-zinc-200'
                               : order.status === 'Cancelled'
                               ? 'bg-rose-100 text-rose-800 border-rose-200'
                               : 'bg-amber-100 text-amber-800 border-amber-200'
@@ -672,7 +672,7 @@ export const AdminOrdersPage: React.FC = () => {
                 <span className="font-bold text-[14px] text-gray-900">
                   Chi tiết đơn #{drawerOrder.orderNumber}
                 </span>
-                <span className="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-blue-100 text-blue-800 border border-blue-200">
+                <span className="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-blue-100 text-blue-800 border border-zinc-200">
                   {ORDER_STATUS_CONFIG[drawerOrder.status]?.label || drawerOrder.status}
                 </span>
               </div>

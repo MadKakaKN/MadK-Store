@@ -115,7 +115,7 @@ export const ProductDetailPage: React.FC = () => {
         <div className="mt-6">
           <Link
             to="/categories"
-            className="inline-flex items-center px-5 py-2.5 rounded bg-[#1D4ED8] hover:bg-[#1E40AF] text-white font-semibold text-xs transition-colors"
+            className="inline-flex items-center px-5 py-2.5 rounded bg-[#18181B] hover:bg-[#09090B] text-white font-semibold text-xs transition-colors"
           >
             Quay lại danh mục sản phẩm
           </Link>
@@ -259,16 +259,16 @@ export const ProductDetailPage: React.FC = () => {
 
       {/* BREADCRUMB (Stitch Screen 10) */}
       <nav className="flex items-center gap-1.5 text-xs text-gray-500">
-        <Link to="/" className="hover:text-[#1D4ED8] flex items-center gap-1">
+        <Link to="/" className="hover:text-[#18181B] flex items-center gap-1">
           <span className="material-symbols-outlined text-sm">home</span>
           <span>Trang chủ</span>
         </Link>
         <span className="text-gray-400">/</span>
-        <Link to="/categories" className="hover:text-[#1D4ED8]">
+        <Link to="/categories" className="hover:text-[#18181B]">
           Danh mục
         </Link>
         <span className="text-gray-400">/</span>
-        <Link to={`/categories/${product.category.slug}`} className="hover:text-[#1D4ED8]">
+        <Link to={`/categories/${product.category.slug}`} className="hover:text-[#18181B]">
           {product.category.name}
         </Link>
         <span className="text-gray-400">/</span>
@@ -288,7 +288,7 @@ export const ProductDetailPage: React.FC = () => {
                   onClick={() => setViewMode('2d')}
                   className={`flex items-center gap-1 pb-1 transition-colors ${
                     viewMode === '2d'
-                      ? 'text-[#1D4ED8] border-b-2 border-[#1D4ED8]'
+                      ? 'text-[#18181B] border-b-2 border-[#18181B]'
                       : 'text-gray-500 hover:text-[#111827]'
                   }`}
                 >
@@ -301,7 +301,7 @@ export const ProductDetailPage: React.FC = () => {
                   onClick={() => setViewMode('3d')}
                   className={`flex items-center gap-1 pb-1 transition-colors ${
                     viewMode === '3d'
-                      ? 'text-[#1D4ED8] border-b-2 border-[#1D4ED8]'
+                      ? 'text-[#18181B] border-b-2 border-[#18181B]'
                       : 'text-gray-500 hover:text-[#111827]'
                   }`}
                 >
@@ -374,8 +374,8 @@ export const ProductDetailPage: React.FC = () => {
                     onClick={() => setSelectedImageIndex(idx)}
                     className={`rounded p-1 bg-white aspect-[4/3] flex items-center justify-center transition-colors ${
                       selectedImageIndex === idx
-                        ? 'border-2 border-[#1D4ED8]'
-                        : 'border border-[#E5E7EB] hover:border-[#1D4ED8]'
+                        ? 'border-2 border-[#18181B]'
+                        : 'border border-[#E5E7EB] hover:border-[#18181B]'
                     }`}
                   >
                     <img
@@ -399,15 +399,15 @@ export const ProductDetailPage: React.FC = () => {
           {/* Fast Commitments Strip below Gallery (Stitch Screen 10) */}
           <div className="bg-white border border-[#E5E7EB] rounded-lg p-3 grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
             <div className="flex items-center gap-2 text-gray-700">
-              <span className="material-symbols-outlined text-base text-[#1D4ED8]">verified_user</span>
+              <span className="material-symbols-outlined text-base text-[#18181B]">verified_user</span>
               <span className="font-medium">Hàng chính hãng 100%</span>
             </div>
             <div className="flex items-center gap-2 text-gray-700">
-              <span className="material-symbols-outlined text-base text-[#1D4ED8]">home_repair_service</span>
+              <span className="material-symbols-outlined text-base text-[#18181B]">home_repair_service</span>
               <span className="font-medium">Bảo hành 24 tháng tận nơi</span>
             </div>
             <div className="flex items-center gap-2 text-gray-700">
-              <span className="material-symbols-outlined text-base text-[#1D4ED8]">autorenew</span>
+              <span className="material-symbols-outlined text-base text-[#18181B]">autorenew</span>
               <span className="font-medium">Đổi mới 30 ngày nếu lỗi NSX</span>
             </div>
           </div>
@@ -429,7 +429,7 @@ export const ProductDetailPage: React.FC = () => {
                 <div className="flex items-center gap-1 text-gray-700">
                   <span className="material-symbols-outlined text-sm text-amber-500">star</span>
                   <span className="font-semibold text-[#111827]">4.9</span>
-                  <a className="text-[#1D4ED8] hover:underline" href="#reviews">
+                  <a className="text-[#18181B] hover:underline" href="#reviews">
                     (128 đánh giá)
                   </a>
                 </div>
@@ -514,7 +514,7 @@ export const ProductDetailPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowSoundTestModal(true)}
-                  className="px-3 py-1.5 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white text-xs font-semibold rounded shrink-0 transition-colors"
+                  className="px-3 py-1.5 bg-[#18181B] hover:bg-[#09090B] text-white text-xs font-semibold rounded shrink-0 transition-colors"
                 >
                   Gõ thử
                 </button>
@@ -538,14 +538,14 @@ export const ProductDetailPage: React.FC = () => {
                         onClick={() => setSelectedVariant(v)}
                         className={`p-2.5 rounded text-left border transition-all ${
                           isSelected
-                            ? 'border-[#1D4ED8] bg-[#EFF6FF] text-[#1D4ED8] font-semibold'
+                            ? 'border-[#18181B] bg-[#F4F4F5] text-[#18181B] font-semibold'
                             : 'border-[#E5E7EB] hover:border-gray-400 bg-white text-gray-700'
                         } ${vOutOfStock ? 'opacity-50' : ''}`}
                       >
                         <div className="flex items-center justify-between gap-1">
                           <span className="truncate">{v.name}</span>
                           {isSelected && (
-                            <span className="material-symbols-outlined text-sm text-[#1D4ED8]">check</span>
+                            <span className="material-symbols-outlined text-sm text-[#18181B]">check</span>
                           )}
                         </div>
                         <div className="text-xs font-bold text-[#D70018] mt-1">
@@ -597,7 +597,7 @@ export const ProductDetailPage: React.FC = () => {
             {/* Promotional Box (Stitch Screen 10) */}
             <div className="border border-[#E5E7EB] rounded-lg p-3 bg-white space-y-2 text-xs">
               <div className="font-semibold text-[#111827] flex items-center gap-1.5 pb-1 border-b border-[#E5E7EB]">
-                <span className="material-symbols-outlined text-base text-[#1D4ED8]">card_giftcard</span>
+                <span className="material-symbols-outlined text-base text-[#18181B]">card_giftcard</span>
                 <span>Khuyến mãi đặc quyền trị giá 3.200.000₫</span>
               </div>
               <ul className="space-y-1.5 text-gray-700">
@@ -626,7 +626,7 @@ export const ProductDetailPage: React.FC = () => {
                 type="button"
                 disabled={isOutOfStock || isAddingToCart}
                 onClick={handleBuyNow}
-                className="w-full py-3 bg-[#1D4ED8] hover:bg-[#1E40AF] disabled:bg-gray-400 text-white font-semibold rounded-lg text-sm transition-colors text-center"
+                className="w-full py-3 bg-[#18181B] hover:bg-[#09090B] disabled:bg-gray-400 text-white font-semibold rounded-lg text-sm transition-colors text-center"
               >
                 MUA NGAY (Giao nhanh 2h hoặc nhận tại showroom)
               </button>
@@ -635,7 +635,7 @@ export const ProductDetailPage: React.FC = () => {
                 type="button"
                 disabled={isOutOfStock || isAddingToCart}
                 onClick={handleAddToCart}
-                className="w-full py-2.5 bg-white border border-[#1D4ED8] hover:bg-[#EFF6FF] text-[#1D4ED8] font-semibold rounded-lg text-xs transition-colors flex items-center justify-center gap-1.5"
+                className="w-full py-2.5 bg-white border border-[#18181B] hover:bg-[#F4F4F5] text-[#18181B] font-semibold rounded-lg text-xs transition-colors flex items-center justify-center gap-1.5"
               >
                 <span className="material-symbols-outlined text-base">add_shopping_cart</span>
                 <span>{isAddingToCart ? 'Đang thêm vào giỏ...' : 'Thêm vào giỏ hàng'}</span>
@@ -688,7 +688,7 @@ export const ProductDetailPage: React.FC = () => {
             onClick={() => setActiveTab('desc')}
             className={`py-3 border-b-2 transition-colors ${
               activeTab === 'desc'
-                ? 'text-[#1D4ED8] border-[#1D4ED8]'
+                ? 'text-[#18181B] border-[#18181B]'
                 : 'text-gray-600 hover:text-[#111827] border-transparent'
             }`}
           >
@@ -699,7 +699,7 @@ export const ProductDetailPage: React.FC = () => {
             onClick={() => setActiveTab('specs')}
             className={`py-3 border-b-2 transition-colors ${
               activeTab === 'specs'
-                ? 'text-[#1D4ED8] border-[#1D4ED8]'
+                ? 'text-[#18181B] border-[#18181B]'
                 : 'text-gray-600 hover:text-[#111827] border-transparent'
             }`}
           >
@@ -710,12 +710,12 @@ export const ProductDetailPage: React.FC = () => {
             onClick={() => setActiveTab('reviews')}
             className={`py-3 border-b-2 transition-colors flex items-center gap-1 ${
               activeTab === 'reviews'
-                ? 'text-[#1D4ED8] border-[#1D4ED8]'
+                ? 'text-[#18181B] border-[#18181B]'
                 : 'text-gray-600 hover:text-[#111827] border-transparent'
             }`}
           >
             <span>Đánh giá &amp; Nhận xét</span>
-            <span className="bg-[#EFF6FF] text-[#1D4ED8] px-1.5 py-0.2 rounded text-[10px]">128</span>
+            <span className="bg-[#F4F4F5] text-[#18181B] px-1.5 py-0.2 rounded text-[10px]">128</span>
           </button>
         </div>
       </div>

@@ -26,10 +26,10 @@ export const Badge: React.FC<BadgeProps> = ({
 }) => {
   const variantStyles: Record<BadgeVariant, { bg: string; text: string; dot: string; border: string }> = {
     primary: {
-      bg: 'bg-blue-50',
+      bg: 'bg-zinc-100',
       text: 'text-blue-700',
-      dot: 'bg-blue-500',
-      border: 'border-blue-200',
+      dot: 'bg-zinc-1000',
+      border: 'border-zinc-200',
     },
     success: {
       bg: 'bg-emerald-50',

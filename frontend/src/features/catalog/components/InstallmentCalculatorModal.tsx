@@ -90,9 +90,9 @@ export const InstallmentCalculatorModal: React.FC<InstallmentCalculatorModalProp
         </div>
 
         {/* Product mini header */}
-        <div className="p-4 px-6 bg-blue-50/50 border-b border-blue-100 flex items-center gap-3">
+        <div className="p-4 px-6 bg-zinc-100/50 border-b border-blue-100 flex items-center gap-3">
           {productImage && (
-            <img src={productImage} alt="" className="w-12 h-12 rounded-xl object-cover bg-white border border-blue-200" />
+            <img src={productImage} alt="" className="w-12 h-12 rounded-xl object-cover bg-white border border-zinc-200" />
           )}
           <div className="flex-1">
             <h4 className="font-bold text-xs sm:text-sm text-slate-900 line-clamp-1">{productName}</h4>
@@ -113,7 +113,7 @@ export const InstallmentCalculatorModal: React.FC<InstallmentCalculatorModalProp
                 onClick={() => setMethod('credit_card')}
                 className={`p-3.5 rounded-2.5xl text-left border transition-all ${
                   method === 'credit_card'
-                    ? 'bg-blue-50 border-blue-600 text-blue-900 shadow-xs'
+                    ? 'bg-zinc-100 border-blue-600 text-blue-900 shadow-xs'
                     : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
                 }`}
               >
@@ -131,7 +131,7 @@ export const InstallmentCalculatorModal: React.FC<InstallmentCalculatorModalProp
                 onClick={() => setMethod('finance')}
                 className={`p-3.5 rounded-2.5xl text-left border transition-all ${
                   method === 'finance'
-                    ? 'bg-blue-50 border-blue-600 text-blue-900 shadow-xs'
+                    ? 'bg-zinc-100 border-blue-600 text-blue-900 shadow-xs'
                     : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
                 }`}
               >
@@ -299,7 +299,7 @@ export const InstallmentCalculatorModal: React.FC<InstallmentCalculatorModalProp
             <button
               type="button"
               onClick={() => setRegistered(true)}
-              className="px-6 py-3 rounded-2.5xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm shadow-md shadow-blue-600/30 hover:scale-102 active:scale-98 transition-all"
+              className="px-6 py-3 rounded-2.5xl bg-blue-600 hover:bg-zinc-1000 text-white font-bold text-xs sm:text-sm shadow-md shadow-blue-600/30 hover:scale-102 active:scale-98 transition-all"
             >
               Đăng ký trả góp ngay
             </button>

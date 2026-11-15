@@ -174,7 +174,7 @@ export const ComparePage: React.FC = () => {
     <div className="py-4 sm:py-6 px-4 md:px-6 max-w-[1240px] mx-auto space-y-6">
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-gray-500">
-        <Link to="/" className="hover:text-[#1D4ED8] flex items-center gap-1">
+        <Link to="/" className="hover:text-[#18181B] flex items-center gap-1">
           <span className="material-symbols-outlined text-[14px]">home</span>
           <span>Trang chủ</span>
         </Link>
@@ -189,7 +189,7 @@ export const ComparePage: React.FC = () => {
             <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[#111827]">
               So Sánh Chi Tiết Sản Phẩm
             </h1>
-            <span className="px-2.5 py-0.5 rounded text-xs font-semibold bg-blue-100 text-[#1D4ED8]">
+            <span className="px-2.5 py-0.5 rounded text-xs font-semibold bg-blue-100 text-[#18181B]">
               {items.length} / {maxItems} sản phẩm
             </span>
           </div>
@@ -205,7 +205,7 @@ export const ComparePage: React.FC = () => {
               type="checkbox"
               checked={diffOnly}
               onChange={(e) => setDiffOnly(e.target.checked)}
-              className="w-4 h-4 rounded text-[#1D4ED8] focus:ring-0 border-gray-300"
+              className="w-4 h-4 rounded text-[#18181B] focus:ring-0 border-gray-300"
             />
             <span>Chỉ xem điểm khác biệt</span>
           </label>
@@ -224,7 +224,7 @@ export const ComparePage: React.FC = () => {
 
       {loading && (
         <div className="text-center py-3 text-xs font-medium text-gray-500 flex items-center justify-center gap-2">
-          <div className="w-4 h-4 border-2 border-[#1D4ED8] border-t-transparent rounded-full animate-spin" />
+          <div className="w-4 h-4 border-2 border-[#18181B] border-t-transparent rounded-full animate-spin" />
           <span>Đang tải thông số kỹ thuật chi tiết...</span>
         </div>
       )}
@@ -275,12 +275,12 @@ export const ComparePage: React.FC = () => {
                     </Link>
 
                     {/* Brand & Name */}
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#1D4ED8] block mb-1">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#18181B] block mb-1">
                       {item.brandName || detail?.brand?.name || 'Chính hãng'}
                     </span>
                     <Link
                       to={`/products/${item.slug}`}
-                      className="font-semibold text-gray-900 hover:text-[#1D4ED8] text-xs sm:text-sm line-clamp-2 mb-2 transition-colors"
+                      className="font-semibold text-gray-900 hover:text-[#18181B] text-xs sm:text-sm line-clamp-2 mb-2 transition-colors"
                       title={item.name}
                     >
                       {item.name}
@@ -304,7 +304,7 @@ export const ComparePage: React.FC = () => {
                             ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                             : addedSlug === item.slug
                             ? 'bg-emerald-600 text-white'
-                            : 'bg-[#1D4ED8] hover:bg-[#1E40AF] text-white'
+                            : 'bg-[#18181B] hover:bg-[#09090B] text-white'
                         }`}
                       >
                         {addedSlug === item.slug ? (
@@ -334,7 +334,7 @@ export const ComparePage: React.FC = () => {
               {items.length < maxItems && (
                 <th className="p-6 min-w-[200px] align-middle text-center bg-slate-50/40 border-dashed border-2 border-slate-200 m-2 rounded-2xl">
                   <div className="flex flex-col items-center justify-center py-8">
-                    <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center mb-3">
+                    <div className="w-12 h-12 rounded-2xl bg-zinc-100 text-blue-500 flex items-center justify-center mb-3">
                       <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <line x1="12" y1="5" x2="12" y2="19" />
                         <line x1="5" y1="12" x2="19" y2="12" />
@@ -431,7 +431,7 @@ export const ComparePage: React.FC = () => {
               return (
                 <tr
                   key={key}
-                  className={`hover:bg-blue-50/30 transition-colors ${
+                  className={`hover:bg-zinc-100/30 transition-colors ${
                     isDifferent ? 'bg-cyan-50/20' : ''
                   }`}
                 >
@@ -463,7 +463,7 @@ export const ComparePage: React.FC = () => {
       </div>
 
       {/* Footer tips */}
-      <div className="mt-8 p-4 rounded-2xl bg-blue-50/60 border border-blue-200/80 flex items-start gap-3 text-slate-600 text-xs md:text-sm">
+      <div className="mt-8 p-4 rounded-2xl bg-zinc-100/60 border border-zinc-200/80 flex items-start gap-3 text-slate-600 text-xs md:text-sm">
         <svg className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <circle cx="12" cy="12" r="10" />
           <line x1="12" y1="16" x2="12" y2="12" />

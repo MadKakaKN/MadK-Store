@@ -112,7 +112,7 @@ export const AdminReturnsPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setSelectedDetail(row)}
-            className="text-left font-mono font-bold text-xs text-blue-600 hover:text-brand-800 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded-md transition-colors"
+            className="text-left font-mono font-bold text-xs text-blue-600 hover:text-brand-800 bg-zinc-100 hover:bg-blue-100 px-2 py-0.5 rounded-md transition-colors"
           >
             #{row.orderNumber}
           </button>

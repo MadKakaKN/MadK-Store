@@ -113,7 +113,7 @@ export const CancelOrderModal: React.FC<CancelOrderModalProps> = ({
                 key={r}
                 className={`flex items-start gap-3 p-3 rounded-2xl border text-xs cursor-pointer transition-all ${
                   selectedReason === r
-                    ? 'bg-blue-50/60 border-blue-300 text-brand-900 font-semibold'
+                    ? 'bg-zinc-100/60 border-blue-300 text-brand-900 font-semibold'
                     : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-700'
                 }`}
               >

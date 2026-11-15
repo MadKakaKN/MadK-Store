@@ -99,17 +99,17 @@ export const Header: React.FC = () => {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
-              className="lg:hidden p-2 text-gray-700 hover:text-[#1D4ED8] hover:bg-gray-100 rounded-md"
+              className="lg:hidden p-2 text-gray-700 hover:text-[#18181B] hover:bg-gray-100 rounded-md"
               aria-label="Mở menu"
             >
               <span className="material-symbols-outlined text-2xl">menu</span>
             </button>
 
             <Link to="/" className="flex items-center gap-2 group">
-              <div className="w-8 h-8 bg-[#1D4ED8] rounded flex items-center justify-center text-white font-bold text-base shadow-sm group-hover:bg-[#1E40AF] transition-colors">
+              <div className="w-8 h-8 bg-[#18181B] rounded flex items-center justify-center text-white font-bold text-base shadow-sm group-hover:bg-[#09090B] transition-colors">
                 M
               </div>
-              <span className="text-xl font-bold leading-tight text-[#111827] tracking-tight group-hover:text-[#1D4ED8] transition-colors">
+              <span className="text-xl font-bold leading-tight text-[#111827] tracking-tight group-hover:text-[#18181B] transition-colors">
                 MadK Store
               </span>
             </Link>
@@ -121,7 +121,7 @@ export const Header: React.FC = () => {
                 onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded text-xs font-semibold border transition-colors ${
                   categoryDropdownOpen
-                    ? 'bg-[#EFF6FF] text-[#1D4ED8] border-[#BFDBFE]'
+                    ? 'bg-[#F4F4F5] text-[#18181B] border-[#E4E4E7]'
                     : 'bg-[#F3F4F6] hover:bg-[#E5E7EB] text-[#111827] border-[#E5E7EB]'
                 }`}
               >
@@ -139,7 +139,7 @@ export const Header: React.FC = () => {
                     <Link
                       to="/categories"
                       onClick={() => setCategoryDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-3 py-2 rounded text-xs font-semibold text-[#1D4ED8] hover:bg-[#EFF6FF] transition-colors"
+                      className="flex items-center gap-2.5 px-3 py-2 rounded text-xs font-semibold text-[#18181B] hover:bg-[#F4F4F5] transition-colors"
                     >
                       <span className="material-symbols-outlined text-base">apps</span>
                       <span>Tất cả sản phẩm & Danh mục</span>
@@ -151,16 +151,16 @@ export const Header: React.FC = () => {
                         <Link
                           to={`/categories/${cat.slug}`}
                           onClick={() => setCategoryDropdownOpen(false)}
-                          className="flex items-center justify-between px-3 py-2 rounded text-xs font-medium text-gray-700 hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors"
+                          className="flex items-center justify-between px-3 py-2 rounded text-xs font-medium text-gray-700 hover:bg-[#F9FAFB] hover:text-[#18181B] transition-colors"
                         >
                           <div className="flex items-center gap-2.5 truncate">
-                            <span className="material-symbols-outlined text-base text-gray-500 group-hover/item:text-[#1D4ED8]">
+                            <span className="material-symbols-outlined text-base text-gray-500 group-hover/item:text-[#18181B]">
                               {cat.slug.includes('laptop') ? 'laptop_mac' : cat.slug.includes('dien-thoai') || cat.slug.includes('phone') ? 'smartphone' : cat.slug.includes('pc') ? 'desktop_windows' : cat.slug.includes('man-hinh') ? 'tv' : cat.slug.includes('linh-kien') ? 'developer_board' : 'devices'}
                             </span>
                             <span className="truncate">{cat.name}</span>
                           </div>
                           {cat.children && cat.children.length > 0 && (
-                            <span className="material-symbols-outlined text-sm text-gray-400 group-hover/item:text-[#1D4ED8]">
+                            <span className="material-symbols-outlined text-sm text-gray-400 group-hover/item:text-[#18181B]">
                               chevron_right
                             </span>
                           )}
@@ -177,7 +177,7 @@ export const Header: React.FC = () => {
                                 key={sub.id}
                                 to={`/categories/${sub.slug}`}
                                 onClick={() => setCategoryDropdownOpen(false)}
-                                className="block px-2.5 py-1.5 rounded text-xs text-gray-600 hover:text-[#1D4ED8] hover:bg-[#EFF6FF] transition-colors"
+                                className="block px-2.5 py-1.5 rounded text-xs text-gray-600 hover:text-[#18181B] hover:bg-[#F4F4F5] transition-colors"
                               >
                                 {sub.name}
                               </Link>
@@ -200,7 +200,7 @@ export const Header: React.FC = () => {
           {/* Quick Action Items */}
           <div className="flex items-center gap-2.5 shrink-0">
             {/* Hotline (Desktop) */}
-            <a href="tel:18006868" className="hidden xl:flex items-center gap-1.5 text-xs text-[#111827] hover:text-[#1D4ED8] transition-colors">
+            <a href="tel:18006868" className="hidden xl:flex items-center gap-1.5 text-xs text-[#111827] hover:text-[#18181B] transition-colors">
               <span className="material-symbols-outlined text-lg text-gray-600">call</span>
               <div className="leading-tight text-left">
                 <span className="text-[10px] text-gray-500 block">Hotline:</span>
@@ -252,7 +252,7 @@ export const Header: React.FC = () => {
               className="flex items-center gap-2 px-3 py-1.5 bg-[#F3F4F6] hover:bg-[#E5E7EB] border border-[#E5E7EB] rounded text-xs text-[#111827] transition-colors"
             >
               <div className="relative flex items-center justify-center">
-                <span className="material-symbols-outlined text-xl text-[#1D4ED8]">shopping_cart</span>
+                <span className="material-symbols-outlined text-xl text-[#18181B]">shopping_cart</span>
                 {itemCount > 0 && (
                   <span className="absolute -top-1.5 -right-2 bg-[#D70018] text-white text-[10px] font-bold px-1 rounded h-4 min-w-[16px] flex items-center justify-center">
                     {itemCount > 99 ? '99+' : itemCount}
@@ -270,7 +270,7 @@ export const Header: React.FC = () => {
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
                   className="flex items-center gap-1.5 px-2.5 py-1.5 hover:bg-[#F3F4F6] rounded text-xs text-[#111827] transition-colors border border-transparent hover:border-[#E5E7EB]"
                 >
-                  <div className="w-6 h-6 rounded bg-[#1D4ED8] text-white font-bold text-xs flex items-center justify-center">
+                  <div className="w-6 h-6 rounded bg-[#18181B] text-white font-bold text-xs flex items-center justify-center">
                     {user.fullName ? user.fullName.charAt(0).toUpperCase() : 'U'}
                   </div>
                   <span className="font-semibold hidden sm:inline max-w-[100px] truncate">{user.fullName}</span>
@@ -302,7 +302,7 @@ export const Header: React.FC = () => {
                         <Link
                           to="/account"
                           onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2 px-3 py-1.5 text-xs text-gray-700 hover:bg-[#F3F4F6] hover:text-[#1D4ED8] rounded transition-colors"
+                          className="flex items-center gap-2 px-3 py-1.5 text-xs text-gray-700 hover:bg-[#F3F4F6] hover:text-[#18181B] rounded transition-colors"
                         >
                           <span className="material-symbols-outlined text-base text-gray-500">person</span>
                           <span>Hồ sơ & Điểm thưởng</span>
@@ -310,7 +310,7 @@ export const Header: React.FC = () => {
                         <Link
                           to="/account?tab=orders"
                           onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2 px-3 py-1.5 text-xs text-gray-700 hover:bg-[#F3F4F6] hover:text-[#1D4ED8] rounded transition-colors"
+                          className="flex items-center gap-2 px-3 py-1.5 text-xs text-gray-700 hover:bg-[#F3F4F6] hover:text-[#18181B] rounded transition-colors"
                         >
                           <span className="material-symbols-outlined text-base text-gray-500">package_2</span>
                           <span>Đơn hàng đã đặt</span>
@@ -318,7 +318,7 @@ export const Header: React.FC = () => {
                         <Link
                           to="/account?tab=loyalty"
                           onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2 px-3 py-1.5 text-xs text-gray-700 hover:bg-[#F3F4F6] hover:text-[#1D4ED8] rounded transition-colors"
+                          className="flex items-center gap-2 px-3 py-1.5 text-xs text-gray-700 hover:bg-[#F3F4F6] hover:text-[#18181B] rounded transition-colors"
                         >
                           <span className="material-symbols-outlined text-base text-amber-500">star</span>
                           <span>MadK Rewards</span>
@@ -358,16 +358,16 @@ export const Header: React.FC = () => {
         {/* Plain Clean Category Navigation Strip (Screen 4 Retail Standard) */}
         <div className="border-t border-[#E5E7EB] bg-white hidden sm:block">
           <div className="max-w-[1240px] mx-auto px-4 py-2 flex items-center gap-6 overflow-x-auto text-xs text-gray-700 scrollbar-none whitespace-nowrap font-medium">
-            <Link to="/categories/laptop" className="text-[#1D4ED8] font-semibold hover:text-[#1D4ED8] pb-0.5">Laptop</Link>
-            <Link to="/categories/dien-thoai" className="hover:text-[#1D4ED8] transition-colors">Điện thoại & Tablet</Link>
-            <Link to="/categories/pc-gaming" className="hover:text-[#1D4ED8] transition-colors">Máy tính & PC</Link>
-            <Link to="/categories/man-hinh" className="hover:text-[#1D4ED8] transition-colors">Màn hình</Link>
-            <Link to="/categories/linh-kien-pc" className="hover:text-[#1D4ED8] transition-colors">Linh kiện PC</Link>
-            <Link to="/categories/ban-phim-co" className="hover:text-[#1D4ED8] transition-colors">Phụ kiện Gaming</Link>
+            <Link to="/categories/laptop" className="text-[#18181B] font-semibold hover:text-[#18181B] pb-0.5">Laptop</Link>
+            <Link to="/categories/dien-thoai" className="hover:text-[#18181B] transition-colors">Điện thoại & Tablet</Link>
+            <Link to="/categories/pc-gaming" className="hover:text-[#18181B] transition-colors">Máy tính & PC</Link>
+            <Link to="/categories/man-hinh" className="hover:text-[#18181B] transition-colors">Màn hình</Link>
+            <Link to="/categories/linh-kien-pc" className="hover:text-[#18181B] transition-colors">Linh kiện PC</Link>
+            <Link to="/categories/ban-phim-co" className="hover:text-[#18181B] transition-colors">Phụ kiện Gaming</Link>
             <Link to="/#flash-sale" className="hover:text-[#D70018] text-[#D70018] font-semibold transition-colors flex items-center gap-1">
               <span>Khuyến mãi</span>
             </Link>
-            <Link to="/pc-builder" className="hover:text-[#1D4ED8] transition-colors text-emerald-600 font-semibold flex items-center gap-1">
+            <Link to="/pc-builder" className="hover:text-[#18181B] transition-colors text-emerald-600 font-semibold flex items-center gap-1">
               <span className="material-symbols-outlined text-sm">build</span>
               <span>Xây dựng PC</span>
             </Link>
@@ -386,7 +386,7 @@ export const Header: React.FC = () => {
             {/* Header */}
             <div className="p-4 border-b border-[#E5E7EB] flex items-center justify-between bg-[#F9FAFB]">
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 bg-[#1D4ED8] rounded flex items-center justify-center text-white font-bold text-sm">
+                <div className="w-7 h-7 bg-[#18181B] rounded flex items-center justify-center text-white font-bold text-sm">
                   M
                 </div>
                 <span className="font-bold text-base text-[#111827]">MadK Store</span>
@@ -405,7 +405,7 @@ export const Header: React.FC = () => {
               <Link
                 to="/pc-builder"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-2 p-2 rounded bg-[#EFF6FF] text-[#1D4ED8] font-semibold border border-[#BFDBFE]"
+                className="flex items-center gap-2 p-2 rounded bg-[#F4F4F5] text-[#18181B] font-semibold border border-[#E4E4E7]"
               >
                 <span className="material-symbols-outlined text-base">construction</span>
                 <span>Xây PC</span>
@@ -428,7 +428,7 @@ export const Header: React.FC = () => {
               <Link
                 to="/categories"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-2.5 px-3 py-2 rounded text-xs font-semibold text-[#1D4ED8] hover:bg-[#EFF6FF]"
+                className="flex items-center gap-2.5 px-3 py-2 rounded text-xs font-semibold text-[#18181B] hover:bg-[#F4F4F5]"
               >
                 <span className="material-symbols-outlined text-base">apps</span>
                 <span>Tất cả sản phẩm</span>
@@ -442,7 +442,7 @@ export const Header: React.FC = () => {
                       <Link
                         to={`/categories/${cat.slug}`}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="text-xs font-medium text-gray-800 hover:text-[#1D4ED8] flex-1"
+                        className="text-xs font-medium text-gray-800 hover:text-[#18181B] flex-1"
                       >
                         {cat.name}
                       </Link>
@@ -465,7 +465,7 @@ export const Header: React.FC = () => {
                             key={sub.id}
                             to={`/categories/${sub.slug}`}
                             onClick={() => setMobileMenuOpen(false)}
-                            className="block py-1 text-xs text-gray-600 hover:text-[#1D4ED8]"
+                            className="block py-1 text-xs text-gray-600 hover:text-[#18181B]"
                           >
                             {sub.name}
                           </Link>
@@ -509,7 +509,7 @@ export const Header: React.FC = () => {
                 <Link
                   to="/auth/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block text-center py-2.5 bg-[#1D4ED8] text-white rounded text-xs font-semibold"
+                  className="block text-center py-2.5 bg-[#18181B] text-white rounded text-xs font-semibold"
                 >
                   Đăng nhập / Đăng ký
                 </Link>
@@ -521,27 +521,27 @@ export const Header: React.FC = () => {
 
       {/* MOBILE BOTTOM NAVIGATION BAR (Screen 3: 390px Mobile Spec) */}
       <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E5E7EB] py-1.5 px-3 flex items-center justify-around text-xs shadow-lg">
-        <Link to="/" className="flex flex-col items-center gap-0.5 text-[#1D4ED8]">
+        <Link to="/" className="flex flex-col items-center gap-0.5 text-[#18181B]">
           <span className="material-symbols-outlined text-xl">home</span>
           <span className="text-[10px] font-semibold">Trang chủ</span>
         </Link>
         <button
           type="button"
           onClick={() => setMobileMenuOpen(true)}
-          className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-[#1D4ED8]"
+          className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-[#18181B]"
         >
           <span className="material-symbols-outlined text-xl">menu</span>
           <span className="text-[10px]">Danh mục</span>
         </button>
-        <Link to="/pc-builder" className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-[#1D4ED8]">
+        <Link to="/pc-builder" className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-[#18181B]">
           <span className="material-symbols-outlined text-xl">construction</span>
           <span className="text-[10px]">Xây PC</span>
         </Link>
-        <Link to="/tracking" className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-[#1D4ED8]">
+        <Link to="/tracking" className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-[#18181B]">
           <span className="material-symbols-outlined text-xl">receipt_long</span>
           <span className="text-[10px]">Tra cứu</span>
         </Link>
-        <Link to="/cart" className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-[#1D4ED8] relative">
+        <Link to="/cart" className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-[#18181B] relative">
           <span className="material-symbols-outlined text-xl">shopping_cart</span>
           <span className="text-[10px]">Giỏ hàng</span>
           {itemCount > 0 && (

@@ -310,7 +310,7 @@ export const AdminInventoryPage: React.FC = () => {
           </div>
           <h2 className="text-[20px] text-gray-900 tracking-tight flex items-center gap-2 font-semibold">
             Quản Lý Kho Hàng &amp; Tồn Kho Thực Tế
-            <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+            <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-zinc-100 text-blue-700 border border-zinc-200">
               Real-time
             </span>
           </h2>
@@ -489,7 +489,7 @@ export const AdminInventoryPage: React.FC = () => {
               onClick={() => setQuickFilter('hot')}
               className={`h-6 px-2 rounded text-[11px] font-medium flex items-center gap-1 transition-colors ${
                 quickFilter === 'hot'
-                  ? 'bg-blue-50 border border-blue-200 text-blue-700'
+                  ? 'bg-zinc-100 border border-zinc-200 text-blue-700'
                   : 'bg-white border border-[#D1D5DB] text-gray-600'
               }`}
             >
@@ -502,7 +502,7 @@ export const AdminInventoryPage: React.FC = () => {
               onClick={() => setQuickFilter('audit')}
               className={`h-6 px-2 rounded text-[11px] transition-colors ${
                 quickFilter === 'audit'
-                  ? 'bg-blue-50 border border-blue-200 text-blue-700 font-medium'
+                  ? 'bg-zinc-100 border border-zinc-200 text-blue-700 font-medium'
                   : 'bg-white border border-[#D1D5DB] text-gray-600'
               }`}
             >
@@ -512,7 +512,7 @@ export const AdminInventoryPage: React.FC = () => {
               onClick={() => setQuickFilter('imei')}
               className={`h-6 px-2 rounded text-[11px] transition-colors ${
                 quickFilter === 'imei'
-                  ? 'bg-blue-50 border border-blue-200 text-blue-700 font-medium'
+                  ? 'bg-zinc-100 border border-zinc-200 text-blue-700 font-medium'
                   : 'bg-white border border-[#D1D5DB] text-gray-600'
               }`}
             >
@@ -522,7 +522,7 @@ export const AdminInventoryPage: React.FC = () => {
               onClick={() => setQuickFilter('gift')}
               className={`h-6 px-2 rounded text-[11px] transition-colors ${
                 quickFilter === 'gift'
-                  ? 'bg-blue-50 border border-blue-200 text-blue-700 font-medium'
+                  ? 'bg-zinc-100 border border-zinc-200 text-blue-700 font-medium'
                   : 'bg-white border border-[#D1D5DB] text-gray-600'
               }`}
             >
@@ -567,7 +567,7 @@ export const AdminInventoryPage: React.FC = () => {
                 <th className="py-2.5 px-3 text-right text-gray-800">Giá niêm yết</th>
                 <th className="py-2.5 px-3 text-center bg-gray-50">On-hand (Tồn kho)</th>
                 <th className="py-2.5 px-3 text-center text-amber-700">Reserved (Đang giữ)</th>
-                <th className="py-2.5 px-3 text-center font-bold text-blue-700 bg-blue-50">
+                <th className="py-2.5 px-3 text-center font-bold text-blue-700 bg-zinc-100">
                   Available (Khả dụng)
                 </th>
                 <th className="py-2.5 px-3 text-center">Ngưỡng</th>
@@ -777,7 +777,7 @@ export const AdminInventoryPage: React.FC = () => {
                   <td className="py-2.5 px-3 font-mono text-gray-500 text-[11px]">{m.time}</td>
                   <td className="py-2.5 px-3 font-mono font-medium text-blue-700">{m.reference}</td>
                   <td className="py-2.5 px-3">
-                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-800 border border-blue-200">
+                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-zinc-100 text-blue-800 border border-zinc-200">
                       <span className="material-symbols-outlined text-[12px]">local_mall</span>
                       {m.type}
                     </span>

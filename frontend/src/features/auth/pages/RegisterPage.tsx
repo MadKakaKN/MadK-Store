@@ -105,7 +105,7 @@ export const RegisterPage: React.FC = () => {
             <div className="mt-6 flex flex-col sm:flex-row gap-3">
               <Link
                 to={`/auth/verify-email?email=${encodeURIComponent(email)}`}
-                className="flex-1 py-3 px-4 rounded-2xl text-xs sm:text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 shadow-sm transition-colors text-center"
+                className="flex-1 py-3 px-4 rounded-2xl text-xs sm:text-sm font-bold text-white bg-blue-600 hover:bg-zinc-1000 shadow-sm transition-colors text-center"
               >
                 Nhập mã xác thực
               </Link>
@@ -136,7 +136,7 @@ export const RegisterPage: React.FC = () => {
           </Link>
           <button
             type="button"
-            className="flex-1 pb-3 text-sm font-semibold text-[#1D4ED8] border-b-2 border-[#1D4ED8] text-center"
+            className="flex-1 pb-3 text-sm font-semibold text-[#18181B] border-b-2 border-[#18181B] text-center"
           >
             Đăng ký
           </button>
@@ -183,7 +183,7 @@ export const RegisterPage: React.FC = () => {
                 if (errors.fullName) setErrors((prev) => ({ ...prev, fullName: '' }));
               }}
               placeholder="Nguyễn Văn A"
-              className={`w-full h-10 px-3 text-sm bg-white border rounded-lg focus:border-[#1D4ED8] focus:ring-0 outline-none transition-colors ${
+              className={`w-full h-10 px-3 text-sm bg-white border rounded-lg focus:border-[#18181B] focus:ring-0 outline-none transition-colors ${
                 errors.fullName ? 'border-rose-400 text-rose-900' : 'border-[#E5E7EB]'
               }`}
             />
@@ -206,7 +206,7 @@ export const RegisterPage: React.FC = () => {
                 if (errors.email) setErrors((prev) => ({ ...prev, email: '' }));
               }}
               placeholder="vidu@madkstore.vn"
-              className={`w-full h-10 px-3 text-sm bg-white border rounded-lg focus:border-[#1D4ED8] focus:ring-0 outline-none transition-colors ${
+              className={`w-full h-10 px-3 text-sm bg-white border rounded-lg focus:border-[#18181B] focus:ring-0 outline-none transition-colors ${
                 errors.email ? 'border-rose-400 text-rose-900' : 'border-[#E5E7EB]'
               }`}
             />
@@ -229,7 +229,7 @@ export const RegisterPage: React.FC = () => {
                 if (errors.phoneNumber) setErrors((prev) => ({ ...prev, phoneNumber: '' }));
               }}
               placeholder="0912 345 678"
-              className="w-full h-10 px-3 text-sm bg-white border border-[#E5E7EB] rounded-lg focus:border-[#1D4ED8] focus:ring-0 outline-none transition-colors"
+              className="w-full h-10 px-3 text-sm bg-white border border-[#E5E7EB] rounded-lg focus:border-[#18181B] focus:ring-0 outline-none transition-colors"
             />
             {errors.phoneNumber && <p className="mt-1 text-xs text-rose-600">{errors.phoneNumber}</p>}
           </div>
@@ -251,7 +251,7 @@ export const RegisterPage: React.FC = () => {
                   if (errors.password) setErrors((prev) => ({ ...prev, password: '' }));
                 }}
                 placeholder="Tối thiểu 6 ký tự"
-                className={`w-full h-10 pl-3 pr-10 text-sm bg-white border rounded-lg focus:border-[#1D4ED8] focus:ring-0 outline-none transition-colors ${
+                className={`w-full h-10 pl-3 pr-10 text-sm bg-white border rounded-lg focus:border-[#18181B] focus:ring-0 outline-none transition-colors ${
                   errors.password ? 'border-rose-400 text-rose-900' : 'border-[#E5E7EB]'
                 }`}
               />
@@ -285,7 +285,7 @@ export const RegisterPage: React.FC = () => {
                 if (errors.confirmPassword) setErrors((prev) => ({ ...prev, confirmPassword: '' }));
               }}
               placeholder="Nhập lại mật khẩu"
-              className={`w-full h-10 px-3 text-sm bg-white border rounded-lg focus:border-[#1D4ED8] focus:ring-0 outline-none transition-colors ${
+              className={`w-full h-10 px-3 text-sm bg-white border rounded-lg focus:border-[#18181B] focus:ring-0 outline-none transition-colors ${
                 errors.confirmPassword ? 'border-rose-400 text-rose-900' : 'border-[#E5E7EB]'
               }`}
             />
@@ -298,11 +298,11 @@ export const RegisterPage: React.FC = () => {
               type="checkbox"
               checked={acceptTerms}
               onChange={(e) => setAcceptTerms(e.target.checked)}
-              className="w-4 h-4 mt-0.5 rounded text-[#1D4ED8] focus:ring-0 border-gray-300"
+              className="w-4 h-4 mt-0.5 rounded text-[#18181B] focus:ring-0 border-gray-300"
             />
             <span className="text-xs text-gray-600">
-              Tôi đồng ý với <a href="#" className="text-[#1D4ED8] hover:underline">Điều khoản dịch vụ</a> và{' '}
-              <a href="#" className="text-[#1D4ED8] hover:underline">Chính sách bảo mật</a>
+              Tôi đồng ý với <a href="#" className="text-[#18181B] hover:underline">Điều khoản dịch vụ</a> và{' '}
+              <a href="#" className="text-[#18181B] hover:underline">Chính sách bảo mật</a>
             </span>
           </label>
           {errors.acceptTerms && <p className="text-xs text-rose-600">{errors.acceptTerms}</p>}
@@ -311,7 +311,7 @@ export const RegisterPage: React.FC = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full h-10 bg-[#1D4ED8] hover:bg-[#1E40AF] disabled:opacity-50 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
+            className="w-full h-10 bg-[#18181B] hover:bg-[#09090B] disabled:opacity-50 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
           >
             {isSubmitting ? 'Đang tạo tài khoản...' : 'Đăng ký tài khoản'}
           </button>
@@ -320,7 +320,7 @@ export const RegisterPage: React.FC = () => {
             Đã có tài khoản?{' '}
             <Link
               to={`/auth/login${explicitRedirect ? `?redirect=${encodeURIComponent(explicitRedirect)}` : ''}`}
-              className="text-[#1D4ED8] font-semibold hover:underline"
+              className="text-[#18181B] font-semibold hover:underline"
             >
               Đăng nhập ngay
             </Link>

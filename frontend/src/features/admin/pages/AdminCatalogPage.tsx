@@ -315,7 +315,7 @@ export const AdminCatalogPage: React.FC = () => {
                   setSelectedProductId(row.id);
                   setIsProductModalOpen(true);
                 }}
-                className="px-2.5 py-1 text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-md transition-colors"
+                className="px-2.5 py-1 text-xs font-semibold bg-zinc-100 text-blue-700 hover:bg-blue-100 rounded-md transition-colors"
               >
                 Sửa
               </button>
@@ -416,7 +416,7 @@ export const AdminCatalogPage: React.FC = () => {
               setSelectedCategory(row);
               setIsCategoryModalOpen(true);
             }}
-            className="px-2 py-1 text-xs font-semibold rounded bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
+            className="px-2 py-1 text-xs font-semibold rounded bg-zinc-100 text-blue-700 hover:bg-blue-100 transition-colors"
           >
             Sửa
           </button>
@@ -492,7 +492,7 @@ export const AdminCatalogPage: React.FC = () => {
               setSelectedBrand(row);
               setIsBrandModalOpen(true);
             }}
-            className="px-2.5 py-1 text-xs font-semibold rounded bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
+            className="px-2.5 py-1 text-xs font-semibold rounded bg-zinc-100 text-blue-700 hover:bg-blue-100 transition-colors"
           >
             Sửa
           </button>

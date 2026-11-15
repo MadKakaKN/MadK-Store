@@ -97,7 +97,7 @@ export const LoyaltyRewardsTab: React.FC = () => {
       case 'refunded':
         return {
           label: 'Hoàn lại điểm',
-          className: 'bg-blue-50 text-blue-700 border-blue-200',
+          className: 'bg-zinc-100 text-blue-700 border-zinc-200',
           prefix: '+',
           color: 'text-blue-600',
         };

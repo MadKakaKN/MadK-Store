@@ -690,7 +690,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
                     <button
                       type="button"
                       onClick={handleAddVariant}
-                      className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
+                      className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-zinc-100 text-blue-700 hover:bg-blue-100 transition-colors"
                     >
                       + Thêm biến thể
                     </button>

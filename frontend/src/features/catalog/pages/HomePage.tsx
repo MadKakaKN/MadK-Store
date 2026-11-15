@@ -75,10 +75,10 @@ export const HomePage: React.FC = () => {
         <aside className="hidden lg:block lg:col-span-3 bg-white border border-[#E5E7EB] rounded-lg overflow-hidden shadow-none divide-y divide-[#E5E7EB]">
           <Link
             to="/categories/laptop"
-            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group"
+            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#18181B] transition-colors group"
           >
             <div className="flex items-center gap-2.5">
-              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">laptop_mac</span>
+              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#18181B]">laptop_mac</span>
               <span className="font-medium">Laptop Chính Hãng & Gaming</span>
             </div>
             <span className="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
@@ -86,10 +86,10 @@ export const HomePage: React.FC = () => {
 
           <Link
             to="/categories/dien-thoai"
-            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group"
+            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#18181B] transition-colors group"
           >
             <div className="flex items-center gap-2.5">
-              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">smartphone</span>
+              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#18181B]">smartphone</span>
               <span className="font-medium">Điện thoại & Tablet Flagship</span>
             </div>
             <span className="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
@@ -97,10 +97,10 @@ export const HomePage: React.FC = () => {
 
           <Link
             to="/categories/pc-gaming"
-            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group"
+            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#18181B] transition-colors group"
           >
             <div className="flex items-center gap-2.5">
-              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">desktop_windows</span>
+              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#18181B]">desktop_windows</span>
               <span className="font-medium">Máy tính để bàn & PC</span>
             </div>
             <span className="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
@@ -108,10 +108,10 @@ export const HomePage: React.FC = () => {
 
           <Link
             to="/categories/man-hinh"
-            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group"
+            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#18181B] transition-colors group"
           >
             <div className="flex items-center gap-2.5">
-              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">tv</span>
+              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#18181B]">tv</span>
               <span className="font-medium">Màn hình máy tính 2K/4K</span>
             </div>
             <span className="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
@@ -119,10 +119,10 @@ export const HomePage: React.FC = () => {
 
           <Link
             to="/categories/linh-kien-pc"
-            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group"
+            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#18181B] transition-colors group"
           >
             <div className="flex items-center gap-2.5">
-              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">developer_board</span>
+              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#18181B]">developer_board</span>
               <span className="font-medium">Linh kiện PC & VGA</span>
             </div>
             <span className="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
@@ -130,10 +130,10 @@ export const HomePage: React.FC = () => {
 
           <Link
             to="/categories/ban-phim-co"
-            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group"
+            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#18181B] transition-colors group"
           >
             <div className="flex items-center gap-2.5">
-              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">keyboard</span>
+              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#18181B]">keyboard</span>
               <span className="font-medium">Chuột & Bàn phím cơ Custom</span>
             </div>
             <span className="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
@@ -141,10 +141,10 @@ export const HomePage: React.FC = () => {
 
           <Link
             to="/categories/tai-nghe"
-            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#1D4ED8] transition-colors group"
+            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#111827] hover:bg-[#F9FAFB] hover:text-[#18181B] transition-colors group"
           >
             <div className="flex items-center gap-2.5">
-              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#1D4ED8]">headphones</span>
+              <span className="material-symbols-outlined text-lg text-gray-500 group-hover:text-[#18181B]">headphones</span>
               <span className="font-medium">Tai nghe & Loa Hi-Res</span>
             </div>
             <span className="material-symbols-outlined text-sm text-gray-400">chevron_right</span>
@@ -152,13 +152,13 @@ export const HomePage: React.FC = () => {
 
           <Link
             to="/pc-builder"
-            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#1D4ED8] bg-[#EFF6FF] hover:bg-[#DBEAFE] font-semibold transition-colors"
+            className="flex items-center justify-between px-3.5 py-2.5 text-xs text-[#18181B] bg-[#F4F4F5] hover:bg-[#DBEAFE] font-semibold transition-colors"
           >
             <div className="flex items-center gap-2.5">
-              <span className="material-symbols-outlined text-lg text-[#1D4ED8]">construction</span>
+              <span className="material-symbols-outlined text-lg text-[#18181B]">construction</span>
               <span>Xây Dựng Cấu Hình PC</span>
             </div>
-            <span className="material-symbols-outlined text-sm text-[#1D4ED8]">arrow_forward</span>
+            <span className="material-symbols-outlined text-sm text-[#18181B]">arrow_forward</span>
           </Link>
         </aside>
 
@@ -182,7 +182,7 @@ export const HomePage: React.FC = () => {
               <div className="pt-2">
                 <Link
                   to="/categories/laptop"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded text-xs font-semibold transition-colors"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#18181B] hover:bg-[#09090B] text-white rounded text-xs font-semibold transition-colors"
                 >
                   <span>Khám phá ngay</span>
                   <span className="material-symbols-outlined text-sm">arrow_forward</span>
@@ -208,7 +208,7 @@ export const HomePage: React.FC = () => {
 
           {/* Dots Indicator */}
           <div className="flex items-center justify-center gap-1.5 pt-4">
-            <span className="w-5 h-1.5 rounded-full bg-[#1D4ED8]"></span>
+            <span className="w-5 h-1.5 rounded-full bg-[#18181B]"></span>
             <span className="w-1.5 h-1.5 rounded-full bg-gray-300"></span>
             <span className="w-1.5 h-1.5 rounded-full bg-gray-300"></span>
           </div>
@@ -217,16 +217,16 @@ export const HomePage: React.FC = () => {
         {/* Col 3: Two Sub-Banners (3 cols) */}
         <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3.5">
           {/* Sub-banner 1: Thu cũ đổi mới */}
-          <div className="bg-white border border-[#E5E7EB] rounded-lg p-3.5 flex flex-col justify-between shadow-none hover:border-[#1D4ED8] transition-colors">
+          <div className="bg-white border border-[#E5E7EB] rounded-lg p-3.5 flex flex-col justify-between shadow-none hover:border-[#18181B] transition-colors">
             <div className="space-y-1">
-              <span className="text-[10px] bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] font-bold px-1.5 py-0.5 rounded">
+              <span className="text-[10px] bg-[#F4F4F5] text-[#18181B] border border-[#E4E4E7] font-bold px-1.5 py-0.5 rounded">
                 TRỢ GIÁ THU CŨ
               </span>
               <h3 className="text-xs font-bold text-[#111827] mt-1">Thu Cũ Đổi Mới Trợ Giá 3.000.000₫</h3>
               <p className="text-[11px] text-gray-500">Áp dụng cho iPhone, MacBook, Laptop Gaming toàn quốc.</p>
             </div>
             <div className="pt-2">
-              <Link to="/categories" className="text-xs font-semibold text-[#1D4ED8] hover:underline flex items-center gap-1">
+              <Link to="/categories" className="text-xs font-semibold text-[#18181B] hover:underline flex items-center gap-1">
                 <span>Xem bảng giá thu</span>
                 <span className="material-symbols-outlined text-sm">chevron_right</span>
               </Link>
@@ -234,7 +234,7 @@ export const HomePage: React.FC = () => {
           </div>
 
           {/* Sub-banner 2: Trả góp 0% */}
-          <div className="bg-white border border-[#E5E7EB] rounded-lg p-3.5 flex flex-col justify-between shadow-none hover:border-[#1D4ED8] transition-colors">
+          <div className="bg-white border border-[#E5E7EB] rounded-lg p-3.5 flex flex-col justify-between shadow-none hover:border-[#18181B] transition-colors">
             <div className="space-y-1">
               <span className="text-[10px] bg-[#FEF2F2] text-[#D70018] border border-[#FECACA] font-bold px-1.5 py-0.5 rounded">
                 LÃI SUẤT 0%
@@ -243,7 +243,7 @@ export const HomePage: React.FC = () => {
               <p className="text-[11px] text-gray-500">Qua thẻ tín dụng hoặc CCCD gắn chip, không giữ giấy tờ.</p>
             </div>
             <div className="pt-2">
-              <Link to="/categories" className="text-xs font-semibold text-[#1D4ED8] hover:underline flex items-center gap-1">
+              <Link to="/categories" className="text-xs font-semibold text-[#18181B] hover:underline flex items-center gap-1">
                 <span>Xem chi tiết điều kiện</span>
                 <span className="material-symbols-outlined text-sm">chevron_right</span>
               </Link>
@@ -256,7 +256,7 @@ export const HomePage: React.FC = () => {
       <section className="bg-white border border-[#E5E7EB] rounded-lg p-3.5 shadow-none">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
           <div className="flex items-center gap-2.5">
-            <span className="material-symbols-outlined text-2xl text-[#1D4ED8]">verified</span>
+            <span className="material-symbols-outlined text-2xl text-[#18181B]">verified</span>
             <div>
               <div className="font-semibold text-[#111827]">100% Chính Hãng</div>
               <div className="text-[11px] text-gray-500">Bảo hành chính hãng 24 tháng</div>
@@ -264,7 +264,7 @@ export const HomePage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2.5">
-            <span className="material-symbols-outlined text-2xl text-[#1D4ED8]">local_shipping</span>
+            <span className="material-symbols-outlined text-2xl text-[#18181B]">local_shipping</span>
             <div>
               <div className="font-semibold text-[#111827]">Giao Hàng GHN 2h</div>
               <div className="text-[11px] text-gray-500">Miễn phí ship đơn từ 1.000.000₫</div>
@@ -272,7 +272,7 @@ export const HomePage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2.5">
-            <span className="material-symbols-outlined text-2xl text-[#1D4ED8]">published_with_changes</span>
+            <span className="material-symbols-outlined text-2xl text-[#18181B]">published_with_changes</span>
             <div>
               <div className="font-semibold text-[#111827]">Đổi Mới 30 Ngày</div>
               <div className="text-[11px] text-gray-500">Lỗi 1 đổi 1 tận nơi nhanh chóng</div>
@@ -280,7 +280,7 @@ export const HomePage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2.5">
-            <span className="material-symbols-outlined text-2xl text-[#1D4ED8]">credit_card</span>
+            <span className="material-symbols-outlined text-2xl text-[#18181B]">credit_card</span>
             <div>
               <div className="font-semibold text-[#111827]">Trả Góp 0% Lãi Suất</div>
               <div className="text-[11px] text-gray-500">Duyệt hồ sơ online trong 5 phút</div>
@@ -296,7 +296,7 @@ export const HomePage: React.FC = () => {
       <section className="bg-white border border-[#E5E7EB] rounded-lg p-4 shadow-none">
         <div className="flex items-center justify-between mb-3 border-b border-[#E5E7EB] pb-2">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-xl text-[#1D4ED8]">view_in_ar</span>
+            <span className="material-symbols-outlined text-xl text-[#18181B]">view_in_ar</span>
             <h3 className="text-sm font-bold text-[#111827]">Trải Nghiệm Tương Tác Mô Hình 3D Xoay 360°</h3>
           </div>
           <span className="text-[11px] text-gray-500 hidden sm:inline">Dùng chuột hoặc ngón tay để xoay đa chiều</span>
@@ -319,7 +319,7 @@ export const HomePage: React.FC = () => {
               onClick={() => setActiveTab('all')}
               className={`px-3 py-1 rounded text-xs font-semibold transition-colors ${
                 activeTab === 'all'
-                  ? 'bg-[#1D4ED8] text-white'
+                  ? 'bg-[#18181B] text-white'
                   : 'bg-[#F3F4F6] text-gray-700 hover:bg-[#E5E7EB]'
               }`}
             >
@@ -330,7 +330,7 @@ export const HomePage: React.FC = () => {
               onClick={() => setActiveTab('laptop')}
               className={`px-3 py-1 rounded text-xs font-semibold transition-colors ${
                 activeTab === 'laptop'
-                  ? 'bg-[#1D4ED8] text-white'
+                  ? 'bg-[#18181B] text-white'
                   : 'bg-[#F3F4F6] text-gray-700 hover:bg-[#E5E7EB]'
               }`}
             >
@@ -341,7 +341,7 @@ export const HomePage: React.FC = () => {
               onClick={() => setActiveTab('phone')}
               className={`px-3 py-1 rounded text-xs font-semibold transition-colors ${
                 activeTab === 'phone'
-                  ? 'bg-[#1D4ED8] text-white'
+                  ? 'bg-[#18181B] text-white'
                   : 'bg-[#F3F4F6] text-gray-700 hover:bg-[#E5E7EB]'
               }`}
             >
@@ -352,7 +352,7 @@ export const HomePage: React.FC = () => {
               onClick={() => setActiveTab('pc')}
               className={`px-3 py-1 rounded text-xs font-semibold transition-colors ${
                 activeTab === 'pc'
-                  ? 'bg-[#1D4ED8] text-white'
+                  ? 'bg-[#18181B] text-white'
                   : 'bg-[#F3F4F6] text-gray-700 hover:bg-[#E5E7EB]'
               }`}
             >
@@ -382,7 +382,7 @@ export const HomePage: React.FC = () => {
         <div className="bg-white border border-[#E5E7EB] rounded-lg p-5 shadow-none flex flex-col justify-between" id="pc-builder">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-2xl text-[#1D4ED8]">construction</span>
+              <span className="material-symbols-outlined text-2xl text-[#18181B]">construction</span>
               <h3 className="text-base font-bold text-[#111827]">Xây dựng cấu hình PC</h3>
             </div>
             <p className="text-xs text-gray-600 leading-relaxed">
@@ -402,7 +402,7 @@ export const HomePage: React.FC = () => {
           <div className="pt-4">
             <Link
               to="/pc-builder"
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded text-xs font-semibold transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#18181B] hover:bg-[#09090B] text-white rounded text-xs font-semibold transition-colors"
             >
               <span>Bắt đầu ráp PC ngay</span>
               <span className="material-symbols-outlined text-sm">arrow_forward</span>
@@ -414,7 +414,7 @@ export const HomePage: React.FC = () => {
         <div className="bg-white border border-[#E5E7EB] rounded-lg p-5 shadow-none flex flex-col justify-between" id="tracking">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-2xl text-[#1D4ED8]">manage_search</span>
+              <span className="material-symbols-outlined text-2xl text-[#18181B]">manage_search</span>
               <h3 className="text-base font-bold text-[#111827]">Tra cứu đơn hàng & Bảo hành</h3>
             </div>
             <p className="text-xs text-gray-600 leading-relaxed">
@@ -427,11 +427,11 @@ export const HomePage: React.FC = () => {
                   value={trackingCode}
                   onChange={(e) => setTrackingCode(e.target.value)}
                   placeholder="Nhập mã đơn hàng hoặc SĐT..."
-                  className="flex-1 h-9 px-3 bg-white border border-[#D1D5DB] rounded text-xs text-[#111827] focus:outline-none focus:border-[#1D4ED8]"
+                  className="flex-1 h-9 px-3 bg-white border border-[#D1D5DB] rounded text-xs text-[#111827] focus:outline-none focus:border-[#18181B]"
                 />
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded text-xs font-semibold transition-colors shrink-0"
+                  className="px-4 py-2 bg-[#18181B] hover:bg-[#09090B] text-white rounded text-xs font-semibold transition-colors shrink-0"
                 >
                   Tra cứu ngay
                 </button>

@@ -478,7 +478,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                           </div>
                         )}
                         {h.note && (
-                          <div className="text-[11px] text-blue-700 mt-1 bg-blue-50/50 p-1.5 rounded border border-blue-100">
+                          <div className="text-[11px] text-blue-700 mt-1 bg-zinc-100/50 p-1.5 rounded border border-blue-100">
                             Ghi chú: {h.note}
                           </div>
                         )}

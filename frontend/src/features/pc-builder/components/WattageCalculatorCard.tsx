@@ -92,7 +92,7 @@ export const WattageCalculatorCard: React.FC<WattageCalculatorCardProps> = ({ se
                 ? 'bg-gradient-to-r from-emerald-500 to-teal-400'
                 : status === 'warning'
                 ? 'bg-gradient-to-r from-amber-500 to-rose-500'
-                : 'bg-blue-500'
+                : 'bg-zinc-1000'
             }`}
             style={{
               width: `${Math.min(

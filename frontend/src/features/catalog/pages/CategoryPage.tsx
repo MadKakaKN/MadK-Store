@@ -220,14 +220,14 @@ export const CategoryPage: React.FC = () => {
 
       {/* BREADCRUMB (Stitch Screen 1) */}
       <nav className="flex items-center gap-1.5 text-xs text-gray-500">
-        <Link to="/" className="hover:text-[#1D4ED8] flex items-center gap-1 transition-colors">
+        <Link to="/" className="hover:text-[#18181B] flex items-center gap-1 transition-colors">
           <span className="material-symbols-outlined text-sm">home</span>
           <span>Trang chủ</span>
         </Link>
         <span>/</span>
         {slug ? (
           <>
-            <Link to="/categories" className="hover:text-[#1D4ED8] transition-colors">
+            <Link to="/categories" className="hover:text-[#18181B] transition-colors">
               Danh mục
             </Link>
             <span>/</span>
@@ -256,7 +256,7 @@ export const CategoryPage: React.FC = () => {
           <span className="material-symbols-outlined text-base">tune</span>
           <span>Bộ lọc</span>
           {hasActiveFilters && (
-            <span className="w-1.5 h-1.5 rounded-full bg-[#1D4ED8]"></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#18181B]"></span>
           )}
         </button>
       </div>
@@ -269,8 +269,8 @@ export const CategoryPage: React.FC = () => {
             onClick={() => handleBrandChange('')}
             className={`px-3 py-1.5 rounded text-xs font-semibold shrink-0 transition-colors border ${
               !selectedBrand
-                ? 'bg-[#1D4ED8] text-white border-[#1D4ED8]'
-                : 'bg-white text-[#111827] hover:text-[#1D4ED8] hover:border-[#1D4ED8] border-[#E5E7EB]'
+                ? 'bg-[#18181B] text-white border-[#18181B]'
+                : 'bg-white text-[#111827] hover:text-[#18181B] hover:border-[#18181B] border-[#E5E7EB]'
             }`}
           >
             Tất cả
@@ -284,8 +284,8 @@ export const CategoryPage: React.FC = () => {
                 onClick={() => handleBrandChange(b.slug)}
                 className={`px-3 py-1.5 rounded text-xs font-medium shrink-0 transition-colors border ${
                   isSelected
-                    ? 'bg-[#1D4ED8] text-white border-[#1D4ED8]'
-                    : 'bg-white text-[#111827] hover:text-[#1D4ED8] hover:border-[#1D4ED8] border-[#E5E7EB]'
+                    ? 'bg-[#18181B] text-white border-[#18181B]'
+                    : 'bg-white text-[#111827] hover:text-[#18181B] hover:border-[#18181B] border-[#E5E7EB]'
                 }`}
               >
                 {b.name}
@@ -319,7 +319,7 @@ export const CategoryPage: React.FC = () => {
             </span>
           ))}
           {hasActiveFilters && (
-            <button onClick={clearAllFilters} className="text-xs text-[#1D4ED8] hover:underline font-medium ml-1">
+            <button onClick={clearAllFilters} className="text-xs text-[#18181B] hover:underline font-medium ml-1">
               Xóa tất cả
             </button>
           )}
@@ -333,7 +333,7 @@ export const CategoryPage: React.FC = () => {
             onClick={() => updateQuery({ sort: 'newest' })}
             className={`px-2.5 py-1 rounded transition-colors ${
               selectedSort === 'newest'
-                ? 'bg-[#1D4ED8] text-white font-semibold'
+                ? 'bg-[#18181B] text-white font-semibold'
                 : 'text-gray-600 hover:text-[#111827] bg-[#F3F4F6]'
             }`}
           >
@@ -344,7 +344,7 @@ export const CategoryPage: React.FC = () => {
             onClick={() => updateQuery({ sort: 'price_asc' })}
             className={`px-2.5 py-1 rounded transition-colors ${
               selectedSort === 'price_asc'
-                ? 'bg-[#1D4ED8] text-white font-semibold'
+                ? 'bg-[#18181B] text-white font-semibold'
                 : 'text-gray-600 hover:text-[#111827] bg-[#F3F4F6]'
             }`}
           >
@@ -355,7 +355,7 @@ export const CategoryPage: React.FC = () => {
             onClick={() => updateQuery({ sort: 'price_desc' })}
             className={`px-2.5 py-1 rounded transition-colors ${
               selectedSort === 'price_desc'
-                ? 'bg-[#1D4ED8] text-white font-semibold'
+                ? 'bg-[#18181B] text-white font-semibold'
                 : 'text-gray-600 hover:text-[#111827] bg-[#F3F4F6]'
             }`}
           >
@@ -374,7 +374,7 @@ export const CategoryPage: React.FC = () => {
               <span>Bộ lọc sản phẩm</span>
             </div>
             {hasActiveFilters && (
-              <button onClick={clearAllFilters} className="text-xs text-[#1D4ED8] hover:underline" type="button">
+              <button onClick={clearAllFilters} className="text-xs text-[#18181B] hover:underline" type="button">
                 Xóa tất cả
               </button>
             )}
@@ -386,7 +386,7 @@ export const CategoryPage: React.FC = () => {
             <div className="space-y-1 text-xs">
               <Link
                 to="/categories"
-                className={`block px-2 py-1 rounded ${!slug ? 'bg-[#EFF6FF] text-[#1D4ED8] font-bold' : 'text-gray-600 hover:bg-gray-50'}`}
+                className={`block px-2 py-1 rounded ${!slug ? 'bg-[#F4F4F5] text-[#18181B] font-bold' : 'text-gray-600 hover:bg-gray-50'}`}
               >
                 Tất cả sản phẩm
               </Link>
@@ -394,7 +394,7 @@ export const CategoryPage: React.FC = () => {
                 <Link
                   key={cat.id}
                   to={`/categories/${cat.slug}`}
-                  className={`block px-2 py-1 rounded truncate ${slug === cat.slug ? 'bg-[#EFF6FF] text-[#1D4ED8] font-bold' : 'text-gray-600 hover:bg-gray-50'}`}
+                  className={`block px-2 py-1 rounded truncate ${slug === cat.slug ? 'bg-[#F4F4F5] text-[#18181B] font-bold' : 'text-gray-600 hover:bg-gray-50'}`}
                 >
                   {cat.name}
                 </Link>
@@ -409,13 +409,13 @@ export const CategoryPage: React.FC = () => {
               {brandsList.map((b) => {
                 const isChecked = selectedBrand === b.slug;
                 return (
-                  <label key={b.id} className="flex items-center justify-between hover:text-[#1D4ED8] cursor-pointer">
+                  <label key={b.id} className="flex items-center justify-between hover:text-[#18181B] cursor-pointer">
                     <span className="flex items-center gap-2">
                       <input
                         type="checkbox"
                         checked={isChecked}
                         onChange={() => handleBrandChange(b.slug)}
-                        className="w-3.5 h-3.5 rounded border-[#D1D5DB] text-[#1D4ED8] focus:ring-[#1D4ED8]"
+                        className="w-3.5 h-3.5 rounded border-[#D1D5DB] text-[#18181B] focus:ring-[#18181B]"
                       />
                       <span>{b.name}</span>
                     </span>
@@ -435,14 +435,14 @@ export const CategoryPage: React.FC = () => {
                   placeholder="Từ (₫)"
                   value={customMinInput}
                   onChange={(e) => setCustomMinInput(e.target.value)}
-                  className="w-full text-xs bg-white border border-[#D1D5DB] rounded px-2 py-1 text-[#111827] focus:outline-none focus:border-[#1D4ED8]"
+                  className="w-full text-xs bg-white border border-[#D1D5DB] rounded px-2 py-1 text-[#111827] focus:outline-none focus:border-[#18181B]"
                 />
                 <input
                   type="number"
                   placeholder="Đến (₫)"
                   value={customMaxInput}
                   onChange={(e) => setCustomMaxInput(e.target.value)}
-                  className="w-full text-xs bg-white border border-[#D1D5DB] rounded px-2 py-1 text-[#111827] focus:outline-none focus:border-[#1D4ED8]"
+                  className="w-full text-xs bg-white border border-[#D1D5DB] rounded px-2 py-1 text-[#111827] focus:outline-none focus:border-[#18181B]"
                 />
               </div>
               <button
@@ -463,8 +463,8 @@ export const CategoryPage: React.FC = () => {
                     onClick={() => handlePricePreset(preset.min, preset.max)}
                     className={`px-2 py-0.5 text-[11px] rounded border transition-colors ${
                       isSelected
-                        ? 'border-[#1D4ED8] bg-[#EFF6FF] text-[#1D4ED8] font-semibold'
-                        : 'border-[#E5E7EB] text-gray-600 hover:border-[#1D4ED8]'
+                        ? 'border-[#18181B] bg-[#F4F4F5] text-[#18181B] font-semibold'
+                        : 'border-[#E5E7EB] text-gray-600 hover:border-[#18181B]'
                     }`}
                   >
                     {preset.label}
@@ -488,8 +488,8 @@ export const CategoryPage: React.FC = () => {
                       onClick={() => handleSpecChange(spec.key, opt)}
                       className={`px-2 py-1 rounded text-xs border transition-colors ${
                         isSelected
-                          ? 'border-[#1D4ED8] bg-[#EFF6FF] text-[#1D4ED8] font-semibold'
-                          : 'border-[#E5E7EB] text-gray-600 hover:border-[#1D4ED8]'
+                          ? 'border-[#18181B] bg-[#F4F4F5] text-[#18181B] font-semibold'
+                          : 'border-[#E5E7EB] text-gray-600 hover:border-[#18181B]'
                       }`}
                     >
                       {opt}
@@ -516,7 +516,7 @@ export const CategoryPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={clearAllFilters}
-                  className="px-4 py-2 bg-[#1D4ED8] text-white rounded text-xs font-semibold"
+                  className="px-4 py-2 bg-[#18181B] text-white rounded text-xs font-semibold"
                 >
                   Xóa bộ lọc
                 </button>
@@ -554,7 +554,7 @@ export const CategoryPage: React.FC = () => {
                           onClick={() => updateQuery({ page: p.toString() })}
                           className={`w-8 h-8 rounded text-xs font-semibold transition-colors ${
                             pagedData.page === p
-                              ? 'bg-[#1D4ED8] text-white'
+                              ? 'bg-[#18181B] text-white'
                               : 'hover:bg-[#F3F4F6] text-gray-700'
                           }`}
                         >
@@ -588,7 +588,7 @@ export const CategoryPage: React.FC = () => {
           <div className="relative bg-white rounded-t-2xl max-h-[85vh] overflow-y-auto p-4 z-10 space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-[#E5E7EB]">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-xl text-[#1D4ED8]">tune</span>
+                <span className="material-symbols-outlined text-xl text-[#18181B]">tune</span>
                 <span className="font-bold text-sm text-[#111827]">Bộ lọc sản phẩm</span>
               </div>
               <button
@@ -611,7 +611,7 @@ export const CategoryPage: React.FC = () => {
                     onClick={() => handleBrandChange(b.slug)}
                     className={`px-3 py-1.5 rounded text-xs font-medium border ${
                       selectedBrand === b.slug
-                        ? 'bg-[#1D4ED8] text-white border-[#1D4ED8]'
+                        ? 'bg-[#18181B] text-white border-[#18181B]'
                         : 'bg-white border-[#D1D5DB] text-gray-700'
                     }`}
                   >
@@ -632,7 +632,7 @@ export const CategoryPage: React.FC = () => {
                     onClick={() => handlePricePreset(preset.min, preset.max)}
                     className={`px-2.5 py-1 rounded text-xs border ${
                       minPriceParam === preset.min && maxPriceParam === preset.max
-                        ? 'bg-[#1D4ED8] text-white border-[#1D4ED8]'
+                        ? 'bg-[#18181B] text-white border-[#18181B]'
                         : 'bg-white border-[#D1D5DB] text-gray-700'
                     }`}
                   >
@@ -657,7 +657,7 @@ export const CategoryPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setMobileFilterOpen(false)}
-                className="flex-1 py-2.5 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded text-xs font-semibold"
+                className="flex-1 py-2.5 bg-[#18181B] hover:bg-[#09090B] text-white rounded text-xs font-semibold"
               >
                 Áp dụng bộ lọc
               </button>

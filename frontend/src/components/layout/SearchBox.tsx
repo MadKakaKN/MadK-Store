@@ -238,7 +238,7 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsOpen(true)}
-          className={`w-full h-10 pl-9 pr-20 bg-white border border-[#D1D5DB] rounded text-sm text-[#111827] placeholder:text-gray-400 focus:outline-none focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] transition-colors`}
+          className={`w-full h-10 pl-9 pr-20 bg-white border border-[#D1D5DB] rounded text-sm text-[#111827] placeholder:text-gray-400 focus:outline-none focus:border-[#18181B] focus:ring-1 focus:ring-[#18181B] transition-colors`}
         />
 
         {/* Clear query button */}
@@ -258,7 +258,7 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ isMobile = false, onNaviga
         {/* Search Action Button */}
         <button
           type="submit"
-          className="absolute right-1 top-1 bottom-1 px-4 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded text-xs font-semibold flex items-center gap-1 transition-colors"
+          className="absolute right-1 top-1 bottom-1 px-4 bg-[#18181B] hover:bg-[#09090B] text-white rounded text-xs font-semibold flex items-center gap-1 transition-colors"
         >
           <span>Tìm</span>
         </button>

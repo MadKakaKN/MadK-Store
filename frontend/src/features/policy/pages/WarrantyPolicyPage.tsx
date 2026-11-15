@@ -29,7 +29,7 @@ export const WarrantyPolicyPage: React.FC = () => {
 
       {/* Header Banner */}
       <header className="border-b border-slate-200 pb-6">
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold uppercase tracking-wider mb-3">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 text-blue-700 border border-zinc-200 text-xs font-bold uppercase tracking-wider mb-3">
           🛡️ Cam kết chất lượng
         </span>
         <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">

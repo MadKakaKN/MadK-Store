@@ -94,7 +94,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
       {/* Breadcrumb - Flat Retail Style */}
       <div className="bg-white border-b border-[#E5E7EB] py-2 px-4 mb-6">
         <div className="max-w-7xl mx-auto flex items-center gap-2 text-xs text-gray-500">
-          <Link className="hover:text-[#1D4ED8] flex items-center gap-1 transition-colors" to="/">
+          <Link className="hover:text-[#18181B] flex items-center gap-1 transition-colors" to="/">
             <span className="material-symbols-outlined text-sm">home</span>
             Trang chủ
           </Link>
@@ -129,7 +129,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
               }}
               className={`flex items-center gap-1.5 py-2 px-4 text-xs font-semibold -mb-px transition-colors ${
                 activeTab === 'order'
-                  ? 'text-[#1D4ED8] border-b-2 border-[#1D4ED8]'
+                  ? 'text-[#18181B] border-b-2 border-[#18181B]'
                   : 'text-gray-500 hover:text-gray-800'
               }`}
             >
@@ -145,7 +145,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
               }}
               className={`flex items-center gap-1.5 py-2 px-4 text-xs font-semibold -mb-px transition-colors ${
                 activeTab === 'warranty'
-                  ? 'text-[#1D4ED8] border-b-2 border-[#1D4ED8]'
+                  ? 'text-[#18181B] border-b-2 border-[#18181B]'
                   : 'text-gray-500 hover:text-gray-800'
               }`}
             >
@@ -176,13 +176,13 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                     }
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    className="w-full h-10 pl-9 pr-3 bg-white border border-[#E5E7EB] rounded text-xs text-gray-900 placeholder-gray-400 focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] outline-none transition-colors shadow-sm"
+                    className="w-full h-10 pl-9 pr-3 bg-white border border-[#E5E7EB] rounded text-xs text-gray-900 placeholder-gray-400 focus:border-[#18181B] focus:ring-1 focus:ring-[#18181B] outline-none transition-colors shadow-sm"
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-6 h-10 bg-[#1D4ED8] hover:bg-[#1e40af] disabled:opacity-50 text-white text-xs font-medium rounded transition-colors flex items-center justify-center gap-1.5 flex-shrink-0 shadow-sm"
+                  className="px-6 h-10 bg-[#18181B] hover:bg-[#09090B] disabled:opacity-50 text-white text-xs font-medium rounded transition-colors flex items-center justify-center gap-1.5 flex-shrink-0 shadow-sm"
                 >
                   <span className="material-symbols-outlined text-base">search</span>
                   <span>{loading ? 'Đang tra cứu...' : activeTab === 'order' ? 'Tra cứu đơn hàng' : 'Tra cứu bảo hành'}</span>
@@ -227,7 +227,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                 <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
                   <Link
                     to="/account/orders"
-                    className="px-4 h-9 bg-[#1D4ED8] text-white hover:bg-[#1e40af] text-xs font-medium rounded flex items-center gap-1.5 transition-colors"
+                    className="px-4 h-9 bg-[#18181B] text-white hover:bg-[#09090B] text-xs font-medium rounded flex items-center gap-1.5 transition-colors"
                   >
                     <span className="material-symbols-outlined text-sm">receipt_long</span>
                     <span>Xem đơn mua của tôi</span>
@@ -258,7 +258,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                 <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
                   <Link
                     to="/account/orders"
-                    className="px-4 h-9 bg-[#1D4ED8] text-white hover:bg-[#1e40af] text-xs font-medium rounded flex items-center gap-1.5 transition-colors"
+                    className="px-4 h-9 bg-[#18181B] text-white hover:bg-[#09090B] text-xs font-medium rounded flex items-center gap-1.5 transition-colors"
                   >
                     <span className="material-symbols-outlined text-sm">receipt_long</span>
                     <span>Xem lịch sử mua hàng</span>
@@ -280,7 +280,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                 {/* 1. Header Card */}
                 <div className="bg-white border border-[#E5E7EB] p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 rounded">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-3.5">
-                    <div className="w-10 h-10 rounded bg-blue-50 border border-blue-200 text-[#1D4ED8] flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 rounded bg-zinc-100 border border-zinc-200 text-[#18181B] flex items-center justify-center flex-shrink-0">
                       <span className="material-symbols-outlined text-2xl">verified_user</span>
                     </div>
 
@@ -332,7 +332,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => alert(`Yêu cầu hỗ trợ kỹ thuật bảo hành cho "${warrantyResult.productName}" đã gửi đến chuyên viên MadK Care!`)}
-                      className="px-3 h-8 border border-[#1D4ED8] text-[#1D4ED8] hover:bg-blue-50 text-xs font-medium rounded flex items-center gap-1 transition-colors"
+                      className="px-3 h-8 border border-[#18181B] text-[#18181B] hover:bg-zinc-100 text-xs font-medium rounded flex items-center gap-1 transition-colors"
                     >
                       <span className="material-symbols-outlined text-sm">home_repair_service</span>
                       <span>Yêu cầu hỗ trợ</span>
@@ -343,7 +343,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                 {/* 2. Specs Details Grid */}
                 <div className="bg-white border border-[#E5E7EB] p-4 sm:p-5 rounded">
                   <h3 className="text-xs font-semibold text-gray-900 uppercase tracking-wider mb-3.5 flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-base text-[#1D4ED8]">fact_check</span>
+                    <span className="material-symbols-outlined text-base text-[#18181B]">fact_check</span>
                     <span>Thông Tin Kích Hoạt &amp; Thời Hạn Bảo Hành</span>
                   </h3>
 
@@ -388,7 +388,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                 <div className="bg-white border border-[#E5E7EB] p-4 sm:p-5 rounded">
                   <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#E5E7EB]">
                     <h3 className="text-xs font-semibold text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
-                      <span className="material-symbols-outlined text-base text-[#1D4ED8]">store</span>
+                      <span className="material-symbols-outlined text-base text-[#18181B]">store</span>
                       <span>Hệ thống trung tâm tiếp nhận bảo hành MadK Care</span>
                     </h3>
                     <span className="text-xs text-gray-500">Mở cửa: 08:30 - 21:30 hàng ngày</span>
@@ -398,10 +398,10 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                     {warrantyResult.serviceCenters.map((sc, idx) => (
                       <div
                         key={idx}
-                        className="p-4 rounded border border-[#E5E7EB] bg-white hover:border-[#1D4ED8] transition-colors flex flex-col justify-between"
+                        className="p-4 rounded border border-[#E5E7EB] bg-white hover:border-[#18181B] transition-colors flex flex-col justify-between"
                       >
                         <div>
-                          <div className="font-semibold text-xs text-[#1D4ED8] flex items-center gap-1.5 mb-1.5">
+                          <div className="font-semibold text-xs text-[#18181B] flex items-center gap-1.5 mb-1.5">
                             <span className="material-symbols-outlined text-base">location_on</span>
                             <span>{sc.city}</span>
                           </div>
@@ -437,7 +437,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                     onClick={() => alert('Yêu cầu nhận máy bảo hành đã được ghi nhận! Bưu tá GHN sẽ liên hệ bạn trong 2 giờ.')}
                     className="w-full sm:w-auto px-5 h-9 bg-white text-[#111827] hover:bg-gray-100 font-semibold text-xs rounded transition-colors flex items-center justify-center gap-1.5 flex-shrink-0 shadow-xs"
                   >
-                    <span className="material-symbols-outlined text-sm text-[#1D4ED8]">send</span>
+                    <span className="material-symbols-outlined text-sm text-[#18181B]">send</span>
                     <span>Yêu cầu lấy hàng tận nơi &rarr;</span>
                   </button>
                 </div>
@@ -450,14 +450,14 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                 {/* 1. Order Info Header Bar */}
                 <div className="bg-white border border-[#E5E7EB] p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 rounded">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                    <div className="w-9 h-9 rounded bg-blue-50 border border-blue-200 text-[#1D4ED8] flex items-center justify-center flex-shrink-0">
+                    <div className="w-9 h-9 rounded bg-zinc-100 border border-zinc-200 text-[#18181B] flex items-center justify-center flex-shrink-0">
                       <span className="material-symbols-outlined text-xl">inventory_2</span>
                     </div>
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-sm font-semibold text-gray-900">Mã đơn #{orderResult.orderNumber}</span>
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-blue-50 text-[#1D4ED8] border border-blue-200">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#1D4ED8]"></span>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-zinc-100 text-[#18181B] border border-zinc-200">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#18181B]"></span>
                           {orderResult.statusText}
                         </span>
                         <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-gray-100 text-gray-700 border border-gray-200">
@@ -494,7 +494,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                 {/* 2. Timeline Progress Bar */}
                 <div className="bg-white border border-[#E5E7EB] p-5 rounded">
                   <h2 className="text-xs font-semibold text-gray-900 uppercase tracking-wider mb-6 flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-base text-[#1D4ED8]">alt_route</span>
+                    <span className="material-symbols-outlined text-base text-[#18181B]">alt_route</span>
                     <span>Tiến trình xử lý &amp; Vận chuyển</span>
                   </h2>
 
@@ -506,9 +506,9 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                           <div
                             className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold mb-1.5 ${
                               step.current
-                                ? 'bg-white border-2 border-[#1D4ED8] text-[#1D4ED8]'
+                                ? 'bg-white border-2 border-[#18181B] text-[#18181B]'
                                 : step.completed
-                                ? 'bg-[#1D4ED8] text-white'
+                                ? 'bg-[#18181B] text-white'
                                 : 'bg-white border border-[#E5E7EB] text-gray-400'
                             }`}
                           >
@@ -521,7 +521,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                           <span
                             className={`text-xs ${
                               step.current
-                                ? 'font-semibold text-[#1D4ED8]'
+                                ? 'font-semibold text-[#18181B]'
                                 : step.completed
                                 ? 'font-medium text-gray-900'
                                 : 'text-gray-400'
@@ -536,7 +536,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                     {/* Connecting line */}
                     <div className="absolute top-3.5 left-8 right-8 h-0.5 bg-gray-200 z-0">
                       <div
-                        className="h-full bg-[#1D4ED8] transition-all"
+                        className="h-full bg-[#18181B] transition-all"
                         style={{
                           width:
                             orderResult.status === 'Completed'
@@ -561,7 +561,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                         <div key={idx} className="relative">
                           <div
                             className={`absolute -left-[31px] top-0.5 w-3 h-3 rounded-full border-2 border-white ${
-                              step.current ? 'bg-[#1D4ED8]' : step.completed ? 'bg-[#1D4ED8]' : 'bg-gray-300'
+                              step.current ? 'bg-[#18181B]' : step.completed ? 'bg-[#18181B]' : 'bg-gray-300'
                             }`}
                           ></div>
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
@@ -575,7 +575,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                               {step.time} &bull; {step.title}
                             </span>
                             {step.current && (
-                              <span className="text-[11px] font-semibold text-[#1D4ED8] bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                              <span className="text-[11px] font-semibold text-[#18181B] bg-zinc-100 px-2 py-0.5 rounded border border-zinc-200">
                                 Đang diễn ra
                               </span>
                             )}
@@ -591,7 +591,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                 <div className="bg-white border border-[#E5E7EB] overflow-hidden rounded">
                   <div className="p-4 border-b border-[#E5E7EB] flex items-center justify-between">
                     <h2 className="text-xs font-semibold text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
-                      <span className="material-symbols-outlined text-base text-[#1D4ED8]">devices</span>
+                      <span className="material-symbols-outlined text-base text-[#18181B]">devices</span>
                       <span>Danh sách thiết bị &amp; Quản lý Serial / IMEI</span>
                     </h2>
                     <span className="text-xs text-gray-500">{orderResult.items.length} sản phẩm</span>
@@ -628,7 +628,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                                   />
                                 </div>
                                 <div>
-                                  <p className="font-semibold text-gray-900 hover:text-[#1D4ED8] cursor-pointer">
+                                  <p className="font-semibold text-gray-900 hover:text-[#18181B] cursor-pointer">
                                     {item.name}
                                   </p>
                                   <p className="text-[11px] text-gray-500">{item.specs}</p>
@@ -705,7 +705,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                   <div className="md:col-span-2 bg-white border border-[#E5E7EB] p-5 rounded">
                     <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#E5E7EB]">
                       <div className="flex items-center gap-2">
-                        <span className="material-symbols-outlined text-[#1D4ED8] text-xl">location_on</span>
+                        <span className="material-symbols-outlined text-[#18181B] text-xl">location_on</span>
                         <h3 className="text-xs font-semibold text-gray-900 uppercase tracking-wider">
                           Thông Tin Người Nhận &amp; Giao Hàng
                         </h3>
@@ -758,7 +758,7 @@ export const OrderAndWarrantyTrackingPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => alert('Đang kết nối trung tâm trợ giúp MadK Care trực tuyến...')}
-                      className="w-full h-8 border border-[#1D4ED8] text-[#1D4ED8] hover:bg-blue-50 text-xs font-medium rounded flex items-center justify-center gap-1 transition-colors"
+                      className="w-full h-8 border border-[#18181B] text-[#18181B] hover:bg-zinc-100 text-xs font-medium rounded flex items-center justify-center gap-1 transition-colors"
                     >
                       <span className="material-symbols-outlined text-sm">chat</span>
                       <span>Chat với CSKH trực tuyến</span>

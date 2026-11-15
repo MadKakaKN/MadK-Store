@@ -160,7 +160,7 @@ export const PcBuilderPage: React.FC = () => {
       {/* Breadcrumb & Page Title Strip (Screen 8 Retail Standard) */}
       <div className="bg-white border border-[#E5E7EB] rounded-lg p-4 sm:p-5">
         <nav className="flex items-center text-xs text-gray-500 gap-2 mb-2">
-          <a className="hover:text-[#1D4ED8] flex items-center gap-1" href="/">
+          <a className="hover:text-[#18181B] flex items-center gap-1" href="/">
             <span className="material-symbols-outlined text-[14px]">home</span>
             <span>Trang chủ</span>
           </a>
@@ -173,7 +173,7 @@ export const PcBuilderPage: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[#111827] flex items-center gap-2">
-              <span className="material-symbols-outlined text-[#1D4ED8] text-2xl">build</span>
+              <span className="material-symbols-outlined text-[#18181B] text-2xl">build</span>
               <span>Xây Dựng Cấu Hình PC &amp; Kiểm Tra Tương Thích Tự Động</span>
             </h1>
             <p className="text-xs text-gray-600 mt-1">
@@ -204,7 +204,7 @@ export const PcBuilderPage: React.FC = () => {
               key={preset.id}
               type="button"
               onClick={() => handleApplyPreset(preset)}
-              className="px-3 py-1 rounded text-xs font-medium bg-[#F3F4F6] hover:bg-[#EFF6FF] text-gray-700 hover:text-[#1D4ED8] border border-[#E5E7EB] hover:border-[#1D4ED8] transition-colors flex items-center gap-1.5"
+              className="px-3 py-1 rounded text-xs font-medium bg-[#F3F4F6] hover:bg-[#F4F4F5] text-gray-700 hover:text-[#18181B] border border-[#E5E7EB] hover:border-[#18181B] transition-colors flex items-center gap-1.5"
             >
               <span>{preset.name}</span>
               <span className="text-[10px] font-bold text-[#D70018]">
@@ -225,7 +225,7 @@ export const PcBuilderPage: React.FC = () => {
               <span className="text-xs uppercase tracking-wider text-gray-700 font-semibold">
                 Danh mục {COMPONENT_SLOTS.length} linh kiện lắp ráp
               </span>
-              <span className="bg-blue-100 text-[#1D4ED8] text-[11px] px-2 py-0.5 rounded font-semibold">
+              <span className="bg-blue-100 text-[#18181B] text-[11px] px-2 py-0.5 rounded font-semibold">
                 {Object.keys(selectedParts).length}/{COMPONENT_SLOTS.length} Đã chọn
               </span>
             </div>
@@ -274,7 +274,7 @@ export const PcBuilderPage: React.FC = () => {
                 type="button"
                 disabled={isAddingCart || totalPartsCount === 0}
                 onClick={handleAddAllToCart}
-                className="w-full h-11 rounded-lg font-semibold text-xs sm:text-sm text-white bg-[#1D4ED8] hover:bg-[#1E40AF] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+                className="w-full h-11 rounded-lg font-semibold text-xs sm:text-sm text-white bg-[#18181B] hover:bg-[#09090B] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
               >
                 <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
                 <span>{isAddingCart ? 'Đang thêm linh kiện...' : 'Thêm cả bộ vào giỏ hàng'}</span>
@@ -295,7 +295,7 @@ export const PcBuilderPage: React.FC = () => {
               <button
                 type="button"
                 onClick={handleConsultAi}
-                className="w-full h-9 rounded-lg font-semibold text-xs text-[#1D4ED8] bg-[#EFF6FF] hover:bg-[#DBEAFE] border border-blue-200 transition-colors flex items-center justify-center gap-1.5"
+                className="w-full h-9 rounded-lg font-semibold text-xs text-[#18181B] bg-[#F4F4F5] hover:bg-[#DBEAFE] border border-zinc-200 transition-colors flex items-center justify-center gap-1.5"
               >
                 <span className="material-symbols-outlined text-[16px]">smart_toy</span>
                 <span>Hỏi MadK AI kiểm tra nghẽn cổ chai</span>

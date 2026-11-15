@@ -500,7 +500,7 @@ export const CheckoutPage: React.FC = () => {
         </div>
         <Link
           to="/categories"
-          className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-md shadow-blue-600/20 transition-all"
+          className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-zinc-1000 text-white font-bold text-sm shadow-md shadow-blue-600/20 transition-all"
         >
           <span>Khám phá sản phẩm ngay</span>
           <span>&rarr;</span>
@@ -513,9 +513,9 @@ export const CheckoutPage: React.FC = () => {
     <div className="py-4 sm:py-6 px-4 md:px-6 max-w-[1200px] mx-auto space-y-6">
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-gray-500">
-        <Link to="/" className="hover:text-[#1D4ED8] hover:underline">Trang chủ</Link>
+        <Link to="/" className="hover:text-[#18181B] hover:underline">Trang chủ</Link>
         <span className="material-symbols-outlined text-[14px]">chevron_right</span>
-        <Link to="/cart" className="hover:text-[#1D4ED8] hover:underline">Giỏ hàng</Link>
+        <Link to="/cart" className="hover:text-[#18181B] hover:underline">Giỏ hàng</Link>
         <span className="material-symbols-outlined text-[14px]">chevron_right</span>
         <span className="text-[#111827] font-semibold">Thanh toán &amp; Đặt hàng</span>
       </nav>
@@ -535,10 +535,10 @@ export const CheckoutPage: React.FC = () => {
             </div>
           </Link>
           {/* Step 2: Active */}
-          <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-[#EFF6FF] border border-[#1D4ED8] text-left">
-            <div className="w-7 h-7 rounded-lg bg-[#1D4ED8] text-white flex items-center justify-center font-bold text-xs">2</div>
+          <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-[#F4F4F5] border border-[#18181B] text-left">
+            <div className="w-7 h-7 rounded-lg bg-[#18181B] text-white flex items-center justify-center font-bold text-xs">2</div>
             <div className="leading-tight">
-              <span className="text-[13px] font-bold text-[#1D4ED8] block">2. Thông tin thanh toán &amp; Đặt hàng</span>
+              <span className="text-[13px] font-bold text-[#18181B] block">2. Thông tin thanh toán &amp; Đặt hàng</span>
               <span className="text-[11px] text-blue-700 block">Địa chỉ giao GHN &amp; VietQR / COD</span>
             </div>
           </div>
@@ -591,7 +591,7 @@ export const CheckoutPage: React.FC = () => {
             <div id="shipping-address-section" className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-5">
               <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                 <div className="flex items-center gap-3">
-                  <span className="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 font-black text-sm flex items-center justify-center">
+                  <span className="w-8 h-8 rounded-xl bg-zinc-100 text-blue-700 font-black text-sm flex items-center justify-center">
                     1
                   </span>
                   <h2 className="text-base sm:text-lg font-extrabold text-slate-900">
@@ -624,7 +624,7 @@ export const CheckoutPage: React.FC = () => {
                           key={addr.id}
                           className={`p-4 rounded-2xl border text-xs cursor-pointer transition-all flex items-start gap-3.5 ${
                             isSelected
-                              ? 'bg-blue-50/50 border-blue-500 ring-2 ring-blue-500/20'
+                              ? 'bg-zinc-100/50 border-blue-500 ring-2 ring-blue-500/20'
                               : 'bg-white border-slate-200 hover:border-slate-300'
                           }`}
                         >
@@ -810,7 +810,7 @@ export const CheckoutPage: React.FC = () => {
             {/* Step 2: Payment Method */}
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-4">
               <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
-                <span className="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 font-black text-sm flex items-center justify-center">
+                <span className="w-8 h-8 rounded-xl bg-zinc-100 text-blue-700 font-black text-sm flex items-center justify-center">
                   2
                 </span>
                 <h2 className="text-base sm:text-lg font-extrabold text-slate-900">
@@ -887,7 +887,7 @@ export const CheckoutPage: React.FC = () => {
                 <label
                   className={`p-4 sm:p-5 rounded-2xl border-2 cursor-pointer flex items-start gap-4 transition-all ${
                     paymentMethod === 'COD'
-                      ? 'border-blue-500 bg-blue-50/40 ring-2 ring-blue-500/10'
+                      ? 'border-blue-500 bg-zinc-100/40 ring-2 ring-blue-500/10'
                       : 'border-slate-200 bg-white hover:border-slate-300'
                   }`}
                 >
@@ -921,7 +921,7 @@ export const CheckoutPage: React.FC = () => {
             {/* Step 3: Customer Note */}
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-3">
               <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-                <span className="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 font-black text-sm flex items-center justify-center">
+                <span className="w-8 h-8 rounded-xl bg-zinc-100 text-blue-700 font-black text-sm flex items-center justify-center">
                   3
                 </span>
                 <h2 className="text-base sm:text-lg font-extrabold text-slate-900">
@@ -1202,7 +1202,7 @@ export const CheckoutPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting || items.length === 0}
-                className="w-full py-4 rounded-2xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-blue-600/30 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2"
+                className="w-full py-4 rounded-2xl bg-blue-600 hover:bg-zinc-1000 disabled:opacity-50 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-blue-600/30 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   <>

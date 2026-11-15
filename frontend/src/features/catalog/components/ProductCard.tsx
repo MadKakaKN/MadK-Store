@@ -26,17 +26,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const discountPercent = Math.round(((oldPrice - priceNum) / oldPrice) * 100);
 
   return (
-    <div className="bg-white border border-[#E5E7EB] rounded-lg p-3 flex flex-col justify-between hover:border-[#1D4ED8] transition-all hover:shadow-sm relative group">
+    <div className="bg-white border border-[#E5E7EB] rounded-lg p-3 flex flex-col justify-between hover:border-[#18181B] transition-all hover:shadow-sm relative group">
       <div>
         {/* Badges Container */}
         <div className="relative bg-white aspect-square flex items-center justify-center mb-2 overflow-hidden rounded">
-          <span className="absolute top-0 left-0 bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] text-[10px] font-semibold px-1.5 py-0.5 rounded z-10">
+          <span className="absolute top-0 left-0 bg-[#F4F4F5] text-[#18181B] border border-[#E4E4E7] text-[10px] font-semibold px-1.5 py-0.5 rounded z-10">
             Trả góp 0%
           </span>
 
           {product.model3DUrl ? (
             <span className="absolute top-0 right-0 border border-[#D1D5DB] text-gray-700 bg-white text-[10px] font-medium px-1.5 py-0.5 rounded flex items-center gap-0.5 z-10">
-              <span className="material-symbols-outlined text-[12px] text-[#1D4ED8]">view_in_ar</span>
+              <span className="material-symbols-outlined text-[12px] text-[#18181B]">view_in_ar</span>
               <span>3D</span>
             </span>
           ) : (
@@ -111,7 +111,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </div>
 
         {/* Title */}
-        <h4 className="text-xs font-semibold text-[#111827] line-clamp-2 hover:text-[#1D4ED8] leading-snug">
+        <h4 className="text-xs font-semibold text-[#111827] line-clamp-2 hover:text-[#18181B] leading-snug">
           <Link to={`/products/${product.slug}`}>{product.name}</Link>
         </h4>
 
@@ -156,12 +156,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           to={`/products/${product.slug}`}
           className="px-2 py-1.5 bg-white border border-[#D1D5DB] hover:bg-[#F3F4F6] text-[#374151] rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1"
         >
-          <span className="material-symbols-outlined text-sm text-[#1D4ED8]">view_in_ar</span>
+          <span className="material-symbols-outlined text-sm text-[#18181B]">view_in_ar</span>
           <span>Xem 3D</span>
         </Link>
         <Link
           to={`/products/${product.slug}`}
-          className="px-2 py-1.5 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1"
+          className="px-2 py-1.5 bg-[#18181B] hover:bg-[#09090B] text-white rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1"
         >
           <span className="material-symbols-outlined text-sm">shopping_cart</span>
           <span>Chi tiết</span>

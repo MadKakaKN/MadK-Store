@@ -72,7 +72,7 @@ export const VerifyEmailPage: React.FC = () => {
         <div className="bg-white py-10 px-6 sm:px-10 shadow-xl shadow-slate-200/50 rounded-3xl border border-slate-100 text-center">
           {status === 'verifying' && (
             <div className="py-6">
-              <div className="w-16 h-16 mx-auto rounded-3xl border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+              <div className="w-16 h-16 mx-auto rounded-3xl border-4 border-zinc-200 border-t-blue-600 rounded-full animate-spin"></div>
               <h3 className="mt-6 text-lg font-bold text-slate-900">Đang xác thực...</h3>
               <p className="mt-2 text-sm text-slate-500">{message}</p>
             </div>
@@ -136,7 +136,7 @@ export const VerifyEmailPage: React.FC = () => {
                   </div>
                   <button
                     type="submit"
-                    className="w-full py-3 px-4 rounded-2xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 transition-colors"
+                    className="w-full py-3 px-4 rounded-2xl text-sm font-bold text-white bg-blue-600 hover:bg-zinc-1000 transition-colors"
                   >
                     Xác thực lại
                   </button>

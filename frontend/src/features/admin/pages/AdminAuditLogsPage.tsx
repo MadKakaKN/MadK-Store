@@ -161,7 +161,7 @@ export const AdminAuditLogsPage: React.FC = () => {
         <button
           type="button"
           onClick={() => setActiveLog(row)}
-          className="px-2.5 py-1 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-md transition-colors"
+          className="px-2.5 py-1 text-xs font-semibold text-blue-700 bg-zinc-100 hover:bg-blue-100 rounded-md transition-colors"
         >
           Xem Diff
         </button>

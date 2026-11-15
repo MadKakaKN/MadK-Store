@@ -327,7 +327,7 @@ export const AiShoppingAssistantWidget: React.FC = () => {
               <div>
                 <div className="flex items-center gap-1.5">
                   <h3 className="font-extrabold text-sm text-slate-900">MadK Neural AI</h3>
-                  <span className="px-1.5 py-0.2 text-[9px] font-bold rounded bg-blue-100 text-blue-700 border border-blue-200">
+                  <span className="px-1.5 py-0.2 text-[9px] font-bold rounded bg-blue-100 text-blue-700 border border-zinc-200">
                     GEMINI
                   </span>
                 </div>
@@ -391,7 +391,7 @@ export const AiShoppingAssistantWidget: React.FC = () => {
             <button
               type="button"
               onClick={() => handleSend('Tư vấn laptop gaming tầm 20 - 30 triệu')}
-              className="px-2.5 py-1 rounded-xl bg-white hover:bg-blue-50 text-slate-700 hover:text-blue-600 border border-slate-200/80 shadow-2xs whitespace-nowrap transition-colors flex items-center gap-1 shrink-0 font-medium"
+              className="px-2.5 py-1 rounded-xl bg-white hover:bg-zinc-100 text-slate-700 hover:text-blue-600 border border-slate-200/80 shadow-2xs whitespace-nowrap transition-colors flex items-center gap-1 shrink-0 font-medium"
             >
               <span>🎮</span> Laptop Gaming
             </button>
@@ -561,7 +561,7 @@ export const AiShoppingAssistantWidget: React.FC = () => {
                 key={idx}
                 type="button"
                 onClick={() => handleSend(p)}
-                className="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-blue-50 hover:text-blue-600 border border-slate-200/70 text-slate-700 text-[11px] whitespace-nowrap transition-colors font-medium"
+                className="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-zinc-100 hover:text-blue-600 border border-slate-200/70 text-slate-700 text-[11px] whitespace-nowrap transition-colors font-medium"
               >
                 {p}
               </button>

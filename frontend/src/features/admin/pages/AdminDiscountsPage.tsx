@@ -162,7 +162,7 @@ export const AdminDiscountsPage: React.FC = () => {
       title: 'Mã Voucher',
       render: (row) => (
         <div className="flex flex-col">
-          <span className="font-mono text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-md w-fit">
+          <span className="font-mono text-xs font-bold text-blue-700 bg-zinc-100 border border-zinc-200 px-2 py-0.5 rounded-md w-fit">
             {row.code}
           </span>
           {row.description && (

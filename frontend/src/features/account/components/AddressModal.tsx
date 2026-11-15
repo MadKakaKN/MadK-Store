@@ -284,7 +284,7 @@ export const AddressModal: React.FC<AddressModalProps> = ({
                   placeholder="Ví dụ: Nguyễn Văn A"
                   className={`w-full h-9 px-3 rounded border text-xs text-gray-900 placeholder-gray-400 ${
                     errors.recipientName ? 'border-red-400 bg-red-50/30' : 'border-[#E5E7EB]'
-                  } focus:outline-none focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] transition-all`}
+                  } focus:outline-none focus:border-[#18181B] focus:ring-1 focus:ring-[#18181B] transition-all`}
                 />
                 {errors.recipientName && (
                   <p className="mt-1 text-xs text-[#D70018] font-medium">{errors.recipientName}</p>
@@ -305,7 +305,7 @@ export const AddressModal: React.FC<AddressModalProps> = ({
                   placeholder="Ví dụ: 0901234567"
                   className={`w-full h-9 px-3 rounded border text-xs text-gray-900 placeholder-gray-400 ${
                     errors.phoneNumber ? 'border-red-400 bg-red-50/30' : 'border-[#E5E7EB]'
-                  } focus:outline-none focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] transition-all`}
+                  } focus:outline-none focus:border-[#18181B] focus:ring-1 focus:ring-[#18181B] transition-all`}
                 />
                 {errors.phoneNumber && (
                   <p className="mt-1 text-xs text-[#D70018] font-medium">{errors.phoneNumber}</p>
@@ -323,7 +323,7 @@ export const AddressModal: React.FC<AddressModalProps> = ({
                 onChange={handleProvinceChange}
                 className={`w-full h-9 px-3 rounded border bg-white text-xs text-gray-900 ${
                   errors.provinceCode ? 'border-red-400 bg-red-50/30' : 'border-[#E5E7EB]'
-                } focus:outline-none focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] transition-all`}
+                } focus:outline-none focus:border-[#18181B] focus:ring-1 focus:ring-[#18181B] transition-all`}
               >
                 <option value="">-- Chọn Tỉnh / Thành phố --</option>
                 {provinces.map((prov) => (
@@ -349,7 +349,7 @@ export const AddressModal: React.FC<AddressModalProps> = ({
                   disabled={!provinceCode || isLoadingLocations}
                   className={`w-full h-9 px-3 rounded border bg-white text-xs text-gray-900 disabled:bg-gray-50 disabled:text-gray-400 ${
                     errors.districtCode ? 'border-red-400 bg-red-50/30' : 'border-[#E5E7EB]'
-                  } focus:outline-none focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] transition-all`}
+                  } focus:outline-none focus:border-[#18181B] focus:ring-1 focus:ring-[#18181B] transition-all`}
                 >
                   <option value="">
                     {!provinceCode ? 'Vui lòng chọn Tỉnh/Thành trước' : '-- Chọn Quận / Huyện --'}
@@ -375,7 +375,7 @@ export const AddressModal: React.FC<AddressModalProps> = ({
                   disabled={!districtCode || isLoadingLocations}
                   className={`w-full h-9 px-3 rounded border bg-white text-xs text-gray-900 disabled:bg-gray-50 disabled:text-gray-400 ${
                     errors.wardCode ? 'border-red-400 bg-red-50/30' : 'border-[#E5E7EB]'
-                  } focus:outline-none focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] transition-all`}
+                  } focus:outline-none focus:border-[#18181B] focus:ring-1 focus:ring-[#18181B] transition-all`}
                 >
                   <option value="">
                     {!districtCode ? 'Vui lòng chọn Quận/Huyện trước' : '-- Chọn Phường / Xã --'}
@@ -407,7 +407,7 @@ export const AddressModal: React.FC<AddressModalProps> = ({
                 placeholder="Ví dụ: Tòa Landmark 81, Số 720A Điện Biên Phủ"
                 className={`w-full p-2.5 rounded border text-xs text-gray-900 placeholder-gray-400 ${
                   errors.detailedAddress ? 'border-red-400 bg-red-50/30' : 'border-[#E5E7EB]'
-                } focus:outline-none focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8] transition-all`}
+                } focus:outline-none focus:border-[#18181B] focus:ring-1 focus:ring-[#18181B] transition-all`}
               />
               {errors.detailedAddress && (
                 <p className="mt-1 text-xs text-[#D70018] font-medium">{errors.detailedAddress}</p>
@@ -421,7 +421,7 @@ export const AddressModal: React.FC<AddressModalProps> = ({
                 type="checkbox"
                 checked={isDefault}
                 onChange={(e) => setIsDefault(e.target.checked)}
-                className="h-4 w-4 text-[#1D4ED8] focus:ring-[#1D4ED8] border-[#E5E7EB] rounded cursor-pointer"
+                className="h-4 w-4 text-[#18181B] focus:ring-[#18181B] border-[#E5E7EB] rounded cursor-pointer"
               />
               <label htmlFor="is-default-checkbox" className="ml-2 text-xs font-medium text-gray-700 cursor-pointer">
                 Đặt làm địa chỉ giao hàng mặc định
@@ -440,7 +440,7 @@ export const AddressModal: React.FC<AddressModalProps> = ({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="px-5 h-9 rounded text-xs font-semibold text-white bg-[#1D4ED8] hover:bg-[#1e40af] disabled:opacity-50 transition-colors flex items-center gap-1.5"
+                className="px-5 h-9 rounded text-xs font-semibold text-white bg-[#18181B] hover:bg-[#09090B] disabled:opacity-50 transition-colors flex items-center gap-1.5"
               >
                 {isSubmitting ? (
                   <>

@@ -38,7 +38,7 @@ export const PrintQuoteView: React.FC<PrintQuoteViewProps> = ({
             <button
               type="button"
               onClick={() => window.print()}
-              className="px-5 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md shadow-blue-600/30 flex items-center gap-2 transition-all"
+              className="px-5 py-2.5 rounded-2xl bg-blue-600 hover:bg-zinc-1000 text-white font-bold text-xs shadow-md shadow-blue-600/30 flex items-center gap-2 transition-all"
             >
               <span>🖨️</span>
               <span>In báo giá / Lưu PDF</span>

@@ -101,7 +101,7 @@ export const AddressList: React.FC<AddressListProps> = ({ userId }) => {
         <button
           type="button"
           onClick={handleOpenAddModal}
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 shadow-md shadow-blue-600/20 transition-all shrink-0 cursor-pointer"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-bold text-white bg-blue-600 hover:bg-zinc-1000 shadow-md shadow-blue-600/20 transition-all shrink-0 cursor-pointer"
         >
           <span className="text-base font-bold">+</span>
           <span>Thêm địa chỉ mới</span>
@@ -147,7 +147,7 @@ export const AddressList: React.FC<AddressListProps> = ({ userId }) => {
           <button
             type="button"
             onClick={handleOpenAddModal}
-            className="mt-5 px-5 py-2.5 rounded-xl text-sm font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors inline-flex items-center gap-1.5"
+            className="mt-5 px-5 py-2.5 rounded-xl text-sm font-bold text-blue-600 bg-zinc-100 hover:bg-blue-100 transition-colors inline-flex items-center gap-1.5"
           >
             <span>+</span>
             <span>Thêm địa chỉ đầu tiên</span>
@@ -161,7 +161,7 @@ export const AddressList: React.FC<AddressListProps> = ({ userId }) => {
               key={address.id}
               className={`relative rounded-3xl p-6 border transition-all duration-200 flex flex-col justify-between ${
                 address.isDefault
-                  ? 'border-blue-500/80 bg-blue-50/15 shadow-sm ring-2 ring-blue-500/10'
+                  ? 'border-blue-500/80 bg-zinc-100/15 shadow-sm ring-2 ring-blue-500/10'
                   : 'border-slate-200/90 bg-white hover:border-slate-300 hover:shadow-xs'
               }`}
             >

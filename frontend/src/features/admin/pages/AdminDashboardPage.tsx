@@ -220,7 +220,7 @@ export const AdminDashboardPage: React.FC = () => {
                     onClick={() => setActiveRole(r)}
                     className={`px-2 py-0.5 rounded text-[11px] font-medium border ${
                       activeRole === r
-                        ? 'bg-blue-50 text-blue-700 border-blue-300 font-semibold'
+                        ? 'bg-zinc-100 text-blue-700 border-blue-300 font-semibold'
                         : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
                     }`}
                   >
@@ -243,7 +243,7 @@ export const AdminDashboardPage: React.FC = () => {
               onClick={() => setTimeRange('today')}
               className={`px-2.5 py-1 rounded-sm font-medium transition-colors ${
                 timeRange === 'today'
-                  ? 'bg-[#1D4ED8] text-white'
+                  ? 'bg-[#18181B] text-white'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
@@ -253,7 +253,7 @@ export const AdminDashboardPage: React.FC = () => {
               onClick={() => setTimeRange('7d')}
               className={`px-2.5 py-1 rounded-sm font-medium transition-colors ${
                 timeRange === '7d'
-                  ? 'bg-[#1D4ED8] text-white'
+                  ? 'bg-[#18181B] text-white'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
@@ -263,7 +263,7 @@ export const AdminDashboardPage: React.FC = () => {
               onClick={() => setTimeRange('30d')}
               className={`px-2.5 py-1 rounded-sm font-medium transition-colors ${
                 timeRange === '30d'
-                  ? 'bg-[#1D4ED8] text-white'
+                  ? 'bg-[#18181B] text-white'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
@@ -273,7 +273,7 @@ export const AdminDashboardPage: React.FC = () => {
               onClick={() => setTimeRange('all')}
               className={`px-2.5 py-1 rounded-sm font-medium flex items-center gap-1 border-l border-gray-100 transition-colors ${
                 timeRange === 'all'
-                  ? 'bg-[#1D4ED8] text-white'
+                  ? 'bg-[#18181B] text-white'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
@@ -409,7 +409,7 @@ export const AdminDashboardPage: React.FC = () => {
           </div>
           <div className="mt-2 pt-2 border-t border-red-100 flex items-center justify-between text-[11px]">
             <span className="text-gray-500">Cần nhập kho ngay</span>
-            <Link to="/admin/inventory" className="font-medium text-[#1D4ED8] hover:underline">
+            <Link to="/admin/inventory" className="font-medium text-[#18181B] hover:underline">
               Chi tiết →
             </Link>
           </div>
@@ -440,7 +440,7 @@ export const AdminDashboardPage: React.FC = () => {
                       onClick={() => setChartView(v)}
                       className={`px-2 py-0.5 rounded text-xs transition-colors ${
                         chartView === v
-                          ? 'bg-white text-[#1D4ED8] font-semibold border border-gray-200'
+                          ? 'bg-white text-[#18181B] font-semibold border border-gray-200'
                           : 'text-gray-600 hover:text-gray-900'
                       }`}
                     >
@@ -450,7 +450,7 @@ export const AdminDashboardPage: React.FC = () => {
                 </div>
                 <div className="hidden sm:flex items-center gap-3 text-xs text-gray-500">
                   <div className="flex items-center gap-1.5">
-                    <span className="w-3 h-0.5 bg-[#1D4ED8]"></span>
+                    <span className="w-3 h-0.5 bg-[#18181B]"></span>
                     <span>Doanh thu 2025</span>
                   </div>
                   <div className="flex items-center gap-1.5">
@@ -508,14 +508,14 @@ export const AdminDashboardPage: React.FC = () => {
                 <path
                   d="M 0,195 L 75,155 L 150,130 L 225,100 L 300,115 L 375,60 L 450,80 L 525,35 L 600,18"
                   fill="none"
-                  stroke="#1D4ED8"
+                  stroke="#18181B"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
                 />
                 {/* Data dots */}
-                <circle cx="375" cy="60" fill="#ffffff" r="3.5" stroke="#1D4ED8" strokeWidth="2" />
-                <circle cx="525" cy="35" fill="#ffffff" r="3.5" stroke="#1D4ED8" strokeWidth="2" />
+                <circle cx="375" cy="60" fill="#ffffff" r="3.5" stroke="#18181B" strokeWidth="2" />
+                <circle cx="525" cy="35" fill="#ffffff" r="3.5" stroke="#18181B" strokeWidth="2" />
               </svg>
 
               {/* Peak Tooltip */}
@@ -556,7 +556,7 @@ export const AdminDashboardPage: React.FC = () => {
             </div>
             <div className="py-1 px-2 rounded bg-gray-50 border border-gray-100">
               <span className="text-[11px] text-gray-500 block">Giờ cao điểm</span>
-              <span className="font-semibold text-[#1D4ED8]">14:00 - 16:00</span>
+              <span className="font-semibold text-[#18181B]">14:00 - 16:00</span>
             </div>
             <div className="py-1 px-2 rounded bg-gray-50 border border-gray-100">
               <span className="text-[11px] text-gray-500 block">Tỷ lệ hủy đơn</span>
@@ -592,7 +592,7 @@ export const AdminDashboardPage: React.FC = () => {
                   cy="50"
                   fill="transparent"
                   r="38"
-                  stroke="#1D4ED8"
+                  stroke="#18181B"
                   strokeDasharray={`${(completedPct * 239) / 100} 239`}
                   strokeDashoffset="0"
                   strokeWidth="10"
@@ -654,7 +654,7 @@ export const AdminDashboardPage: React.FC = () => {
             <div className="space-y-1.5 text-xs">
               <div className="flex items-center justify-between py-1 px-1.5 rounded hover:bg-gray-50">
                 <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-[#1D4ED8]"></span>
+                  <span className="w-2.5 h-2.5 rounded-sm bg-[#18181B]"></span>
                   <span className="text-gray-700">Hoàn tất</span>
                 </div>
                 <div className="flex items-center gap-2 font-mono">
@@ -734,7 +734,7 @@ export const AdminDashboardPage: React.FC = () => {
             </div>
             <Link
               to="/admin/reports"
-              className="text-xs text-[#1D4ED8] font-medium hover:underline flex items-center gap-0.5"
+              className="text-xs text-[#18181B] font-medium hover:underline flex items-center gap-0.5"
             >
               <span>Xem tất cả</span>
               <span className="material-symbols-outlined text-[14px]">chevron_right</span>
@@ -770,7 +770,7 @@ export const AdminDashboardPage: React.FC = () => {
                           }}
                         />
                         <div>
-                          <div className="font-medium text-gray-900 hover:text-[#1D4ED8] cursor-pointer line-clamp-1">
+                          <div className="font-medium text-gray-900 hover:text-[#18181B] cursor-pointer line-clamp-1">
                             {p.name}
                           </div>
                           <div className="text-[10px] text-gray-400 font-mono">{p.sku}</div>
@@ -845,7 +845,7 @@ export const AdminDashboardPage: React.FC = () => {
                     </div>
                     <Link
                       to="/admin/inventory"
-                      className="shrink-0 px-2 py-1 rounded bg-[#1D4ED8] hover:bg-[#1E40AF] text-white text-[11px] font-medium transition-colors"
+                      className="shrink-0 px-2 py-1 rounded bg-[#18181B] hover:bg-[#09090B] text-white text-[11px] font-medium transition-colors"
                     >
                       Nhập hàng
                     </Link>
@@ -859,7 +859,7 @@ export const AdminDashboardPage: React.FC = () => {
             <span className="text-gray-500">Xem toàn bộ sổ kho và phân bổ SKU</span>
             <Link
               to="/admin/inventory"
-              className="font-medium text-[#1D4ED8] hover:underline flex items-center gap-0.5"
+              className="font-medium text-[#18181B] hover:underline flex items-center gap-0.5"
             >
               <span>Vào kho hàng</span>
               <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
