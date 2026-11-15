@@ -45,20 +45,20 @@ export const AuthRequiredModal: React.FC<AuthRequiredModalProps> = ({
       aria-modal="true"
       aria-labelledby="auth-modal-title"
     >
-      {/* Backdrop with modern blur */}
+      {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-black/60 transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Modal Dialog Card */}
-      <div className="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-100 z-10 text-center transform transition-all duration-300 scale-100">
+      <div className="relative w-full max-w-sm sm:max-w-md bg-white rounded-lg p-6 sm:p-7 shadow-xl border border-[#E5E7EB] z-10 text-center">
         {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500"
+          className="absolute top-3.5 right-3.5 p-1 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors focus:outline-none"
           aria-label="Đóng cửa sổ"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -66,9 +66,9 @@ export const AuthRequiredModal: React.FC<AuthRequiredModalProps> = ({
           </svg>
         </button>
 
-        {/* Icon with Glowing Gradient */}
-        <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-brand-600/30 text-2xl mb-4">
-          <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        {/* Clean Retail Lock Badge */}
+        <div className="w-11 h-11 mx-auto rounded-full bg-blue-50 text-[#1D4ED8] flex items-center justify-center mb-3">
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -79,24 +79,24 @@ export const AuthRequiredModal: React.FC<AuthRequiredModalProps> = ({
         </div>
 
         {/* Modal Titles */}
-        <h2 id="auth-modal-title" className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+        <h3 id="auth-modal-title" className="text-base sm:text-lg font-bold text-gray-900">
           {title}
-        </h2>
-        <p className="mt-2 text-sm text-slate-500 leading-relaxed max-w-sm mx-auto">
+        </h3>
+        <p className="mt-1.5 text-xs text-gray-500 leading-relaxed max-w-sm mx-auto">
           {message}
         </p>
 
         {/* Dual CTA Action Buttons */}
-        <div className="mt-6 space-y-3">
-          {/* Button 1: Đăng nhập (Login) */}
+        <div className="mt-5 space-y-2.5">
+          {/* Button 1: Đăng nhập ngay */}
           <Link
             to={loginUrl}
             onClick={onClose}
-            className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-sm shadow-md shadow-brand-600/25 transition-all flex items-center justify-center gap-2 group hover:scale-[1.01] active:scale-[0.99]"
+            className="w-full h-10 px-4 rounded bg-[#1D4ED8] hover:bg-[#1e40af] text-white font-semibold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5"
           >
-            <span>Đăng nhập (Login)</span>
+            <span>Đăng nhập ngay</span>
             <svg
-              className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
+              className="w-4 h-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -105,16 +105,16 @@ export const AuthRequiredModal: React.FC<AuthRequiredModalProps> = ({
             </svg>
           </Link>
 
-          {/* Button 2: Đăng ký (Sign Up) */}
+          {/* Button 2: Tạo tài khoản mới */}
           <Link
             to={registerUrl}
             onClick={onClose}
-            className="w-full py-3.5 px-4 rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50/50 text-slate-700 hover:text-brand-700 font-bold text-sm transition-all flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99]"
+            className="w-full h-10 px-4 rounded border border-[#E5E7EB] bg-white hover:bg-gray-50 text-gray-700 font-medium text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5"
           >
-            <svg className="w-4 h-4 text-brand-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
             </svg>
-            <span>Tạo tài khoản mới (Sign Up)</span>
+            <span>Tạo tài khoản mới</span>
           </Link>
 
           {/* Social 1-click Quick Login */}
@@ -125,11 +125,11 @@ export const AuthRequiredModal: React.FC<AuthRequiredModalProps> = ({
         </div>
 
         {/* Dismiss Footer */}
-        <div className="mt-4 pt-1">
+        <div className="mt-4 pt-3 border-t border-[#E5E7EB]">
           <button
             type="button"
             onClick={onClose}
-            className="text-xs font-semibold text-slate-400 hover:text-slate-600 transition-colors"
+            className="text-xs text-gray-500 hover:text-gray-800 transition-colors"
           >
             Để sau, tôi muốn tiếp tục xem sản phẩm
           </button>
